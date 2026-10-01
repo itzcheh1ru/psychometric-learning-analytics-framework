@@ -33,6 +33,11 @@ from app.services.sem_analysis import (
     result_service,
     status_service,
 )
+from app.services.longitudinal import (
+    LongitudinalAnalysisNotAvailableError,
+    LongitudinalAnalysisService,
+    analysis_service,
+)
 
 
 @pytest.fixture
@@ -64,6 +69,21 @@ def valid_payload():
         "verification_frequency": "Often",
         "independent_learning":   "High",
         "academic_year":          "Year 4",
+    }
+
+
+@pytest.fixture
+def valid_weekly_payload():
+    """Return a valid prototype weekly study record payload."""
+    return {
+        "participant_reference": "P0001",
+        "study_week": "Week 2",
+        "ai_study_hours": 5.5,
+        "independent_study_hours": 8.0,
+        "academic_period": "Regular study week",
+        "learning_activity": "Concept learning",
+        "prompt_count": 12,
+        "prompt_purpose": "Concept explanation",
     }
 
 
@@ -551,3 +571,311 @@ def test_component2_apis_do_not_contain_fake_results(client):
         assert "p-value" not in payload_str
         assert "path_coefficient" not in payload_str
         assert "significant" not in payload_str
+
+
+# =========================================================================== #
+# Feature 005: Component 3 Longitudinal Analytics Prototype Workflow        #
+# =========================================================================== #
+
+# 1. UI route and page content
+def test_component3_page_returns_200(client):
+    """GET /component3/ must return HTTP 200."""
+    response = client.get("/component3/")
+    assert response.status_code == 200
+
+
+def test_component3_page_contains_title(client):
+    """Component 3 page must contain 'Longitudinal AI-Assisted Study Pattern Analytics'."""
+    data = client.get("/component3/").data
+    assert b"Longitudinal AI-Assisted Study Pattern Analytics" in data
+
+
+def test_component3_page_contains_prototype_record(client):
+    """Component 3 page must contain 'Prototype record'."""
+    data = client.get("/component3/").data
+    assert b"Prototype record" in data or b"prototype record" in data.lower()
+
+
+def test_component3_page_contains_available_after_longitudinal_data_collection(client):
+    """Component 3 page must display 'Available after longitudinal data collection'."""
+    data = client.get("/component3/").data
+    assert b"Available after longitudinal data collection" in data
+
+
+# 2. Status API
+def test_component3_status_api_returns_200(client):
+    """GET /api/component3/status must return HTTP 200."""
+    response = client.get("/api/component3/status")
+    assert response.status_code == 200
+
+
+def test_component3_status_api_reports_dataset_not_ready(client):
+    """Status API must report dataset_ready = False."""
+    body = client.get("/api/component3/status").get_json()
+    assert body["dataset_ready"] is False
+
+
+def test_component3_status_api_reports_trend_analysis_unavailable(client):
+    """Status API must report trend_analysis_available = False."""
+    body = client.get("/api/component3/status").get_json()
+    assert body["trend_analysis_available"] is False
+
+
+def test_component3_status_api_reports_prompt_analysis_unavailable(client):
+    """Status API must report prompt_analysis_available = False."""
+    body = client.get("/api/component3/status").get_json()
+    assert body["prompt_analysis_available"] is False
+
+
+def test_component3_status_api_reports_study_pattern_results_unavailable(client):
+    """Status API must report study_pattern_results_available = False."""
+    body = client.get("/api/component3/status").get_json()
+    assert body["study_pattern_results_available"] is False
+
+
+# 3. Specification API
+def test_component3_specification_api_returns_200(client):
+    """GET /api/component3/specification must return HTTP 200."""
+    response = client.get("/api/component3/specification")
+    assert response.status_code == 200
+
+
+def test_component3_specification_identifies_duration(client):
+    """Specification must identify planned duration as 4-6 weeks."""
+    body = client.get("/api/component3/specification").get_json()
+    assert "collection" in body
+    assert "4-6 weeks" in body["collection"]["planned_duration"]
+
+
+def test_component3_specification_includes_ai_study_share(client):
+    """Specification must include 'AI Study Share' indicator."""
+    body = client.get("/api/component3/specification").get_json()
+    assert "AI Study Share" in body["indicators"]
+
+
+def test_component3_specification_includes_independent_study_share(client):
+    """Specification must include 'Independent Study Share' indicator."""
+    body = client.get("/api/component3/specification").get_json()
+    assert "Independent Study Share" in body["indicators"]
+
+
+def test_component3_specification_includes_prompt_frequency(client):
+    """Specification must include 'Prompt Frequency' indicator."""
+    body = client.get("/api/component3/specification").get_json()
+    assert "Prompt Frequency" in body["indicators"]
+
+
+# 4. Weekly Record Validation API
+def test_validate_weekly_record_valid_returns_200(client, valid_weekly_payload):
+    """POST /api/component3/validate-weekly-record with valid payload returns HTTP 200."""
+    response = client.post(
+        "/api/component3/validate-weekly-record",
+        data=json.dumps(valid_weekly_payload),
+        content_type="application/json",
+    )
+    assert response.status_code == 200
+    body = response.get_json()
+    assert body["status"] == "valid"
+    assert body["analysis_ready"] is False
+    assert body["persistence"] is False
+
+
+def test_validate_weekly_record_missing_participant_id_returns_400(client, valid_weekly_payload):
+    """Missing participant reference ID returns HTTP 400."""
+    del valid_weekly_payload["participant_reference"]
+    response = client.post(
+        "/api/component3/validate-weekly-record",
+        data=json.dumps(valid_weekly_payload),
+        content_type="application/json",
+    )
+    assert response.status_code == 400
+    body = response.get_json()
+    assert body["status"] == "invalid"
+    assert any("participant_reference" in err for err in body["errors"])
+
+
+def test_validate_weekly_record_malformed_participant_id_returns_400(client, valid_weekly_payload):
+    """Malformed participant ID (e.g. email or invalid characters) returns HTTP 400."""
+    valid_weekly_payload["participant_reference"] = "student@sliit.lk"
+    response = client.post(
+        "/api/component3/validate-weekly-record",
+        data=json.dumps(valid_weekly_payload),
+        content_type="application/json",
+    )
+    assert response.status_code == 400
+    body = response.get_json()
+    assert any("Participant reference" in err for err in body["errors"])
+
+
+def test_validate_weekly_record_invalid_week_returns_400(client, valid_weekly_payload):
+    """Invalid study week returns HTTP 400."""
+    valid_weekly_payload["study_week"] = "Week 10"  # Allowed is Week 1-6
+    response = client.post(
+        "/api/component3/validate-weekly-record",
+        data=json.dumps(valid_weekly_payload),
+        content_type="application/json",
+    )
+    assert response.status_code == 400
+    body = response.get_json()
+    assert any("study week" in err for err in body["errors"])
+
+
+def test_validate_weekly_record_negative_ai_hours_returns_400(client, valid_weekly_payload):
+    """Negative AI-assisted study hours returns HTTP 400."""
+    valid_weekly_payload["ai_study_hours"] = -2.5
+    response = client.post(
+        "/api/component3/validate-weekly-record",
+        data=json.dumps(valid_weekly_payload),
+        content_type="application/json",
+    )
+    assert response.status_code == 400
+    body = response.get_json()
+    assert any("cannot be negative" in err for err in body["errors"])
+
+
+def test_validate_weekly_record_excessive_study_hours_returns_400(client, valid_weekly_payload):
+    """Excessive study hours (>168 hrs/week) returns HTTP 400."""
+    valid_weekly_payload["ai_study_hours"] = 200.0
+    response = client.post(
+        "/api/component3/validate-weekly-record",
+        data=json.dumps(valid_weekly_payload),
+        content_type="application/json",
+    )
+    assert response.status_code == 400
+    body = response.get_json()
+    assert any("cannot exceed" in err for err in body["errors"])
+
+
+def test_validate_weekly_record_negative_independent_hours_returns_400(client, valid_weekly_payload):
+    """Negative independent study hours returns HTTP 400."""
+    valid_weekly_payload["independent_study_hours"] = -1.0
+    response = client.post(
+        "/api/component3/validate-weekly-record",
+        data=json.dumps(valid_weekly_payload),
+        content_type="application/json",
+    )
+    assert response.status_code == 400
+    body = response.get_json()
+    assert any("cannot be negative" in err for err in body["errors"])
+
+
+def test_validate_weekly_record_invalid_academic_period_returns_400(client, valid_weekly_payload):
+    """Invalid academic period returns HTTP 400."""
+    valid_weekly_payload["academic_period"] = "Summer vacation holiday"
+    response = client.post(
+        "/api/component3/validate-weekly-record",
+        data=json.dumps(valid_weekly_payload),
+        content_type="application/json",
+    )
+    assert response.status_code == 400
+    body = response.get_json()
+    assert any("academic period" in err for err in body["errors"])
+
+
+def test_validate_weekly_record_invalid_learning_activity_returns_400(client, valid_weekly_payload):
+    """Invalid learning activity returns HTTP 400."""
+    valid_weekly_payload["learning_activity"] = "Playing video games"
+    response = client.post(
+        "/api/component3/validate-weekly-record",
+        data=json.dumps(valid_weekly_payload),
+        content_type="application/json",
+    )
+    assert response.status_code == 400
+    body = response.get_json()
+    assert any("learning activity" in err for err in body["errors"])
+
+
+def test_validate_weekly_record_negative_prompt_count_returns_400(client, valid_weekly_payload):
+    """Negative prompt count returns HTTP 400."""
+    valid_weekly_payload["prompt_count"] = -5
+    response = client.post(
+        "/api/component3/validate-weekly-record",
+        data=json.dumps(valid_weekly_payload),
+        content_type="application/json",
+    )
+    assert response.status_code == 400
+    body = response.get_json()
+    assert any("cannot be negative" in err for err in body["errors"])
+
+
+def test_validate_weekly_record_non_integer_prompt_count_returns_400(client, valid_weekly_payload):
+    """Float/non-integer prompt count returns HTTP 400."""
+    valid_weekly_payload["prompt_count"] = 4.7
+    response = client.post(
+        "/api/component3/validate-weekly-record",
+        data=json.dumps(valid_weekly_payload),
+        content_type="application/json",
+    )
+    assert response.status_code == 400
+    body = response.get_json()
+    assert any("integer" in err for err in body["errors"])
+
+
+def test_validate_weekly_record_invalid_prompt_purpose_returns_400(client, valid_weekly_payload):
+    """Invalid prompt purpose returns HTTP 400."""
+    valid_weekly_payload["prompt_purpose"] = "Unauthorised purpose"
+    response = client.post(
+        "/api/component3/validate-weekly-record",
+        data=json.dumps(valid_weekly_payload),
+        content_type="application/json",
+    )
+    assert response.status_code == 400
+    body = response.get_json()
+    assert any("prompt purpose" in err for err in body["errors"])
+
+
+def test_validate_weekly_record_rejects_unknown_fields(client, valid_weekly_payload):
+    """Submitting unexpected/unknown fields must return HTTP 400."""
+    valid_weekly_payload["extra_field"] = "unexpected_value"
+    valid_weekly_payload["user_real_name"] = "Alice"
+    response = client.post(
+        "/api/component3/validate-weekly-record",
+        data=json.dumps(valid_weekly_payload),
+        content_type="application/json",
+    )
+    assert response.status_code == 400
+    body = response.get_json()
+    assert any("Unknown fields are not permitted" in err for err in body["errors"])
+
+
+def test_validate_weekly_record_response_does_not_contain_trend_result(client, valid_weekly_payload):
+    """Validation response must NOT contain any trend analysis result."""
+    response = client.post(
+        "/api/component3/validate-weekly-record",
+        data=json.dumps(valid_weekly_payload),
+        content_type="application/json",
+    )
+    body = response.get_json()
+    payload_str = json.dumps(body).lower()
+    assert "trend_result" not in payload_str
+    assert "trend" not in payload_str
+    assert "slope" not in payload_str
+
+
+def test_validate_weekly_record_response_does_not_contain_study_pattern_classification(client, valid_weekly_payload):
+    """Validation response must NOT contain any study-pattern classification."""
+    response = client.post(
+        "/api/component3/validate-weekly-record",
+        data=json.dumps(valid_weekly_payload),
+        content_type="application/json",
+    )
+    body = response.get_json()
+    payload_str = json.dumps(body).lower()
+    assert "study_pattern_classification" not in payload_str
+    assert "classification" not in payload_str
+    assert "cluster" not in payload_str
+
+
+# 5. Longitudinal Analysis Service Unit Tests
+def test_longitudinal_analysis_service_raises_not_available_error():
+    """analysis_service.get_trends() must raise LongitudinalAnalysisNotAvailableError."""
+    svc = LongitudinalAnalysisService()
+    with pytest.raises(LongitudinalAnalysisNotAvailableError) as exc_info:
+        svc.get_trends()
+    assert "not available until the required multi-week research dataset has been collected" in str(exc_info.value)
+
+
+def test_longitudinal_analysis_service_is_analysis_available_returns_false():
+    """analysis_service.is_analysis_available() must return False."""
+    svc = LongitudinalAnalysisService()
+    assert svc.is_analysis_available() is False

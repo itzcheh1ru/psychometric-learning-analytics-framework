@@ -29,14 +29,16 @@
 | Feature 002 | Responsive research dashboard shell | ✅ Complete |
 | Feature 003 | Component 1 interactive prototype workflow | ✅ Complete |
 | Feature 004 | Component 2 SEM analysis prototype workflow | ✅ Complete |
+| Feature 005 | Component 3 longitudinal analytics prototype workflow | ✅ Complete |
 
-**Feature 004 notes:**
-- Component 2 prototype: Implemented (specification API, status API, construct cards, measurement/structural workflows).
-- CFA: Pending validated data (`measurement_model_estimated = false`).
-- SEM: Pending validated data (`structural_model_estimated = false`).
-- SEM Results: Not available (`sem_results_available = false`, `SemResultService` raises `SemResultsNotAvailableError`).
-- R/lavaan integration: Architecture prepared; final results integration pending.
-- Research integrity: Conceptual pathways clearly identified as planned relationships to be tested; no artificial coefficients or fit statistics.
+**Feature 005 notes:**
+- Component 3 prototype: Implemented (specification API, status API, weekly study-record validation, indicator definitions).
+- Weekly data structure: Implemented (4–6 week observation schema, time distribution, prompt frequency, academic context).
+- Longitudinal validation: Implemented (safe sanitisation, range checking, unknown field rejection, no persistence).
+- Longitudinal dataset: Pending collection (`dataset_ready = false`).
+- Trend analysis: Not yet enabled (`trend_analysis_available = false`, `LongitudinalAnalysisService` raises `LongitudinalAnalysisNotAvailableError`).
+- Prompt behaviour analysis: Not yet enabled (`prompt_analysis_available = false`).
+- Final longitudinal findings: Not available (no fake trends, no mock histories, no simulated participant patterns).
 
 ---
 

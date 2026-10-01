@@ -205,6 +205,72 @@ A strict separation of concerns is maintained between statistical estimation and
 
 ---
 
+## Component 3 Architecture – Longitudinal Study Pattern Analytics
+
+### Weekly Participant Record Structure
+
+Component 3 tracks study behaviour and academic prompt interactions across repeated weekly observations (4–6 weeks planned duration):
+
+| Variable | Type / Constraints | Description |
+|----------|-------------------|-------------|
+| `participant_reference` | String (1–20 chars, regex `^[A-Za-z0-9\-]+$`) | Anonymised research participant identifier |
+| `study_week` | Categorical ("Week 1" – "Week 6") | Observation week index |
+| `ai_study_hours` | Float ($0.0 \le h \le 168.0$) | Weekly study hours involving active Generative AI assistance |
+| `independent_study_hours` | Float ($0.0 \le h \le 168.0$) | Weekly study hours completed without direct AI assistance |
+| `academic_period` | Categorical (5 academic contexts) | Academic context (regular week, assignments, exams, projects) |
+| `learning_activity` | Categorical (7 academic activities) | Dominant learning activity for the study week |
+| `prompt_count` | Integer ($0 \le n \le 2000$) | Weekly count of academic GenAI prompts (no raw text stored) |
+| `prompt_purpose` | Categorical (7 academic purposes) | Primary academic purpose of student GenAI interactions |
+
+### Methodological Boundaries and Pipeline Architecture
+
+A strict boundary exists between prototype data validation and empirical longitudinal analytics:
+
+```
+┌────────────────────────────────────────────────────────┐
+│           Weekly Diary Data Collection Layer           │
+│  - Anonymised weekly observation submission            │
+│  - Zero raw prompt text collection                     │
+└───────────────────────────┬────────────────────────────┘
+                            │ Validation & Preprocessing
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│          Longitudinal Research Dataset Boundary        │
+│  - Multi-week participant consolidation (Weeks 1–6)    │
+│  - Baseline vs. subsequent week alignment              │
+│  - Missing-observation handling & screening            │
+└───────────────────────────┬────────────────────────────┘
+                            │ Preprocessed time series
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│           Behavioural Indicator Generation             │
+│  - AI Study Share = AI Hours / (AI + Independent Hours)│
+│  - Independent Study Share = Ind Hours / Total Hours   │
+│  - Prompt Frequency = Weekly Interaction Count         │
+│  - Study Pattern Shift Index across observation weeks  │
+└───────────────────────────┬────────────────────────────┘
+                            │ Indicator matrices
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│             Trend & Prompt Analytics Engine            │
+│  - Time-series slope estimation & trajectory grouping  │
+│  - Academic-period comparative analysis (e.g. exams)   │
+│  - Prompt purpose distribution evolution               │
+└───────────────────────────┬────────────────────────────┘
+                            │ Validated findings
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│         Dashboard Presentation Layer (/component3/)    │
+│  - Interactive prototype record validation             │
+│  - Displays longitudinal trends only after dataset is   │
+│    fully assembled and validated                       │
+└────────────────────────────────────────────────────────┘
+```
+
+> **Research Integrity Principle:** **Prototype validation does not equal longitudinal research analysis.** The `/api/component3/validate-weekly-record` endpoint validates the structural soundness of an individual record; it does not calculate longitudinal trends, infer behavioural shifts, or persist data. Trend analysis will only be executed once the complete 4–6 week empirical dataset has been validated.
+
+---
+
 ## Dashboard Integration (planned)
 
 Once all four components have been analysed, their outputs will be surfaced
@@ -235,4 +301,4 @@ in the shared research dashboard at `/dashboard`:
 
 ---
 
-*Last updated: Feature 004 – Component 2 SEM analysis prototype workflow*
+*Last updated: Feature 005 – Component 3 longitudinal analytics prototype workflow*
