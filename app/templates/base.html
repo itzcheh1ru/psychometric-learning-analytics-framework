@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Psychometric Learning Analytics Framework – Research Prototype J26-DS-310" />
+    <title>{% block title %}Psychometric Learning Analytics Framework{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+    <!-- ================================================================
+         Navigation Bar
+    ================================================================ -->
+    <header class="site-header">
+        <nav class="nav-container">
+            <div class="nav-brand">
+                <span class="nav-logo">&#x1F9E0;</span>
+                <div class="nav-title-group">
+                    <span class="nav-title">PLAF</span>
+                    <span class="nav-subtitle">J26-DS-310</span>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('main.index') }}" class="nav-link">Home</a></li>
+                <li><a href="{{ url_for('main.dashboard') }}" class="nav-link">Dashboard</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ================================================================
+         Prototype Status Banner
+    ================================================================ -->
+    <div class="prototype-banner">
+        &#x26A0;&#xFE0F; &nbsp;<strong>Prototype Status:</strong>&nbsp;
+        Research data collection is in progress. No real findings are presented.
+    </div>
+
+    <!-- ================================================================
+         Main Content
+    ================================================================ -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- ================================================================
+         Footer
+    ================================================================ -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <p class="footer-institution">
+                Sri Lanka Institute of Information Technology (SLIIT) &mdash;
+                Centre of Excellence in Artificial Intelligence (CoEAI)
+            </p>
+            <p class="footer-note">
+                This is an academic research prototype. All data is anonymised.
+                No real participant data is stored in this repository.
+            </p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

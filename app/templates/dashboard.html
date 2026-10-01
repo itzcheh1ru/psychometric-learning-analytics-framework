@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}Research Dashboard – Psychometric Learning Analytics Framework{% endblock %}
+
+{% block content %}
+
+<!-- ================================================================
+     Dashboard Header
+================================================================ -->
+<section class="page-header">
+    <div class="page-header-inner">
+        <h1 class="page-title">Research Analytics Dashboard</h1>
+        <p class="page-subtitle">
+            Project J26-DS-310 &mdash; Four independent analytical modules.
+            Data collection is currently in progress.
+        </p>
+    </div>
+</section>
+
+<!-- ================================================================
+     Dashboard Component Cards
+================================================================ -->
+<section class="section">
+    <div class="section-container">
+
+        <div class="dashboard-grid">
+
+            <!-- Component 1 -->
+            <article class="dashboard-card">
+                <div class="dashboard-card-header dashboard-card-header--c1">
+                    <span class="dashboard-card-number">01</span>
+                    <h2 class="dashboard-card-title">Cognitive Offloading Risk Prediction</h2>
+                </div>
+                <div class="dashboard-card-body">
+                    <p class="dashboard-card-tech">
+                        Logistic Regression &middot; Random Forest &middot; XGBoost &middot; SHAP
+                    </p>
+                    <p class="dashboard-card-desc">
+                        Predicts students' cognitive offloading risk based on
+                        GenAI usage behaviour, verification practices and
+                        learning strategies. Provides SHAP-based individual
+                        prediction explanations.
+                    </p>
+                    <div class="module-status">
+                        <span class="status-indicator status-indicator--dev"></span>
+                        Module under development
+                    </div>
+                    <a href="{{ url_for('component1.index') }}" class="btn btn-outline btn-sm">
+                        View Module
+                    </a>
+                </div>
+            </article>
+
+            <!-- Component 2 -->
+            <article class="dashboard-card">
+                <div class="dashboard-card-header dashboard-card-header--c2">
+                    <span class="dashboard-card-number">02</span>
+                    <h2 class="dashboard-card-title">Algorithmic Trust &amp; Verification Analysis</h2>
+                </div>
+                <div class="dashboard-card-body">
+                    <p class="dashboard-card-tech">
+                        CFA &middot; Structural Equation Modelling &middot; R / lavaan
+                    </p>
+                    <p class="dashboard-card-desc">
+                        Models the psychological relationships between
+                        algorithmic trust, verification behaviour, perceived
+                        usefulness, AI dependence and learning confidence
+                        via SEM path analysis.
+                    </p>
+                    <div class="module-status">
+                        <span class="status-indicator status-indicator--dev"></span>
+                        Module under development
+                    </div>
+                    <a href="{{ url_for('component2.index') }}" class="btn btn-outline btn-sm">
+                        View Module
+                    </a>
+                </div>
+            </article>
+
+            <!-- Component 3 -->
+            <article class="dashboard-card">
+                <div class="dashboard-card-header dashboard-card-header--c3">
+                    <span class="dashboard-card-number">03</span>
+                    <h2 class="dashboard-card-title">Longitudinal Study Pattern Analytics</h2>
+                </div>
+                <div class="dashboard-card-body">
+                    <p class="dashboard-card-tech">
+                        Pandas &middot; Time-Series Analysis &middot; Trend Modelling
+                    </p>
+                    <p class="dashboard-card-desc">
+                        Analyses how AI-assisted and independent study patterns
+                        change over time using longitudinal diary records,
+                        moving averages and prompt behaviour trend analysis.
+                    </p>
+                    <div class="module-status">
+                        <span class="status-indicator status-indicator--dev"></span>
+                        Module under development
+                    </div>
+                    <a href="{{ url_for('component3.index') }}" class="btn btn-outline btn-sm">
+                        View Module
+                    </a>
+                </div>
+            </article>
+
+            <!-- Component 4 -->
+            <article class="dashboard-card">
+                <div class="dashboard-card-header dashboard-card-header--c4">
+                    <span class="dashboard-card-number">04</span>
+                    <h2 class="dashboard-card-title">Cognitive Engagement &amp; Learning Retention</h2>
+                </div>
+                <div class="dashboard-card-body">
+                    <p class="dashboard-card-tech">
+                        NLP &middot; NLTK &middot; spaCy &middot; Semantic Analysis &middot; SciPy
+                    </p>
+                    <p class="dashboard-card-desc">
+                        Evaluates writing quality, lexical diversity, semantic
+                        similarity and knowledge recall under AI-assisted and
+                        brain-only writing conditions using NLP-based analysis.
+                    </p>
+                    <div class="module-status">
+                        <span class="status-indicator status-indicator--dev"></span>
+                        Module under development
+                    </div>
+                    <a href="{{ url_for('component4.index') }}" class="btn btn-outline btn-sm">
+                        View Module
+                    </a>
+                </div>
+            </article>
+
+        </div><!-- /.dashboard-grid -->
+
+    </div>
+</section>
+
+{% endblock %}

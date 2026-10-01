@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Home – Psychometric Learning Analytics Framework{% endblock %}
+
+{% block content %}
+
+<!-- ================================================================
+     Hero Section
+================================================================ -->
+<section class="hero">
+    <div class="hero-inner">
+        <div class="hero-badge">Research Prototype</div>
+        <h1 class="hero-title">Psychometric Learning Analytics Framework</h1>
+        <p class="hero-project-id">Project ID: <strong>J26-DS-310</strong></p>
+        <p class="hero-description">
+            A data-driven research framework designed to analyse the impact of
+            Generative AI on undergraduate learning behaviour, cognitive
+            engagement, algorithmic trust, and knowledge retention.
+        </p>
+        <p class="hero-description">
+            The framework integrates Explainable Machine Learning, Structural
+            Equation Modelling (SEM), Longitudinal Learning Analytics, and
+            Natural Language Processing (NLP) to generate evidence-based
+            insights for responsible AI adoption in higher education.
+        </p>
+        <div class="hero-actions">
+            <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary">
+                View Research Dashboard
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================
+     Research Component Overview
+================================================================ -->
+<section class="section">
+    <div class="section-container">
+        <h2 class="section-title">Research Components</h2>
+        <p class="section-subtitle">
+            Four independent analytical modules that will be integrated into
+            a unified research analytics dashboard upon data collection completion.
+        </p>
+
+        <div class="component-grid">
+
+            <div class="component-card">
+                <div class="component-number">01</div>
+                <h3 class="component-name">Cognitive Offloading Risk Prediction</h3>
+                <p class="component-tech">
+                    Logistic Regression &middot; Random Forest &middot; XGBoost &middot; SHAP
+                </p>
+                <p class="component-desc">
+                    Predicts cognitive offloading risk based on students'
+                    GenAI usage, verification practices and learning strategies.
+                </p>
+            </div>
+
+            <div class="component-card">
+                <div class="component-number">02</div>
+                <h3 class="component-name">Algorithmic Trust &amp; Verification</h3>
+                <p class="component-tech">CFA &middot; Structural Equation Modelling &middot; R / lavaan</p>
+                <p class="component-desc">
+                    Models psychological pathways between trust, perceived
+                    usefulness, verification behaviour and AI dependence.
+                </p>
+            </div>
+
+            <div class="component-card">
+                <div class="component-number">03</div>
+                <h3 class="component-name">Longitudinal Study Pattern Analytics</h3>
+                <p class="component-tech">Pandas &middot; Time-Series Analysis &middot; Trend Modelling</p>
+                <p class="component-desc">
+                    Tracks how AI-assisted and independent study patterns
+                    evolve over time across the research cohort.
+                </p>
+            </div>
+
+            <div class="component-card">
+                <div class="component-number">04</div>
+                <h3 class="component-name">Cognitive Engagement &amp; Learning Retention</h3>
+                <p class="component-tech">NLP &middot; NLTK &middot; spaCy &middot; Statistical Analysis</p>
+                <p class="component-desc">
+                    Evaluates writing quality, lexical diversity and recall
+                    under AI-assisted and brain-only writing conditions.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================
+     Institution
+================================================================ -->
+<section class="section section-alt">
+    <div class="section-container text-center">
+        <h2 class="section-title">Institution</h2>
+        <p>
+            <strong>Sri Lanka Institute of Information Technology (SLIIT)</strong><br />
+            Centre of Excellence in Artificial Intelligence (CoEAI)<br />
+            Specialisation: Data Science
+        </p>
+    </div>
+</section>
+
+{% endblock %}
