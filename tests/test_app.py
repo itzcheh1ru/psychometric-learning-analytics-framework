@@ -38,6 +38,11 @@ from app.services.longitudinal import (
     LongitudinalAnalysisService,
     analysis_service,
 )
+from app.services.retention import (
+    RetentionAnalysisNotAvailableError,
+    RetentionAnalysisService,
+    analysis_service as retention_analysis_service,
+)
 
 
 @pytest.fixture
@@ -84,6 +89,19 @@ def valid_weekly_payload():
         "learning_activity": "Concept learning",
         "prompt_count": 12,
         "prompt_purpose": "Concept explanation",
+    }
+
+
+@pytest.fixture
+def valid_session_payload():
+    """Return a valid prototype experimental session payload."""
+    return {
+        "participant_reference": "P0001",
+        "experimental_condition": "Brain-only writing",
+        "condition_order": "Brain-only first",
+        "session_stage": "Writing task",
+        "task_reference": "TASK01",
+        "consent_confirmed": True,
     }
 
 
@@ -879,3 +897,282 @@ def test_longitudinal_analysis_service_is_analysis_available_returns_false():
     """analysis_service.is_analysis_available() must return False."""
     svc = LongitudinalAnalysisService()
     assert svc.is_analysis_available() is False
+
+
+# =========================================================================== #
+# Feature 006: Component 4 Cognitive Engagement & Learning Retention         #
+# =========================================================================== #
+
+def test_component4_page_returns_200_and_content(client):
+    """GET /component4/ returns 200 with required structure and empty-state disclaimer."""
+    response = client.get("/component4/")
+    assert response.status_code == 200
+    html = response.get_data(as_text=True)
+
+    # Core condition references
+    assert "Brain-Only Writing" in html
+    assert "GenAI-Assisted Writing" in html
+    assert "Better writing output does not automatically imply better learning" in html
+    assert "Pending experimental data" in html or "Pending experimental evaluation" in html
+    assert "Available after experimental analysis" in html
+    assert "Counterbalanced condition order" in html or "counterbalanced" in html.lower()
+
+    # Empty analytics state check for research integrity
+    assert "NLP analytics not yet available" in html
+
+    # Methodological architecture elements
+    assert "Controlled Experimental Sessions" in html
+    assert "Validate Experimental Session" in html
+
+
+def test_component4_status_api(client):
+    """GET /api/component4/status returns 200 with all availability flags False."""
+    response = client.get("/api/component4/status")
+    assert response.status_code == 200
+    data = response.get_json()
+
+    assert data["dataset_ready"] is False
+    assert data["nlp_analysis_available"] is False
+    assert data["recall_analysis_available"] is False
+    assert data["paired_analysis_available"] is False
+    assert data["final_results_available"] is False
+    assert "prototype" in data["stage"].lower() or "in_progress" in data["experimental_data_collection"].lower()
+
+
+def test_component4_specification_api(client):
+    """GET /api/component4/specification returns 200 with experimental specifications."""
+    response = client.get("/api/component4/specification")
+    assert response.status_code == 200
+    data = response.get_json()
+
+    assert "Brain-only writing" in data["conditions"]
+    assert "GenAI-assisted writing" in data["conditions"]
+    assert "Brain-only first" in data["condition_orders"]
+    assert "GenAI-assisted first" in data["condition_orders"]
+    assert "Writing task" in data["session_stages"]
+    assert "Immediate recall" in data["session_stages"]
+    assert "Delayed recall" in data["session_stages"]
+
+    outcome_names = [o["name"] for o in data["outcomes"]]
+    assert "Immediate Recall" in outcome_names
+    assert "Delayed Recall" in outcome_names
+    assert "Ownership" in outcome_names
+    assert "Cognitive Effort" in outcome_names
+
+    nlp_names = [n["name"] for n in data["nlp_features"]]
+    assert "Lexical Diversity" in nlp_names
+    assert "Readability Scores" in nlp_names
+    assert "Sentence Complexity" in nlp_names
+    assert "Semantic Similarity" in nlp_names
+
+
+def test_validate_session_valid_payload_returns_200(client, valid_session_payload):
+    """Valid experimental session payload returns HTTP 200 and echo validated_session."""
+    response = client.post(
+        "/api/component4/validate-session",
+        data=json.dumps(valid_session_payload),
+        content_type="application/json",
+    )
+    assert response.status_code == 200
+    data = response.get_json()
+    assert data["valid"] is True
+    validated = data["validated_session"]
+    assert validated["participant_reference"] == "P0001"
+    assert validated["experimental_condition"] == "Brain-only writing"
+    assert validated["condition_order"] == "Brain-only first"
+    assert validated["session_stage"] == "Writing task"
+    assert validated["task_reference"] == "TASK01"
+    assert validated["consent_confirmed"] is True
+
+
+def test_validate_session_missing_required_fields_returns_400(client, valid_session_payload):
+    """Missing any required field returns HTTP 400 with specific error."""
+    required_keys = [
+        "participant_reference",
+        "experimental_condition",
+        "condition_order",
+        "session_stage",
+        "task_reference",
+        "consent_confirmed",
+    ]
+    for key in required_keys:
+        payload = dict(valid_session_payload)
+        del payload[key]
+        response = client.post(
+            "/api/component4/validate-session",
+            data=json.dumps(payload),
+            content_type="application/json",
+        )
+        assert response.status_code == 400, f"Expected 400 when '{key}' is missing"
+        data = response.get_json()
+        assert not data["valid"]
+        assert any(key in err or "consent" in err.lower() for err in data["errors"])
+
+
+def test_validate_session_malformed_participant_reference_returns_400(client, valid_session_payload):
+    """Malformed participant reference returns HTTP 400."""
+    invalid_refs = ["P@01", "P", "A" * 25, ""]
+    for bad_ref in invalid_refs:
+        payload = dict(valid_session_payload)
+        payload["participant_reference"] = bad_ref
+        response = client.post(
+            "/api/component4/validate-session",
+            data=json.dumps(payload),
+            content_type="application/json",
+        )
+        assert response.status_code == 400, f"Expected 400 for bad participant_reference: '{bad_ref}'"
+        data = response.get_json()
+        assert not data["valid"]
+
+
+def test_validate_session_invalid_experimental_condition_returns_400(client, valid_session_payload):
+    """Invalid experimental condition returns HTTP 400."""
+    valid_session_payload["experimental_condition"] = "Autonomous Agent Writing"
+    response = client.post(
+        "/api/component4/validate-session",
+        data=json.dumps(valid_session_payload),
+        content_type="application/json",
+    )
+    assert response.status_code == 400
+    data = response.get_json()
+    assert any("experimental condition" in err.lower() for err in data["errors"])
+
+
+def test_validate_session_invalid_condition_order_returns_400(client, valid_session_payload):
+    """Invalid condition order returns HTTP 400."""
+    valid_session_payload["condition_order"] = "Randomized Sequence"
+    response = client.post(
+        "/api/component4/validate-session",
+        data=json.dumps(valid_session_payload),
+        content_type="application/json",
+    )
+    assert response.status_code == 400
+    data = response.get_json()
+    assert any("condition order" in err.lower() for err in data["errors"])
+
+
+def test_validate_session_invalid_session_stage_returns_400(client, valid_session_payload):
+    """Invalid session stage returns HTTP 400."""
+    valid_session_payload["session_stage"] = "Post-experiment debrief"
+    response = client.post(
+        "/api/component4/validate-session",
+        data=json.dumps(valid_session_payload),
+        content_type="application/json",
+    )
+    assert response.status_code == 400
+    data = response.get_json()
+    assert any("session stage" in err.lower() for err in data["errors"])
+
+
+def test_validate_session_malformed_task_reference_returns_400(client, valid_session_payload):
+    """Malformed task reference returns HTTP 400."""
+    valid_session_payload["task_reference"] = "TASK#01"
+    response = client.post(
+        "/api/component4/validate-session",
+        data=json.dumps(valid_session_payload),
+        content_type="application/json",
+    )
+    assert response.status_code == 400
+    data = response.get_json()
+    assert any("task reference" in err.lower() for err in data["errors"])
+
+
+def test_validate_session_consent_not_confirmed_returns_400(client, valid_session_payload):
+    """Consent confirmed = False returns HTTP 400."""
+    valid_session_payload["consent_confirmed"] = False
+    response = client.post(
+        "/api/component4/validate-session",
+        data=json.dumps(valid_session_payload),
+        content_type="application/json",
+    )
+    assert response.status_code == 400
+    data = response.get_json()
+    assert any("consent" in err.lower() for err in data["errors"])
+
+
+def test_validate_session_consent_not_boolean_returns_400(client, valid_session_payload):
+    """Non-boolean consent confirmed returns HTTP 400."""
+    valid_session_payload["consent_confirmed"] = "True"
+    response = client.post(
+        "/api/component4/validate-session",
+        data=json.dumps(valid_session_payload),
+        content_type="application/json",
+    )
+    assert response.status_code == 400
+    data = response.get_json()
+    assert any("boolean" in err.lower() for err in data["errors"])
+
+
+def test_validate_session_rejects_unknown_fields(client, valid_session_payload):
+    """Submitting unknown fields like essay text or student name returns HTTP 400."""
+    valid_session_payload["essay_response_text"] = "This is a student written essay sample..."
+    valid_session_payload["student_real_name"] = "Alice Smith"
+    response = client.post(
+        "/api/component4/validate-session",
+        data=json.dumps(valid_session_payload),
+        content_type="application/json",
+    )
+    assert response.status_code == 400
+    data = response.get_json()
+    assert any("unknown fields" in err.lower() for err in data["errors"])
+
+
+def test_validate_session_empty_payload_returns_400(client):
+    """Empty JSON body returns HTTP 400."""
+    response = client.post(
+        "/api/component4/validate-session",
+        data=json.dumps({}),
+        content_type="application/json",
+    )
+    assert response.status_code == 400
+    data = response.get_json()
+    assert not data["valid"]
+
+
+def test_validate_session_response_does_not_contain_recall_or_retention_scores(client, valid_session_payload):
+    """Validation response must NOT contain any simulated recall, retention, or effect-size metrics."""
+    response = client.post(
+        "/api/component4/validate-session",
+        data=json.dumps(valid_session_payload),
+        content_type="application/json",
+    )
+    body = response.get_json()
+    payload_str = json.dumps(body).lower()
+
+    assert "recall_score" not in payload_str
+    assert "retention_score" not in payload_str
+    assert "ownership_score" not in payload_str
+    assert "cognitive_effort_score" not in payload_str
+    assert "p_value" not in payload_str
+    assert "effect_size" not in payload_str
+    assert "cohen" not in payload_str
+    assert "superiority" not in payload_str
+
+
+def test_retention_analysis_service_raises_not_available_error():
+    """RetentionAnalysisService.get_results() must raise RetentionAnalysisNotAvailableError."""
+    svc = RetentionAnalysisService()
+    with pytest.raises(RetentionAnalysisNotAvailableError) as exc_info:
+        svc.get_results()
+    assert "not available until the controlled experimental dataset has been collected" in str(exc_info.value)
+
+
+def test_retention_analysis_service_is_analysis_available_returns_false():
+    """RetentionAnalysisService.is_analysis_available() must return False."""
+    svc = RetentionAnalysisService()
+    assert svc.is_analysis_available() is False
+
+
+def test_component4_no_fabricated_findings_in_apis(client):
+    """Component 4 status and specification endpoints contain no fabricated p-values or effect sizes."""
+    for endpoint in ["/api/component4/status", "/api/component4/specification"]:
+        response = client.get(endpoint)
+        assert response.status_code == 200
+        text = json.dumps(response.get_json()).lower()
+        assert "p_value" not in text
+        assert "p-value" not in text
+        assert "p <" not in text
+        assert "effect_size" not in text
+        assert "cohen" not in text
+        assert "hedges" not in text
+        assert "eta_squared" not in text

@@ -24,7 +24,7 @@ def create_app() -> Flask:
     from app.routes.component1 import component1_bp, api_component1_bp
     from app.routes.component2 import component2_bp, api_component2_bp
     from app.routes.component3 import component3_bp, api_component3_bp
-    from app.routes.component4 import component4_bp
+    from app.routes.component4 import component4_bp, api_component4_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(component1_bp)
@@ -34,5 +34,6 @@ def create_app() -> Flask:
     app.register_blueprint(component3_bp)
     app.register_blueprint(api_component3_bp)
     app.register_blueprint(component4_bp)
+    app.register_blueprint(api_component4_bp)
 
     return app

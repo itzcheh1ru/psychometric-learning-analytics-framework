@@ -271,6 +271,84 @@ A strict boundary exists between prototype data validation and empirical longitu
 
 ---
 
+## Component 4 Architecture – Cognitive Engagement & Learning Retention Evaluation
+
+### Experimental Protocol and Conditions
+
+Component 4 evaluates writing output quality, cognitive effort, psychological ownership, and knowledge retention across two controlled writing conditions:
+- **Condition A (Brain-Only Writing):** Student completes academic writing without Generative AI assistance.
+- **Condition B (GenAI-Assisted Writing):** Student completes academic writing with permitted Generative AI assistance.
+
+### Counterbalancing Protocol
+
+To isolate treatment effects from ordering and topic confounding, a counterbalancing design is employed:
+- **Sequence A:** Brain-only condition first, followed by GenAI-assisted condition.
+- **Sequence B:** GenAI-assisted condition first, followed by brain-only condition.
+
+Topic equivalence and washout intervals are enforced between sessions.
+
+### Prototype Experimental Session Record Schema
+
+| Variable | Type / Constraints | Description |
+|---|---|---|
+| `participant_reference` | String (2–20 chars, `^[A-Za-z0-9\-_]{2,20}$`) | Anonymised research participant identifier |
+| `experimental_condition` | Categorical ("Brain-only writing", "GenAI-assisted writing") | Assigned experimental writing condition |
+| `condition_order` | Categorical ("Brain-only first", "GenAI-assisted first") | Counterbalanced order assignment |
+| `session_stage` | Categorical ("Writing task", "Immediate recall", "Ownership / cognitive effort", "Delayed recall") | Session experimental stage |
+| `task_reference` | String (2–20 chars, `^[A-Za-z0-9\-_]{2,20}$`) | Anonymised writing task reference code |
+| `consent_confirmed` | Boolean (`True`) | Explicit confirmation of research consent |
+
+### Analytical Pipeline and Research Integrity Boundaries
+
+A multi-stage architecture separates session metadata validation from subsequent NLP, rubric, and recall analytics:
+
+```
+┌────────────────────────────────────────────────────────┐
+│         Controlled Experimental Session Layer          │
+│  - Anonymised session metadata validation              │
+│  - Zero raw essay text persistence in prototype        │
+│  - Ethical consent verification                        │
+└───────────────────────────┬────────────────────────────┘
+                            │ Validated session records
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│        Anonymised Corpus Preprocessing Pipeline        │
+│  - Text sanitisation and lemmatisation                 │
+│  - spaCy dependency parsing & NLTK text processing    │
+│  - Rater anonymisation for rubric scoring              │
+└───────────────────────────┬────────────────────────────┘
+                            │ Preprocessed data
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│          Multi-Branch Analytical Engine                │
+│  - NLP Feature Extraction (TTR, readability, cosine)   │
+│  - Independent Human Rubric Scoring (inter-rater kappa)│
+│  - Immediate & Delayed Recall Assessment               │
+│  - Psychological Ownership & Cognitive Effort Scales   │
+└───────────────────────────┬────────────────────────────┘
+                            │ Multi-modal measures
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│          Paired Condition Comparison Engine            │
+│  - Within-participant paired difference testing        │
+│  - Effect size estimation (Cohen's d) & 95% CIs        │
+│  - Output quality vs. retention dissociation analysis  │
+└───────────────────────────┬────────────────────────────┘
+                            │ Validated empirical findings
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│         Dashboard Presentation Layer (/component4/)    │
+│  - Interactive prototype session validation            │
+│  - Condition comparison and analytical results         │
+│    displayed only after experimental validation        │
+└────────────────────────────────────────────────────────┘
+```
+
+> **Methodological Principle & Research Integrity Rule:** **Better writing output does not automatically imply better learning or retention.** High surface fluency produced by GenAI assistance must be decoupled from genuine conceptual integration and delayed recall.  
+> **Prototype session validation is NOT experimental outcome analysis.** The `/api/component4/validate-session` endpoint validates the structural integrity of session metadata; it does not grade writing, evaluate recall, calculate NLP metrics, or persist participant data.
+
+---
+
 ## Dashboard Integration (planned)
 
 Once all four components have been analysed, their outputs will be surfaced
@@ -301,4 +379,4 @@ in the shared research dashboard at `/dashboard`:
 
 ---
 
-*Last updated: Feature 005 – Component 3 longitudinal analytics prototype workflow*
+*Last updated: Feature 006 – Component 4 cognitive retention prototype workflow*

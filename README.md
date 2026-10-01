@@ -30,6 +30,17 @@
 | Feature 003 | Component 1 interactive prototype workflow | ✅ Complete |
 | Feature 004 | Component 2 SEM analysis prototype workflow | ✅ Complete |
 | Feature 005 | Component 3 longitudinal analytics prototype workflow | ✅ Complete |
+| Feature 006 | Component 4 cognitive retention prototype workflow | ✅ Complete |
+
+**Feature 006 notes:**
+- Component 4 prototype: Implemented (specification API, status API, session validation, learning outcomes, NLP feature framework).
+- Experimental condition schema: Implemented (Brain-only writing Condition A vs. GenAI-assisted writing Condition B).
+- Counterbalancing design: Implemented (Sequence A vs. Sequence B, order control, task code references).
+- Session validation: Implemented (safe in-memory sanitisation, required consent, rejection of unknown fields, no persistence).
+- Experimental dataset: Pending collection (`dataset_ready = false`).
+- NLP analysis: Not yet available (`nlp_analysis_available = false`, pending writing sample collection and spaCy/NLTK pipeline execution).
+- Recall / retention analysis: Not yet available (`recall_analysis_available = false`, `paired_analysis_available = false`, `RetentionAnalysisService` raises `RetentionAnalysisNotAvailableError`).
+- Final experimental findings: Not available (no fake essay texts, no simulated recall scores, no fabricated NLP metrics or effect sizes, no condition superiority claims).
 
 **Feature 005 notes:**
 - Component 3 prototype: Implemented (specification API, status API, weekly study-record validation, indicator definitions).
