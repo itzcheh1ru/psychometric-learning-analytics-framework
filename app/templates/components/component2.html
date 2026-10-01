@@ -2,8 +2,15 @@
 
 {% block title %}Algorithmic Trust & Verification — Component 2{% endblock %}
 
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/component2.css') }}" />
+{% endblock %}
+
 {% block content %}
 
+<!-- ================================================================
+     A. Component Header
+================================================================ -->
 <div class="page-heading">
     <nav class="breadcrumb" aria-label="Breadcrumb">
         <a href="{{ url_for('main.dashboard') }}" class="breadcrumb__link">Overview</a>
@@ -15,83 +22,458 @@
     </div>
     <h1 class="page-heading__title">Algorithmic Trust &amp; Verification Analysis</h1>
     <p class="page-heading__desc">
-        Analyses the psychological relationships between algorithmic trust, perceived
-        usefulness, verification behaviour, AI dependence and learning confidence using
-        Confirmatory Factor Analysis and Structural Equation Modelling.
+        Prototype representation of the psychometric CFA and Structural Equation Modelling workflow for GenAI-assisted learning behaviour.
     </p>
     <div class="page-heading__status">
-        <span class="status-badge status-badge--collection">
+        <span class="status-badge status-badge--preparation">
             <span class="status-badge__dot" aria-hidden="true"></span>
-            Data Collection / Module Preparation
+            Prototype &mdash; SEM Analysis Pending
         </span>
     </div>
 </div>
 
-<!-- Constructs -->
+<!-- Research stage notice -->
+<div class="info-banner info-banner--prototype" role="status">
+    <svg class="info-banner__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+    <div>
+        <strong>Research stage notice:</strong> Research data collection is currently in progress. The conceptual model shown here represents the planned analysis and does not contain empirical SEM findings.
+    </div>
+</div>
+
+
+<!-- ================================================================
+     B. Research Construct Overview
+================================================================ -->
 <section class="content-section" aria-labelledby="constructsHeading">
-    <h2 class="section-heading" id="constructsHeading">Psychometric Constructs</h2>
+    <div class="content-section__header">
+        <h2 class="section-heading" id="constructsHeading">Psychometric Constructs</h2>
+        <p class="section-subheading">
+            Five latent constructs defined in the psychometric survey instrument for Confirmatory Factor Analysis and Structural Equation Modelling.
+        </p>
+    </div>
+
     <div class="card-grid card-grid--3">
-        <div class="construct-card">
-            <div class="construct-card__name">Algorithmic Trust</div>
-            <p class="construct-card__desc">Degree to which students trust GenAI-generated outputs.</p>
+        {% for c in constructs %}
+        <article class="construct-card" aria-labelledby="construct-{{ c.code }}">
+            <div class="construct-card__header">
+                <span class="construct-badge construct-badge--{{ c.code|lower }}">{{ c.code }}</span>
+                <div class="construct-card__meta">
+                    <h3 class="construct-card__name" id="construct-{{ c.code }}">{{ c.name }}</h3>
+                    <span class="construct-card__role">{{ c.role }}</span>
+                </div>
+            </div>
+            <p class="construct-card__desc">{{ c.description }}</p>
+            <div class="construct-card__footer">
+                <span class="construct-status">Construct Status: Defined in Survey Instrument</span>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+
+
+<!-- ================================================================
+     C. Measurement Model Workflow
+================================================================ -->
+<section class="content-section" aria-labelledby="measurementHeading">
+    <div class="content-section__header">
+        <h2 class="section-heading" id="measurementHeading">Measurement Model Workflow</h2>
+        <p class="section-subheading">
+            Sequential Confirmatory Factor Analysis (CFA) validation pipeline to establish indicator reliability, construct reliability, convergent validity, and discriminant validity.
+        </p>
+    </div>
+
+    <div class="cfa-workflow" role="img" aria-label="Measurement model workflow: Survey Items to Construct Preparation to Confirmatory Factor Analysis to Factor Loadings to Reliability Assessment to Convergent Validity to Discriminant Validity to Validated Measurement Model">
+        <div class="cfa-steps">
+            <div class="cfa-step cfa-step--source">
+                <span class="cfa-step__title">Survey Items</span>
+                <span class="cfa-step__note">Item-level responses</span>
+            </div>
+            <div class="cfa-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="cfa-step cfa-step--prep">
+                <span class="cfa-step__title">Construct Preparation</span>
+                <span class="cfa-step__note">Normality, screening &amp; missing data</span>
+            </div>
+            <div class="cfa-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="cfa-step cfa-step--core">
+                <span class="cfa-step__title">Confirmatory Factor Analysis</span>
+                <span class="cfa-step__note">R / lavaan CFA estimation</span>
+            </div>
+            <div class="cfa-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="cfa-step cfa-step--eval">
+                <span class="cfa-step__title">Factor Loadings</span>
+                <span class="cfa-step__note">Standardised factor loadings</span>
+            </div>
+            <div class="cfa-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="cfa-step cfa-step--eval">
+                <span class="cfa-step__title">Reliability Assessment</span>
+                <span class="cfa-step__note">Cronbach's α &amp; Composite Reliability</span>
+            </div>
+            <div class="cfa-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="cfa-step cfa-step--eval">
+                <span class="cfa-step__title">Convergent Validity</span>
+                <span class="cfa-step__note">Average Variance Extracted (AVE)</span>
+            </div>
+            <div class="cfa-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="cfa-step cfa-step--eval">
+                <span class="cfa-step__title">Discriminant Validity</span>
+                <span class="cfa-step__note">Fornell-Larcker &amp; HTMT ratio</span>
+            </div>
+            <div class="cfa-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="cfa-step cfa-step--validated">
+                <span class="cfa-step__title">Validated Measurement Model</span>
+                <span class="cfa-step__note">Pre-requisite for structural model</span>
+            </div>
         </div>
-        <div class="construct-card">
-            <div class="construct-card__name">Perceived Usefulness</div>
-            <p class="construct-card__desc">Perceived benefit of GenAI for academic tasks.</p>
+    </div>
+
+    <!-- Planned measurement indicators -->
+    <h3 class="subsection-heading">Measurement Model Evaluation Criteria</h3>
+    <div class="metrics-grid">
+        {% for m in measurement_metrics %}
+        <div class="metric-card metric-card--pending">
+            <div class="metric-card__header">
+                <span class="metric-card__title">{{ m.name }}</span>
+                <span class="metric-card__thresh">{{ m.threshold }}</span>
+            </div>
+            <div class="metric-card__value metric-card__value--pending">
+                <span class="metric-dot" aria-hidden="true"></span>
+                {{ m.status }}
+            </div>
         </div>
-        <div class="construct-card">
-            <div class="construct-card__name">Verification Behaviour</div>
-            <p class="construct-card__desc">Frequency and depth of checking AI outputs independently.</p>
+        {% endfor %}
+    </div>
+</section>
+
+
+<!-- ================================================================
+     D. Structural Model Specification
+================================================================ -->
+<section class="content-section" aria-labelledby="structuralHeading">
+    <div class="content-section__header">
+        <h2 class="section-heading" id="structuralHeading">Structural Model Specification</h2>
+        <p class="section-subheading">
+            Conceptual structural model organisation. Direct and indirect pathways will be evaluated in the final SEM specification using Structural Equation Modelling.
+        </p>
+    </div>
+
+    <!-- Notice banner: planned relationships to be tested -->
+    <div class="model-tested-banner" role="note">
+        <span class="model-tested-badge">PLANNED RELATIONSHIPS TO BE TESTED</span>
+        <span class="model-tested-text">
+            Conceptual specification only. Arrows represent planned relationships to be tested through empirical SEM estimation, not confirmed empirical results.
+        </span>
+    </div>
+
+    <div class="conceptual-model" role="img" aria-label="Conceptual structural model: Antecedent Constructs (Algorithmic Trust, Perceived Usefulness) lead to Behavioural Mechanism (Verification Behaviour) which leads to Learning and Reliance Outcomes (AI Dependence, Learning Confidence)">
+        
+        <!-- Level 1: Antecedents -->
+        <div class="model-tier model-tier--antecedent">
+            <div class="model-tier__label">ANTECEDENT CONSTRUCTS</div>
+            <div class="model-tier__nodes">
+                <div class="model-node model-node--at">
+                    <span class="model-node__code">AT</span>
+                    <span class="model-node__name">Algorithmic Trust</span>
+                </div>
+                <div class="model-node model-node--pu">
+                    <span class="model-node__code">PU</span>
+                    <span class="model-node__name">Perceived Usefulness</span>
+                </div>
+            </div>
         </div>
-        <div class="construct-card">
-            <div class="construct-card__name">AI Dependence</div>
-            <p class="construct-card__desc">Extent to which learning relies on GenAI assistance.</p>
+
+        <!-- Connector Arrow -->
+        <div class="model-connector" aria-hidden="true">
+            <span class="model-connector__line"></span>
+            <span class="model-connector__label">Hypothesised direct &amp; indirect paths</span>
+            <span class="model-connector__arrow">&#x25BC;</span>
         </div>
-        <div class="construct-card">
-            <div class="construct-card__name">Learning Confidence</div>
-            <p class="construct-card__desc">Self-assessed confidence in independent understanding.</p>
+
+        <!-- Level 2: Behavioural Mechanism -->
+        <div class="model-tier model-tier--mechanism">
+            <div class="model-tier__label">BEHAVIOURAL MECHANISM (MEDIATOR)</div>
+            <div class="model-tier__nodes">
+                <div class="model-node model-node--vb">
+                    <span class="model-node__code">VB</span>
+                    <span class="model-node__name">Verification Behaviour</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Connector Arrow -->
+        <div class="model-connector" aria-hidden="true">
+            <span class="model-connector__line"></span>
+            <span class="model-connector__label">Hypothesised behavioural pathways</span>
+            <span class="model-connector__arrow">&#x25BC;</span>
+        </div>
+
+        <!-- Level 3: Learning / Reliance Outcomes -->
+        <div class="model-tier model-tier--outcomes">
+            <div class="model-tier__label">LEARNING / RELIANCE OUTCOMES</div>
+            <div class="model-tier__nodes">
+                <div class="model-node model-node--ad">
+                    <span class="model-node__code">AD</span>
+                    <span class="model-node__name">AI Dependence</span>
+                </div>
+                <div class="model-node model-node--lc">
+                    <span class="model-node__code">LC</span>
+                    <span class="model-node__name">Learning Confidence</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <p class="model-pathway-note">
+        <strong>Specification Note:</strong> Direct pathways (AT &rarr; AD, AT &rarr; LC, PU &rarr; AD, PU &rarr; LC) and mediated pathways via Verification Behaviour (AT &rarr; VB &rarr; AD, AT &rarr; VB &rarr; LC, PU &rarr; VB &rarr; AD, PU &rarr; VB &rarr; LC) will be evaluated in the final SEM specification.
+    </p>
+</section>
+
+
+<!-- ================================================================
+     E. Mediation Analysis Section
+================================================================ -->
+<section class="content-section" aria-labelledby="mediationHeading">
+    <div class="content-section__header">
+        <h2 class="section-heading" id="mediationHeading">Mediation Analysis</h2>
+        <p class="section-subheading">
+            The final structural model will evaluate whether verification behaviour acts as a mediating mechanism in relationships between algorithmic trust and GenAI-related learning outcomes.
+        </p>
+    </div>
+
+    <div class="mediation-diagram" role="img" aria-label="Mediation diagram: Algorithmic Trust leads to Verification Behaviour which leads to AI Dependence and Learning Confidence">
+        <div class="mediation-stage mediation-stage--predictor">
+            <span class="mediation-stage__tag">Independent Variable</span>
+            <span class="mediation-stage__title">Algorithmic Trust</span>
+        </div>
+        <div class="mediation-arrow" aria-hidden="true">
+            <span class="mediation-arrow__text">Direct / Indirect</span>
+            <span class="mediation-arrow__sym">&rarr;</span>
+        </div>
+        <div class="mediation-stage mediation-stage--mediator">
+            <span class="mediation-stage__tag">Hypothesised Mediator</span>
+            <span class="mediation-stage__title">Verification Behaviour</span>
+        </div>
+        <div class="mediation-arrow" aria-hidden="true">
+            <span class="mediation-arrow__text">Mediated Path</span>
+            <span class="mediation-arrow__sym">&rarr;</span>
+        </div>
+        <div class="mediation-stage mediation-stage--outcomes">
+            <span class="mediation-stage__tag">Outcome Variables</span>
+            <span class="mediation-stage__title">AI Dependence / Learning Confidence</span>
+        </div>
+    </div>
+
+    <div class="mediation-methods-grid">
+        <div class="med-method-card">
+            <span class="med-method-card__title">Bootstrapping</span>
+            <p class="med-method-card__desc">5,000 bootstrap resamples for robust standard error and percentile confidence interval estimation.</p>
+            <span class="med-method-card__status">Bootstrapping: Pending SEM estimation</span>
+        </div>
+        <div class="med-method-card">
+            <span class="med-method-card__title">Indirect Effects</span>
+            <p class="med-method-card__desc">Evaluation of specific indirect effects to test full vs. partial mediation through verification behaviour.</p>
+            <span class="med-method-card__status">Indirect Effects: Pending SEM estimation</span>
+        </div>
+        <div class="med-method-card">
+            <span class="med-method-card__title">Confidence Intervals</span>
+            <p class="med-method-card__desc">95% bias-corrected bootstrap confidence intervals for indirect effect significance.</p>
+            <span class="med-method-card__status">Confidence Intervals: Pending SEM estimation</span>
         </div>
     </div>
 </section>
 
-<!-- Methodology -->
-<section class="content-section" aria-labelledby="methodHeading2">
-    <h2 class="section-heading" id="methodHeading2">Methodology</h2>
-    <div class="card-grid card-grid--4">
-        <div class="method-card">
-            <div class="method-card__title">Confirmatory Factor Analysis</div>
-            <p class="method-card__desc">Validates measurement model reliability and construct validity.</p>
+
+<!-- ================================================================
+     F. Planned Model Evaluation
+================================================================ -->
+<section class="content-section" aria-labelledby="evalHeading">
+    <div class="content-section__header">
+        <h2 class="section-heading" id="evalHeading">Planned Model Evaluation</h2>
+        <p class="section-subheading">
+            Target goodness-of-fit and parameter evaluation criteria for the measurement and structural models.
+        </p>
+    </div>
+
+    <!-- 1. Measurement Model -->
+    <h3 class="eval-category-heading">1. Measurement Model Parameters</h3>
+    <div class="metrics-grid">
+        {% for m in measurement_metrics %}
+        <div class="metric-card metric-card--pending">
+            <div class="metric-card__header">
+                <span class="metric-card__title">{{ m.name }}</span>
+                <span class="metric-card__thresh">{{ m.threshold }}</span>
+            </div>
+            <div class="metric-card__value metric-card__value--pending">
+                {{ m.status }}
+            </div>
         </div>
-        <div class="method-card">
-            <div class="method-card__title">Structural Equation Modelling</div>
-            <p class="method-card__desc">Models causal pathways between latent constructs using R/lavaan.</p>
+        {% endfor %}
+    </div>
+
+    <!-- 2. Structural Model Parameters -->
+    <h3 class="eval-category-heading">2. Structural Model Parameters</h3>
+    <div class="metrics-grid">
+        {% for m in structural_metrics %}
+        <div class="metric-card metric-card--pending">
+            <div class="metric-card__header">
+                <span class="metric-card__title">{{ m.name }}</span>
+                <span class="metric-card__thresh">{{ m.threshold }}</span>
+            </div>
+            <div class="metric-card__value metric-card__value--pending">
+                {{ m.status }}
+            </div>
         </div>
-        <div class="method-card">
-            <div class="method-card__title">Reliability &amp; Validity Assessment</div>
-            <p class="method-card__desc">Cronbach's alpha, composite reliability, AVE, discriminant validity.</p>
+        {% endfor %}
+    </div>
+
+    <!-- 3. Overall Model Fit -->
+    <h3 class="eval-category-heading">3. Overall Model Fit Indices</h3>
+    <div class="metrics-grid">
+        {% for m in model_fit_metrics %}
+        <div class="metric-card metric-card--pending">
+            <div class="metric-card__header">
+                <span class="metric-card__title">{{ m.name }}</span>
+                <span class="metric-card__thresh">{{ m.threshold }}</span>
+            </div>
+            <div class="metric-card__value metric-card__value--pending">
+                {{ m.status }}
+            </div>
         </div>
-        <div class="method-card">
-            <div class="method-card__title">Bootstrapping / Mediation</div>
-            <p class="method-card__desc">Indirect effects and mediation significance testing.</p>
+        {% endfor %}
+    </div>
+</section>
+
+
+<!-- ================================================================
+     G. SEM Result Status
+================================================================ -->
+<section class="content-section" aria-labelledby="statusHeading">
+    <div class="content-section__header">
+        <h2 class="section-heading" id="statusHeading">SEM Pipeline Readiness Status</h2>
+        <p class="section-subheading">Live readiness state queried from the research backend service.</p>
+    </div>
+
+    <div class="sem-status-panel">
+        <div class="sem-status-row">
+            <span class="sem-status-label">Research Component</span>
+            <span class="sem-status-val">Algorithmic Trust &amp; Verification Analysis</span>
+        </div>
+        <div class="sem-status-row">
+            <span class="sem-status-label">Research Stage</span>
+            <span class="sem-status-val">Prototype Development</span>
+        </div>
+        <div class="sem-status-row">
+            <span class="sem-status-label">Data Collection</span>
+            <span class="sem-status-val sem-status-val--active">In Progress</span>
+        </div>
+        <div class="sem-status-row">
+            <span class="sem-status-label">CFA Measurement Model</span>
+            <span class="sem-status-val sem-status-val--pending">Not estimated</span>
+        </div>
+        <div class="sem-status-row">
+            <span class="sem-status-label">Structural Equation Model</span>
+            <span class="sem-status-val sem-status-val--pending">Not estimated</span>
+        </div>
+        <div class="sem-status-row">
+            <span class="sem-status-label">SEM Analytical Results</span>
+            <span class="sem-status-val sem-status-val--pending">Not available</span>
+        </div>
+        <div class="sem-status-row">
+            <span class="sem-status-label">Mediation Results</span>
+            <span class="sem-status-val sem-status-val--pending">Not available</span>
         </div>
     </div>
 </section>
 
-<!-- Planned Outputs -->
+
+<!-- ================================================================
+     H. Planned Analytical Outputs
+================================================================ -->
 <section class="content-section" aria-labelledby="outputsHeading2">
-    <h2 class="section-heading" id="outputsHeading2">Planned Analytical Outputs</h2>
-    <ul class="outputs-list">
-        <li class="outputs-list__item">CFA measurement model with factor loadings</li>
-        <li class="outputs-list__item">Model-fit indices (CFI, TLI, RMSEA, SRMR)</li>
-        <li class="outputs-list__item">SEM pathway diagram with standardised coefficients</li>
-        <li class="outputs-list__item">Direct and indirect effect estimates</li>
-        <li class="outputs-list__item">Verification mediation analysis</li>
-    </ul>
-</section>
+    <div class="content-section__header">
+        <h2 class="section-heading" id="outputsHeading2">Planned Analytical Outputs</h2>
+        <p class="section-subheading">
+            Output visualisations and result tables to be populated after empirical SEM estimation is completed.
+        </p>
+    </div>
 
-<!-- Empty analytics state -->
-<section class="content-section" aria-labelledby="analyticsHeading2">
-    <h2 class="section-heading" id="analyticsHeading2">Analytics</h2>
+    <div class="card-grid card-grid--4">
+        <div class="output-card output-card--disabled" aria-label="Measurement Model Summary — not yet available">
+            <div class="output-card__title">Measurement Model Summary</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after SEM estimation
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="Model Fit — not yet available">
+            <div class="output-card__title">Model Fit Indices</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after SEM estimation
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="Structural Pathways — not yet available">
+            <div class="output-card__title">Structural Pathways</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after SEM estimation
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="Direct Effects — not yet available">
+            <div class="output-card__title">Direct Effects</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after SEM estimation
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="Indirect Effects — not yet available">
+            <div class="output-card__title">Indirect Effects</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after SEM estimation
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="Mediation Analysis — not yet available">
+            <div class="output-card__title">Mediation Analysis</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after SEM estimation
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="Construct Reliability — not yet available">
+            <div class="output-card__title">Construct Reliability</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after SEM estimation
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="Construct Validity — not yet available">
+            <div class="output-card__title">Construct Validity</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after SEM estimation
+            </div>
+        </div>
+    </div>
+
+    <!-- Empty analytics state for research integrity and test compatibility -->
     <div class="empty-state">
         <div class="empty-state__icon" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -100,10 +482,89 @@
         </div>
         <h3 class="empty-state__title">SEM analytics not yet available</h3>
         <p class="empty-state__body">
-            CFA and SEM results will become available after survey data collection,
-            measurement model validation and R/lavaan analysis are completed.
+            CFA and SEM results will become available after survey data collection, measurement model validation, and R/lavaan statistical analyses are completed.
         </p>
     </div>
 </section>
 
+
+<!-- ================================================================
+     I. R/lavaan Integration Architecture
+================================================================ -->
+<section class="content-section" aria-labelledby="rIntegrationHeading">
+    <div class="content-section__header">
+        <h2 class="section-heading" id="rIntegrationHeading">R / lavaan Integration Architecture</h2>
+        <p class="section-subheading">
+            Analytical pipeline architecture showing the boundary between R statistical modelling and Flask dashboard presentation.
+        </p>
+    </div>
+
+    <div class="r-arch-diagram" role="img" aria-label="R and lavaan integration architecture: Validated Survey Dataset to R lavaan to Confirmatory Factor Analysis to Measurement Model Validation to Structural Equation Model to Bootstrapping and Mediation to Validated Result Export to Flask SEM Result Service to Research Analytics Dashboard">
+        <div class="r-arch-steps">
+            <div class="r-arch-step r-arch-step--data">
+                <span class="r-arch-step__title">Validated Survey Dataset</span>
+                <span class="r-arch-step__env">Cleaned survey responses</span>
+            </div>
+            <div class="r-arch-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="r-arch-step r-arch-step--renv">
+                <span class="r-arch-step__title">R / lavaan</span>
+                <span class="r-arch-step__env">Statistical Modelling Environment</span>
+            </div>
+            <div class="r-arch-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="r-arch-step r-arch-step--r">
+                <span class="r-arch-step__title">Confirmatory Factor Analysis</span>
+                <span class="r-arch-step__env">cfa(model, data, estimator = "MLR")</span>
+            </div>
+            <div class="r-arch-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="r-arch-step r-arch-step--r">
+                <span class="r-arch-step__title">Measurement Model Validation</span>
+                <span class="r-arch-step__env">Factor loadings, CR, AVE, HTMT</span>
+            </div>
+            <div class="r-arch-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="r-arch-step r-arch-step--r">
+                <span class="r-arch-step__title">Structural Equation Model</span>
+                <span class="r-arch-step__env">sem(structural_model, data)</span>
+            </div>
+            <div class="r-arch-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="r-arch-step r-arch-step--r">
+                <span class="r-arch-step__title">Bootstrapping / Mediation</span>
+                <span class="r-arch-step__env">5,000 bootstrap resamples for indirect effects</span>
+            </div>
+            <div class="r-arch-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="r-arch-step r-arch-step--export">
+                <span class="r-arch-step__title">Validated Result Export</span>
+                <span class="r-arch-step__env">Standardised parameter estimates &amp; fit indices</span>
+            </div>
+            <div class="r-arch-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="r-arch-step r-arch-step--flask">
+                <span class="r-arch-step__title">Flask SEM Result Service</span>
+                <span class="r-arch-step__env">Python service layer (SemResultService)</span>
+            </div>
+            <div class="r-arch-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="r-arch-step r-arch-step--dash">
+                <span class="r-arch-step__title">Research Analytics Dashboard</span>
+                <span class="r-arch-step__env">Component 2 dashboard view</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="prose-block" style="margin-top: 1.5rem;">
+        <p>
+            <strong>Architectural Boundary:</strong> The dashboard will consume validated SEM outputs only after the final R/lavaan analysis has been completed. The Flask web application does not execute R or perform statistical factor estimation in real-time; instead, statistical modelling remains strictly governed within the dedicated R psychometric research environment.
+        </p>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/component2.js') }}"></script>
 {% endblock %}

@@ -27,6 +27,12 @@ from app.services.cognitive_offloading.model_service import (
     CognitiveOffloadingModelService,
     ModelNotAvailableError,
 )
+from app.services.sem_analysis import (
+    SemResultsNotAvailableError,
+    SemResultService,
+    result_service,
+    status_service,
+)
 
 
 @pytest.fixture
@@ -402,3 +408,146 @@ def test_model_service_is_model_available_returns_false():
     """model_service.is_model_available() must return False during prototype stage."""
     svc = CognitiveOffloadingModelService()
     assert svc.is_model_available() is False
+
+
+# =========================================================================== #
+# Feature 004: Component 2 SEM Analysis Prototype Workflow                  #
+# =========================================================================== #
+
+# 1. UI route and page content
+def test_component2_page_returns_200(client):
+    """GET /component2/ must return HTTP 200."""
+    response = client.get("/component2/")
+    assert response.status_code == 200
+
+
+def test_component2_page_contains_algorithmic_trust(client):
+    """Component 2 page must contain 'Algorithmic Trust'."""
+    data = client.get("/component2/").data
+    assert b"Algorithmic Trust" in data
+
+
+def test_component2_page_contains_perceived_usefulness(client):
+    """Component 2 page must contain 'Perceived Usefulness'."""
+    data = client.get("/component2/").data
+    assert b"Perceived Usefulness" in data
+
+
+def test_component2_page_contains_verification_behaviour(client):
+    """Component 2 page must contain 'Verification Behaviour'."""
+    data = client.get("/component2/").data
+    assert b"Verification Behaviour" in data
+
+
+def test_component2_page_contains_ai_dependence(client):
+    """Component 2 page must contain 'AI Dependence'."""
+    data = client.get("/component2/").data
+    assert b"AI Dependence" in data
+
+
+def test_component2_page_contains_learning_confidence(client):
+    """Component 2 page must contain 'Learning Confidence'."""
+    data = client.get("/component2/").data
+    assert b"Learning Confidence" in data
+
+
+def test_component2_page_contains_cfa(client):
+    """Component 2 page must contain 'Confirmatory Factor Analysis'."""
+    data = client.get("/component2/").data
+    assert b"Confirmatory Factor Analysis" in data
+
+
+def test_component2_page_contains_sem(client):
+    """Component 2 page must contain 'Structural Equation Modelling'."""
+    data = client.get("/component2/").data
+    assert b"Structural Equation Modelling" in data
+
+
+def test_component2_page_contains_pending_sem_estimation(client):
+    """Component 2 page must display 'Pending SEM estimation' for uncomputed metrics."""
+    data = client.get("/component2/").data
+    assert b"Pending SEM estimation" in data
+
+
+def test_component2_page_identifies_planned_relationships(client):
+    """Component 2 page must clearly label the structural model as planned relationships to be tested."""
+    data = client.get("/component2/").data
+    assert b"PLANNED RELATIONSHIPS TO BE TESTED" in data or b"planned relationships to be tested" in data.lower()
+    # Must NOT label the conceptual model as empirical SEM results
+    assert b"confirmed relationships" not in data.lower()
+
+
+# 2. Status API
+def test_component2_status_api_returns_200(client):
+    """GET /api/component2/status must return HTTP 200."""
+    response = client.get("/api/component2/status")
+    assert response.status_code == 200
+
+
+def test_component2_status_api_reports_measurement_model_not_estimated(client):
+    """Status API must report measurement_model_estimated = False."""
+    response = client.get("/api/component2/status")
+    body = response.get_json()
+    assert body["measurement_model_estimated"] is False
+
+
+def test_component2_status_api_reports_structural_model_not_estimated(client):
+    """Status API must report structural_model_estimated = False."""
+    response = client.get("/api/component2/status")
+    body = response.get_json()
+    assert body["structural_model_estimated"] is False
+
+
+def test_component2_status_api_reports_sem_results_unavailable(client):
+    """Status API must report sem_results_available = False."""
+    response = client.get("/api/component2/status")
+    body = response.get_json()
+    assert body["sem_results_available"] is False
+    assert body["mediation_results_available"] is False
+
+
+# 3. Specification API
+def test_component2_specification_api_returns_200(client):
+    """GET /api/component2/specification must return HTTP 200."""
+    response = client.get("/api/component2/specification")
+    assert response.status_code == 200
+
+
+def test_component2_specification_contains_approved_constructs(client):
+    """Specification API must return exactly the five approved constructs."""
+    response = client.get("/api/component2/specification")
+    body = response.get_json()
+    assert "constructs" in body
+    codes = [c["code"] for c in body["constructs"]]
+    assert set(codes) == {"AT", "PU", "VB", "AD", "LC"}
+    assert len(codes) == 5
+
+
+# 4. Result Service Unit Tests
+def test_sem_result_service_raises_sem_results_not_available_error():
+    """result_service.get_results() must raise SemResultsNotAvailableError during prototype stage."""
+    svc = SemResultService()
+    with pytest.raises(SemResultsNotAvailableError) as exc_info:
+        svc.get_results()
+    assert "not available until validated research data has been analysed" in str(exc_info.value)
+
+
+def test_sem_result_service_results_available_returns_false():
+    """result_service.results_available() must return False during prototype stage."""
+    svc = SemResultService()
+    assert svc.results_available() is False
+
+
+# 5. Research Integrity: No fake numerical analytical results in APIs
+def test_component2_apis_do_not_contain_fake_results(client):
+    """Status and specification APIs must not contain fabricated statistical findings."""
+    status_data = client.get("/api/component2/status").get_json()
+    spec_data = client.get("/api/component2/specification").get_json()
+
+    for payload in [status_data, spec_data]:
+        payload_str = json.dumps(payload).lower()
+        assert "cfi" not in payload_str
+        assert "rmsea" not in payload_str
+        assert "p-value" not in payload_str
+        assert "path_coefficient" not in payload_str
+        assert "significant" not in payload_str

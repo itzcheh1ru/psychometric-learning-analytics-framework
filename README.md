@@ -28,14 +28,15 @@
 | Feature 001 | Flask application scaffold | ✅ Complete |
 | Feature 002 | Responsive research dashboard shell | ✅ Complete |
 | Feature 003 | Component 1 interactive prototype workflow | ✅ Complete |
+| Feature 004 | Component 2 SEM analysis prototype workflow | ✅ Complete |
 
-**Feature 003 notes:**
-- Component 1 prototype workflow: Implemented (input validation, preprocessing preview, schema definitions).
-- Actual ML model: Pending data collection and validation.
-- Prediction: Not yet enabled (`model_trained = false`, `prediction_available = false`).
-- SHAP: Not yet enabled (`explainability_available = false`).
-- Target leakage protection: Documented and enforced (target scale items excluded from predictors).
-- Privacy: No personal identifying information requested; no submission persisted to database or logs.
+**Feature 004 notes:**
+- Component 2 prototype: Implemented (specification API, status API, construct cards, measurement/structural workflows).
+- CFA: Pending validated data (`measurement_model_estimated = false`).
+- SEM: Pending validated data (`structural_model_estimated = false`).
+- SEM Results: Not available (`sem_results_available = false`, `SemResultService` raises `SemResultsNotAvailableError`).
+- R/lavaan integration: Architecture prepared; final results integration pending.
+- Research integrity: Conceptual pathways clearly identified as planned relationships to be tested; no artificial coefficients or fit statistics.
 
 ---
 

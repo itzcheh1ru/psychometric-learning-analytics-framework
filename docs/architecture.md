@@ -138,6 +138,73 @@ Target Variable: Binary / Ordinal Risk        Feature Engineering / Preprocessin
 
 ---
 
+## Component 2 Architecture – Algorithmic Trust & Verification Analysis
+
+### Latent Constructs
+
+Component 2 investigates five theoretical constructs operationalised via psychometric survey scales:
+
+| Code | Construct Name | Role in Structural Model |
+|------|----------------|--------------------------|
+| **AT** | Algorithmic Trust | Antecedent Construct |
+| **PU** | Perceived Usefulness | Antecedent Construct |
+| **VB** | Verification Behaviour | Behavioural Mechanism (Mediator) |
+| **AD** | AI Dependence | Learning / Reliance Outcome |
+| **LC** | Learning Confidence | Learning / Reliance Outcome |
+
+### Methodological Stages
+
+1. **Measurement Model Stage (Confirmatory Factor Analysis):**
+   - Evaluates indicator factor loadings ($\lambda \ge 0.70$).
+   - Tests construct reliability using Composite Reliability ($\text{CR} \ge 0.70$) and Cronbach's $\alpha \ge 0.70$.
+   - Assesses convergent validity via Average Variance Extracted ($\text{AVE} \ge 0.50$).
+   - Evaluates discriminant validity using the Fornell-Larcker criterion and Heterotrait-Monotrait ratio ($\text{HTMT} < 0.85 / 0.90$).
+
+2. **Structural Model Stage (Structural Equation Modelling):**
+   - Assesses hypothesised direct pathways from antecedents to outcomes.
+   - Evaluates overall goodness of fit using $\chi^2/\text{df}$, CFI, TLI, RMSEA, and SRMR.
+
+3. **Mediation Analysis Stage:**
+   - Evaluates whether Verification Behaviour serves as an indirect behavioural mechanism linking Algorithmic Trust to AI Dependence and Learning Confidence.
+   - Applies non-parametric bootstrapping (5,000 resamples) with 95% bias-corrected confidence intervals.
+
+### Analytical and Architectural Boundary: R/lavaan vs. Flask
+
+A strict separation of concerns is maintained between statistical estimation and web visualization:
+
+```
+┌────────────────────────────────────────────────────────┐
+│            R / lavaan Research Environment             │
+│  - Survey data screening & psychometric cleaning       │
+│  - CFA measurement model estimation (MLR estimator)     │
+│  - Structural Equation Model path estimation           │
+│  - Bootstrapped mediation analysis (5,000 resamples)   │
+│  - Parameter estimate & fit index export               │
+└───────────────────────────┬────────────────────────────┘
+                            │ Validated JSON / CSV export
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│            Flask Web Application Backend               │
+│  - `app/services/sem_analysis/schemas.py`: metadata   │
+│  - `app/services/sem_analysis/status_service.py`       │
+│  - `app/services/sem_analysis/result_service.py`       │
+│    (SemResultService raises error if unvalidated)     │
+│  - `GET /api/component2/status`                        │
+│  - `GET /api/component2/specification`                 │
+└───────────────────────────┬────────────────────────────┘
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│          Dashboard Presentation Layer (/component2/)   │
+│  - Interactive construct exploration                   │
+│  - Planned model specification visualisations          │
+│  - Results display only after empirical validation     │
+└────────────────────────────────────────────────────────┘
+```
+
+> **Architectural Boundary Rule:** All statistical SEM calculations (factor extraction, covariance estimation, fit indices, bootstrap resampling) remain strictly governed within the **R / lavaan** psychometric research environment. The Flask application does **not** estimate SEM or simulate statistics in real-time; it serves exclusively as an analytics consumer and presentation layer for validated empirical outputs.
+
+---
+
 ## Dashboard Integration (planned)
 
 Once all four components have been analysed, their outputs will be surfaced
@@ -168,4 +235,4 @@ in the shared research dashboard at `/dashboard`:
 
 ---
 
-*Last updated: Feature 003 – Component 1 interactive prototype workflow*
+*Last updated: Feature 004 – Component 2 SEM analysis prototype workflow*
