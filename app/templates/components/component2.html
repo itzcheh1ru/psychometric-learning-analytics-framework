@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Algorithmic Trust & Verification — Component 2{% endblock %}
+
+{% block content %}
+
+<div class="page-heading">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="{{ url_for('main.dashboard') }}" class="breadcrumb__link">Overview</a>
+        <span class="breadcrumb__sep" aria-hidden="true">&rsaquo;</span>
+        <span class="breadcrumb__current" aria-current="page">Component 2</span>
+    </nav>
+    <div class="page-heading__tag">
+        <span class="comp-label comp-label--c2">Component 02</span>
+    </div>
+    <h1 class="page-heading__title">Algorithmic Trust &amp; Verification Analysis</h1>
+    <p class="page-heading__desc">
+        Analyses the psychological relationships between algorithmic trust, perceived
+        usefulness, verification behaviour, AI dependence and learning confidence using
+        Confirmatory Factor Analysis and Structural Equation Modelling.
+    </p>
+    <div class="page-heading__status">
+        <span class="status-badge status-badge--collection">
+            <span class="status-badge__dot" aria-hidden="true"></span>
+            Data Collection / Module Preparation
+        </span>
+    </div>
+</div>
+
+<!-- Constructs -->
+<section class="content-section" aria-labelledby="constructsHeading">
+    <h2 class="section-heading" id="constructsHeading">Psychometric Constructs</h2>
+    <div class="card-grid card-grid--3">
+        <div class="construct-card">
+            <div class="construct-card__name">Algorithmic Trust</div>
+            <p class="construct-card__desc">Degree to which students trust GenAI-generated outputs.</p>
+        </div>
+        <div class="construct-card">
+            <div class="construct-card__name">Perceived Usefulness</div>
+            <p class="construct-card__desc">Perceived benefit of GenAI for academic tasks.</p>
+        </div>
+        <div class="construct-card">
+            <div class="construct-card__name">Verification Behaviour</div>
+            <p class="construct-card__desc">Frequency and depth of checking AI outputs independently.</p>
+        </div>
+        <div class="construct-card">
+            <div class="construct-card__name">AI Dependence</div>
+            <p class="construct-card__desc">Extent to which learning relies on GenAI assistance.</p>
+        </div>
+        <div class="construct-card">
+            <div class="construct-card__name">Learning Confidence</div>
+            <p class="construct-card__desc">Self-assessed confidence in independent understanding.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Methodology -->
+<section class="content-section" aria-labelledby="methodHeading2">
+    <h2 class="section-heading" id="methodHeading2">Methodology</h2>
+    <div class="card-grid card-grid--4">
+        <div class="method-card">
+            <div class="method-card__title">Confirmatory Factor Analysis</div>
+            <p class="method-card__desc">Validates measurement model reliability and construct validity.</p>
+        </div>
+        <div class="method-card">
+            <div class="method-card__title">Structural Equation Modelling</div>
+            <p class="method-card__desc">Models causal pathways between latent constructs using R/lavaan.</p>
+        </div>
+        <div class="method-card">
+            <div class="method-card__title">Reliability &amp; Validity Assessment</div>
+            <p class="method-card__desc">Cronbach's alpha, composite reliability, AVE, discriminant validity.</p>
+        </div>
+        <div class="method-card">
+            <div class="method-card__title">Bootstrapping / Mediation</div>
+            <p class="method-card__desc">Indirect effects and mediation significance testing.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Planned Outputs -->
+<section class="content-section" aria-labelledby="outputsHeading2">
+    <h2 class="section-heading" id="outputsHeading2">Planned Analytical Outputs</h2>
+    <ul class="outputs-list">
+        <li class="outputs-list__item">CFA measurement model with factor loadings</li>
+        <li class="outputs-list__item">Model-fit indices (CFI, TLI, RMSEA, SRMR)</li>
+        <li class="outputs-list__item">SEM pathway diagram with standardised coefficients</li>
+        <li class="outputs-list__item">Direct and indirect effect estimates</li>
+        <li class="outputs-list__item">Verification mediation analysis</li>
+    </ul>
+</section>
+
+<!-- Empty analytics state -->
+<section class="content-section" aria-labelledby="analyticsHeading2">
+    <h2 class="section-heading" id="analyticsHeading2">Analytics</h2>
+    <div class="empty-state">
+        <div class="empty-state__icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>
+            </svg>
+        </div>
+        <h3 class="empty-state__title">SEM analytics not yet available</h3>
+        <p class="empty-state__body">
+            CFA and SEM results will become available after survey data collection,
+            measurement model validation and R/lavaan analysis are completed.
+        </p>
+    </div>
+</section>
+
+{% endblock %}

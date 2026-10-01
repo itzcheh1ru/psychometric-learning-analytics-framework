@@ -1,0 +1,113 @@
+{#
+  partials/sidebar.html
+  Left navigation sidebar.
+  Uses request.endpoint for active-state highlighting.
+#}
+<nav
+    class="app-sidebar"
+    id="appSidebar"
+    role="navigation"
+    aria-label="Main navigation"
+>
+    <div class="sidebar-inner">
+
+        <!-- Overview -->
+        <ul class="sidebar-nav" role="list">
+            <li>
+                <a
+                    href="{{ url_for('main.dashboard') }}"
+                    class="sidebar-link {% if request.endpoint == 'main.dashboard' %}sidebar-link--active{% endif %}"
+                    aria-current="{% if request.endpoint == 'main.dashboard' %}page{% endif %}"
+                >
+                    <svg class="sidebar-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="7"/>
+                        <rect x="14" y="3" width="7" height="7"/>
+                        <rect x="14" y="14" width="7" height="7"/>
+                        <rect x="3" y="14" width="7" height="7"/>
+                    </svg>
+                    Overview
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-section-label">Research Components</div>
+
+        <ul class="sidebar-nav" role="list">
+            <li>
+                <a
+                    href="{{ url_for('component1.index') }}"
+                    class="sidebar-link {% if request.endpoint == 'component1.index' %}sidebar-link--active{% endif %}"
+                    aria-current="{% if request.endpoint == 'component1.index' %}page{% endif %}"
+                >
+                    <span class="sidebar-comp-num" aria-hidden="true">01</span>
+                    <span class="sidebar-link-text">
+                        <span class="sidebar-link-main">Cognitive Offloading</span>
+                        <span class="sidebar-link-sub">ML · SHAP · XGBoost</span>
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a
+                    href="{{ url_for('component2.index') }}"
+                    class="sidebar-link {% if request.endpoint == 'component2.index' %}sidebar-link--active{% endif %}"
+                    aria-current="{% if request.endpoint == 'component2.index' %}page{% endif %}"
+                >
+                    <span class="sidebar-comp-num" aria-hidden="true">02</span>
+                    <span class="sidebar-link-text">
+                        <span class="sidebar-link-main">Trust & Verification</span>
+                        <span class="sidebar-link-sub">CFA · SEM</span>
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a
+                    href="{{ url_for('component3.index') }}"
+                    class="sidebar-link {% if request.endpoint == 'component3.index' %}sidebar-link--active{% endif %}"
+                    aria-current="{% if request.endpoint == 'component3.index' %}page{% endif %}"
+                >
+                    <span class="sidebar-comp-num" aria-hidden="true">03</span>
+                    <span class="sidebar-link-text">
+                        <span class="sidebar-link-main">Study Patterns</span>
+                        <span class="sidebar-link-sub">Longitudinal · Trend</span>
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a
+                    href="{{ url_for('component4.index') }}"
+                    class="sidebar-link {% if request.endpoint == 'component4.index' %}sidebar-link--active{% endif %}"
+                    aria-current="{% if request.endpoint == 'component4.index' %}page{% endif %}"
+                >
+                    <span class="sidebar-comp-num" aria-hidden="true">04</span>
+                    <span class="sidebar-link-text">
+                        <span class="sidebar-link-main">Engagement & Retention</span>
+                        <span class="sidebar-link-sub">NLP · Statistics</span>
+                    </span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-section-label">Project</div>
+
+        <ul class="sidebar-nav" role="list">
+            <li>
+                <a
+                    href="{{ url_for('main.project') }}"
+                    class="sidebar-link {% if request.endpoint == 'main.project' %}sidebar-link--active{% endif %}"
+                    aria-current="{% if request.endpoint == 'main.project' %}page{% endif %}"
+                >
+                    <svg class="sidebar-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    Project Information
+                </a>
+            </li>
+        </ul>
+
+    </div><!-- /.sidebar-inner -->
+</nav>
+
+<!-- Sidebar overlay (mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true"></div>

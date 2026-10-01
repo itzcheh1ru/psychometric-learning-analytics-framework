@@ -21,6 +21,19 @@
 > All analytical modules will be populated with real results once data collection
 > and analysis are complete.
 
+### Development Progress
+
+| Feature | Description | Status |
+|---------|-------------|--------|
+| Feature 001 | Flask application scaffold | ✅ Complete |
+| Feature 002 | Responsive research dashboard shell | ✅ Complete |
+
+**Feature 002 notes:**
+- Professional responsive dashboard shell with sidebar navigation implemented.
+- All four research module pages include methodology summaries and planned outputs.
+- Research analytics remain pending data collection, validation and model development.
+- No final model outputs, SEM coefficients or statistical results are represented.
+
 ---
 
 ## Project Purpose

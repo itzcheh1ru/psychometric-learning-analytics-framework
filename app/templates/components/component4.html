@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Cognitive Engagement & Learning Retention — Component 4{% endblock %}
+
+{% block content %}
+
+<div class="page-heading">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="{{ url_for('main.dashboard') }}" class="breadcrumb__link">Overview</a>
+        <span class="breadcrumb__sep" aria-hidden="true">&rsaquo;</span>
+        <span class="breadcrumb__current" aria-current="page">Component 4</span>
+    </nav>
+    <div class="page-heading__tag">
+        <span class="comp-label comp-label--c4">Component 04</span>
+    </div>
+    <h1 class="page-heading__title">Cognitive Engagement &amp; Learning Retention</h1>
+    <p class="page-heading__desc">
+        Evaluates the impact of GenAI-assisted learning on cognitive engagement and
+        knowledge retention through NLP-based writing analysis, recall evaluation,
+        ownership measurement and paired statistical comparison of learning conditions.
+    </p>
+    <div class="page-heading__status">
+        <span class="status-badge status-badge--preparation">
+            <span class="status-badge__dot" aria-hidden="true"></span>
+            Experimental Preparation / Data Collection
+        </span>
+    </div>
+</div>
+
+<!-- Methodology -->
+<section class="content-section" aria-labelledby="methodHeading4">
+    <h2 class="section-heading" id="methodHeading4">Methodology</h2>
+    <div class="card-grid card-grid--4">
+        <div class="method-card">
+            <div class="method-card__title">NLP Writing Analysis</div>
+            <p class="method-card__desc">Lexical diversity, readability and syntactic complexity of student writing samples.</p>
+        </div>
+        <div class="method-card">
+            <div class="method-card__title">TF-IDF / Semantic Similarity</div>
+            <p class="method-card__desc">Measures content similarity between AI-assisted and brain-only writing conditions.</p>
+        </div>
+        <div class="method-card">
+            <div class="method-card__title">Recall &amp; Retention Evaluation</div>
+            <p class="method-card__desc">Immediate and delayed recall assessment post-writing experiment.</p>
+        </div>
+        <div class="method-card">
+            <div class="method-card__title">Paired Statistical Testing</div>
+            <p class="method-card__desc">Within-participant statistical comparison of learning conditions.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Planned Outputs -->
+<section class="content-section" aria-labelledby="outputsHeading4">
+    <h2 class="section-heading" id="outputsHeading4">Planned Analytical Outputs</h2>
+    <ul class="outputs-list">
+        <li class="outputs-list__item">Writing quality comparison (AI-assisted vs. brain-only)</li>
+        <li class="outputs-list__item">Immediate recall scores</li>
+        <li class="outputs-list__item">Delayed recall scores</li>
+        <li class="outputs-list__item">Knowledge retention rate</li>
+        <li class="outputs-list__item">Cognitive ownership measurement</li>
+        <li class="outputs-list__item">Cognitive engagement indicators</li>
+        <li class="outputs-list__item">Statistical comparison between learning conditions</li>
+    </ul>
+</section>
+
+<!-- Empty analytics state -->
+<section class="content-section" aria-labelledby="analyticsHeading4">
+    <h2 class="section-heading" id="analyticsHeading4">Analytics</h2>
+    <div class="empty-state">
+        <div class="empty-state__icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+            </svg>
+        </div>
+        <h3 class="empty-state__title">NLP analytics not yet available</h3>
+        <p class="empty-state__body">
+            Writing analysis, recall results and statistical comparisons will become
+            available after writing experiment data collection, NLP preprocessing
+            and statistical analysis are completed.
+        </p>
+    </div>
+</section>
+
+{% endblock %}

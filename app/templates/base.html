@@ -3,62 +3,36 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Psychometric Learning Analytics Framework – Research Prototype J26-DS-310" />
-    <title>{% block title %}Psychometric Learning Analytics Framework{% endblock %}</title>
+    <meta name="description" content="Psychometric Learning Analytics Framework – Research Prototype J26-DS-310, SLIIT" />
+    <title>{% block title %}Psychometric Learning Analytics Framework{% endblock %} | J26-DS-310</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
     {% block extra_head %}{% endblock %}
 </head>
-<body>
+<body class="app-body">
 
     <!-- ================================================================
-         Navigation Bar
+         Top Header
     ================================================================ -->
-    <header class="site-header">
-        <nav class="nav-container">
-            <div class="nav-brand">
-                <span class="nav-logo">&#x1F9E0;</span>
-                <div class="nav-title-group">
-                    <span class="nav-title">PLAF</span>
-                    <span class="nav-subtitle">J26-DS-310</span>
-                </div>
-            </div>
-            <ul class="nav-links">
-                <li><a href="{{ url_for('main.index') }}" class="nav-link">Home</a></li>
-                <li><a href="{{ url_for('main.dashboard') }}" class="nav-link">Dashboard</a></li>
-            </ul>
-        </nav>
-    </header>
+    {% include "partials/header.html" %}
 
     <!-- ================================================================
-         Prototype Status Banner
+         Application Shell
     ================================================================ -->
-    <div class="prototype-banner">
-        &#x26A0;&#xFE0F; &nbsp;<strong>Prototype Status:</strong>&nbsp;
-        Research data collection is in progress. No real findings are presented.
-    </div>
+    <div class="app-shell">
 
-    <!-- ================================================================
-         Main Content
-    ================================================================ -->
-    <main class="main-content">
-        {% block content %}{% endblock %}
-    </main>
+        <!-- Sidebar -->
+        {% include "partials/sidebar.html" %}
 
-    <!-- ================================================================
-         Footer
-    ================================================================ -->
-    <footer class="site-footer">
-        <div class="footer-container">
-            <p class="footer-institution">
-                Sri Lanka Institute of Information Technology (SLIIT) &mdash;
-                Centre of Excellence in Artificial Intelligence (CoEAI)
-            </p>
-            <p class="footer-note">
-                This is an academic research prototype. All data is anonymised.
-                No real participant data is stored in this repository.
-            </p>
+        <!-- Main content area -->
+        <div class="app-main" id="appMain">
+            <main class="app-content" id="mainContent" tabindex="-1">
+                {% block content %}{% endblock %}
+            </main>
+
+            {% include "partials/footer.html" %}
         </div>
-    </footer>
+
+    </div><!-- /.app-shell -->
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     {% block extra_scripts %}{% endblock %}
