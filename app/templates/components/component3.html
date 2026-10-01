@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Longitudinal Study Pattern Analytics — Component 3{% endblock %}
+
+{% block content %}
+
+<div class="page-heading">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="{{ url_for('main.dashboard') }}" class="breadcrumb__link">Overview</a>
+        <span class="breadcrumb__sep" aria-hidden="true">&rsaquo;</span>
+        <span class="breadcrumb__current" aria-current="page">Component 3</span>
+    </nav>
+    <div class="page-heading__tag">
+        <span class="comp-label comp-label--c3">Component 03</span>
+    </div>
+    <h1 class="page-heading__title">Longitudinal AI-Assisted Study Pattern Analytics</h1>
+    <p class="page-heading__desc">
+        Analyses how AI-assisted and independent study behaviours and academic prompt
+        patterns evolve over time throughout the research period, using longitudinal
+        study diary records.
+    </p>
+    <div class="page-heading__status">
+        <span class="status-badge status-badge--collection">
+            <span class="status-badge__dot" aria-hidden="true"></span>
+            Data Collection / Module Preparation
+        </span>
+    </div>
+</div>
+
+<!-- Indicators & Methods -->
+<section class="content-section" aria-labelledby="methodHeading3">
+    <h2 class="section-heading" id="methodHeading3">Analytical Indicators &amp; Methods</h2>
+    <div class="card-grid card-grid--3">
+        <div class="method-card">
+            <div class="method-card__title">AI Study Share</div>
+            <p class="method-card__desc">Proportion of weekly study time using GenAI assistance.</p>
+        </div>
+        <div class="method-card">
+            <div class="method-card__title">Independent Study Share</div>
+            <p class="method-card__desc">Proportion of weekly study time without AI assistance.</p>
+        </div>
+        <div class="method-card">
+            <div class="method-card__title">Prompt Frequency</div>
+            <p class="method-card__desc">Weekly GenAI query volume per participant.</p>
+        </div>
+        <div class="method-card">
+            <div class="method-card__title">Prompt Purpose</div>
+            <p class="method-card__desc">Categorised academic prompting intentions over time.</p>
+        </div>
+        <div class="method-card">
+            <div class="method-card__title">Study Pattern Shift</div>
+            <p class="method-card__desc">Longitudinal change in AI vs. independent study balance.</p>
+        </div>
+        <div class="method-card">
+            <div class="method-card__title">Trend Analysis</div>
+            <p class="method-card__desc">Moving averages and regression over academic periods.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Planned Outputs -->
+<section class="content-section" aria-labelledby="outputsHeading3">
+    <h2 class="section-heading" id="outputsHeading3">Planned Analytical Outputs</h2>
+    <ul class="outputs-list">
+        <li class="outputs-list__item">AI-assisted study time trends across academic period</li>
+        <li class="outputs-list__item">Independent study time trends</li>
+        <li class="outputs-list__item">Prompt behaviour evolution over time</li>
+        <li class="outputs-list__item">Academic-period comparisons</li>
+        <li class="outputs-list__item">Behavioural pattern insights and profiles</li>
+    </ul>
+</section>
+
+<!-- Empty analytics state -->
+<section class="content-section" aria-labelledby="analyticsHeading3">
+    <h2 class="section-heading" id="analyticsHeading3">Analytics</h2>
+    <div class="empty-state">
+        <div class="empty-state__icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+        </div>
+        <h3 class="empty-state__title">Longitudinal analytics not yet available</h3>
+        <p class="empty-state__body">
+            Trend charts and study pattern analyses will become available after
+            longitudinal study diary data collection and time-series preprocessing
+            are completed.
+        </p>
+    </div>
+</section>
+
+{% endblock %}

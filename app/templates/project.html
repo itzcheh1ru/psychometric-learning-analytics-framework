@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block title %}Project Information{% endblock %}
+
+{% block content %}
+
+<div class="page-heading">
+    <h1 class="page-heading__title">Project Information</h1>
+    <p class="page-heading__desc">
+        Overview of the research project, current prototype status, technology
+        direction and architectural approach.
+    </p>
+</div>
+
+<!-- Core project info -->
+<section class="content-section" aria-labelledby="projInfoHeading">
+    <h2 class="section-heading" id="projInfoHeading">Project Details</h2>
+
+    <div class="info-table-wrap">
+        <table class="info-table" aria-label="Project details">
+            <tbody>
+                <tr>
+                    <th scope="row">Project</th>
+                    <td>Psychometric Learning Analytics Framework for Generative AI-Assisted Learning</td>
+                </tr>
+                <tr>
+                    <th scope="row">Project ID</th>
+                    <td><strong>J26-DS-310</strong></td>
+                </tr>
+                <tr>
+                    <th scope="row">Research Area</th>
+                    <td>Data Science &mdash; Learning Analytics &mdash; Educational Data Mining &mdash; Explainable AI</td>
+                </tr>
+                <tr>
+                    <th scope="row">Institution</th>
+                    <td>
+                        Sri Lanka Institute of Information Technology (SLIIT)<br />
+                        Centre of Excellence in Artificial Intelligence (CoEAI)<br />
+                        Specialisation: Data Science
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Prototype Status</th>
+                    <td>
+                        <span class="status-badge status-badge--collection">
+                            <span class="status-badge__dot" aria-hidden="true"></span>
+                            Data Collection and Prototype Development
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- Research team -->
+<section class="content-section" aria-labelledby="teamHeading">
+    <h2 class="section-heading" id="teamHeading">Research Team</h2>
+    <div class="info-table-wrap">
+        <table class="info-table" aria-label="Research team members and components">
+            <thead>
+                <tr>
+                    <th scope="col">Student ID</th>
+                    <th scope="col">Research Component</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>IT23426580</td>
+                    <td>Explainable Cognitive Offloading Risk Prediction</td>
+                </tr>
+                <tr>
+                    <td>IT23217904</td>
+                    <td>Algorithmic Trust &amp; Verification SEM Model</td>
+                </tr>
+                <tr>
+                    <td>IT23426344</td>
+                    <td>Longitudinal Study Pattern Analytics</td>
+                </tr>
+                <tr>
+                    <td>IT23165220</td>
+                    <td>NLP-Based Cognitive Retention Evaluation</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- Technology direction -->
+<section class="content-section" aria-labelledby="techHeading">
+    <h2 class="section-heading" id="techHeading">Technology Direction</h2>
+    <div class="card-grid card-grid--3">
+
+        <div class="tech-card">
+            <h3 class="tech-card__heading">Backend</h3>
+            <ul class="tech-list">
+                <li>Python 3.11+</li>
+                <li>Flask</li>
+                <li>python-dotenv</li>
+            </ul>
+        </div>
+
+        <div class="tech-card">
+            <h3 class="tech-card__heading">Frontend</h3>
+            <ul class="tech-list">
+                <li>HTML5 / CSS3</li>
+                <li>Vanilla JavaScript</li>
+                <li>Chart.js (planned)</li>
+            </ul>
+        </div>
+
+        <div class="tech-card">
+            <h3 class="tech-card__heading">Data &amp; Analytics</h3>
+            <ul class="tech-list">
+                <li>Pandas, NumPy</li>
+                <li>scikit-learn</li>
+                <li>XGBoost</li>
+                <li>SHAP</li>
+                <li>SciPy</li>
+                <li>NLTK / spaCy</li>
+            </ul>
+        </div>
+
+        <div class="tech-card">
+            <h3 class="tech-card__heading">Statistical Modelling</h3>
+            <ul class="tech-list">
+                <li>R</li>
+                <li>lavaan (SEM/CFA)</li>
+            </ul>
+        </div>
+
+        <div class="tech-card">
+            <h3 class="tech-card__heading">Database (Prototype)</h3>
+            <ul class="tech-list">
+                <li>SQLite (planned)</li>
+            </ul>
+        </div>
+
+        <div class="tech-card">
+            <h3 class="tech-card__heading">Development</h3>
+            <ul class="tech-list">
+                <li>Git / GitHub</li>
+                <li>pytest</li>
+                <li>Jupyter Notebooks</li>
+            </ul>
+        </div>
+
+    </div>
+</section>
+
+<!-- Architecture summary -->
+<section class="content-section" aria-labelledby="archSummaryHeading">
+    <h2 class="section-heading" id="archSummaryHeading">Architecture Summary</h2>
+    <div class="prose-block">
+        <p>
+            The framework is structured around <strong>four fully independent analytical
+            components</strong>. Each component is self-contained within its own
+            route blueprint and service module, and operates on distinct data sources
+            and methodologies.
+        </p>
+        <p>
+            This independence ensures that research conducted on one component does
+            not affect or depend on another, allowing parallel development by each
+            team member.
+        </p>
+        <p>
+            Once research data collection is complete and each component has been
+            individually analysed, their outputs will be presented together in this
+            shared research analytics dashboard for <strong>complementary interpretation</strong>.
+            The four components are not combined into a single unified model.
+        </p>
+    </div>
+
+    <div class="info-banner info-banner--prototype" role="note" style="margin-top: 1.5rem;">
+        <svg class="info-banner__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <div>
+            No final research findings, model outputs, SEM coefficients, or statistical
+            results are presented in this prototype. All analytical content will reflect
+            actual research results after data collection is complete.
+        </div>
+    </div>
+</section>
+
+{% endblock %}

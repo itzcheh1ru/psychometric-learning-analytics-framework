@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+
+{% block title %}Research Overview Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- Page heading -->
+<div class="page-heading">
+    <h1 class="page-heading__title">Research Analytics Overview</h1>
+    <p class="page-heading__desc">
+        Integrated prototype for analysing Generative AI-assisted undergraduate learning
+        across four independent analytical research components.
+    </p>
+</div>
+
+<!-- Prototype info banner -->
+<div class="info-banner info-banner--prototype" role="status" aria-live="polite">
+    <svg class="info-banner__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+    <div>
+        <strong>Prototype Stage</strong> &mdash;
+        Research data collection is currently in progress. Analytical outputs will be
+        populated after data validation and model development are completed.
+    </div>
+</div>
+
+<!-- ================================================================
+     Four Research Module Cards
+================================================================ -->
+<section class="content-section" aria-labelledby="modulesHeading">
+    <h2 class="section-heading" id="modulesHeading">Research Modules</h2>
+
+    <div class="card-grid card-grid--2">
+
+        <!-- Card 1 -->
+        <article class="module-card" aria-labelledby="card1Title">
+            <div class="module-card__header module-card__header--c1">
+                <span class="module-card__num" aria-label="Component 1">01</span>
+                <h3 class="module-card__title" id="card1Title">
+                    Explainable Cognitive Offloading Risk Prediction
+                </h3>
+            </div>
+            <div class="module-card__body">
+                <p class="module-card__desc">
+                    Predicts cognitive-offloading risk using GenAI usage behaviour,
+                    verification practices and independent-learning strategies, with
+                    SHAP-based individual explanations.
+                </p>
+                <div class="method-tags" aria-label="Methodologies">
+                    <span class="method-tag">Machine Learning</span>
+                    <span class="method-tag">XAI</span>
+                    <span class="method-tag">SHAP</span>
+                </div>
+                <div class="module-card__footer">
+                    {% include "partials/status_badge.html" with context %}
+                    {%- set label = "Data Collection / Module Preparation" -%}
+                    {%- set variant = "collection" -%}
+                    {% include "partials/status_badge.html" %}
+                    <a href="{{ url_for('component1.index') }}" class="btn btn--outline btn--sm">
+                        Open Module
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="module-card" aria-labelledby="card2Title">
+            <div class="module-card__header module-card__header--c2">
+                <span class="module-card__num" aria-label="Component 2">02</span>
+                <h3 class="module-card__title" id="card2Title">
+                    Algorithmic Trust &amp; Verification
+                </h3>
+            </div>
+            <div class="module-card__body">
+                <p class="module-card__desc">
+                    Examines relationships among algorithmic trust, perceived usefulness,
+                    verification behaviour, AI dependence and learning confidence using
+                    CFA and Structural Equation Modelling.
+                </p>
+                <div class="method-tags" aria-label="Methodologies">
+                    <span class="method-tag">CFA</span>
+                    <span class="method-tag">SEM</span>
+                    <span class="method-tag">Psychometrics</span>
+                </div>
+                <div class="module-card__footer">
+                    {%- set label = "Data Collection / Module Preparation" -%}
+                    {%- set variant = "collection" -%}
+                    {% include "partials/status_badge.html" %}
+                    <a href="{{ url_for('component2.index') }}" class="btn btn--outline btn--sm">
+                        Open Module
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="module-card" aria-labelledby="card3Title">
+            <div class="module-card__header module-card__header--c3">
+                <span class="module-card__num" aria-label="Component 3">03</span>
+                <h3 class="module-card__title" id="card3Title">
+                    Longitudinal AI-Assisted Study Pattern Analytics
+                </h3>
+            </div>
+            <div class="module-card__body">
+                <p class="module-card__desc">
+                    Analyses how AI-assisted and independent study behaviours and
+                    academic prompt patterns evolve over time throughout the research period.
+                </p>
+                <div class="method-tags" aria-label="Methodologies">
+                    <span class="method-tag">Longitudinal Analytics</span>
+                    <span class="method-tag">Trend Analysis</span>
+                    <span class="method-tag">Prompt Behaviour</span>
+                </div>
+                <div class="module-card__footer">
+                    {%- set label = "Data Collection / Module Preparation" -%}
+                    {%- set variant = "collection" -%}
+                    {% include "partials/status_badge.html" %}
+                    <a href="{{ url_for('component3.index') }}" class="btn btn--outline btn--sm">
+                        Open Module
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <!-- Card 4 -->
+        <article class="module-card" aria-labelledby="card4Title">
+            <div class="module-card__header module-card__header--c4">
+                <span class="module-card__num" aria-label="Component 4">04</span>
+                <h3 class="module-card__title" id="card4Title">
+                    Cognitive Engagement &amp; Learning Retention
+                </h3>
+            </div>
+            <div class="module-card__body">
+                <p class="module-card__desc">
+                    Evaluates AI-assisted and brain-only learning through writing analysis,
+                    recall, retention, ownership and statistical comparison of learning conditions.
+                </p>
+                <div class="method-tags" aria-label="Methodologies">
+                    <span class="method-tag">NLP</span>
+                    <span class="method-tag">Statistical Analysis</span>
+                    <span class="method-tag">Learning Evaluation</span>
+                </div>
+                <div class="module-card__footer">
+                    {%- set label = "Experimental Preparation / Data Collection" -%}
+                    {%- set variant = "preparation" -%}
+                    {% include "partials/status_badge.html" %}
+                    <a href="{{ url_for('component4.index') }}" class="btn btn--outline btn--sm">
+                        Open Module
+                    </a>
+                </div>
+            </div>
+        </article>
+
+    </div>
+</section>
+
+<!-- ================================================================
+     Framework Architecture Diagram (HTML/CSS only, no image)
+================================================================ -->
+<section class="content-section" aria-labelledby="archHeading">
+    <h2 class="section-heading" id="archHeading">Framework Architecture</h2>
+    <p class="section-subheading">
+        Each analytical component remains methodologically independent. The dashboard
+        integrates their outputs for complementary interpretation rather than combining
+        them into one predictive model.
+    </p>
+
+    <div class="arch-diagram" role="img" aria-label="Framework architecture: Data Sources lead to four independent analytical modules which feed into a shared Research Analytics Dashboard">
+
+        <!-- Row 1: Data Sources -->
+        <div class="arch-row">
+            <div class="arch-block arch-block--source">
+                <div class="arch-block__label">Research Data Sources</div>
+                <div class="arch-block__sub">Psychometric Survey · Study Diaries · Writing Experiments · Prompt Data</div>
+            </div>
+        </div>
+
+        <div class="arch-arrow" aria-hidden="true">
+            <span class="arch-arrow__line"></span>
+            <span class="arch-arrow__head">&#x25BC;</span>
+        </div>
+
+        <!-- Row 2: Four modules -->
+        <div class="arch-row arch-row--modules">
+            <div class="arch-module arch-module--c1">
+                <div class="arch-module__id">C1</div>
+                <div class="arch-module__name">ML + SHAP</div>
+                <div class="arch-module__detail">Cognitive Offloading</div>
+            </div>
+            <div class="arch-module arch-module--c2">
+                <div class="arch-module__id">C2</div>
+                <div class="arch-module__name">CFA + SEM</div>
+                <div class="arch-module__detail">Trust Analysis</div>
+            </div>
+            <div class="arch-module arch-module--c3">
+                <div class="arch-module__id">C3</div>
+                <div class="arch-module__name">Longitudinal</div>
+                <div class="arch-module__detail">Study Patterns</div>
+            </div>
+            <div class="arch-module arch-module--c4">
+                <div class="arch-module__id">C4</div>
+                <div class="arch-module__name">NLP + Stats</div>
+                <div class="arch-module__detail">Retention</div>
+            </div>
+        </div>
+
+        <div class="arch-arrow" aria-hidden="true">
+            <span class="arch-arrow__line"></span>
+            <span class="arch-arrow__head">&#x25BC;</span>
+        </div>
+
+        <!-- Row 3: Dashboard -->
+        <div class="arch-row">
+            <div class="arch-block arch-block--dashboard">
+                <div class="arch-block__label">Shared Research Analytics Dashboard</div>
+                <div class="arch-block__sub">Integrated interpretation &mdash; complementary, not combined</div>
+            </div>
+        </div>
+
+    </div><!-- /.arch-diagram -->
+</section>
+
+{% endblock %}

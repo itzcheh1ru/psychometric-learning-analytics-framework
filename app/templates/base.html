@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Psychometric Learning Analytics Framework – Research Prototype J26-DS-310, SLIIT" />
+    <title>{% block title %}Psychometric Learning Analytics Framework{% endblock %} | J26-DS-310</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="app-body">
+
+    <!-- ================================================================
+         Top Header
+    ================================================================ -->
+    {% include "partials/header.html" %}
+
+    <!-- ================================================================
+         Application Shell
+    ================================================================ -->
+    <div class="app-shell">
+
+        <!-- Sidebar -->
+        {% include "partials/sidebar.html" %}
+
+        <!-- Main content area -->
+        <div class="app-main" id="appMain">
+            <main class="app-content" id="mainContent" tabindex="-1">
+                {% block content %}{% endblock %}
+            </main>
+
+            {% include "partials/footer.html" %}
+        </div>
+
+    </div><!-- /.app-shell -->
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

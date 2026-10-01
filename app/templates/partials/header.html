@@ -1,0 +1,45 @@
+{#
+  partials/header.html
+  Top application header.
+  Variables expected in context: none (uses url_for)
+#}
+<header class="app-header" role="banner">
+    <div class="app-header__inner">
+
+        <!-- Brand -->
+        <div class="app-header__brand">
+            <button
+                class="sidebar-toggle"
+                id="sidebarToggle"
+                aria-label="Toggle navigation menu"
+                aria-expanded="false"
+                aria-controls="appSidebar"
+                type="button"
+            >
+                <span class="sidebar-toggle__bar"></span>
+                <span class="sidebar-toggle__bar"></span>
+                <span class="sidebar-toggle__bar"></span>
+            </button>
+
+            <a href="{{ url_for('main.index') }}" class="app-header__logo-link" aria-label="Psychometric Learning Analytics Framework home">
+                <svg class="app-header__logo-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10z"/>
+                    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                    <path d="M16 3.5c1.5.8 2.5 2.3 2.5 4.5"/>
+                    <path d="M8 3.5C6.5 4.3 5.5 5.8 5.5 8"/>
+                </svg>
+                <div class="app-header__title-group">
+                    <span class="app-header__title">Psychometric Learning Analytics Framework</span>
+                    <span class="app-header__project-id">J26-DS-310</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Status badges -->
+        <div class="app-header__badges" aria-label="Project status">
+            <span class="header-badge header-badge--prototype">Research Prototype</span>
+            <span class="header-badge header-badge--status">Data Collection in Progress</span>
+        </div>
+
+    </div>
+</header>
