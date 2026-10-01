@@ -2,8 +2,15 @@
 
 {% block title %}Cognitive Offloading Risk Prediction — Component 1{% endblock %}
 
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/component1.css') }}" />
+{% endblock %}
+
 {% block content %}
 
+<!-- ================================================================
+     A. Component Header
+================================================================ -->
 <div class="page-heading">
     <nav class="breadcrumb" aria-label="Breadcrumb">
         <a href="{{ url_for('main.dashboard') }}" class="breadcrumb__link">Overview</a>
@@ -15,71 +22,573 @@
     </div>
     <h1 class="page-heading__title">Explainable Cognitive Offloading Risk Prediction</h1>
     <p class="page-heading__desc">
-        Develops an explainable machine learning model to predict cognitive-offloading
-        risk based on GenAI usage behaviour, verification practices and learning strategies.
-        Target-defining cognitive-offloading survey items are excluded from predictors
-        to prevent data leakage.
+        Interactive prototype for preparing behavioural inputs for the future
+        explainable machine-learning prediction pipeline.
     </p>
     <div class="page-heading__status">
-        <span class="status-badge status-badge--collection">
+        <span class="status-badge status-badge--preparation">
             <span class="status-badge__dot" aria-hidden="true"></span>
-            Data Collection / Module Preparation
+            Prototype &mdash; Model Development Pending
         </span>
     </div>
 </div>
 
-<!-- Methodology -->
-<section class="content-section" aria-labelledby="methodHeading1">
-    <h2 class="section-heading" id="methodHeading1">Methodology</h2>
-    <div class="card-grid card-grid--4">
-        <div class="method-card">
-            <div class="method-card__title">Logistic Regression</div>
-            <p class="method-card__desc">Baseline interpretable classifier for binary risk classification.</p>
-        </div>
-        <div class="method-card">
-            <div class="method-card__title">Random Forest</div>
-            <p class="method-card__desc">Ensemble method capturing non-linear behavioural feature interactions.</p>
-        </div>
-        <div class="method-card">
-            <div class="method-card__title">XGBoost</div>
-            <p class="method-card__desc">Gradient-boosted trees for robust risk prediction performance.</p>
-        </div>
-        <div class="method-card">
-            <div class="method-card__title">SHAP Explainability</div>
-            <p class="method-card__desc">SHapley Additive exPlanations for global and individual prediction explanations.</p>
+<!-- Research stage notice -->
+<div class="info-banner info-banner--prototype" role="status">
+    <svg class="info-banner__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+    <div>
+        <strong>Research stage notice:</strong> Research data collection is currently in progress.
+        This prototype demonstrates the <em>planned</em> analytical workflow only and does
+        not generate research predictions.
+    </div>
+</div>
+
+
+<!-- ================================================================
+     B. Research Workflow Visual
+================================================================ -->
+<section class="content-section" aria-labelledby="workflowHeading">
+    <h2 class="section-heading" id="workflowHeading">Research Workflow</h2>
+    <p class="section-subheading">Planned prediction pipeline for the final research module.</p>
+
+    <div class="workflow-diagram" role="img" aria-label="Prediction workflow: Behavioural Inputs → Input Validation → Data Preprocessing → Trained ML Model → Risk Probability → SHAP Explanation → Dashboard Output">
+        <div class="workflow-steps">
+
+            <div class="workflow-step workflow-step--ready">
+                <div class="workflow-step__icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <div class="workflow-step__label">Behavioural Inputs</div>
+                <div class="workflow-step__status">Prototype Ready</div>
+            </div>
+
+            <div class="workflow-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="workflow-step workflow-step--ready">
+                <div class="workflow-step__icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div class="workflow-step__label">Input Validation</div>
+                <div class="workflow-step__status">Prototype Ready</div>
+            </div>
+
+            <div class="workflow-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="workflow-step workflow-step--ready">
+                <div class="workflow-step__icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                </div>
+                <div class="workflow-step__label">Data Preprocessing</div>
+                <div class="workflow-step__status">Prototype Interface</div>
+            </div>
+
+            <div class="workflow-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="workflow-step workflow-step--pending">
+                <div class="workflow-step__icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                </div>
+                <div class="workflow-step__label">Trained ML Model</div>
+                <div class="workflow-step__status">Pending Research Data</div>
+            </div>
+
+            <div class="workflow-arrow workflow-arrow--pending" aria-hidden="true">&#x25BC;</div>
+
+            <div class="workflow-step workflow-step--pending">
+                <div class="workflow-step__icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                </div>
+                <div class="workflow-step__label">Risk Probability</div>
+                <div class="workflow-step__status">Pending Model Training</div>
+            </div>
+
+            <div class="workflow-arrow workflow-arrow--pending" aria-hidden="true">&#x25BC;</div>
+
+            <div class="workflow-step workflow-step--pending">
+                <div class="workflow-step__icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+                </div>
+                <div class="workflow-step__label">SHAP Explanation</div>
+                <div class="workflow-step__status">Pending Model Training</div>
+            </div>
+
+            <div class="workflow-arrow workflow-arrow--pending" aria-hidden="true">&#x25BC;</div>
+
+            <div class="workflow-step workflow-step--pending">
+                <div class="workflow-step__icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                </div>
+                <div class="workflow-step__label">Dashboard Output</div>
+                <div class="workflow-step__status">Pending Research Data</div>
+            </div>
+
         </div>
     </div>
 </section>
 
-<!-- Planned Outputs -->
-<section class="content-section" aria-labelledby="outputsHeading1">
-    <h2 class="section-heading" id="outputsHeading1">Planned Analytical Outputs</h2>
-    <ul class="outputs-list">
-        <li class="outputs-list__item">Cognitive-offloading risk probability per participant</li>
-        <li class="outputs-list__item">Risk classification (high / moderate / low)</li>
-        <li class="outputs-list__item">Global feature importance (SHAP summary)</li>
-        <li class="outputs-list__item">Individual SHAP waterfall / force plot explanations</li>
-        <li class="outputs-list__item">Model comparison across classifiers</li>
-        <li class="outputs-list__item">Calibration and evaluation metrics (accuracy, F1, ROC-AUC)</li>
-    </ul>
+
+<!-- ================================================================
+     C. Behavioural Input Form (Prototype)
+================================================================ -->
+<section class="content-section" aria-labelledby="formHeading">
+    <h2 class="section-heading" id="formHeading">Behavioural Input Prototype</h2>
+    <p class="section-subheading">
+        Enter prototype predictor values to test the input validation pipeline.
+        Only anonymised participant references are accepted. No personally
+        identifying information should be entered.
+    </p>
+
+    <div class="proto-notice" role="note">
+        <strong>Prototype form:</strong> This form validates input structure only.
+        No risk prediction is performed and no submission is stored.
+    </div>
+
+    <form
+        id="component1Form"
+        class="predictor-form"
+        novalidate
+        aria-label="Behavioural predictor prototype input form"
+    >
+
+        <!-- ── Participant Reference ── -->
+        <fieldset class="form-fieldset">
+            <legend class="form-fieldset__legend">Participant Reference</legend>
+            <div class="form-group">
+                <label class="form-label" for="participant_reference">
+                    Participant Reference ID
+                    <span class="form-label__required" aria-hidden="true">*</span>
+                </label>
+                <input
+                    type="text"
+                    id="participant_reference"
+                    name="participant_reference"
+                    class="form-input"
+                    placeholder="e.g. P0001"
+                    maxlength="20"
+                    autocomplete="off"
+                    required
+                    aria-required="true"
+                    aria-describedby="ref_help ref_error"
+                />
+                <p class="form-help" id="ref_help">
+                    Use an anonymised research participant identifier only.
+                    Letters, digits and hyphens are accepted (max 20 characters).
+                    Do not enter student registration numbers, names or email addresses.
+                </p>
+                <p class="form-error" id="ref_error" aria-live="polite" hidden></p>
+            </div>
+        </fieldset>
+
+        <!-- ── GenAI Usage Behaviour ── -->
+        <fieldset class="form-fieldset">
+            <legend class="form-fieldset__legend">GenAI Usage Behaviour</legend>
+
+            <div class="form-group">
+                <label class="form-label" for="genai_usage_frequency">
+                    GenAI Usage Frequency
+                    <span class="form-label__required" aria-hidden="true">*</span>
+                </label>
+                <select
+                    id="genai_usage_frequency"
+                    name="genai_usage_frequency"
+                    class="form-select"
+                    required
+                    aria-required="true"
+                    aria-describedby="freq_error"
+                >
+                    <option value="">— Select —</option>
+                    {% for opt in schema.genai_usage_frequency %}
+                    <option value="{{ opt }}">{{ opt }}</option>
+                    {% endfor %}
+                </select>
+                <p class="form-error" id="freq_error" aria-live="polite" hidden></p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="weekly_genai_usage">
+                    Weekly GenAI Usage
+                    <span class="form-label__required" aria-hidden="true">*</span>
+                </label>
+                <select
+                    id="weekly_genai_usage"
+                    name="weekly_genai_usage"
+                    class="form-select"
+                    required
+                    aria-required="true"
+                    aria-describedby="weekly_error"
+                >
+                    <option value="">— Select —</option>
+                    {% for opt in schema.weekly_genai_usage %}
+                    <option value="{{ opt }}">{{ opt }}</option>
+                    {% endfor %}
+                </select>
+                <p class="form-error" id="weekly_error" aria-live="polite" hidden></p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="academic_purpose">
+                    Main Academic Purpose of GenAI Use
+                    <span class="form-label__required" aria-hidden="true">*</span>
+                </label>
+                <select
+                    id="academic_purpose"
+                    name="academic_purpose"
+                    class="form-select"
+                    required
+                    aria-required="true"
+                    aria-describedby="purpose_error"
+                >
+                    <option value="">— Select —</option>
+                    {% for opt in schema.academic_purpose %}
+                    <option value="{{ opt }}">{{ opt }}</option>
+                    {% endfor %}
+                </select>
+                <p class="form-error" id="purpose_error" aria-live="polite" hidden></p>
+            </div>
+        </fieldset>
+
+        <!-- ── Verification Practices ── -->
+        <fieldset class="form-fieldset">
+            <legend class="form-fieldset__legend">Verification Practices</legend>
+            <div class="form-group">
+                <label class="form-label" for="verification_frequency">
+                    Verification Frequency
+                    <span class="form-label__required" aria-hidden="true">*</span>
+                </label>
+                <select
+                    id="verification_frequency"
+                    name="verification_frequency"
+                    class="form-select"
+                    required
+                    aria-required="true"
+                    aria-describedby="verif_help verif_error"
+                >
+                    <option value="">— Select —</option>
+                    {% for opt in schema.verification_frequency %}
+                    <option value="{{ opt }}">{{ opt }}</option>
+                    {% endfor %}
+                </select>
+                <p class="form-help" id="verif_help">
+                    Represents how consistently a learner checks or verifies
+                    AI-generated academic information before relying on it.
+                    Note: This single field is a prototype representation only
+                    and does not replace the validated research verification scale.
+                </p>
+                <p class="form-error" id="verif_error" aria-live="polite" hidden></p>
+            </div>
+        </fieldset>
+
+        <!-- ── Independent Learning ── -->
+        <fieldset class="form-fieldset">
+            <legend class="form-fieldset__legend">Independent Learning Behaviour</legend>
+            <div class="form-group">
+                <label class="form-label" for="independent_learning">
+                    Independent Learning Engagement
+                    <span class="form-label__required" aria-hidden="true">*</span>
+                </label>
+                <select
+                    id="independent_learning"
+                    name="independent_learning"
+                    class="form-select"
+                    required
+                    aria-required="true"
+                    aria-describedby="indep_help indep_error"
+                >
+                    <option value="">— Select —</option>
+                    {% for opt in schema.independent_learning %}
+                    <option value="{{ opt }}">{{ opt }}</option>
+                    {% endfor %}
+                </select>
+                <p class="form-help" id="indep_help">
+                    Prototype representation of independent-learning behaviour.
+                    Final model features will be derived from validated research variables.
+                </p>
+                <p class="form-error" id="indep_error" aria-live="polite" hidden></p>
+            </div>
+        </fieldset>
+
+        <!-- ── Academic Context (Optional) ── -->
+        <fieldset class="form-fieldset">
+            <legend class="form-fieldset__legend">Academic Context <span class="form-fieldset__optional">(Optional)</span></legend>
+            <div class="form-group">
+                <label class="form-label" for="academic_year">Academic Year</label>
+                <select
+                    id="academic_year"
+                    name="academic_year"
+                    class="form-select"
+                    aria-describedby="year_error"
+                >
+                    <option value="">— Not specified —</option>
+                    {% for opt in schema.academic_year %}
+                    <option value="{{ opt }}">{{ opt }}</option>
+                    {% endfor %}
+                </select>
+                <p class="form-error" id="year_error" aria-live="polite" hidden></p>
+            </div>
+        </fieldset>
+
+        <!-- Submit -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn--primary" id="submitBtn">
+                Validate Prototype Input
+            </button>
+            <button type="button" class="btn btn--outline" id="resetBtn">
+                Reset Form
+            </button>
+        </div>
+
+    </form>
 </section>
 
-<!-- Empty analytics state -->
-<section class="content-section" aria-labelledby="analyticsHeading1">
-    <h2 class="section-heading" id="analyticsHeading1">Analytics</h2>
-    <div class="empty-state">
-        <div class="empty-state__icon" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/>
-                <line x1="9" y1="21" x2="9" y2="9"/>
+
+<!-- ================================================================
+     D. Validation Result & Preprocessing Preview
+     (hidden initially, shown by JS after submission)
+================================================================ -->
+<section
+    class="content-section"
+    id="validationResultSection"
+    aria-labelledby="validationResultHeading"
+    aria-live="polite"
+    hidden
+>
+    <h2 class="section-heading" id="validationResultHeading">Input Validation Result</h2>
+
+    <!-- Success state -->
+    <div id="validationSuccess" hidden>
+        <div class="validation-success-banner" role="status">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Prototype input validated successfully.
+        </div>
+
+        <!-- Input summary table -->
+        <h3 class="subsection-heading">Prototype Input Summary</h3>
+        <div class="summary-table-wrap">
+            <table class="summary-table" aria-label="Submitted predictor values">
+                <tbody id="summaryTableBody"></tbody>
+            </table>
+        </div>
+
+        <!-- Validation checks -->
+        <h3 class="subsection-heading">Input Validation</h3>
+        <ul class="check-list" aria-label="Validation checks passed">
+            <li class="check-list__item check-list__item--pass">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Required fields complete
+            </li>
+            <li class="check-list__item check-list__item--pass">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Accepted category values
+            </li>
+            <li class="check-list__item check-list__item--pass">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Anonymous participant reference format
+            </li>
+        </ul>
+
+        <!-- Model Status -->
+        <h3 class="subsection-heading">Model Status</h3>
+        <div class="model-status-card">
+            <div class="model-status-row">
+                <span class="model-status-label">Training status</span>
+                <span class="model-status-value model-status-value--unavailable">Not trained</span>
+            </div>
+            <div class="model-status-row">
+                <span class="model-status-label">Prediction</span>
+                <span class="model-status-value model-status-value--unavailable">Unavailable</span>
+            </div>
+            <div class="model-status-row">
+                <span class="model-status-label">SHAP explanation</span>
+                <span class="model-status-value model-status-value--unavailable">Unavailable</span>
+            </div>
+        </div>
+
+        <div class="info-banner info-banner--prototype" role="note" style="margin: 0 0 0 0;">
+            <svg class="info-banner__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
             </svg>
+            <div>
+                The submitted data is structurally valid for the prototype workflow.
+                Risk prediction will be enabled only after the research dataset has
+                been validated and the final machine-learning model has been trained
+                and evaluated.
+            </div>
         </div>
-        <h3 class="empty-state__title">Model analytics not yet available</h3>
-        <p class="empty-state__body">
-            Analytics will become available after survey data collection,
-            construct validation, preprocessing and model development are completed.
-        </p>
+    </div>
+
+    <!-- Error state -->
+    <div id="validationError" hidden>
+        <div class="validation-error-banner" role="alert">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            Input validation failed. Please correct the errors below.
+        </div>
+        <ul class="error-list" id="errorList" aria-live="assertive"></ul>
     </div>
 </section>
 
+
+<!-- ================================================================
+     E. Planned Analytical Outputs
+     (visually disabled — model not yet trained)
+================================================================ -->
+<section class="content-section" aria-labelledby="outputsHeading">
+    <h2 class="section-heading" id="outputsHeading">Planned Analytical Outputs</h2>
+    <p class="section-subheading">
+        These outputs will be generated once the trained model is integrated.
+    </p>
+
+    <div class="card-grid card-grid--3">
+
+        <div class="output-card output-card--disabled" aria-label="Cognitive Offloading Risk Probability — not yet available">
+            <div class="output-card__title">Cognitive Offloading Risk Probability</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after model training
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="Risk Classification — not yet available">
+            <div class="output-card__title">Risk Classification</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after model training
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="Top Behavioural Factors — not yet available">
+            <div class="output-card__title">Top Behavioural Factors</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after model training
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="SHAP Explanation — not yet available">
+            <div class="output-card__title">SHAP Explanation</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after model training
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="Model Confidence and Calibration — not yet available">
+            <div class="output-card__title">Model Confidence &amp; Calibration</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after model training
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ================================================================
+     G. Data Leakage Protection Panel
+================================================================ -->
+<section class="content-section" aria-labelledby="leakageHeading">
+    <h2 class="section-heading" id="leakageHeading">Target Leakage Protection</h2>
+    <p class="section-subheading">
+        The cognitive-offloading measurement items used to construct the prediction
+        target are intentionally excluded from model predictors. Only non-target
+        behavioural variables such as GenAI usage, verification practices and
+        independent-learning strategies will be used for prediction.
+    </p>
+
+    <div class="leakage-diagram" role="img" aria-label="Target leakage protection: Target construction using Cognitive Offloading Scale is separated from Predictor inputs used in the machine learning model">
+        <div class="leakage-side leakage-side--target">
+            <div class="leakage-side__header">TARGET CONSTRUCTION</div>
+            <div class="leakage-item leakage-item--target">Cognitive Offloading Scale</div>
+            <div class="leakage-arrow" aria-hidden="true">&#x25BC;</div>
+            <div class="leakage-item leakage-item--output">Cognitive Offloading Outcome</div>
+            <div class="leakage-not-equal" aria-label="Not equal to, not used as model input">TARGET ITEMS &ne; MODEL INPUT FEATURES</div>
+        </div>
+
+        <div class="leakage-separator" aria-hidden="true">
+            <span>SEPARATE<br/>FROM</span>
+        </div>
+
+        <div class="leakage-side leakage-side--predictors">
+            <div class="leakage-side__header">PREDICTORS</div>
+            <div class="leakage-item leakage-item--predictor">GenAI Usage Behaviour</div>
+            <div class="leakage-item leakage-item--predictor">Verification Practices</div>
+            <div class="leakage-item leakage-item--predictor">Independent Learning</div>
+            <div class="leakage-item leakage-item--predictor">Academic Context</div>
+            <div class="leakage-arrow" aria-hidden="true">&#x25BC;</div>
+            <div class="leakage-item leakage-item--model">Machine Learning Model</div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ================================================================
+     H. Future Model Architecture Panel
+================================================================ -->
+<section class="content-section" aria-labelledby="archHeading">
+    <h2 class="section-heading" id="archHeading">Future Model Integration Architecture</h2>
+    <p class="section-subheading">
+        Planned analytical pipeline — implementation begins after validated research
+        data becomes available.
+    </p>
+
+    <div class="model-arch-diagram" role="img" aria-label="Future model architecture: Validated Dataset → Preprocessing → Train/Test Split → Stratified Cross Validation → Three models (Logistic Regression, Random Forest, XGBoost) → Model Evaluation → Selected Model → SHAP → Dashboard">
+        <div class="model-arch-steps">
+
+            <div class="model-arch-step">
+                <div class="model-arch-step__label">Validated Survey Dataset</div>
+            </div>
+            <div class="model-arch-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="model-arch-step">
+                <div class="model-arch-step__label">Training-only Preprocessing</div>
+            </div>
+            <div class="model-arch-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="model-arch-step">
+                <div class="model-arch-step__label">Train / Test Separation</div>
+            </div>
+            <div class="model-arch-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="model-arch-step">
+                <div class="model-arch-step__label">Stratified Cross Validation</div>
+            </div>
+            <div class="model-arch-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="model-arch-models">
+                <div class="model-arch-model">Logistic Regression</div>
+                <div class="model-arch-model">Random Forest</div>
+                <div class="model-arch-model">XGBoost</div>
+            </div>
+            <div class="model-arch-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="model-arch-step">
+                <div class="model-arch-step__label">Model Evaluation</div>
+                <div class="model-arch-step__sub">Accuracy · F1 · ROC-AUC · Calibration</div>
+            </div>
+            <div class="model-arch-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="model-arch-step model-arch-step--highlight">
+                <div class="model-arch-step__label">Selected Model</div>
+            </div>
+            <div class="model-arch-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="model-arch-step">
+                <div class="model-arch-step__label">SHAP Explainability</div>
+            </div>
+            <div class="model-arch-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="model-arch-step model-arch-step--dashboard">
+                <div class="model-arch-step__label">Research Analytics Dashboard</div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/component1.js') }}"></script>
 {% endblock %}

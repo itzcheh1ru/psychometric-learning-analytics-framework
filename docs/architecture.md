@@ -89,6 +89,55 @@ app.py  (entry point)
 
 ---
 
+## Component 1 Architecture – Cognitive Offloading Risk Prediction
+
+### Target Construction vs. Predictor Preparation Separation
+
+To uphold research integrity and eliminate **data leakage**, the pipeline strictly separates:
+
+```
+[Survey Administration]
+      │
+      ├─────────────────────────────────────────────┐
+      ▼                                             ▼
+Target Construction Items                     Predictor Items
+(validated cognitive offloading scale)         (GenAI usage, verification, independent learning)
+      │                                             │
+      ▼                                             ▼
+Target Variable: Binary / Ordinal Risk        Feature Engineering / Preprocessing
+      │                                             │
+      └─────────────────────┬───────────────────────┘
+                            ▼
+                Train / Test Separation
+                            ▼
+               Stratified Cross-Validation
+                            ▼
+                     Model Training
+          (Logistic Regression, RF, XGBoost)
+                            ▼
+                     Selected Model
+                            ▼
+                    SHAP Explainability
+                            ▼
+                   Dashboard Presentation
+```
+
+> **Target Leakage Rule:** Cognitive-offloading scale items used to construct the
+> target label are **strictly excluded** from the predictor feature set.
+
+### Service Layer Design
+
+- `schemas.py`: Allowed category enumerations, regex pattern for anonymous participant IDs.
+- `validation.py`: Pure validation and sanitization. Rejects any out-of-schema values.
+- `model_service.py`: `CognitiveOffloadingModelService` singleton. All prediction methods
+  raise `ModelNotAvailableError` until an evaluated model file is loaded.
+- `routes/component1.py`:
+  - `GET /component1/`: interactive prototype UI
+  - `GET /api/component1/status`: reports `model_trained: false`, `prediction_available: false`
+  - `POST /api/component1/validate-input`: validates prototype payload; does NOT predict or persist
+
+---
+
 ## Dashboard Integration (planned)
 
 Once all four components have been analysed, their outputs will be surfaced
@@ -119,4 +168,4 @@ in the shared research dashboard at `/dashboard`:
 
 ---
 
-*Last updated: Feature 001 – Initial scaffold*
+*Last updated: Feature 003 – Component 1 interactive prototype workflow*

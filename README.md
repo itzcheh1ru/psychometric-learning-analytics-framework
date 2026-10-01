@@ -27,12 +27,15 @@
 |---------|-------------|--------|
 | Feature 001 | Flask application scaffold | ✅ Complete |
 | Feature 002 | Responsive research dashboard shell | ✅ Complete |
+| Feature 003 | Component 1 interactive prototype workflow | ✅ Complete |
 
-**Feature 002 notes:**
-- Professional responsive dashboard shell with sidebar navigation implemented.
-- All four research module pages include methodology summaries and planned outputs.
-- Research analytics remain pending data collection, validation and model development.
-- No final model outputs, SEM coefficients or statistical results are represented.
+**Feature 003 notes:**
+- Component 1 prototype workflow: Implemented (input validation, preprocessing preview, schema definitions).
+- Actual ML model: Pending data collection and validation.
+- Prediction: Not yet enabled (`model_trained = false`, `prediction_available = false`).
+- SHAP: Not yet enabled (`explainability_available = false`).
+- Target leakage protection: Documented and enforced (target scale items excluded from predictors).
+- Privacy: No personal identifying information requested; no submission persisted to database or logs.
 
 ---
 
