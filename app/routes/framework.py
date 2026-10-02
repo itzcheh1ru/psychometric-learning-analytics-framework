@@ -26,7 +26,8 @@ api_framework_bp = Blueprint("api_framework", __name__, url_prefix="/api/framewo
 # UI Routes                                                                   #
 # =========================================================================== #
 
-@framework_bp.route("/")
+@framework_bp.route("", strict_slashes=False)
+@framework_bp.route("/", strict_slashes=False)
 def index():
     """
     Framework Integration architectural page.

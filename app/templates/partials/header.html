@@ -35,10 +35,23 @@
             </a>
         </div>
 
-        <!-- Status badges -->
-        <div class="app-header__badges" aria-label="Project status">
+        <!-- Status badges & presentation toggle -->
+        <div class="app-header__badges" aria-label="Project status and presentation controls">
             <span class="header-badge header-badge--prototype">Research Prototype</span>
             <span class="header-badge header-badge--status">Data Collection in Progress</span>
+            <a
+                href="{% if request.args.get('presentation') == '1' %}{{ request.path }}{% else %}{{ request.path }}?presentation=1{% endif %}"
+                class="header-badge header-badge--presentation {% if request.args.get('presentation') == '1' %}header-badge--presentation-active{% endif %}"
+                role="button"
+                aria-pressed="{% if request.args.get('presentation') == '1' %}true{% else %}false{% endif %}"
+                title="{% if request.args.get('presentation') == '1' %}Exit presentation mode{% else %}Enable presentation mode for widescreen projection{% endif %}"
+            >
+                {% if request.args.get('presentation') == '1' %}
+                &#10005; Exit Presentation
+                {% else %}
+                &#9654; Presentation Mode
+                {% endif %}
+            </a>
         </div>
 
     </div>

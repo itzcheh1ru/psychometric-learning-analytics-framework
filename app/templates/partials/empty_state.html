@@ -1,0 +1,28 @@
+{#
+  partials/empty_state.html
+  Reusable empty state partial for pending analytical output sections.
+
+  Supported variables (via context or with):
+    empty_title: Title string (default: "Analytics Pending")
+    empty_desc:  Detailed explanatory string (default: "Results will become available after validated research data is processed.")
+    empty_status: Status label (default: "Pending Validated Research Data")
+#}
+<div class="empty-state-card" role="status" aria-live="polite">
+    <div class="empty-state-card__icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+    </div>
+    <h3 class="empty-state-card__title">{{ empty_title | default("Analytics Pending") }}</h3>
+    <p class="empty-state-card__desc">{{ empty_desc | default("Results will become available after validated research data is processed.") }}</p>
+    {% if empty_status is not none %}
+    <div class="empty-state-card__badge-wrap">
+        <span class="status-badge status-badge--collection">
+            <span class="status-badge__dot" aria-hidden="true"></span>
+            {{ empty_status | default("Pending Validated Research Data") }}
+        </span>
+    </div>
+    {% endif %}
+</div>

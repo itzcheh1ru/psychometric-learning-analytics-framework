@@ -25,6 +25,7 @@ ENV/
 # ---------- Environment Files (Secrets) ----------
 .env
 .env.*
+!.env.example
 *.env
 secrets.py
 

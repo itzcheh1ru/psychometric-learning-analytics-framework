@@ -33,7 +33,8 @@ api_component3_bp = Blueprint("api_component3", __name__, url_prefix="/api/compo
 # UI Routes                                                                   #
 # =========================================================================== #
 
-@component3_bp.route("/")
+@component3_bp.route("", strict_slashes=False)
+@component3_bp.route("/", strict_slashes=False)
 def index():
     """
     Component 3 interactive prototype page.
