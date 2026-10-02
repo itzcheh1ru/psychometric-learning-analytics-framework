@@ -1,0 +1,405 @@
+{% extends "base.html" %}
+
+{% block title %}Framework Integration{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/framework.css') }}" />
+{% endblock %}
+
+{% block content %}
+
+<!-- ================================================================
+     Framework Page Header
+================================================================ -->
+<div class="framework-header">
+    <h1 class="framework-header__title">
+        Psychometric Learning Analytics Framework
+    </h1>
+    <p class="framework-header__subtitle">
+        Integrated four-component analytical architecture for studying
+        Generative AI-assisted undergraduate learning.
+    </p>
+    <div class="framework-header__badges">
+        <span class="badge badge--project">J26-DS-310</span>
+        <span class="badge badge--prototype">Research Prototype</span>
+        <span class="badge badge--collection">Data Collection / Prototype Development</span>
+    </div>
+</div>
+
+<!-- ================================================================
+     Prototype Info Banner
+================================================================ -->
+<div class="info-banner info-banner--prototype" role="status" aria-live="polite">
+    <svg class="info-banner__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+    <div>
+        <strong>Prototype Stage</strong> &mdash;
+        Research data collection is currently in progress. Analytical outputs will be
+        populated after data validation and model development are completed.
+        Each component remains methodologically independent.
+    </div>
+</div>
+
+<!-- ================================================================
+     Section 1: Integration Architecture Diagram
+================================================================ -->
+<section class="content-section" aria-labelledby="archHeading">
+    <h2 class="section-heading" id="archHeading">Integration Architecture</h2>
+    <p class="section-subheading">
+        Four independent analytical components share a common research dashboard.
+        Integration means complementary interpretation, not mathematical aggregation.
+    </p>
+
+    <div class="framework-arch"
+         role="img"
+         aria-label="Framework architecture: Research Data Sources feed into four independent analytical components which feed into a shared Analytical Integration Layer and Research Dashboard">
+
+        <!-- Row: Data Sources -->
+        <div class="framework-arch__row">
+            <div class="framework-arch__block framework-arch__block--source">
+                <div class="framework-arch__block-label">Research Data Sources</div>
+                <div class="framework-arch__block-sub">
+                    Psychometric Survey &middot; Study Diaries &middot;
+                    Writing Experiments &middot; Prompt Data
+                </div>
+            </div>
+        </div>
+
+        <div class="framework-arch__arrow" aria-hidden="true">
+            <span class="framework-arch__arrow-line"></span>
+            <span>&#x25BC;</span>
+        </div>
+
+        <!-- Row: Four Independent Components -->
+        <div class="framework-arch__row">
+            <div class="framework-arch__components">
+                <div class="framework-arch__component framework-arch__component--c1">
+                    <div class="framework-arch__comp-id framework-arch__comp-id--c1">C1</div>
+                    <div class="framework-arch__comp-method">ML + SHAP</div>
+                    <div class="framework-arch__comp-name">Cognitive Offloading</div>
+                </div>
+                <div class="framework-arch__component framework-arch__component--c2">
+                    <div class="framework-arch__comp-id framework-arch__comp-id--c2">C2</div>
+                    <div class="framework-arch__comp-method">CFA + SEM</div>
+                    <div class="framework-arch__comp-name">Trust Analysis</div>
+                </div>
+                <div class="framework-arch__component framework-arch__component--c3">
+                    <div class="framework-arch__comp-id framework-arch__comp-id--c3">C3</div>
+                    <div class="framework-arch__comp-method">Longitudinal</div>
+                    <div class="framework-arch__comp-name">Study Patterns</div>
+                </div>
+                <div class="framework-arch__component framework-arch__component--c4">
+                    <div class="framework-arch__comp-id framework-arch__comp-id--c4">C4</div>
+                    <div class="framework-arch__comp-method">NLP + Stats</div>
+                    <div class="framework-arch__comp-name">Retention</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="framework-arch__arrow" aria-hidden="true">
+            <span class="framework-arch__arrow-line"></span>
+            <span>&#x25BC;</span>
+        </div>
+
+        <!-- Row: Integration Layer -->
+        <div class="framework-arch__row">
+            <div class="framework-arch__block framework-arch__block--integration">
+                <div class="framework-arch__block-label">Analytical Integration Layer</div>
+                <div class="framework-arch__block-sub">
+                    Complementary Evidence &mdash; independent outputs interpreted together
+                </div>
+            </div>
+        </div>
+
+        <div class="framework-arch__arrow" aria-hidden="true">
+            <span class="framework-arch__arrow-line"></span>
+            <span>&#x25BC;</span>
+        </div>
+
+        <!-- Row: Dashboard -->
+        <div class="framework-arch__row">
+            <div class="framework-arch__block framework-arch__block--dashboard">
+                <div class="framework-arch__block-label">Shared Research Analytics Dashboard</div>
+                <div class="framework-arch__block-sub">
+                    Holistic understanding &mdash; not a combined model
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /.framework-arch -->
+</section>
+
+<!-- ================================================================
+     Section 2: Data Source Mapping
+================================================================ -->
+<section class="content-section" aria-labelledby="dsHeading">
+    <h2 class="section-heading" id="dsHeading">Data Source Mapping</h2>
+    <p class="section-subheading">
+        Each component draws from a distinct data source. No single combined dataset is used.
+    </p>
+
+    <div class="table-responsive">
+        <table class="ds-table" aria-label="Data source mapping per component">
+            <thead>
+                <tr>
+                    <th scope="col">Component</th>
+                    <th scope="col">Short Title</th>
+                    <th scope="col">Primary Data Source</th>
+                    <th scope="col">Instrument</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="comp-label comp-label--c1">C1</span></td>
+                    <td>Cognitive Offloading</td>
+                    <td>Psychometric behaviour survey</td>
+                    <td>Self-report questionnaire (GenAI usage, verification, learning strategy)</td>
+                </tr>
+                <tr>
+                    <td><span class="comp-label comp-label--c2">C2</span></td>
+                    <td>Trust &amp; Verification</td>
+                    <td>Likert-scale psychometric survey</td>
+                    <td>Validated psychometric instrument (trust, dependence, confidence constructs)</td>
+                </tr>
+                <tr>
+                    <td><span class="comp-label comp-label--c3">C3</span></td>
+                    <td>Study Patterns</td>
+                    <td>Weekly self-report study diaries</td>
+                    <td>4–6 week longitudinal diary (AI hours, independent hours, prompt logs)</td>
+                </tr>
+                <tr>
+                    <td><span class="comp-label comp-label--c4">C4</span></td>
+                    <td>Engagement &amp; Retention</td>
+                    <td>Controlled writing experiments</td>
+                    <td>Counterbalanced experimental sessions (Brain-only vs. GenAI-assisted)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ================================================================
+     Section 3: Method Comparison Matrix
+================================================================ -->
+<section class="content-section" aria-labelledby="methodHeading">
+    <h2 class="section-heading" id="methodHeading">Method Comparison Matrix</h2>
+    <p class="section-subheading">
+        Each component applies a methodologically distinct analytical approach.
+    </p>
+
+    <div class="table-responsive">
+        <table class="method-matrix" aria-label="Analytical method comparison across components">
+            <thead>
+                <tr>
+                    <th scope="col">Component</th>
+                    <th scope="col">Paradigm</th>
+                    <th scope="col">Primary Methods</th>
+                    <th scope="col">Output Type</th>
+                    <th scope="col">Explainability</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="comp-label comp-label--c1">C1</span> Cognitive Offloading</td>
+                    <td>Supervised ML</td>
+                    <td>Logistic Regression, Random Forest, XGBoost, SHAP</td>
+                    <td>Risk classification + individual feature attribution</td>
+                    <td>SHAP (XAI)</td>
+                </tr>
+                <tr>
+                    <td><span class="comp-label comp-label--c2">C2</span> Trust &amp; Verification</td>
+                    <td>Structural Modelling</td>
+                    <td>CFA, SEM, R/lavaan, Psychometrics</td>
+                    <td>Path coefficients, factor loadings, fit indices</td>
+                    <td>Structural transparency</td>
+                </tr>
+                <tr>
+                    <td><span class="comp-label comp-label--c3">C3</span> Study Patterns</td>
+                    <td>Longitudinal Analytics</td>
+                    <td>Time-Series Analysis, Trend Modelling, Pandas</td>
+                    <td>Temporal trend curves, prompt behaviour profiles</td>
+                    <td>Descriptive trend plots</td>
+                </tr>
+                <tr>
+                    <td><span class="comp-label comp-label--c4">C4</span> Engagement &amp; Retention</td>
+                    <td>Experimental + NLP</td>
+                    <td>NLP (NLTK, spaCy), Statistical Analysis, SciPy</td>
+                    <td>Linguistic metrics, recall scores, effect sizes</td>
+                    <td>NLP feature attribution</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ================================================================
+     Section 4: Analytical Independence
+================================================================ -->
+<section class="content-section" aria-labelledby="independenceHeading">
+    <h2 class="section-heading" id="independenceHeading">Analytical Independence</h2>
+
+    <div class="independence-notice" role="note" aria-label="Framework integration principle">
+        <svg class="independence-notice__icon" aria-hidden="true"
+             xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <div>
+            <p class="independence-notice__title">Integration Principle: Complementary Evidence</p>
+            <p class="independence-notice__body">
+                Each analytical component produces independent findings from its own data source
+                and methodology. These outputs are interpreted together to build a holistic
+                understanding of GenAI-assisted learning. The framework does
+                <strong>not</strong> combine component outputs into a single predictive model,
+                overall risk score, or combined participant metric.
+                No cross-component classification rules exist (e.g. "High Risk + Low Trust = Critical").
+            </p>
+        </div>
+    </div>
+
+    <ul class="content-list" style="margin-top: var(--space-md);">
+        <li>Each component operates on its own independent data instrument.</li>
+        <li>Analytical methods are methodologically distinct and cannot be trivially combined.</li>
+        <li>Component development is assigned to separate team members.</li>
+        <li>A delay in one component does not block progress in any other.</li>
+        <li>No overall AI risk score is computed or will be computed by this framework.</li>
+        <li><code>single_combined_model = false</code> &mdash; confirmed in
+            <a href="{{ url_for('api_framework.specification') }}">GET /api/framework/specification</a>.</li>
+    </ul>
+</section>
+
+<!-- ================================================================
+     Section 5: System Readiness Table
+================================================================ -->
+<section class="content-section" aria-labelledby="readinessTableHeading">
+    <h2 class="section-heading" id="readinessTableHeading">System Readiness</h2>
+    <p class="section-subheading">
+        Current prototype and analysis readiness for each component.
+    </p>
+
+    <div class="table-responsive">
+        <table class="readiness-table" aria-label="Component system readiness status">
+            <thead>
+                <tr>
+                    <th scope="col">Component</th>
+                    <th scope="col">Methods</th>
+                    <th scope="col">Prototype Ready</th>
+                    <th scope="col">Analysis Ready</th>
+                    <th scope="col">Stage</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for comp in components %}
+                <tr>
+                    <td>
+                        <span class="comp-label comp-label--{{ comp.color_token }}">C{{ comp.number }}</span>
+                        {{ comp.short_title }}
+                    </td>
+                    <td>{{ comp.methods | join(", ") }}</td>
+                    <td>
+                        {% if comp.prototype_ready %}
+                        <span class="readiness-pill readiness-pill--ready">&#10003; Ready</span>
+                        {% else %}
+                        <span class="readiness-pill readiness-pill--pending">Pending</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if comp.analysis_ready %}
+                        <span class="readiness-pill readiness-pill--ready">&#10003; Available</span>
+                        {% else %}
+                        <span class="readiness-pill readiness-pill--pending">Pending data</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="status-text">{{ comp.stage | replace("_", " ") | title }}</span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ================================================================
+     Section 6: Component Readiness Cards (live-updated by JS)
+================================================================ -->
+<section class="content-section" aria-labelledby="readinessCardsHeading">
+    <h2 class="section-heading" id="readinessCardsHeading">Framework at a Glance</h2>
+    <p class="section-subheading">
+        Per-component prototype readiness. Analysis availability will update
+        as data collection and model development progress.
+    </p>
+
+    <div id="frameworkReadinessContainer" class="readiness-grid">
+        {% for comp in components %}
+        <div class="readiness-card" data-component-id="{{ comp.id }}">
+            <div class="readiness-card__header readiness-card__header--{{ comp.color_token }}">
+                <span class="readiness-card__num readiness-card__num--{{ comp.color_token }}"
+                      aria-hidden="true">0{{ comp.number }}</span>
+                <h3 class="readiness-card__title">{{ comp.short_title }}</h3>
+            </div>
+            <div class="readiness-card__body">
+                <div class="readiness-card__row">
+                    <span class="readiness-card__label">Prototype</span>
+                    <span class="readiness-pill js-prototype-pill
+                        {% if comp.prototype_ready %}readiness-pill--ready{% else %}readiness-pill--pending{% endif %}">
+                        {% if comp.prototype_ready %}Ready{% else %}Pending{% endif %}
+                    </span>
+                </div>
+                <div class="readiness-card__row">
+                    <span class="readiness-card__label">Analysis</span>
+                    <span class="readiness-pill js-analysis-pill
+                        {% if comp.analysis_ready %}readiness-pill--ready{% else %}readiness-pill--pending{% endif %}">
+                        {% if comp.analysis_ready %}Available{% else %}Pending data{% endif %}
+                    </span>
+                </div>
+                <div class="readiness-card__row">
+                    <span class="readiness-card__label">Data source</span>
+                    <span style="font-size: var(--font-size-xs); color: var(--color-text-secondary); text-align: right; max-width: 65%;">
+                        {{ comp.data_source }}
+                    </span>
+                </div>
+            </div>
+            <div class="readiness-card__footer">
+                <a href="{{ comp.route }}" class="btn btn--outline btn--sm">Open Component</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- ================================================================
+     Section 7: Integrated Insights (empty state)
+================================================================ -->
+<section class="content-section" aria-labelledby="insightsHeading">
+    <h2 class="section-heading" id="insightsHeading">Integrated Insights</h2>
+
+    <div class="integrated-insights-empty" role="status" aria-live="polite">
+        <div class="integrated-insights-empty__icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"
+                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+        </div>
+        <h3 class="integrated-insights-empty__title">No Integrated Insights Available Yet</h3>
+        <p class="integrated-insights-empty__desc">
+            Complementary analytical insights across all four components will appear here
+            once data collection is complete and each component's analysis has been validated.
+            Outputs will be interpreted together &mdash; not combined into a single score.
+        </p>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/framework.js') }}"></script>
+{% endblock %}

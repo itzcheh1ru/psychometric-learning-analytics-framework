@@ -2,6 +2,10 @@
 
 {% block title %}Research Overview Dashboard{% endblock %}
 
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/framework.css') }}" />
+{% endblock %}
+
 {% block content %}
 
 <!-- Page heading -->
@@ -11,6 +15,11 @@
         Integrated prototype for analysing Generative AI-assisted undergraduate learning
         across four independent analytical research components.
     </p>
+    <div class="framework-header__badges" style="margin-top: var(--space-xs);">
+        <span class="badge badge--project">J26-DS-310</span>
+        <span class="badge badge--prototype">Research Prototype</span>
+        <span class="badge badge--collection">Data Collection / Prototype Development</span>
+    </div>
 </div>
 
 <!-- Prototype info banner -->
@@ -154,6 +163,29 @@
 
     </div>
 </section>
+
+<!-- Integration Principle Notice -->
+<div class="independence-notice" role="note" aria-label="Framework integration principle"
+     style="margin-bottom: var(--space-lg);">
+    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+         viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:2px;">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+    </svg>
+    <div>
+        <p class="independence-notice__title" style="margin:0 0 4px;">
+            Integration Principle: Complementary Evidence
+        </p>
+        <p class="independence-notice__body" style="margin:0 0 var(--space-xs);">
+            Each component produces independent findings. Outputs are interpreted together
+            for a holistic understanding &mdash; <strong>not</strong> combined into
+            a single model or overall score.
+        </p>
+        <a href="{{ url_for('framework.index') }}" class="btn btn--outline btn--sm">
+            View Framework Integration Architecture &rarr;
+        </a>
+    </div>
+</div>
 
 <!-- ================================================================
      Framework Architecture Diagram (HTML/CSS only, no image)

@@ -379,4 +379,80 @@ in the shared research dashboard at `/dashboard`:
 
 ---
 
-*Last updated: Feature 006 – Component 4 cognitive retention prototype workflow*
+## Framework Integration Layer (Feature 007)
+
+### Shared Governance Layer
+
+A shared `app/services/framework/` package provides governance metadata across all four
+components. It does **not** implement a combined model or produce cross-component scores.
+
+```
+app/services/framework/
+├── __init__.py        # Package exports
+├── registry.py        # COMPONENT_REGISTRY + FRAMEWORK_SPECIFICATION
+└── status_service.py  # FrameworkStatusService (direct import, no HTTP)
+```
+
+### Data Source Mapping
+
+Each component draws from a distinct, independent data source:
+
+| Component | Data Source |
+|-----------|-------------|
+| C1 – Cognitive Offloading | Psychometric behaviour survey |
+| C2 – Trust & Verification | Likert-scale psychometric survey |
+| C3 – Study Patterns | Weekly self-report study diaries |
+| C4 – Engagement & Retention | Controlled writing experiments |
+
+No single combined dataset is used.
+
+### Component Boundaries
+
+Each component's service layer is strictly self-contained:
+
+- `app/services/cognitive_offloading/` – C1 model stub + validation
+- `app/services/sem_analysis/` – C2 SEM status + result stub
+- `app/services/longitudinal/` – C3 analysis stub + validation
+- `app/services/retention/` – C4 retention stub + session validation
+- `app/services/framework/` – Integration governance (reads from above, no HTTP)
+
+### Analytical Independence Enforcement
+
+- No method exists to produce a combined participant score.
+- `FRAMEWORK_SPECIFICATION["single_combined_model"] = False`
+- `FRAMEWORK_SPECIFICATION["overall_score_available"] = False`
+- `FrameworkStatusService.get_status()` returns per-component readiness only.
+- Integration principle: **Complementary Evidence** — independent outputs interpreted
+  together for holistic understanding, never mathematically aggregated.
+
+### Output Boundaries
+
+| Component | Output Type | Combined? |
+|-----------|-------------|-----------|
+| C1 | Risk classification + SHAP attribution | No |
+| C2 | SEM path coefficients + factor loadings | No |
+| C3 | Temporal trend curves + prompt profiles | No |
+| C4 | NLP metrics + recall scores + effect sizes | No |
+| Framework | Per-component readiness metadata | N/A – no aggregation |
+
+### Evidence Integration Layer
+
+The `GET /framework/` page renders all four component outputs side-by-side once
+analysis is available. The integration layer:
+
+- Never applies cross-component classification rules.
+- Never computes a combined score or overall risk level.
+- Reads component service readiness via direct Python import only.
+- Does **not** make HTTP requests to the application's own APIs.
+
+### Framework API Routes
+
+| Method | Route | Purpose |
+|--------|-------|---------|
+| GET | `/framework/` | Full architectural integration page |
+| GET | `/api/framework/status` | Aggregated component readiness |
+| GET | `/api/framework/specification` | Framework metadata + integration principle |
+
+---
+
+*Last updated: Feature 007 – Integrated four-component research dashboard*

@@ -18,6 +18,14 @@ Feature 003: Component 1 interactive prototype workflow:
       - Clear statement that model/analytics are not currently available
   - Model service predict() raises ModelNotAvailableError
   - No regression on Feature 001 / Feature 002 tests
+Feature 007: Integrated four-component research dashboard:
+  - GET /framework/ returns 200 with required headings and content
+  - GET /api/framework/status returns 200 with correct structure
+  - GET /api/framework/specification returns 200 with correct structure
+  - Framework service layer imports, registry, and status aggregation
+  - No combined model, no overall score, no fake findings in APIs
+  - Dashboard upgraded with badges and integration principle notice
+  - Sidebar contains Framework Integration link
 """
 
 import json
@@ -42,6 +50,12 @@ from app.services.retention import (
     RetentionAnalysisNotAvailableError,
     RetentionAnalysisService,
     analysis_service as retention_analysis_service,
+)
+from app.services.framework import (
+    COMPONENT_REGISTRY,
+    FRAMEWORK_SPECIFICATION,
+    FrameworkStatusService,
+    framework_status_service,
 )
 
 
@@ -1176,3 +1190,345 @@ def test_component4_no_fabricated_findings_in_apis(client):
         assert "cohen" not in text
         assert "hedges" not in text
         assert "eta_squared" not in text
+
+
+# ===========================================================================
+# Feature 007 – Integrated Four-Component Research Dashboard
+# ===========================================================================
+
+# --------------------------------------------------------------------------- #
+# Test 1 – GET /framework/ returns 200                                        #
+# --------------------------------------------------------------------------- #
+
+def test_framework_page_returns_200(client):
+    """GET /framework/ must return HTTP 200."""
+    response = client.get("/framework/")
+    assert response.status_code == 200
+
+
+# --------------------------------------------------------------------------- #
+# Test 2 – /framework/ contains page title                                    #
+# --------------------------------------------------------------------------- #
+
+def test_framework_page_contains_title(client):
+    """GET /framework/ must contain the framework title text."""
+    response = client.get("/framework/")
+    html = response.data.decode()
+    assert "Psychometric Learning Analytics Framework" in html
+
+
+# --------------------------------------------------------------------------- #
+# Test 3 – /framework/ contains integration architecture heading              #
+# --------------------------------------------------------------------------- #
+
+def test_framework_page_contains_integration_architecture_heading(client):
+    """GET /framework/ must contain 'Integration Architecture' heading."""
+    response = client.get("/framework/")
+    html = response.data.decode()
+    assert "Integration Architecture" in html
+
+
+# --------------------------------------------------------------------------- #
+# Test 4 – /framework/ contains data source mapping                          #
+# --------------------------------------------------------------------------- #
+
+def test_framework_page_contains_data_source_mapping(client):
+    """GET /framework/ must contain a data source mapping section."""
+    response = client.get("/framework/")
+    html = response.data.decode()
+    assert "Data Source Mapping" in html
+
+
+# --------------------------------------------------------------------------- #
+# Test 5 – /framework/ contains method comparison matrix                     #
+# --------------------------------------------------------------------------- #
+
+def test_framework_page_contains_method_comparison_matrix(client):
+    """GET /framework/ must contain a method comparison matrix section."""
+    response = client.get("/framework/")
+    html = response.data.decode()
+    assert "Method Comparison" in html
+
+
+# --------------------------------------------------------------------------- #
+# Test 6 – /framework/ contains analytical independence section               #
+# --------------------------------------------------------------------------- #
+
+def test_framework_page_contains_analytical_independence(client):
+    """GET /framework/ must contain the analytical independence section."""
+    response = client.get("/framework/")
+    html = response.data.decode()
+    assert "Analytical Independence" in html
+
+
+# --------------------------------------------------------------------------- #
+# Test 7 – /framework/ contains integration principle notice                  #
+# --------------------------------------------------------------------------- #
+
+def test_framework_page_contains_integration_principle(client):
+    """GET /framework/ must contain integration principle text."""
+    response = client.get("/framework/")
+    html = response.data.decode()
+    assert "Complementary Evidence" in html
+
+
+# --------------------------------------------------------------------------- #
+# Test 8 – /framework/ contains system readiness section                     #
+# --------------------------------------------------------------------------- #
+
+def test_framework_page_contains_system_readiness(client):
+    """GET /framework/ must contain 'System Readiness' section."""
+    response = client.get("/framework/")
+    html = response.data.decode()
+    assert "System Readiness" in html
+
+
+# --------------------------------------------------------------------------- #
+# Test 9 – /framework/ contains Framework at a Glance section                #
+# --------------------------------------------------------------------------- #
+
+def test_framework_page_contains_framework_at_a_glance(client):
+    """GET /framework/ must contain 'Framework at a Glance' section."""
+    response = client.get("/framework/")
+    html = response.data.decode()
+    assert "Framework at a Glance" in html
+
+
+# --------------------------------------------------------------------------- #
+# Test 10 – /framework/ contains Integrated Insights empty state              #
+# --------------------------------------------------------------------------- #
+
+def test_framework_page_contains_integrated_insights_empty_state(client):
+    """GET /framework/ must contain the Integrated Insights empty state."""
+    response = client.get("/framework/")
+    html = response.data.decode()
+    assert "Integrated Insights" in html
+    assert "No Integrated Insights Available Yet" in html
+
+
+# --------------------------------------------------------------------------- #
+# Test 11 – GET /api/framework/status returns 200                            #
+# --------------------------------------------------------------------------- #
+
+def test_framework_status_api_returns_200(client):
+    """GET /api/framework/status must return HTTP 200."""
+    response = client.get("/api/framework/status")
+    assert response.status_code == 200
+
+
+# --------------------------------------------------------------------------- #
+# Test 12 – /api/framework/status response structure                         #
+# --------------------------------------------------------------------------- #
+
+def test_framework_status_api_structure(client):
+    """GET /api/framework/status must return required top-level keys."""
+    response = client.get("/api/framework/status")
+    data = response.get_json()
+    assert "components" in data
+    assert "single_combined_model" in data
+    assert "overall_score_available" in data
+    assert "integration_principle" in data
+
+
+# --------------------------------------------------------------------------- #
+# Test 13 – single_combined_model is False                                   #
+# --------------------------------------------------------------------------- #
+
+def test_framework_status_api_single_combined_model_is_false(client):
+    """GET /api/framework/status must return single_combined_model = False."""
+    response = client.get("/api/framework/status")
+    data = response.get_json()
+    assert data["single_combined_model"] is False
+
+
+# --------------------------------------------------------------------------- #
+# Test 14 – overall_score_available is False                                 #
+# --------------------------------------------------------------------------- #
+
+def test_framework_status_api_overall_score_available_is_false(client):
+    """GET /api/framework/status must return overall_score_available = False."""
+    response = client.get("/api/framework/status")
+    data = response.get_json()
+    assert data["overall_score_available"] is False
+
+
+# --------------------------------------------------------------------------- #
+# Test 15 – /api/framework/status contains 4 components                     #
+# --------------------------------------------------------------------------- #
+
+def test_framework_status_api_has_four_components(client):
+    """GET /api/framework/status must list exactly four components."""
+    response = client.get("/api/framework/status")
+    data = response.get_json()
+    assert len(data["components"]) == 4
+
+
+# --------------------------------------------------------------------------- #
+# Test 16 – each component has prototype_ready = True                        #
+# --------------------------------------------------------------------------- #
+
+def test_framework_status_api_all_prototypes_ready(client):
+    """GET /api/framework/status – all components must have prototype_ready=True."""
+    response = client.get("/api/framework/status")
+    data = response.get_json()
+    for comp in data["components"]:
+        assert comp["prototype_ready"] is True, (
+            f"prototype_ready should be True for {comp.get('id')}"
+        )
+
+
+# --------------------------------------------------------------------------- #
+# Test 17 – each component has analysis_ready = False                        #
+# --------------------------------------------------------------------------- #
+
+def test_framework_status_api_all_analysis_not_ready(client):
+    """GET /api/framework/status – all components must have analysis_ready=False."""
+    response = client.get("/api/framework/status")
+    data = response.get_json()
+    for comp in data["components"]:
+        assert comp["analysis_ready"] is False, (
+            f"analysis_ready should be False for {comp.get('id')}"
+        )
+
+
+# --------------------------------------------------------------------------- #
+# Test 18 – GET /api/framework/specification returns 200                     #
+# --------------------------------------------------------------------------- #
+
+def test_framework_specification_api_returns_200(client):
+    """GET /api/framework/specification must return HTTP 200."""
+    response = client.get("/api/framework/specification")
+    assert response.status_code == 200
+
+
+# --------------------------------------------------------------------------- #
+# Test 19 – /api/framework/specification structure                           #
+# --------------------------------------------------------------------------- #
+
+def test_framework_specification_api_structure(client):
+    """GET /api/framework/specification must contain required keys."""
+    response = client.get("/api/framework/specification")
+    data = response.get_json()
+    assert "components" in data
+    assert "integration_principle" in data
+    assert "single_combined_model" in data
+    assert "overall_score_available" in data
+
+
+# --------------------------------------------------------------------------- #
+# Test 20 – specification single_combined_model is False                     #
+# --------------------------------------------------------------------------- #
+
+def test_framework_specification_single_combined_model_is_false(client):
+    """GET /api/framework/specification must return single_combined_model = False."""
+    response = client.get("/api/framework/specification")
+    data = response.get_json()
+    assert data["single_combined_model"] is False
+
+
+# --------------------------------------------------------------------------- #
+# Test 21 – specification overall_score_available is False                   #
+# --------------------------------------------------------------------------- #
+
+def test_framework_specification_overall_score_available_is_false(client):
+    """GET /api/framework/specification must return overall_score_available = False."""
+    response = client.get("/api/framework/specification")
+    data = response.get_json()
+    assert data["overall_score_available"] is False
+
+
+# --------------------------------------------------------------------------- #
+# Test 22 – COMPONENT_REGISTRY contains 4 entries                            #
+# --------------------------------------------------------------------------- #
+
+def test_component_registry_has_four_entries():
+    """COMPONENT_REGISTRY must contain exactly four components."""
+    assert len(COMPONENT_REGISTRY) == 4
+
+
+# --------------------------------------------------------------------------- #
+# Test 23 – COMPONENT_REGISTRY has required fields                           #
+# --------------------------------------------------------------------------- #
+
+def test_component_registry_entries_have_required_fields():
+    """Each COMPONENT_REGISTRY entry must have required metadata fields."""
+    required_fields = [
+        "id", "number", "title", "short_title", "role",
+        "methods", "data_source", "route",
+        "prototype_ready", "analysis_ready", "stage",
+    ]
+    for comp in COMPONENT_REGISTRY:
+        for field in required_fields:
+            assert field in comp, (
+                f"Missing field '{field}' in registry entry for {comp.get('id')}"
+            )
+
+
+# --------------------------------------------------------------------------- #
+# Test 24 – all registry entries have prototype_ready = True                 #
+# --------------------------------------------------------------------------- #
+
+def test_component_registry_prototype_ready_is_true():
+    """All COMPONENT_REGISTRY entries must have prototype_ready=True."""
+    for comp in COMPONENT_REGISTRY:
+        assert comp["prototype_ready"] is True, (
+            f"prototype_ready should be True for {comp.get('id')}"
+        )
+
+
+# --------------------------------------------------------------------------- #
+# Test 25 – all registry entries have analysis_ready = False                 #
+# --------------------------------------------------------------------------- #
+
+def test_component_registry_analysis_ready_is_false():
+    """All COMPONENT_REGISTRY entries must have analysis_ready=False."""
+    for comp in COMPONENT_REGISTRY:
+        assert comp["analysis_ready"] is False, (
+            f"analysis_ready should be False for {comp.get('id')}"
+        )
+
+
+# --------------------------------------------------------------------------- #
+# Test 26 – FrameworkStatusService.get_status() does not combine scores      #
+# --------------------------------------------------------------------------- #
+
+def test_framework_status_service_no_combined_score():
+    """FrameworkStatusService.get_status() must not contain combined_score or overall_risk."""
+    svc = FrameworkStatusService()
+    status = svc.get_status()
+    status_str = json.dumps(status).lower()
+    assert "combined_score" not in status_str
+    assert "overall_risk" not in status_str
+    assert "aggregated_score" not in status_str
+
+
+# --------------------------------------------------------------------------- #
+# Test 27 – Framework APIs contain no fabricated findings                    #
+# --------------------------------------------------------------------------- #
+
+def test_framework_apis_contain_no_fabricated_findings(client):
+    """Framework status and specification endpoints contain no fabricated p-values or effect sizes."""
+    for endpoint in ["/api/framework/status", "/api/framework/specification"]:
+        response = client.get(endpoint)
+        assert response.status_code == 200
+        text = json.dumps(response.get_json()).lower()
+        assert "p_value" not in text
+        assert "p-value" not in text
+        assert "effect_size" not in text
+        assert "cohen" not in text
+        assert "predicted_risk" not in text
+        assert "overall_risk_level" not in text
+
+
+# --------------------------------------------------------------------------- #
+# Test 28 – Dashboard page contains badges and integration principle          #
+# --------------------------------------------------------------------------- #
+
+def test_dashboard_page_contains_badges_and_integration_principle(client):
+    """GET /dashboard must contain J26-DS-310 badge, prototype badge, and integration principle."""
+    response = client.get("/dashboard")
+    html = response.data.decode()
+    assert "J26-DS-310" in html
+    assert "Research Prototype" in html
+    assert "Data Collection" in html
+    assert "Complementary Evidence" in html
