@@ -1,9 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Longitudinal Study Pattern Analytics — Component 3{% endblock %}
+{% block title %}Longitudinal AI-Assisted Study Pattern Analytics — Component 3{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/component3.css') }}" />
+{% endblock %}
 
 {% block content %}
 
+<!-- ================================================================
+     A. Component Header
+================================================================ -->
 <div class="page-heading">
     <nav class="breadcrumb" aria-label="Breadcrumb">
         <a href="{{ url_for('main.dashboard') }}" class="breadcrumb__link">Overview</a>
@@ -15,64 +22,595 @@
     </div>
     <h1 class="page-heading__title">Longitudinal AI-Assisted Study Pattern Analytics</h1>
     <p class="page-heading__desc">
-        Analyses how AI-assisted and independent study behaviours and academic prompt
-        patterns evolve over time throughout the research period, using longitudinal
-        study diary records.
+        Interactive prototype for organising weekly AI-assisted and independent study behaviour prior to longitudinal trend analysis.
     </p>
     <div class="page-heading__status">
-        <span class="status-badge status-badge--collection">
+        <span class="status-badge status-badge--preparation">
             <span class="status-badge__dot" aria-hidden="true"></span>
-            Data Collection / Module Preparation
+            Prototype &mdash; Longitudinal Analysis Pending
         </span>
     </div>
 </div>
 
-<!-- Indicators & Methods -->
-<section class="content-section" aria-labelledby="methodHeading3">
-    <h2 class="section-heading" id="methodHeading3">Analytical Indicators &amp; Methods</h2>
-    <div class="card-grid card-grid--3">
-        <div class="method-card">
-            <div class="method-card__title">AI Study Share</div>
-            <p class="method-card__desc">Proportion of weekly study time using GenAI assistance.</p>
-        </div>
-        <div class="method-card">
-            <div class="method-card__title">Independent Study Share</div>
-            <p class="method-card__desc">Proportion of weekly study time without AI assistance.</p>
-        </div>
-        <div class="method-card">
-            <div class="method-card__title">Prompt Frequency</div>
-            <p class="method-card__desc">Weekly GenAI query volume per participant.</p>
-        </div>
-        <div class="method-card">
-            <div class="method-card__title">Prompt Purpose</div>
-            <p class="method-card__desc">Categorised academic prompting intentions over time.</p>
-        </div>
-        <div class="method-card">
-            <div class="method-card__title">Study Pattern Shift</div>
-            <p class="method-card__desc">Longitudinal change in AI vs. independent study balance.</p>
-        </div>
-        <div class="method-card">
-            <div class="method-card__title">Trend Analysis</div>
-            <p class="method-card__desc">Moving averages and regression over academic periods.</p>
+<!-- Research stage notice -->
+<div class="info-banner info-banner--prototype" role="status">
+    <svg class="info-banner__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+    <div>
+        <strong>Research stage notice:</strong> Longitudinal data collection is currently in progress. This prototype demonstrates the planned weekly-data and analysis workflow only and does not present empirical learning-behaviour trends.
+    </div>
+</div>
+
+
+<!-- ================================================================
+     B. Longitudinal Research Workflow
+================================================================ -->
+<section class="content-section" aria-labelledby="workflowHeading3">
+    <div class="content-section__header">
+        <h2 class="section-heading" id="workflowHeading3">Longitudinal Research Workflow</h2>
+        <p class="section-subheading">
+            Planned multi-week data collection and analysis pipeline for tracking study pattern evolution and prompt behaviours over 4–6 observation weeks.
+        </p>
+    </div>
+
+    <div class="long-workflow" role="img" aria-label="Longitudinal research workflow: Participant Baseline to Weekly Study Records to Data Validation to Longitudinal Dataset to Behavioural Indicator Generation to Trend Analysis to Prompt Behaviour Analysis to Study Pattern Evolution to Dashboard Insights">
+        <div class="long-steps">
+
+            <div class="long-step long-step--ready">
+                <span class="long-step__title">Participant Baseline</span>
+                <span class="long-step__tag">Prototype Ready</span>
+            </div>
+            <div class="long-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="long-step long-step--ready">
+                <span class="long-step__title">Weekly Study Records</span>
+                <span class="long-step__tag">Prototype Ready</span>
+            </div>
+            <div class="long-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="long-step long-step--ready">
+                <span class="long-step__title">Data Validation</span>
+                <span class="long-step__tag">Prototype Ready</span>
+            </div>
+            <div class="long-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="long-step long-step--progress">
+                <span class="long-step__title">Longitudinal Dataset</span>
+                <span class="long-step__tag">Data Collection in Progress</span>
+            </div>
+            <div class="long-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="long-step long-step--pending">
+                <span class="long-step__title">Behavioural Indicator Generation</span>
+                <span class="long-step__tag">Pending Longitudinal Dataset</span>
+            </div>
+            <div class="long-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="long-step long-step--pending">
+                <span class="long-step__title">Trend Analysis</span>
+                <span class="long-step__tag">Pending Longitudinal Dataset</span>
+            </div>
+            <div class="long-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="long-step long-step--pending">
+                <span class="long-step__title">Prompt Behaviour Analysis</span>
+                <span class="long-step__tag">Pending Longitudinal Dataset</span>
+            </div>
+            <div class="long-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="long-step long-step--pending">
+                <span class="long-step__title">Study Pattern Evolution</span>
+                <span class="long-step__tag">Pending Longitudinal Dataset</span>
+            </div>
+            <div class="long-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="long-step long-step--pending">
+                <span class="long-step__title">Dashboard Insights</span>
+                <span class="long-step__tag">Pending Longitudinal Dataset</span>
+            </div>
+
         </div>
     </div>
 </section>
 
-<!-- Planned Outputs -->
-<section class="content-section" aria-labelledby="outputsHeading3">
-    <h2 class="section-heading" id="outputsHeading3">Planned Analytical Outputs</h2>
-    <ul class="outputs-list">
-        <li class="outputs-list__item">AI-assisted study time trends across academic period</li>
-        <li class="outputs-list__item">Independent study time trends</li>
-        <li class="outputs-list__item">Prompt behaviour evolution over time</li>
-        <li class="outputs-list__item">Academic-period comparisons</li>
-        <li class="outputs-list__item">Behavioural pattern insights and profiles</li>
-    </ul>
+
+<!-- ================================================================
+     C. Weekly Study Record Prototype (Form)
+================================================================ -->
+<section class="content-section" aria-labelledby="formHeading3">
+    <div class="content-section__header">
+        <h2 class="section-heading" id="formHeading3">Weekly Study Record Prototype</h2>
+        <p class="section-subheading">
+            Enter prototype weekly study observations to test data validation and multi-week structure. No participant records are stored or persisted.
+        </p>
+    </div>
+
+    <div class="proto-notice" role="note">
+        <strong>Privacy protection:</strong> Use an anonymised research participant reference only (e.g. P0001). Do not enter names, student registration numbers, emails, or personal contact details.
+    </div>
+
+    <form
+        id="weeklyRecordForm"
+        class="weekly-form"
+        novalidate
+        aria-label="Weekly study record prototype input form"
+    >
+
+        <!-- 1. Participant Reference & Week -->
+        <fieldset class="form-fieldset">
+            <legend class="form-fieldset__legend">Participant Reference &amp; Study Week</legend>
+
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label class="form-label" for="participant_reference">
+                        Participant Reference ID
+                        <span class="form-label__required" aria-hidden="true">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        id="participant_reference"
+                        name="participant_reference"
+                        class="form-input"
+                        placeholder="e.g. P0001"
+                        maxlength="20"
+                        autocomplete="off"
+                        required
+                        aria-required="true"
+                        aria-describedby="ref_help ref_error"
+                    />
+                    <p class="form-help" id="ref_help">
+                        Use an anonymised research participant identifier only.
+                    </p>
+                    <p class="form-error" id="ref_error" aria-live="polite" hidden></p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="study_week">
+                        Study Week
+                        <span class="form-label__required" aria-hidden="true">*</span>
+                    </label>
+                    <select
+                        id="study_week"
+                        name="study_week"
+                        class="form-select"
+                        required
+                        aria-required="true"
+                        aria-describedby="week_error"
+                    >
+                        <option value="">— Select Week —</option>
+                        {% for w in allowed_weeks %}
+                        <option value="{{ w }}">{{ w }}</option>
+                        {% endfor %}
+                    </select>
+                    <p class="form-error" id="week_error" aria-live="polite" hidden></p>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- 2. Study Time Distribution -->
+        <fieldset class="form-fieldset">
+            <legend class="form-fieldset__legend">Weekly Study Time Distribution</legend>
+
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label class="form-label" for="ai_study_hours">
+                        AI-Assisted Study Hours
+                        <span class="form-label__required" aria-hidden="true">*</span>
+                    </label>
+                    <input
+                        type="number"
+                        id="ai_study_hours"
+                        name="ai_study_hours"
+                        class="form-input"
+                        placeholder="e.g. 5.5"
+                        min="0"
+                        max="168"
+                        step="0.5"
+                        required
+                        aria-required="true"
+                        aria-describedby="ai_hours_help ai_hours_error"
+                    />
+                    <p class="form-help" id="ai_hours_help">
+                        Total study time during this week in which Generative AI was actively used for academic learning activities.
+                    </p>
+                    <p class="form-error" id="ai_hours_error" aria-live="polite" hidden></p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="independent_study_hours">
+                        Independent Study Hours
+                        <span class="form-label__required" aria-hidden="true">*</span>
+                    </label>
+                    <input
+                        type="number"
+                        id="independent_study_hours"
+                        name="independent_study_hours"
+                        class="form-input"
+                        placeholder="e.g. 8.0"
+                        min="0"
+                        max="168"
+                        step="0.5"
+                        required
+                        aria-required="true"
+                        aria-describedby="ind_hours_help ind_hours_error"
+                    />
+                    <p class="form-help" id="ind_hours_help">
+                        Total study time during this week completed without direct Generative AI assistance.
+                    </p>
+                    <p class="form-error" id="ind_hours_error" aria-live="polite" hidden></p>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- 3. Academic Context & Activity -->
+        <fieldset class="form-fieldset">
+            <legend class="form-fieldset__legend">Academic Context &amp; Learning Activity</legend>
+
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label class="form-label" for="academic_period">
+                        Academic Period / Context
+                        <span class="form-label__required" aria-hidden="true">*</span>
+                    </label>
+                    <select
+                        id="academic_period"
+                        name="academic_period"
+                        class="form-select"
+                        required
+                        aria-required="true"
+                        aria-describedby="period_error"
+                    >
+                        <option value="">— Select Context —</option>
+                        {% for p in academic_periods %}
+                        <option value="{{ p }}">{{ p }}</option>
+                        {% endfor %}
+                    </select>
+                    <p class="form-error" id="period_error" aria-live="polite" hidden></p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="learning_activity">
+                        Main Learning Activity
+                        <span class="form-label__required" aria-hidden="true">*</span>
+                    </label>
+                    <select
+                        id="learning_activity"
+                        name="learning_activity"
+                        class="form-select"
+                        required
+                        aria-required="true"
+                        aria-describedby="activity_error"
+                    >
+                        <option value="">— Select Activity —</option>
+                        {% for a in learning_activities %}
+                        <option value="{{ a }}">{{ a }}</option>
+                        {% endfor %}
+                    </select>
+                    <p class="form-error" id="activity_error" aria-live="polite" hidden></p>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- 4. Academic GenAI Prompt Behaviour -->
+        <fieldset class="form-fieldset">
+            <legend class="form-fieldset__legend">Academic GenAI Prompt Behaviour</legend>
+
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label class="form-label" for="prompt_count">
+                        Academic GenAI Prompt Count
+                        <span class="form-label__required" aria-hidden="true">*</span>
+                    </label>
+                    <input
+                        type="number"
+                        id="prompt_count"
+                        name="prompt_count"
+                        class="form-input"
+                        placeholder="e.g. 15"
+                        min="0"
+                        max="2000"
+                        step="1"
+                        required
+                        aria-required="true"
+                        aria-describedby="prompt_count_help prompt_count_error"
+                    />
+                    <p class="form-help" id="prompt_count_help">
+                        Number of academic GenAI prompts/interactions recorded for the study week. This prototype does not collect actual prompt text.
+                    </p>
+                    <p class="form-error" id="prompt_count_error" aria-live="polite" hidden></p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="prompt_purpose">
+                        Primary Prompt Purpose
+                        <span class="form-label__required" aria-hidden="true">*</span>
+                    </label>
+                    <select
+                        id="prompt_purpose"
+                        name="prompt_purpose"
+                        class="form-select"
+                        required
+                        aria-required="true"
+                        aria-describedby="purpose_error"
+                    >
+                        <option value="">— Select Purpose —</option>
+                        {% for pu in prompt_purposes %}
+                        <option value="{{ pu }}">{{ pu }}</option>
+                        {% endfor %}
+                    </select>
+                    <p class="form-error" id="purpose_error" aria-live="polite" hidden></p>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Actions -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn--primary" id="validateWeeklyBtn">
+                Validate Weekly Record
+            </button>
+            <button type="button" class="btn btn--outline" id="resetWeeklyBtn">
+                Reset Form
+            </button>
+        </div>
+
+    </form>
 </section>
 
-<!-- Empty analytics state -->
-<section class="content-section" aria-labelledby="analyticsHeading3">
-    <h2 class="section-heading" id="analyticsHeading3">Analytics</h2>
+
+<!-- ================================================================
+     D. Input Validation / Record Preview
+================================================================ -->
+<section
+    class="content-section"
+    id="validationPreviewSection"
+    aria-labelledby="previewHeading3"
+    aria-live="polite"
+    hidden
+>
+    <div class="content-section__header">
+        <h2 class="section-heading" id="previewHeading3">Input Validation &amp; Record Preview</h2>
+    </div>
+
+    <!-- Success state -->
+    <div id="validationSuccessBlock" hidden>
+        <div class="validation-success-banner" role="status">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Weekly prototype record validated successfully.
+        </div>
+
+        <h3 class="subsection-heading">Prototype Weekly Record</h3>
+        <p class="preview-disclaimer">
+            Prototype record &mdash; not stored and not included in the research dataset.
+        </p>
+
+        <div class="summary-table-wrap">
+            <table class="summary-table" aria-label="Validated weekly record summary">
+                <tbody id="weeklyRecordSummaryBody"></tbody>
+            </table>
+        </div>
+
+        <h3 class="subsection-heading">Validation Checks Passed</h3>
+        <ul class="check-list" aria-label="Validation checks passed">
+            <li class="check-list__item check-list__item--pass">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Required fields complete
+            </li>
+            <li class="check-list__item check-list__item--pass">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Numerical values valid (study hours &amp; prompt count)
+            </li>
+            <li class="check-list__item check-list__item--pass">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Academic categories valid
+            </li>
+            <li class="check-list__item check-list__item--pass">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Anonymous participant reference
+            </li>
+            <li class="check-list__item check-list__item--pass">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                No raw prompt text collected
+            </li>
+        </ul>
+    </div>
+
+    <!-- Error state -->
+    <div id="validationErrorBlock" hidden>
+        <div class="validation-error-banner" role="alert">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            Weekly record validation failed. Please address the errors below.
+        </div>
+        <ul class="error-list" id="weeklyErrorList" aria-live="assertive"></ul>
+    </div>
+</section>
+
+
+<!-- ================================================================
+     E. Behavioural Indicator Definitions
+================================================================ -->
+<section class="content-section" aria-labelledby="indicatorsHeading">
+    <div class="content-section__header">
+        <h2 class="section-heading" id="indicatorsHeading">Behavioural Indicator Definitions</h2>
+        <p class="section-subheading">
+            Mathematical definitions of the longitudinal indicators to be computed once multi-week research records are collected.
+        </p>
+    </div>
+
+    <div class="card-grid card-grid--3">
+        {% for ind in indicators %}
+        <article class="indicator-card">
+            <h3 class="indicator-card__title">{{ ind.name }}</h3>
+            <p class="indicator-card__concept">{{ ind.concept }}</p>
+            <div class="indicator-card__status">
+                <span class="indicator-dot" aria-hidden="true"></span>
+                {{ ind.status }}
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+
+
+<!-- ================================================================
+     F. Prompt Behaviour Framework
+================================================================ -->
+<section class="content-section" aria-labelledby="promptHeading">
+    <div class="content-section__header">
+        <h2 class="section-heading" id="promptHeading">Prompt Behaviour Framework</h2>
+        <p class="section-subheading">
+            Categorisation framework for analysing how student prompt purposes evolve over time across academic periods.
+        </p>
+    </div>
+
+    <div class="prompt-categories-wrap">
+        <h3 class="subsection-heading">Approved Academic Prompt Purpose Categories</h3>
+        <div class="prompt-chips">
+            {% for pu in prompt_purposes %}
+            <span class="prompt-chip">{{ pu }}</span>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="prompt-flow" role="img" aria-label="Prompt behaviour analytical workflow: Academic Prompt Records to Anonymisation and Cleaning to Academic Purpose Categorisation to Weekly Prompt Frequency to Prompt Purpose Trends to Longitudinal Interpretation">
+        <div class="prompt-flow__tag">Planned analytical workflow</div>
+        <div class="prompt-flow__steps">
+            <span class="prompt-step">Academic Prompt Records</span>
+            <span class="prompt-flow-arrow" aria-hidden="true">&rarr;</span>
+            <span class="prompt-step">Anonymisation / Cleaning</span>
+            <span class="prompt-flow-arrow" aria-hidden="true">&rarr;</span>
+            <span class="prompt-step">Academic-Purpose Categorisation</span>
+            <span class="prompt-flow-arrow" aria-hidden="true">&rarr;</span>
+            <span class="prompt-step">Weekly Prompt Frequency</span>
+            <span class="prompt-flow-arrow" aria-hidden="true">&rarr;</span>
+            <span class="prompt-step">Prompt-Purpose Trends</span>
+            <span class="prompt-flow-arrow" aria-hidden="true">&rarr;</span>
+            <span class="prompt-step">Longitudinal Interpretation</span>
+        </div>
+    </div>
+</section>
+
+
+<!-- ================================================================
+     G. Analysis Status
+================================================================ -->
+<section class="content-section" aria-labelledby="statusHeading3">
+    <div class="content-section__header">
+        <h2 class="section-heading" id="statusHeading3">Longitudinal Analysis Readiness Status</h2>
+        <p class="section-subheading">Status metadata queried from the Component 3 backend service.</p>
+    </div>
+
+    <div class="long-status-panel">
+        <div class="long-status-row">
+            <span class="long-status-label">Research Component</span>
+            <span class="long-status-val">Longitudinal AI-Assisted Study Pattern Analytics</span>
+        </div>
+        <div class="long-status-row">
+            <span class="long-status-label">Research Stage</span>
+            <span class="long-status-val">Prototype Development</span>
+        </div>
+        <div class="long-status-row">
+            <span class="long-status-label">Longitudinal Data Collection</span>
+            <span class="long-status-val long-status-val--active">In Progress</span>
+        </div>
+        <div class="long-status-row">
+            <span class="long-status-label">Multi-Week Dataset Ready</span>
+            <span class="long-status-val long-status-val--pending">False (collection ongoing)</span>
+        </div>
+        <div class="long-status-row">
+            <span class="long-status-label">Trend Analysis Available</span>
+            <span class="long-status-val long-status-val--pending">False (pending dataset)</span>
+        </div>
+        <div class="long-status-row">
+            <span class="long-status-label">Prompt Analysis Available</span>
+            <span class="long-status-val long-status-val--pending">False (pending dataset)</span>
+        </div>
+        <div class="long-status-row">
+            <span class="long-status-label">Study Pattern Results Available</span>
+            <span class="long-status-val long-status-val--pending">False (pending dataset)</span>
+        </div>
+    </div>
+</section>
+
+
+<!-- ================================================================
+     H. Planned Longitudinal Outputs
+================================================================ -->
+<section class="content-section" aria-labelledby="outputsHeading3">
+    <div class="content-section__header">
+        <h2 class="section-heading" id="outputsHeading3">Planned Longitudinal Outputs</h2>
+        <p class="section-subheading">
+            Time-series visualisations and indicators to be produced after multi-week observations are collected.
+        </p>
+    </div>
+
+    <div class="card-grid card-grid--4">
+        <div class="output-card output-card--disabled" aria-label="AI-Assisted Study Trend — not yet available">
+            <div class="output-card__title">AI-Assisted Study Trend</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after longitudinal data collection
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="Independent Study Trend — not yet available">
+            <div class="output-card__title">Independent Study Trend</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after longitudinal data collection
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="AI Study Share — not yet available">
+            <div class="output-card__title">AI Study Share</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after longitudinal data collection
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="Independent Study Share — not yet available">
+            <div class="output-card__title">Independent Study Share</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after longitudinal data collection
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="Prompt Frequency Trend — not yet available">
+            <div class="output-card__title">Prompt Frequency Trend</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after longitudinal data collection
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="Prompt Purpose Evolution — not yet available">
+            <div class="output-card__title">Prompt Purpose Evolution</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after longitudinal data collection
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="Study Pattern Shift — not yet available">
+            <div class="output-card__title">Study Pattern Shift</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after longitudinal data collection
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="Academic-Period Comparison — not yet available">
+            <div class="output-card__title">Academic-Period Comparison</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after longitudinal data collection
+            </div>
+        </div>
+    </div>
+
+    <!-- Empty analytics state for test compatibility & integrity -->
     <div class="empty-state">
         <div class="empty-state__icon" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -81,11 +619,60 @@
         </div>
         <h3 class="empty-state__title">Longitudinal analytics not yet available</h3>
         <p class="empty-state__body">
-            Trend charts and study pattern analyses will become available after
-            longitudinal study diary data collection and time-series preprocessing
-            are completed.
+            Trend charts and study pattern analyses will become available after longitudinal study diary data collection and time-series preprocessing are completed.
         </p>
     </div>
 </section>
 
+
+<!-- ================================================================
+     I. Future Analytical Pipeline
+================================================================ -->
+<section class="content-section" aria-labelledby="pipelineHeading3">
+    <div class="content-section__header">
+        <h2 class="section-heading" id="pipelineHeading3">Future Analytical Pipeline</h2>
+        <p class="section-subheading">
+            Architecture of the longitudinal analytics engine from multi-week study diary records to dashboard presentation.
+        </p>
+    </div>
+
+    <div class="pipeline-diagram" role="img" aria-label="Future analytical pipeline: Weekly Research Records to Participant-Level Longitudinal Dataset to Data Cleaning and Validation to Weekly Indicator Generation to Time-Based / Trend Analysis to Prompt Behaviour Analysis to Repeated-Measure / Comparative Analysis to Study Pattern Evolution to Research Dashboard">
+        <div class="pipeline-steps">
+            <div class="pipeline-step pipeline-step--data">Weekly Research Records</div>
+            <div class="pipeline-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="pipeline-step pipeline-step--data">Participant-Level Longitudinal Dataset</div>
+            <div class="pipeline-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="pipeline-step pipeline-step--clean">Data Cleaning &amp; Validation</div>
+            <div class="pipeline-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="pipeline-step pipeline-step--ind">Weekly Indicator Generation</div>
+            <div class="pipeline-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="pipeline-step pipeline-step--ana">Time-Based / Trend Analysis</div>
+            <div class="pipeline-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="pipeline-step pipeline-step--ana">Prompt Behaviour Analysis</div>
+            <div class="pipeline-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="pipeline-step pipeline-step--ana">Repeated-Measure / Comparative Analysis</div>
+            <div class="pipeline-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="pipeline-step pipeline-step--evol">Study Pattern Evolution</div>
+            <div class="pipeline-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="pipeline-step pipeline-step--dash">Research Dashboard</div>
+        </div>
+    </div>
+
+    <p class="pipeline-note">
+        <strong>Implementation Note:</strong> Analytical implementation will use validated longitudinal research records only after the required observation period has been completed.
+    </p>
+</section>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/component3.js') }}"></script>
 {% endblock %}

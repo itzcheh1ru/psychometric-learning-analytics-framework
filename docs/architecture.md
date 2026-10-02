@@ -205,6 +205,150 @@ A strict separation of concerns is maintained between statistical estimation and
 
 ---
 
+## Component 3 Architecture – Longitudinal Study Pattern Analytics
+
+### Weekly Participant Record Structure
+
+Component 3 tracks study behaviour and academic prompt interactions across repeated weekly observations (4–6 weeks planned duration):
+
+| Variable | Type / Constraints | Description |
+|----------|-------------------|-------------|
+| `participant_reference` | String (1–20 chars, regex `^[A-Za-z0-9\-]+$`) | Anonymised research participant identifier |
+| `study_week` | Categorical ("Week 1" – "Week 6") | Observation week index |
+| `ai_study_hours` | Float ($0.0 \le h \le 168.0$) | Weekly study hours involving active Generative AI assistance |
+| `independent_study_hours` | Float ($0.0 \le h \le 168.0$) | Weekly study hours completed without direct AI assistance |
+| `academic_period` | Categorical (5 academic contexts) | Academic context (regular week, assignments, exams, projects) |
+| `learning_activity` | Categorical (7 academic activities) | Dominant learning activity for the study week |
+| `prompt_count` | Integer ($0 \le n \le 2000$) | Weekly count of academic GenAI prompts (no raw text stored) |
+| `prompt_purpose` | Categorical (7 academic purposes) | Primary academic purpose of student GenAI interactions |
+
+### Methodological Boundaries and Pipeline Architecture
+
+A strict boundary exists between prototype data validation and empirical longitudinal analytics:
+
+```
+┌────────────────────────────────────────────────────────┐
+│           Weekly Diary Data Collection Layer           │
+│  - Anonymised weekly observation submission            │
+│  - Zero raw prompt text collection                     │
+└───────────────────────────┬────────────────────────────┘
+                            │ Validation & Preprocessing
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│          Longitudinal Research Dataset Boundary        │
+│  - Multi-week participant consolidation (Weeks 1–6)    │
+│  - Baseline vs. subsequent week alignment              │
+│  - Missing-observation handling & screening            │
+└───────────────────────────┬────────────────────────────┘
+                            │ Preprocessed time series
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│           Behavioural Indicator Generation             │
+│  - AI Study Share = AI Hours / (AI + Independent Hours)│
+│  - Independent Study Share = Ind Hours / Total Hours   │
+│  - Prompt Frequency = Weekly Interaction Count         │
+│  - Study Pattern Shift Index across observation weeks  │
+└───────────────────────────┬────────────────────────────┘
+                            │ Indicator matrices
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│             Trend & Prompt Analytics Engine            │
+│  - Time-series slope estimation & trajectory grouping  │
+│  - Academic-period comparative analysis (e.g. exams)   │
+│  - Prompt purpose distribution evolution               │
+└───────────────────────────┬────────────────────────────┘
+                            │ Validated findings
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│         Dashboard Presentation Layer (/component3/)    │
+│  - Interactive prototype record validation             │
+│  - Displays longitudinal trends only after dataset is   │
+│    fully assembled and validated                       │
+└────────────────────────────────────────────────────────┘
+```
+
+> **Research Integrity Principle:** **Prototype validation does not equal longitudinal research analysis.** The `/api/component3/validate-weekly-record` endpoint validates the structural soundness of an individual record; it does not calculate longitudinal trends, infer behavioural shifts, or persist data. Trend analysis will only be executed once the complete 4–6 week empirical dataset has been validated.
+
+---
+
+## Component 4 Architecture – Cognitive Engagement & Learning Retention Evaluation
+
+### Experimental Protocol and Conditions
+
+Component 4 evaluates writing output quality, cognitive effort, psychological ownership, and knowledge retention across two controlled writing conditions:
+- **Condition A (Brain-Only Writing):** Student completes academic writing without Generative AI assistance.
+- **Condition B (GenAI-Assisted Writing):** Student completes academic writing with permitted Generative AI assistance.
+
+### Counterbalancing Protocol
+
+To isolate treatment effects from ordering and topic confounding, a counterbalancing design is employed:
+- **Sequence A:** Brain-only condition first, followed by GenAI-assisted condition.
+- **Sequence B:** GenAI-assisted condition first, followed by brain-only condition.
+
+Topic equivalence and washout intervals are enforced between sessions.
+
+### Prototype Experimental Session Record Schema
+
+| Variable | Type / Constraints | Description |
+|---|---|---|
+| `participant_reference` | String (2–20 chars, `^[A-Za-z0-9\-_]{2,20}$`) | Anonymised research participant identifier |
+| `experimental_condition` | Categorical ("Brain-only writing", "GenAI-assisted writing") | Assigned experimental writing condition |
+| `condition_order` | Categorical ("Brain-only first", "GenAI-assisted first") | Counterbalanced order assignment |
+| `session_stage` | Categorical ("Writing task", "Immediate recall", "Ownership / cognitive effort", "Delayed recall") | Session experimental stage |
+| `task_reference` | String (2–20 chars, `^[A-Za-z0-9\-_]{2,20}$`) | Anonymised writing task reference code |
+| `consent_confirmed` | Boolean (`True`) | Explicit confirmation of research consent |
+
+### Analytical Pipeline and Research Integrity Boundaries
+
+A multi-stage architecture separates session metadata validation from subsequent NLP, rubric, and recall analytics:
+
+```
+┌────────────────────────────────────────────────────────┐
+│         Controlled Experimental Session Layer          │
+│  - Anonymised session metadata validation              │
+│  - Zero raw essay text persistence in prototype        │
+│  - Ethical consent verification                        │
+└───────────────────────────┬────────────────────────────┘
+                            │ Validated session records
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│        Anonymised Corpus Preprocessing Pipeline        │
+│  - Text sanitisation and lemmatisation                 │
+│  - spaCy dependency parsing & NLTK text processing    │
+│  - Rater anonymisation for rubric scoring              │
+└───────────────────────────┬────────────────────────────┘
+                            │ Preprocessed data
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│          Multi-Branch Analytical Engine                │
+│  - NLP Feature Extraction (TTR, readability, cosine)   │
+│  - Independent Human Rubric Scoring (inter-rater kappa)│
+│  - Immediate & Delayed Recall Assessment               │
+│  - Psychological Ownership & Cognitive Effort Scales   │
+└───────────────────────────┬────────────────────────────┘
+                            │ Multi-modal measures
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│          Paired Condition Comparison Engine            │
+│  - Within-participant paired difference testing        │
+│  - Effect size estimation (Cohen's d) & 95% CIs        │
+│  - Output quality vs. retention dissociation analysis  │
+└───────────────────────────┬────────────────────────────┘
+                            │ Validated empirical findings
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│         Dashboard Presentation Layer (/component4/)    │
+│  - Interactive prototype session validation            │
+│  - Condition comparison and analytical results         │
+│    displayed only after experimental validation        │
+└────────────────────────────────────────────────────────┘
+```
+
+> **Methodological Principle & Research Integrity Rule:** **Better writing output does not automatically imply better learning or retention.** High surface fluency produced by GenAI assistance must be decoupled from genuine conceptual integration and delayed recall.  
+> **Prototype session validation is NOT experimental outcome analysis.** The `/api/component4/validate-session` endpoint validates the structural integrity of session metadata; it does not grade writing, evaluate recall, calculate NLP metrics, or persist participant data.
+
+---
+
 ## Dashboard Integration (planned)
 
 Once all four components have been analysed, their outputs will be surfaced
@@ -235,4 +379,80 @@ in the shared research dashboard at `/dashboard`:
 
 ---
 
-*Last updated: Feature 004 – Component 2 SEM analysis prototype workflow*
+## Framework Integration Layer (Feature 007)
+
+### Shared Governance Layer
+
+A shared `app/services/framework/` package provides governance metadata across all four
+components. It does **not** implement a combined model or produce cross-component scores.
+
+```
+app/services/framework/
+├── __init__.py        # Package exports
+├── registry.py        # COMPONENT_REGISTRY + FRAMEWORK_SPECIFICATION
+└── status_service.py  # FrameworkStatusService (direct import, no HTTP)
+```
+
+### Data Source Mapping
+
+Each component draws from a distinct, independent data source:
+
+| Component | Data Source |
+|-----------|-------------|
+| C1 – Cognitive Offloading | Psychometric behaviour survey |
+| C2 – Trust & Verification | Likert-scale psychometric survey |
+| C3 – Study Patterns | Weekly self-report study diaries |
+| C4 – Engagement & Retention | Controlled writing experiments |
+
+No single combined dataset is used.
+
+### Component Boundaries
+
+Each component's service layer is strictly self-contained:
+
+- `app/services/cognitive_offloading/` – C1 model stub + validation
+- `app/services/sem_analysis/` – C2 SEM status + result stub
+- `app/services/longitudinal/` – C3 analysis stub + validation
+- `app/services/retention/` – C4 retention stub + session validation
+- `app/services/framework/` – Integration governance (reads from above, no HTTP)
+
+### Analytical Independence Enforcement
+
+- No method exists to produce a combined participant score.
+- `FRAMEWORK_SPECIFICATION["single_combined_model"] = False`
+- `FRAMEWORK_SPECIFICATION["overall_score_available"] = False`
+- `FrameworkStatusService.get_status()` returns per-component readiness only.
+- Integration principle: **Complementary Evidence** — independent outputs interpreted
+  together for holistic understanding, never mathematically aggregated.
+
+### Output Boundaries
+
+| Component | Output Type | Combined? |
+|-----------|-------------|-----------|
+| C1 | Risk classification + SHAP attribution | No |
+| C2 | SEM path coefficients + factor loadings | No |
+| C3 | Temporal trend curves + prompt profiles | No |
+| C4 | NLP metrics + recall scores + effect sizes | No |
+| Framework | Per-component readiness metadata | N/A – no aggregation |
+
+### Evidence Integration Layer
+
+The `GET /framework/` page renders all four component outputs side-by-side once
+analysis is available. The integration layer:
+
+- Never applies cross-component classification rules.
+- Never computes a combined score or overall risk level.
+- Reads component service readiness via direct Python import only.
+- Does **not** make HTTP requests to the application's own APIs.
+
+### Framework API Routes
+
+| Method | Route | Purpose |
+|--------|-------|---------|
+| GET | `/framework/` | Full architectural integration page |
+| GET | `/api/framework/status` | Aggregated component readiness |
+| GET | `/api/framework/specification` | Framework metadata + integration principle |
+
+---
+
+*Last updated: Feature 007 – Integrated four-component research dashboard*

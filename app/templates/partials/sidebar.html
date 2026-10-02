@@ -28,6 +28,18 @@
                     Overview
                 </a>
             </li>
+            <li>
+                <a
+                    href="{{ url_for('framework.index') }}"
+                    class="sidebar-link {% if request.endpoint == 'framework.index' %}sidebar-link--active{% endif %}"
+                    aria-current="{% if request.endpoint == 'framework.index' %}page{% endif %}"
+                >
+                    <svg class="sidebar-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    Framework Integration
+                </a>
+            </li>
         </ul>
 
         <div class="sidebar-section-label">Research Components</div>

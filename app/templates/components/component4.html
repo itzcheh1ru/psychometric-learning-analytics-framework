@@ -2,8 +2,15 @@
 
 {% block title %}Cognitive Engagement & Learning Retention — Component 4{% endblock %}
 
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/component4.css') }}" />
+{% endblock %}
+
 {% block content %}
 
+<!-- ================================================================
+     A. Component Header
+================================================================ -->
 <div class="page-heading">
     <nav class="breadcrumb" aria-label="Breadcrumb">
         <a href="{{ url_for('main.dashboard') }}" class="breadcrumb__link">Overview</a>
@@ -13,60 +20,768 @@
     <div class="page-heading__tag">
         <span class="comp-label comp-label--c4">Component 04</span>
     </div>
-    <h1 class="page-heading__title">Cognitive Engagement &amp; Learning Retention</h1>
+    <h1 class="page-heading__title">GenAI-Assisted Cognitive Engagement &amp; Learning Retention Evaluation</h1>
     <p class="page-heading__desc">
-        Evaluates the impact of GenAI-assisted learning on cognitive engagement and
-        knowledge retention through NLP-based writing analysis, recall evaluation,
-        ownership measurement and paired statistical comparison of learning conditions.
+        Interactive prototype representing the controlled comparison of brain-only and GenAI-assisted academic writing conditions.
     </p>
     <div class="page-heading__status">
         <span class="status-badge status-badge--preparation">
             <span class="status-badge__dot" aria-hidden="true"></span>
-            Experimental Preparation / Data Collection
+            Prototype &mdash; Experimental Analysis Pending
         </span>
     </div>
 </div>
 
-<!-- Methodology -->
-<section class="content-section" aria-labelledby="methodHeading4">
-    <h2 class="section-heading" id="methodHeading4">Methodology</h2>
-    <div class="card-grid card-grid--4">
-        <div class="method-card">
-            <div class="method-card__title">NLP Writing Analysis</div>
-            <p class="method-card__desc">Lexical diversity, readability and syntactic complexity of student writing samples.</p>
+<!-- Research stage notice -->
+<div class="info-banner info-banner--prototype" role="status">
+    <svg class="info-banner__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+    <div>
+        <strong>Research stage notice:</strong> Experimental data collection and validation are not yet complete. This interface demonstrates the planned research workflow only and does not present empirical learning-retention findings.
+    </div>
+</div>
+
+
+<!-- ================================================================
+     B. Experimental Research Design
+================================================================ -->
+<section class="content-section" aria-labelledby="designHeading4">
+    <div class="content-section__header">
+        <h2 class="section-heading" id="designHeading4">Experimental Research Design</h2>
+        <p class="section-subheading">
+            Controlled laboratory and classroom evaluation contrasting independent cognitive effort against AI-assisted task execution.
+        </p>
+    </div>
+
+    <div class="exp-conditions-grid">
+        <div class="exp-condition-card exp-condition-card--brain">
+            <div class="exp-condition-card__badge">CONDITION A</div>
+            <h3 class="exp-condition-card__title">Brain-Only Writing</h3>
+            <p class="exp-condition-card__desc">
+                Student completes the assigned academic writing task without direct Generative AI assistance.
+            </p>
         </div>
-        <div class="method-card">
-            <div class="method-card__title">TF-IDF / Semantic Similarity</div>
-            <p class="method-card__desc">Measures content similarity between AI-assisted and brain-only writing conditions.</p>
+
+        <div class="exp-vs-badge" aria-hidden="true">VS</div>
+
+        <div class="exp-condition-card exp-condition-card--ai">
+            <div class="exp-condition-card__badge">CONDITION B</div>
+            <h3 class="exp-condition-card__title">GenAI-Assisted Writing</h3>
+            <p class="exp-condition-card__desc">
+                Student completes the assigned academic writing task with permitted Generative AI assistance according to the study protocol.
+            </p>
         </div>
-        <div class="method-card">
-            <div class="method-card__title">Recall &amp; Retention Evaluation</div>
-            <p class="method-card__desc">Immediate and delayed recall assessment post-writing experiment.</p>
+    </div>
+
+    <!-- Controlled Comparison Summary -->
+    <div class="controlled-comp-box">
+        <div class="controlled-comp-box__title">CONTROLLED COMPARISON</div>
+        <div class="controlled-comp-items">
+            <span class="comp-item">Writing Output</span>
+            <span class="comp-sep">+</span>
+            <span class="comp-item">Immediate Recall</span>
+            <span class="comp-sep">+</span>
+            <span class="comp-item">Delayed Recall</span>
+            <span class="comp-sep">+</span>
+            <span class="comp-item">Ownership</span>
+            <span class="comp-sep">+</span>
+            <span class="comp-item">Cognitive Effort</span>
+            <span class="comp-sep">+</span>
+            <span class="comp-item">Human Rubric</span>
+            <span class="comp-sep">+</span>
+            <span class="comp-item">NLP Features</span>
         </div>
-        <div class="method-card">
-            <div class="method-card__title">Paired Statistical Testing</div>
-            <p class="method-card__desc">Within-participant statistical comparison of learning conditions.</p>
+    </div>
+
+    <div class="methodology-note-banner">
+        <strong>Methodological Principle:</strong> Better writing output does not automatically imply better learning or retention; output quality and learning evidence are evaluated separately.
+    </div>
+</section>
+
+
+<!-- ================================================================
+     C. Counterbalancing Section
+================================================================ -->
+<section class="content-section" aria-labelledby="counterHeading4">
+    <div class="content-section__header">
+        <h2 class="section-heading" id="counterHeading4">Counterbalancing Protocol</h2>
+        <p class="section-subheading">
+            Mitigating sequence and topic order effects across experimental conditions.
+        </p>
+    </div>
+
+    <div class="counterbalance-wrap">
+        <div class="counterbalance-badge">Counterbalanced condition order</div>
+        <div class="counterbalance-sequences">
+            <div class="counterbalance-seq">
+                <span class="counterbalance-seq__name">Sequence A</span>
+                <div class="counterbalance-seq__steps">
+                    <span class="seq-step">Brain-Only</span>
+                    <span class="seq-arrow" aria-hidden="true">&darr;</span>
+                    <span class="seq-step">GenAI-Assisted</span>
+                </div>
+            </div>
+            <div class="counterbalance-seq">
+                <span class="counterbalance-seq__name">Sequence B</span>
+                <div class="counterbalance-seq__steps">
+                    <span class="seq-step">GenAI-Assisted</span>
+                    <span class="seq-arrow" aria-hidden="true">&darr;</span>
+                    <span class="seq-step">Brain-Only</span>
+                </div>
+            </div>
+        </div>
+        <p class="counterbalance-text">
+            When the same participants complete both experimental conditions, condition order and equivalent task topics should be controlled to reduce order and topic effects.
+        </p>
+    </div>
+</section>
+
+
+<!-- ================================================================
+     D. Experimental Workflow
+================================================================ -->
+<section class="content-section" aria-labelledby="workflowHeading4">
+    <div class="content-section__header">
+        <h2 class="section-heading" id="workflowHeading4">Experimental Workflow</h2>
+        <p class="section-subheading">
+            Protocol pipeline from participant consent through immediate recall, delayed retention testing, and condition comparison.
+        </p>
+    </div>
+
+    <div class="exp-workflow" role="img" aria-label="Experimental workflow: Participant Consent to Anonymised Participant Code to Assigned Writing Condition to Academic Writing Task to Immediate Recall to Ownership plus Cognitive Effort to Delayed Recall to NLP Feature Extraction to Human Rubric Evaluation to Condition Comparison to Research Dashboard">
+        <div class="exp-steps">
+            <div class="exp-step exp-step--ready">
+                <span class="exp-step__title">Participant Consent</span>
+                <span class="exp-step__tag">Prototype Ready</span>
+            </div>
+            <div class="exp-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="exp-step exp-step--ready">
+                <span class="exp-step__title">Anonymised Participant Code</span>
+                <span class="exp-step__tag">Prototype Ready</span>
+            </div>
+            <div class="exp-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="exp-step exp-step--ready">
+                <span class="exp-step__title">Assigned Writing Condition</span>
+                <span class="exp-step__tag">Prototype Ready</span>
+            </div>
+            <div class="exp-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="exp-step exp-step--ready">
+                <span class="exp-step__title">Academic Writing Task</span>
+                <span class="exp-step__tag">Prototype Ready</span>
+            </div>
+            <div class="exp-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="exp-step exp-step--pending">
+                <span class="exp-step__title">Immediate Recall</span>
+                <span class="exp-step__tag">Pending Research Data</span>
+            </div>
+            <div class="exp-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="exp-step exp-step--pending">
+                <span class="exp-step__title">Ownership + Cognitive Effort</span>
+                <span class="exp-step__tag">Pending Research Data</span>
+            </div>
+            <div class="exp-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="exp-step exp-step--pending">
+                <span class="exp-step__title">Delayed Recall</span>
+                <span class="exp-step__tag">Pending Research Data</span>
+            </div>
+            <div class="exp-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="exp-step exp-step--pending">
+                <span class="exp-step__title">NLP Feature Extraction</span>
+                <span class="exp-step__tag">Pending Research Data</span>
+            </div>
+            <div class="exp-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="exp-step exp-step--pending">
+                <span class="exp-step__title">Human Rubric Evaluation</span>
+                <span class="exp-step__tag">Pending Research Data</span>
+            </div>
+            <div class="exp-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="exp-step exp-step--pending">
+                <span class="exp-step__title">Condition Comparison</span>
+                <span class="exp-step__tag">Pending Research Data</span>
+            </div>
+            <div class="exp-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="exp-step exp-step--pending">
+                <span class="exp-step__title">Research Dashboard</span>
+                <span class="exp-step__tag">Pending Research Data</span>
+            </div>
         </div>
     </div>
 </section>
 
-<!-- Planned Outputs -->
-<section class="content-section" aria-labelledby="outputsHeading4">
-    <h2 class="section-heading" id="outputsHeading4">Planned Analytical Outputs</h2>
-    <ul class="outputs-list">
-        <li class="outputs-list__item">Writing quality comparison (AI-assisted vs. brain-only)</li>
-        <li class="outputs-list__item">Immediate recall scores</li>
-        <li class="outputs-list__item">Delayed recall scores</li>
-        <li class="outputs-list__item">Knowledge retention rate</li>
-        <li class="outputs-list__item">Cognitive ownership measurement</li>
-        <li class="outputs-list__item">Cognitive engagement indicators</li>
-        <li class="outputs-list__item">Statistical comparison between learning conditions</li>
-    </ul>
+
+<!-- ================================================================
+     E. Session Record Prototype (Form)
+================================================================ -->
+<section class="content-section" aria-labelledby="formHeading4">
+    <div class="content-section__header">
+        <h2 class="section-heading" id="formHeading4">Experimental Session Record Prototype</h2>
+        <p class="section-subheading">
+            Validate experimental session parameters and counterbalancing metadata. Actual essay text and recall answers are not collected or stored in this prototype.
+        </p>
+    </div>
+
+    <div class="proto-notice" role="note">
+        <strong>Privacy rule:</strong> Enter anonymised research identifiers only. Do not submit student names, emails, registration numbers, or full essay text.
+    </div>
+
+    <form
+        id="sessionRecordForm"
+        class="session-form"
+        novalidate
+        aria-label="Experimental session prototype record form"
+    >
+
+        <fieldset class="form-fieldset">
+            <legend class="form-fieldset__legend">Experimental Session Metadata</legend>
+
+            <div class="form-row-2">
+                <!-- Participant Reference -->
+                <div class="form-group">
+                    <label class="form-label" for="participant_reference">
+                        Participant Reference ID
+                        <span class="form-label__required" aria-hidden="true">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        id="participant_reference"
+                        name="participant_reference"
+                        class="form-input"
+                        placeholder="e.g. P0001"
+                        maxlength="20"
+                        autocomplete="off"
+                        required
+                        aria-required="true"
+                        aria-describedby="ref_help ref_error"
+                    />
+                    <p class="form-help" id="ref_help">
+                        Use an anonymised research participant identifier only.
+                    </p>
+                    <p class="form-error" id="ref_error" aria-live="polite" hidden></p>
+                </div>
+
+                <!-- Experimental Condition -->
+                <div class="form-group">
+                    <label class="form-label" for="experimental_condition">
+                        Experimental Condition
+                        <span class="form-label__required" aria-hidden="true">*</span>
+                    </label>
+                    <select
+                        id="experimental_condition"
+                        name="experimental_condition"
+                        class="form-select"
+                        required
+                        aria-required="true"
+                        aria-describedby="cond_error"
+                    >
+                        <option value="">— Select Condition —</option>
+                        {% for c in conditions %}
+                        <option value="{{ c }}">{{ c }}</option>
+                        {% endfor %}
+                    </select>
+                    <p class="form-error" id="cond_error" aria-live="polite" hidden></p>
+                </div>
+            </div>
+
+            <div class="form-row-2">
+                <!-- Condition Order -->
+                <div class="form-group">
+                    <label class="form-label" for="condition_order">
+                        Condition Order
+                        <span class="form-label__required" aria-hidden="true">*</span>
+                    </label>
+                    <select
+                        id="condition_order"
+                        name="condition_order"
+                        class="form-select"
+                        required
+                        aria-required="true"
+                        aria-describedby="order_help order_error"
+                    >
+                        <option value="">— Select Order —</option>
+                        {% for o in condition_orders %}
+                        <option value="{{ o }}">{{ o }}</option>
+                        {% endfor %}
+                    </select>
+                    <p class="form-help" id="order_help">
+                        Represents counterbalanced condition order for the experimental protocol.
+                    </p>
+                    <p class="form-error" id="order_error" aria-live="polite" hidden></p>
+                </div>
+
+                <!-- Session Stage -->
+                <div class="form-group">
+                    <label class="form-label" for="session_stage">
+                        Session Stage
+                        <span class="form-label__required" aria-hidden="true">*</span>
+                    </label>
+                    <select
+                        id="session_stage"
+                        name="session_stage"
+                        class="form-select"
+                        required
+                        aria-required="true"
+                        aria-describedby="stage_error"
+                    >
+                        <option value="">— Select Stage —</option>
+                        {% for s in session_stages %}
+                        <option value="{{ s }}">{{ s }}</option>
+                        {% endfor %}
+                    </select>
+                    <p class="form-error" id="stage_error" aria-live="polite" hidden></p>
+                </div>
+            </div>
+
+            <div class="form-row-2">
+                <!-- Task Reference -->
+                <div class="form-group">
+                    <label class="form-label" for="task_reference">
+                        Task Reference Code
+                        <span class="form-label__required" aria-hidden="true">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        id="task_reference"
+                        name="task_reference"
+                        class="form-input"
+                        placeholder="e.g. TASK01"
+                        maxlength="20"
+                        autocomplete="off"
+                        required
+                        aria-required="true"
+                        aria-describedby="task_help task_error"
+                    />
+                    <p class="form-help" id="task_help">
+                        Use an anonymised task code rather than entering the full writing response or topic text.
+                    </p>
+                    <p class="form-error" id="task_error" aria-live="polite" hidden></p>
+                </div>
+
+                <!-- Consent Status Checkbox -->
+                <div class="form-group form-group--checkbox">
+                    <div class="checkbox-control">
+                        <input
+                            type="checkbox"
+                            id="consent_confirmed"
+                            name="consent_confirmed"
+                            class="form-checkbox"
+                            required
+                            aria-required="true"
+                            aria-describedby="consent_help consent_error"
+                        />
+                        <label class="form-label form-label--checkbox" for="consent_confirmed">
+                            Research consent confirmed according to the study protocol.
+                            <span class="form-label__required" aria-hidden="true">*</span>
+                        </label>
+                    </div>
+                    <p class="form-help" id="consent_help">
+                        Ethical requirement: confirmation that participant consent is documented.
+                    </p>
+                    <p class="form-error" id="consent_error" aria-live="polite" hidden></p>
+                </div>
+            </div>
+
+        </fieldset>
+
+        <!-- Actions -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn--primary" id="validateSessionBtn">
+                Validate Experimental Session
+            </button>
+            <button type="button" class="btn btn--outline" id="resetSessionBtn">
+                Reset Form
+            </button>
+        </div>
+
+    </form>
 </section>
 
-<!-- Empty analytics state -->
-<section class="content-section" aria-labelledby="analyticsHeading4">
-    <h2 class="section-heading" id="analyticsHeading4">Analytics</h2>
+
+<!-- ================================================================
+     F. Session Validation Result
+================================================================ -->
+<section
+    class="content-section"
+    id="sessionPreviewSection"
+    aria-labelledby="sessionPreviewHeading4"
+    aria-live="polite"
+    hidden
+>
+    <div class="content-section__header">
+        <h2 class="section-heading" id="sessionPreviewHeading4">Session Validation Result</h2>
+    </div>
+
+    <!-- Success state -->
+    <div id="sessionSuccessBlock" hidden>
+        <div class="validation-success-banner" role="status">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Prototype experimental session validated successfully.
+        </div>
+
+        <h3 class="subsection-heading">Prototype Experimental Session</h3>
+        <p class="preview-disclaimer">
+            Prototype record &mdash; not stored and not included in the final experimental dataset.
+        </p>
+
+        <div class="summary-table-wrap">
+            <table class="summary-table" aria-label="Validated experimental session summary">
+                <tbody id="sessionSummaryBody"></tbody>
+            </table>
+        </div>
+
+        <h3 class="subsection-heading">Validation Checks Passed</h3>
+        <ul class="check-list" aria-label="Validation checks passed">
+            <li class="check-list__item check-list__item--pass">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Required fields complete
+            </li>
+            <li class="check-list__item check-list__item--pass">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Anonymous participant reference
+            </li>
+            <li class="check-list__item check-list__item--pass">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Approved experimental condition
+            </li>
+            <li class="check-list__item check-list__item--pass">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Approved condition order
+            </li>
+            <li class="check-list__item check-list__item--pass">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Valid session stage
+            </li>
+            <li class="check-list__item check-list__item--pass">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Safe task-reference format
+            </li>
+            <li class="check-list__item check-list__item--pass">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Research consent requirement represented
+            </li>
+        </ul>
+    </div>
+
+    <!-- Error state -->
+    <div id="sessionErrorBlock" hidden>
+        <div class="validation-error-banner" role="alert">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            Session record validation failed. Please address the errors below.
+        </div>
+        <ul class="error-list" id="sessionErrorList" aria-live="assertive"></ul>
+    </div>
+</section>
+
+
+<!-- ================================================================
+     G. Learning Outcome Measures
+================================================================ -->
+<section class="content-section" aria-labelledby="outcomesHeading4">
+    <div class="content-section__header">
+        <h2 class="section-heading" id="outcomesHeading4">Learning Outcome Measures</h2>
+        <p class="section-subheading">
+            Key empirical dimensions evaluated across experimental writing conditions.
+        </p>
+    </div>
+
+    <div class="card-grid card-grid--3">
+        {% for o in outcomes %}
+        <article class="outcome-card">
+            <h3 class="outcome-card__title">{{ o.name }}</h3>
+            <p class="outcome-card__desc">{{ o.description }}</p>
+            <div class="outcome-card__status">
+                <span class="outcome-dot" aria-hidden="true"></span>
+                {{ o.status }}
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+
+
+<!-- ================================================================
+     H. NLP Feature Framework
+================================================================ -->
+<section class="content-section" aria-labelledby="nlpHeading4">
+    <div class="content-section__header">
+        <h2 class="section-heading" id="nlpHeading4">NLP Feature Extraction Framework</h2>
+        <p class="section-subheading">
+            Automated computational text features extracted from student writing samples using Python, spaCy, and NLTK.
+        </p>
+    </div>
+
+    <div class="card-grid card-grid--3">
+        {% for n in nlp_features %}
+        <article class="nlp-feature-card">
+            <h3 class="nlp-feature-card__title">{{ n.name }}</h3>
+            <p class="nlp-feature-card__desc">{{ n.description }}</p>
+            <div class="nlp-feature-card__status">
+                <span class="nlp-dot" aria-hidden="true"></span>
+                {{ n.status }}
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+
+    <!-- NLP Flow -->
+    <div class="nlp-flow-box" role="img" aria-label="NLP feature extraction flow: Anonymised Writing Samples to Text Cleaning to NLP Feature Extraction to Feature Validation to Condition-Level Comparison">
+        <div class="nlp-flow-box__tag">Natural Language Processing Pipeline</div>
+        <div class="nlp-flow-box__steps">
+            <span class="nlp-step">Anonymised Writing Samples</span>
+            <span class="nlp-flow-arrow" aria-hidden="true">&rarr;</span>
+            <span class="nlp-step">Text Cleaning</span>
+            <span class="nlp-flow-arrow" aria-hidden="true">&rarr;</span>
+            <span class="nlp-step">NLP Feature Extraction</span>
+            <span class="nlp-flow-arrow" aria-hidden="true">&rarr;</span>
+            <span class="nlp-step">Feature Validation</span>
+            <span class="nlp-flow-arrow" aria-hidden="true">&rarr;</span>
+            <span class="nlp-step">Condition-Level Comparison</span>
+        </div>
+        <div class="nlp-tech-note">Technology Stack: Python &middot; spaCy &middot; NLTK</div>
+    </div>
+</section>
+
+
+<!-- ================================================================
+     I. Human Rubric & Rater Evaluation
+================================================================ -->
+<section class="content-section" aria-labelledby="rubricHeading4">
+    <div class="content-section__header">
+        <h2 class="section-heading" id="rubricHeading4">Human Rubric &amp; Rater Evaluation</h2>
+        <p class="section-subheading">
+            Independent qualitative scoring protocol and inter-rater reliability assessment.
+        </p>
+    </div>
+
+    <div class="rubric-workflow" role="img" aria-label="Human rubric evaluation flow: Anonymised Essay to Human Rubric Scoring to Independent Rater Scores to Inter-Rater Agreement to Validated Writing-Quality Evidence">
+        <div class="rubric-steps">
+            <span class="rubric-step">Anonymised Essay</span>
+            <span class="rubric-arrow" aria-hidden="true">&rarr;</span>
+            <span class="rubric-step">Human Rubric Scoring</span>
+            <span class="rubric-arrow" aria-hidden="true">&rarr;</span>
+            <span class="rubric-step">Independent Rater Scores</span>
+            <span class="rubric-arrow" aria-hidden="true">&rarr;</span>
+            <span class="rubric-step">Inter-Rater Agreement</span>
+            <span class="rubric-arrow" aria-hidden="true">&rarr;</span>
+            <span class="rubric-step">Validated Writing-Quality Evidence</span>
+        </div>
+    </div>
+
+    <div class="rubric-status-grid">
+        <div class="rubric-status-card">
+            <span class="rubric-status-card__label">Human rubric results</span>
+            <span class="rubric-status-card__val">Pending experimental evaluation</span>
+        </div>
+        <div class="rubric-status-card">
+            <span class="rubric-status-card__label">Inter-rater agreement</span>
+            <span class="rubric-status-card__val">Pending experimental evaluation</span>
+        </div>
+    </div>
+</section>
+
+
+<!-- ================================================================
+     J. Paired Experimental Comparison
+================================================================ -->
+<section class="content-section" aria-labelledby="pairedHeading4">
+    <div class="content-section__header">
+        <h2 class="section-heading" id="pairedHeading4">Paired Experimental Comparison</h2>
+        <p class="section-subheading">
+            Within-participant contrast of cognitive performance across experimental writing conditions.
+        </p>
+    </div>
+
+    <div class="paired-comp-diagram" role="img" aria-label="Paired experimental comparison: Brain-Only Condition and GenAI-Assisted Condition lead to Paired Controlled Comparison">
+        <div class="paired-side paired-side--brain">
+            <span class="paired-side__name">Brain-Only Condition</span>
+            <span class="paired-side__sub">Condition A</span>
+        </div>
+
+        <div class="paired-center">
+            <span class="paired-center__label">Paired / Controlled Comparison</span>
+            <span class="paired-center__note">Planned analytical comparison &mdash; not empirical results</span>
+        </div>
+
+        <div class="paired-side paired-side--ai">
+            <span class="paired-side__name">GenAI-Assisted Condition</span>
+            <span class="paired-side__sub">Condition B</span>
+        </div>
+    </div>
+
+    <div class="paired-details-grid">
+        <div class="paired-col">
+            <h4 class="paired-col__title">Planned Outcomes Compared</h4>
+            <ul class="paired-list">
+                <li>Writing quality</li>
+                <li>Immediate recall</li>
+                <li>Delayed recall</li>
+                <li>Ownership</li>
+                <li>Cognitive effort</li>
+                <li>NLP features</li>
+            </ul>
+        </div>
+        <div class="paired-col">
+            <h4 class="paired-col__title">Planned Statistical Reporting</h4>
+            <ul class="paired-list">
+                <li>Statistical comparison</li>
+                <li>Effect sizes</li>
+                <li>Confidence intervals</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+
+<!-- ================================================================
+     K. Experimental Analysis Status
+================================================================ -->
+<section class="content-section" aria-labelledby="statusHeading4">
+    <div class="content-section__header">
+        <h2 class="section-heading" id="statusHeading4">Experimental Evaluation Readiness Status</h2>
+        <p class="section-subheading">Live readiness state queried from the Component 4 backend service.</p>
+    </div>
+
+    <div class="retention-status-panel">
+        <div class="retention-status-row">
+            <span class="retention-status-label">Research Component</span>
+            <span class="retention-status-val">GenAI-Assisted Cognitive Engagement &amp; Learning Retention Evaluation</span>
+        </div>
+        <div class="retention-status-row">
+            <span class="retention-status-label">Research Stage</span>
+            <span class="retention-status-val">Prototype Development</span>
+        </div>
+        <div class="retention-status-row">
+            <span class="retention-status-label">Experimental Data Collection</span>
+            <span class="retention-status-val retention-status-val--active">In Progress</span>
+        </div>
+        <div class="retention-status-row">
+            <span class="retention-status-label">Dataset Ready</span>
+            <span class="retention-status-val retention-status-val--pending">False (collection ongoing)</span>
+        </div>
+        <div class="retention-status-row">
+            <span class="retention-status-label">NLP Analysis Available</span>
+            <span class="retention-status-val retention-status-val--pending">False (pending experimental data)</span>
+        </div>
+        <div class="retention-status-row">
+            <span class="retention-status-label">Recall Analysis Available</span>
+            <span class="retention-status-val retention-status-val--pending">False (pending experimental data)</span>
+        </div>
+        <div class="retention-status-row">
+            <span class="retention-status-label">Paired Analysis Available</span>
+            <span class="retention-status-val retention-status-val--pending">False (pending experimental data)</span>
+        </div>
+        <div class="retention-status-row">
+            <span class="retention-status-label">Final Results Available</span>
+            <span class="retention-status-val retention-status-val--pending">False (pending experimental data)</span>
+        </div>
+    </div>
+</section>
+
+
+<!-- ================================================================
+     L. Planned Analytical Outputs
+================================================================ -->
+<section class="content-section" aria-labelledby="outputsHeading4">
+    <div class="content-section__header">
+        <h2 class="section-heading" id="outputsHeading4">Planned Analytical Outputs</h2>
+        <p class="section-subheading">
+            Output visualisations and statistical reports to be populated once empirical evaluations are completed.
+        </p>
+    </div>
+
+    <div class="card-grid card-grid--4">
+        <div class="output-card output-card--disabled" aria-label="Writing Quality Comparison — not yet available">
+            <div class="output-card__title">Writing Quality Comparison</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after experimental analysis
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="NLP Feature Comparison — not yet available">
+            <div class="output-card__title">NLP Feature Comparison</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after experimental analysis
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="Immediate Recall — not yet available">
+            <div class="output-card__title">Immediate Recall</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after experimental analysis
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="Delayed Recall — not yet available">
+            <div class="output-card__title">Delayed Recall</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after experimental analysis
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="Learning Retention — not yet available">
+            <div class="output-card__title">Learning Retention</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after experimental analysis
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="Ownership — not yet available">
+            <div class="output-card__title">Ownership</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after experimental analysis
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="Cognitive Effort — not yet available">
+            <div class="output-card__title">Cognitive Effort</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after experimental analysis
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="Human Rubric Results — not yet available">
+            <div class="output-card__title">Human Rubric Results</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after experimental analysis
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="Inter-Rater Agreement — not yet available">
+            <div class="output-card__title">Inter-Rater Agreement</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after experimental analysis
+            </div>
+        </div>
+
+        <div class="output-card output-card--disabled" aria-label="Paired Condition Effects — not yet available">
+            <div class="output-card__title">Paired Condition Effects</div>
+            <div class="output-card__unavailable">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Available after experimental analysis
+            </div>
+        </div>
+    </div>
+
+    <!-- Empty analytics state for test compatibility & research integrity -->
     <div class="empty-state">
         <div class="empty-state__icon" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -77,11 +792,64 @@
         </div>
         <h3 class="empty-state__title">NLP analytics not yet available</h3>
         <p class="empty-state__body">
-            Writing analysis, recall results and statistical comparisons will become
-            available after writing experiment data collection, NLP preprocessing
-            and statistical analysis are completed.
+            Writing analysis, recall results and statistical comparisons will become available after writing experiment data collection, NLP preprocessing and statistical analysis are completed.
         </p>
     </div>
 </section>
 
+
+<!-- ================================================================
+     M. Future Analysis Pipeline
+================================================================ -->
+<section class="content-section" aria-labelledby="pipelineHeading4">
+    <div class="content-section__header">
+        <h2 class="section-heading" id="pipelineHeading4">Future Analytical Pipeline</h2>
+        <p class="section-subheading">
+            Architecture of the experimental evaluation pipeline from participant sessions to dashboard presentation.
+        </p>
+    </div>
+
+    <div class="pipeline-diagram" role="img" aria-label="Future experimental analytical pipeline: Controlled Experimental Sessions to Anonymised Writing and Learning Measures to Data Cleaning and Validation to Multi-branch evaluation to Condition-Level Paired Comparison to Effect Sizes and Confidence Intervals to Inter-Rater Evaluation to Validated Experimental Evidence to Research Analytics Dashboard">
+        <div class="pipeline-steps">
+            <div class="pipeline-step pipeline-step--exp">Controlled Experimental Sessions</div>
+            <div class="pipeline-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="pipeline-step pipeline-step--data">Anonymised Writing + Learning Measures</div>
+            <div class="pipeline-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="pipeline-step pipeline-step--clean">Data Cleaning &amp; Validation</div>
+            <div class="pipeline-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="pipeline-box-multibranch">
+                <div class="pipeline-substep">NLP Feature Extraction</div>
+                <div class="pipeline-substep">Human Rubric Evaluation</div>
+                <div class="pipeline-substep">Recall / Ownership Measures</div>
+            </div>
+            <div class="pipeline-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="pipeline-step pipeline-step--ana">Condition-Level / Paired Comparison</div>
+            <div class="pipeline-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="pipeline-step pipeline-step--ana">Effect Sizes + Confidence Intervals</div>
+            <div class="pipeline-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="pipeline-step pipeline-step--clean">Inter-Rater Evaluation</div>
+            <div class="pipeline-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="pipeline-step pipeline-step--evol">Validated Experimental Evidence</div>
+            <div class="pipeline-arrow" aria-hidden="true">&#x25BC;</div>
+
+            <div class="pipeline-step pipeline-step--dash">Research Analytics Dashboard</div>
+        </div>
+    </div>
+
+    <p class="pipeline-note">
+        <strong>Implementation Note:</strong> Final analysis will be performed only on validated experimental data collected according to the approved research protocol.
+    </p>
+</section>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/component4.js') }}"></script>
 {% endblock %}

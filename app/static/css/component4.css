@@ -1,0 +1,941 @@
+/* =============================================================================
+   component4.css – Styles for Component 4 Cognitive Engagement & Retention Prototype.
+   Psychometric Learning Analytics Framework – J26-DS-310
+   Feature 006: Cognitive Engagement & Learning Retention Prototype Workflow
+============================================================================= */
+
+/* --------------------------------------------------------------------------
+   Experimental Conditions Comparison Grid
+-------------------------------------------------------------------------- */
+.exp-conditions-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+@media (max-width: 768px) {
+    .exp-conditions-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+.exp-condition-card {
+    background: var(--bg-surface);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-lg, 12px);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    position: relative;
+}
+
+.exp-condition-card--brain {
+    border-color: #3b82f6;
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+}
+
+.exp-condition-card--ai {
+    border-color: #f59e0b;
+    background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%);
+}
+
+.exp-condition-card__badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.65rem;
+    border-radius: 9999px;
+    width: fit-content;
+}
+
+.exp-condition-card--brain .exp-condition-card__badge {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.exp-condition-card--ai .exp-condition-card__badge {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.exp-condition-card__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.exp-condition-card__desc {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.exp-vs-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--text-secondary);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    margin: 0 auto;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Controlled Comparison Box */
+.controlled-comp-box {
+    background: var(--bg-surface-alt);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-md, 8px);
+    padding: 1rem 1.25rem;
+    margin: 1.25rem 0;
+    text-align: center;
+}
+
+.controlled-comp-box__title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.controlled-comp-items {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.comp-item {
+    font-weight: 600;
+    color: var(--text-primary);
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+}
+
+.comp-sep {
+    color: var(--text-light);
+    font-weight: bold;
+}
+
+.methodology-note-banner {
+    background: #f0fdf4;
+    border-left: 4px solid #16a34a;
+    padding: 0.85rem 1.25rem;
+    border-radius: 0 var(--radius-md, 8px) var(--radius-md, 8px) 0;
+    font-size: 0.9rem;
+    color: #14532d;
+    margin-top: 1rem;
+    line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   Counterbalancing Protocol
+-------------------------------------------------------------------------- */
+.counterbalance-wrap {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg, 12px);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.counterbalance-badge {
+    display: inline-block;
+    align-self: flex-start;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0.75rem;
+    background: #eff6ff;
+    color: #1d4ed8;
+    border-radius: 9999px;
+}
+
+.counterbalance-sequences {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 600px) {
+    .counterbalance-sequences {
+        grid-template-columns: 1fr;
+    }
+}
+
+.counterbalance-seq {
+    background: var(--bg-surface-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md, 8px);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.counterbalance-seq__name {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+.counterbalance-seq__steps {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    width: 100%;
+}
+
+.seq-step {
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    width: 80%;
+    text-align: center;
+}
+
+.seq-arrow {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.counterbalance-text {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Experimental Workflow
+-------------------------------------------------------------------------- */
+.exp-workflow {
+    margin: 1rem 0 1.5rem;
+    overflow-x: auto;
+}
+
+.exp-steps {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.exp-step {
+    width: 100%;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-md, 8px);
+    border: 1px solid var(--border);
+    background: var(--bg-surface);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.25rem;
+}
+
+.exp-step--ready {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+.exp-step--pending {
+    background: var(--bg-surface-alt);
+    border-color: var(--border);
+}
+
+.exp-step__title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.exp-step__tag {
+    font-size: 0.7rem;
+    font-family: var(--font-mono, monospace);
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 20px;
+}
+
+.exp-step--ready .exp-step__tag {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.exp-step--pending .exp-step__tag {
+    background: #f1f5f9;
+    color: var(--text-muted);
+}
+
+.exp-arrow {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    padding: 0.1rem 0;
+    line-height: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Session Record Form
+-------------------------------------------------------------------------- */
+.session-form {
+    max-width: 720px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-fieldset {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md, 8px);
+    padding: 1.25rem 1.5rem;
+    background: var(--bg-surface);
+}
+
+.form-fieldset__legend {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    padding: 0 0.5rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.form-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 1.25rem;
+    margin-top: 0.75rem;
+}
+
+@media (max-width: 600px) {
+    .form-row-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.form-group--checkbox {
+    justify-content: center;
+}
+
+.checkbox-control {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-top: 0.5rem;
+}
+
+.form-checkbox {
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-top: 0.15rem;
+    accent-color: var(--color-primary, #1a4480);
+    cursor: pointer;
+}
+
+.form-label--checkbox {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.form-label {
+    font-size: 0.825rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.form-label__required {
+    color: #dc2626;
+    margin-left: 2px;
+}
+
+.form-input,
+.form-select {
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    font-size: 0.875rem;
+    font-family: inherit;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm, 6px);
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    transition: border-color 0.15s, box-shadow 0.15s;
+    box-sizing: border-box;
+}
+
+.form-input:focus,
+.form-select:focus {
+    outline: none;
+    border-color: var(--border-focus, #1a4480);
+    box-shadow: 0 0 0 3px rgba(26, 68, 128, 0.15);
+}
+
+.input--error {
+    border-color: #dc2626 !important;
+    background-color: #fef2f2 !important;
+}
+
+.form-help {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.35;
+}
+
+.form-error {
+    font-size: 0.75rem;
+    color: #dc2626;
+    margin: 0;
+    font-weight: 600;
+}
+
+.proto-notice {
+    font-size: 0.8rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--radius-sm, 6px);
+    padding: 0.5rem 0.75rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* --------------------------------------------------------------------------
+   Validation Banners & Results
+-------------------------------------------------------------------------- */
+.validation-success-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    color: #14532d;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md, 8px);
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-bottom: 1.25rem;
+}
+
+.validation-error-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: #fef2f2;
+    border: 1px solid #fca5a5;
+    color: #991b1b;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md, 8px);
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+}
+
+.error-list {
+    margin: 0 0 1rem;
+    padding-left: 1.5rem;
+    color: #dc2626;
+    font-size: 0.825rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.preview-disclaimer {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin: -0.25rem 0 0.75rem;
+}
+
+.summary-table-wrap {
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+}
+
+.summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.summary-table th,
+.summary-table td {
+    padding: 0.6rem 0.85rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+.summary-table th {
+    width: 35%;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: var(--bg-surface-alt);
+}
+
+.summary-table td {
+    color: var(--text-primary);
+    font-family: var(--font-mono, monospace);
+}
+
+.check-list {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.check-list__item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.825rem;
+    color: var(--text-secondary);
+}
+
+.check-list__item--pass svg {
+    color: #16a34a;
+    flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Learning Outcome Measures & NLP Feature Framework Cards
+-------------------------------------------------------------------------- */
+.outcome-card,
+.nlp-feature-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md, 8px);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    box-shadow: var(--shadow-xs);
+}
+
+.outcome-card__title,
+.nlp-feature-card__title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.outcome-card__desc,
+.nlp-feature-card__desc {
+    font-size: 0.825rem;
+    line-height: 1.45;
+    color: var(--text-secondary);
+    margin: 0;
+    flex-grow: 1;
+}
+
+.outcome-card__status,
+.nlp-feature-card__status {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+}
+
+.outcome-dot,
+.nlp-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #d97706;
+}
+
+/* NLP Flow */
+.nlp-flow-box {
+    margin-top: 1.5rem;
+    background: var(--bg-surface-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md, 8px);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.nlp-flow-box__tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.nlp-flow-box__steps {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem 0.75rem;
+}
+
+.nlp-step {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+}
+
+.nlp-flow-arrow {
+    color: var(--text-light);
+    font-size: 1rem;
+}
+
+.nlp-tech-note {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono, monospace);
+}
+
+/* --------------------------------------------------------------------------
+   Human Rubric Evaluation Workflow
+-------------------------------------------------------------------------- */
+.rubric-workflow {
+    background: var(--bg-surface-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md, 8px);
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.rubric-steps {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem 0.75rem;
+}
+
+.rubric-step {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+}
+
+.rubric-arrow {
+    color: var(--text-light);
+    font-size: 1rem;
+}
+
+.rubric-status-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 600px) {
+    .rubric-status-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.rubric-status-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md, 8px);
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.rubric-status-card__label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.rubric-status-card__val {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* --------------------------------------------------------------------------
+   Paired Comparison Diagram & Details
+-------------------------------------------------------------------------- */
+.paired-comp-diagram {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    gap: 1rem;
+    align-items: center;
+    margin: 1.5rem 0;
+}
+
+@media (max-width: 768px) {
+    .paired-comp-diagram {
+        grid-template-columns: 1fr;
+    }
+}
+
+.paired-side {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md, 8px);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.25rem;
+}
+
+.paired-side--brain {
+    border-color: #93c5fd;
+    background: #f0f7ff;
+}
+
+.paired-side--ai {
+    border-color: #fde68a;
+    background: #fffbeb;
+}
+
+.paired-side__name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.paired-side__sub {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.paired-center {
+    background: var(--bg-surface-alt);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-md, 8px);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.25rem;
+}
+
+.paired-center__label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.paired-center__note {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.paired-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+@media (max-width: 600px) {
+    .paired-details-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.paired-col {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md, 8px);
+    padding: 1.25rem;
+}
+
+.paired-col__title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+    margin: 0 0 0.75rem;
+}
+
+.paired-list {
+    margin: 0;
+    padding-left: 1.25rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+/* --------------------------------------------------------------------------
+   Retention Status Panel
+-------------------------------------------------------------------------- */
+.retention-status-panel {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md, 8px);
+    overflow: hidden;
+}
+
+.retention-status-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+}
+
+.retention-status-row:last-child {
+    border-bottom: none;
+}
+
+.retention-status-label {
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.retention-status-val {
+    color: var(--text-primary);
+}
+
+.retention-status-val--active {
+    color: #b45309;
+    font-weight: 600;
+}
+
+.retention-status-val--pending {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* --------------------------------------------------------------------------
+   Pipeline Architecture Diagram
+-------------------------------------------------------------------------- */
+.pipeline-diagram {
+    margin: 1.5rem 0;
+}
+
+.pipeline-steps {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.pipeline-step {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md, 8px);
+    border: 1px solid var(--border);
+    background: var(--bg-surface);
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.pipeline-box-multibranch {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+@media (max-width: 500px) {
+    .pipeline-box-multibranch {
+        grid-template-columns: 1fr;
+    }
+}
+
+.pipeline-substep {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: var(--radius-sm, 6px);
+    padding: 0.6rem 0.4rem;
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.pipeline-arrow {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    padding: 0.15rem 0;
+    line-height: 1;
+}
+
+.pipeline-step--exp  { background: #eff6ff; border-color: #bfdbfe; }
+.pipeline-step--data { background: #f0fdf4; border-color: #bbf7d0; }
+.pipeline-step--clean{ background: #fefce8; border-color: #fef08a; }
+.pipeline-step--ana  { background: #faf5ff; border-color: #e9d5ff; }
+.pipeline-step--evol { background: #ecfeff; border-color: #a5f3fc; }
+.pipeline-step--dash { background: #f0fdf4; border-color: #86efac; font-weight: 700; }
+
+.pipeline-note {
+    font-size: 0.825rem;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 1rem;
+}

@@ -29,14 +29,44 @@
 | Feature 002 | Responsive research dashboard shell | ✅ Complete |
 | Feature 003 | Component 1 interactive prototype workflow | ✅ Complete |
 | Feature 004 | Component 2 SEM analysis prototype workflow | ✅ Complete |
+| Feature 005 | Component 3 longitudinal analytics prototype workflow | ✅ Complete |
+| Feature 006 | Component 4 cognitive retention prototype workflow | ✅ Complete |
+| Feature 007 | Integrated four-component research dashboard | ✅ Complete |
 
-**Feature 004 notes:**
-- Component 2 prototype: Implemented (specification API, status API, construct cards, measurement/structural workflows).
-- CFA: Pending validated data (`measurement_model_estimated = false`).
-- SEM: Pending validated data (`structural_model_estimated = false`).
-- SEM Results: Not available (`sem_results_available = false`, `SemResultService` raises `SemResultsNotAvailableError`).
-- R/lavaan integration: Architecture prepared; final results integration pending.
-- Research integrity: Conceptual pathways clearly identified as planned relationships to be tested; no artificial coefficients or fit statistics.
+**Feature 007 notes:**
+- Framework Integration layer: Implemented (`app/services/framework/`, `app/routes/framework.py`).
+- `GET /framework/`: Full architectural page with integration diagram, data source mapping,
+  method comparison matrix, analytical independence section, system readiness table,
+  readiness cards, and Integrated Insights empty state.
+- `GET /api/framework/status`: Returns per-component readiness. `single_combined_model = false`,
+  `overall_score_available = false`. Aggregates by direct service import — no HTTP calls to own APIs.
+- `GET /api/framework/specification`: Returns component roles, methods, data sources,
+  and integration principle. `single_combined_model = false`.
+- Integration principle: Complementary Evidence — outputs are interpreted together, not combined
+  into a single model or overall score. No cross-component classification rules.
+- Sidebar: "Framework Integration" link added between Overview and Research Components.
+- Dashboard: Upgraded with project badges (J26-DS-310, Research Prototype, Data Collection)
+  and an integration principle notice linking to `/framework/`.
+- Tests: 28 new tests added. Total: 143 tests passing.
+
+**Feature 006 notes:**
+- Component 4 prototype: Implemented (specification API, status API, session validation, learning outcomes, NLP feature framework).
+- Experimental condition schema: Implemented (Brain-only writing Condition A vs. GenAI-assisted writing Condition B).
+- Counterbalancing design: Implemented (Sequence A vs. Sequence B, order control, task code references).
+- Session validation: Implemented (safe in-memory sanitisation, required consent, rejection of unknown fields, no persistence).
+- Experimental dataset: Pending collection (`dataset_ready = false`).
+- NLP analysis: Not yet available (`nlp_analysis_available = false`, pending writing sample collection and spaCy/NLTK pipeline execution).
+- Recall / retention analysis: Not yet available (`recall_analysis_available = false`, `paired_analysis_available = false`, `RetentionAnalysisService` raises `RetentionAnalysisNotAvailableError`).
+- Final experimental findings: Not available (no fake essay texts, no simulated recall scores, no fabricated NLP metrics or effect sizes, no condition superiority claims).
+
+**Feature 005 notes:**
+- Component 3 prototype: Implemented (specification API, status API, weekly study-record validation, indicator definitions).
+- Weekly data structure: Implemented (4–6 week observation schema, time distribution, prompt frequency, academic context).
+- Longitudinal validation: Implemented (safe sanitisation, range checking, unknown field rejection, no persistence).
+- Longitudinal dataset: Pending collection (`dataset_ready = false`).
+- Trend analysis: Not yet enabled (`trend_analysis_available = false`, `LongitudinalAnalysisService` raises `LongitudinalAnalysisNotAvailableError`).
+- Prompt behaviour analysis: Not yet enabled (`prompt_analysis_available = false`).
+- Final longitudinal findings: Not available (no fake trends, no mock histories, no simulated participant patterns).
 
 ---
 
@@ -146,14 +176,16 @@ psychometric-learning-analytics-framework/
 │   │   ├── component1.py         # /component1/
 │   │   ├── component2.py         # /component2/
 │   │   ├── component3.py         # /component3/
-│   │   └── component4.py         # /component4/
+│   │   ├── component4.py         # /component4/
+│   │   └── framework.py          # /framework/ and /api/framework/*
 │   │
 │   ├── services/
 │   │   ├── __init__.py
 │   │   ├── cognitive_offloading/ # Component 1 service (pending)
 │   │   ├── sem_analysis/         # Component 2 service (pending)
 │   │   ├── longitudinal/         # Component 3 service (pending)
-│   │   └── retention/            # Component 4 service (pending)
+│   │   ├── retention/            # Component 4 service (pending)
+│   │   └── framework/            # Framework integration service layer
 │   │
 │   ├── templates/
 │   │   ├── base.html
