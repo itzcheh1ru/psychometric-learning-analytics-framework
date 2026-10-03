@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Researcher Admin Login | GenAI Learning Evaluation</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .login-wrapper {
+      min-height: calc(100vh - 130px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+    }
+
+    .login-card {
+      background: var(--surface-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 2.25rem 2.5rem;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .login-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      background: #fef3c7;
+      border: 1px solid #fde68a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .login-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 0.35rem;
+    }
+
+    .login-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.75rem;
+      line-height: 1.5;
+    }
+
+    .login-field {
+      margin-bottom: 1.2rem;
+    }
+
+    .login-field label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.4rem;
+    }
+
+    .login-input {
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      font-size: 0.95rem;
+      font-family: inherit;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: #ffffff;
+      color: var(--text-primary);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      min-height: 44px;
+      box-sizing: border-box;
+    }
+
+    .login-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15);
+    }
+
+    .login-input.error {
+      border-color: #dc2626;
+      background-color: #fff5f5;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 0.75rem 1.25rem;
+      font-size: 1rem;
+      font-weight: 600;
+      background-color: var(--primary-color);
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      min-height: 46px;
+      margin-top: 0.5rem;
+      font-family: inherit;
+      transition: background-color 0.15s ease, opacity 0.15s ease;
+    }
+
+    .login-btn:hover:not(:disabled) {
+      background-color: var(--primary-hover);
+    }
+
+    .login-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .error-banner {
+      display: none;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #b91c1c;
+      border-radius: 6px;
+      padding: 0.7rem 1rem;
+      font-size: 0.9rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+    }
+
+    .error-banner.hidden {
+      display: none !important;
+    }
+
+    .security-note {
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .redirect-banner {
+      display: none;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      border-radius: 6px;
+      padding: 0.7rem 1rem;
+      font-size: 0.9rem;
+      margin-bottom: 1.25rem;
+      align-items: flex-start;
+      gap: 0.6rem;
+    }
+
+    .redirect-banner.visible {
+      display: flex;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header & Navigation -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand-wrapper">
+        <span class="brand-label">Academic Research Project</span>
+        <a href="index.html" class="brand-title">Cognitive Engagement &amp; Recall Evaluation</a>
+      </div>
+      <nav class="site-nav">
+        <a href="index.html" class="nav-link">Study Overview</a>
+        <a href="register.html" class="nav-link">Participant Registration</a>
+        <a href="admin_login.html" class="nav-link active" style="font-weight: 700; color: #b45309;">&#128274; Researcher Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Login Wrapper -->
+  <div class="login-wrapper">
+    <div class="login-card">
+      <div class="login-icon">&#128274;</div>
+      <h1 class="login-title">Researcher Admin Login</h1>
+      <p class="login-subtitle">
+        Restricted access. Enter your researcher credentials to access the admin dashboard and experimental dataset exports.
+      </p>
+
+      <!-- Redirect message (shown when arriving from admin_dashboard with no auth) -->
+      <div id="redirectBanner" class="redirect-banner hidden">
+        <span>&#128274;</span>
+        <span id="redirectBannerText">Admin authentication required to access the research dashboard.</span>
+      </div>
+
+      <!-- Error Banner -->
+      <div id="errorBanner" class="error-banner hidden">
+        <span>&#9888;&#65039;</span>
+        <span id="errorBannerText">Invalid username or password. Please try again.</span>
+      </div>
+
+      <!-- Login Form -->
+      <form id="adminLoginForm" autocomplete="off" onsubmit="return false;">
+        <div class="login-field">
+          <label for="adminUsername">Admin Username</label>
+          <input
+            type="text"
+            id="adminUsername"
+            name="adminUsername"
+            class="login-input"
+            placeholder="Enter admin username"
+            autocomplete="username"
+            required
+          >
+        </div>
+
+        <div class="login-field">
+          <label for="adminPassword">Admin Password</label>
+          <input
+            type="password"
+            id="adminPassword"
+            name="adminPassword"
+            class="login-input"
+            placeholder="Enter admin password"
+            autocomplete="current-password"
+            required
+          >
+        </div>
+
+        <button type="submit" id="loginBtn" class="login-btn">
+          &#128274; Sign In to Admin Dashboard
+        </button>
+      </form>
+
+      <div class="security-note">
+        &#128100; This panel is intended for authorized research administrators only.<br>
+        Credentials are verified server-side. Login activity may be monitored.
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>University Final-Year Dissertation Project &bull; Experimental Research Prototype</span>
+      <span>Researcher Admin &amp; Data Pipeline</span>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      // --- If already authenticated, redirect straight to dashboard ---
+      if (sessionStorage.getItem('admin_authenticated') === 'true') {
+        window.location.replace('admin_dashboard.html');
+        return;
+      }
+
+      // --- Show redirect banner if user was bounced from admin_dashboard or just logged out ---
+      const params = new URLSearchParams(window.location.search);
+      const redirectBanner = document.getElementById('redirectBanner');
+      const redirectBannerText = document.getElementById('redirectBannerText');
+      const reason = params.get('reason');
+      if (reason === 'unauthorized' || reason === 'logout') {
+        redirectBanner.classList.remove('hidden');
+        redirectBanner.classList.add('visible');
+        redirectBannerText.textContent =
+          params.get('msg') || 'Admin authentication required to access the research dashboard.';
+      }
+
+      const form = document.getElementById('adminLoginForm');
+      const loginBtn = document.getElementById('loginBtn');
+      const errorBanner = document.getElementById('errorBanner');
+      const errorBannerText = document.getElementById('errorBannerText');
+      const usernameInput = document.getElementById('adminUsername');
+      const passwordInput = document.getElementById('adminPassword');
+
+      function showError(msg) {
+        errorBannerText.textContent = msg || 'Invalid username or password. Please try again.';
+        errorBanner.classList.remove('hidden');
+        usernameInput.classList.add('error');
+        passwordInput.classList.add('error');
+        passwordInput.value = '';
+        passwordInput.focus();
+      }
+
+      function hideError() {
+        errorBanner.classList.add('hidden');
+        usernameInput.classList.remove('error');
+        passwordInput.classList.remove('error');
+      }
+
+      function setLoading(loading) {
+        loginBtn.disabled = loading;
+        loginBtn.textContent = loading
+          ? '⏳ Authenticating…'
+          : '🔐 Sign In to Admin Dashboard';
+      }
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        hideError();
+
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value.trim();
+
+        if (!username || !password) {
+          showError('Please enter both username and password.');
+          return;
+        }
+
+        setLoading(true);
+
+        try {
+          const response = await fetch('/api/admin/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+          });
+
+          const result = await response.json().catch(() => ({}));
+
+          if (response.ok && result.success === true) {
+            // Store admin session — no credentials stored, only auth flag
+            sessionStorage.setItem('admin_authenticated', 'true');
+            window.location.replace('admin_dashboard.html');
+          } else {
+            const msg = result.message || 'Invalid username or password. Please try again.';
+            showError(msg);
+            setLoading(false);
+          }
+        } catch (err) {
+          showError('Unable to reach the server. Please ensure the backend is running.');
+          setLoading(false);
+        }
+      });
+
+      // Clear error on typing
+      [usernameInput, passwordInput].forEach(function (inp) {
+        inp.addEventListener('input', hideError);
+      });
+    })();
+  </script>
+</body>
+</html>

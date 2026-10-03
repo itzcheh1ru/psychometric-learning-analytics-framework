@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Experiment Dashboard | GenAI Learning Evaluation</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Header & Navigation -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand-wrapper">
+        <span class="brand-label">Academic Research Project</span>
+        <a href="index.html" class="brand-title">Cognitive Engagement & Recall Evaluation</a>
+      </div>
+      <nav class="site-nav">
+        <a href="index.html" class="nav-link">Study Overview</a>
+        <a href="register.html" class="nav-link">Participant Registration</a>
+        <a href="dashboard.html" class="nav-link active">Experiment Dashboard</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="page-header">
+      <span class="page-badge">Session Control</span>
+      <h1 class="page-title">Experiment Dashboard</h1>
+      <p class="page-description">
+        Participant session manager and fixed-order phase progression.
+      </p>
+    </div>
+
+    <!-- Global Progress Stepper Container -->
+    <div id="globalProgressContainer"></div>
+
+    <!-- Active Participant Status Bar -->
+    <div class="participant-bar">
+      <div class="participant-info">
+        <div>
+          <div class="meta-label">Participant ID</div>
+          <div class="meta-value" id="displayParticipantId">&mdash;</div>
+        </div>
+        <div>
+          <div class="meta-label">Assigned Group</div>
+          <div class="meta-value" id="displayGroup">&mdash;</div>
+        </div>
+        <div>
+          <div class="meta-label">Assigned Sequence</div>
+          <div class="meta-value" id="displaySequence" style="font-size: 0.9rem;">&mdash;</div>
+        </div>
+        <div>
+          <div class="meta-label">Protocol Status</div>
+          <div class="meta-value" id="displayProtocolStatus" style="color: var(--secondary-color);">&mdash;</div>
+        </div>
+      </div>
+      <div>
+        <a href="register.html" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.4rem 0.8rem;">Change Participant</a>
+      </div>
+    </div>
+
+    <!-- Experiment Completion Percentage Widget -->
+    <div class="completion-widget" id="completionWidget">
+      <div class="completion-header">
+        <div class="completion-title">
+          <span>&#128202;</span>
+          <span>Experiment Completion &amp; Progress Tracker</span>
+        </div>
+        <span class="completion-badge" id="completionOverallBadge">0% Complete &bull; Registration Done</span>
+      </div>
+      <div class="completion-bar-track">
+        <div class="completion-bar-fill" id="completionBarFill" style="width: 0%;"></div>
+      </div>
+      <div class="completion-milestones" id="completionMilestones">
+        <div class="milestone-item done" id="milestoneReg">
+          <span class="milestone-target">&#10003;</span>
+          <span class="milestone-label">Registration</span>
+          <span class="milestone-status">Completed</span>
+        </div>
+        <div class="milestone-item" id="milestoneBrain">
+          <span class="milestone-target" id="milestoneBrainTarget">33%</span>
+          <span class="milestone-label">Brain-Only</span>
+          <span class="milestone-status" id="milestoneBrainStatus">Pending</span>
+        </div>
+        <div class="milestone-item" id="milestoneGenAi">
+          <span class="milestone-target" id="milestoneGenAiTarget">66%</span>
+          <span class="milestone-label">GenAI-Assisted</span>
+          <span class="milestone-status" id="milestoneGenAiStatus">Pending</span>
+        </div>
+        <div class="milestone-item" id="milestoneRecall">
+          <span class="milestone-target" id="milestoneRecallTarget">100%</span>
+          <span class="milestone-label">Delayed Recall</span>
+          <span class="milestone-status" id="milestoneRecallStatus">Pending</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fixed Sequence Workflow Banner -->
+    <div class="sequence-flow-banner" id="sequenceFlowBanner">
+      <div class="sequence-flow-header">
+        <div class="sequence-flow-title">
+          <span>&#9878;</span>
+          <span id="bannerGroupTitle">Fixed Protocol: Brain-Only First</span>
+        </div>
+        <span style="font-size: 0.8rem; color: var(--text-muted);" id="bannerBiasNotice">Brain-Only &rarr; GenAI-Assisted &rarr; Delayed Recall</span>
+      </div>
+      <div class="sequence-steps-track" id="sequenceStepsTrack">
+        <!-- Dynamically rendered steps track -->
+      </div>
+    </div>
+
+    <!-- Before You Begin Guidance Card -->
+    <div class="card" style="border-left: 4px solid var(--accent-color); background: #ffffff; margin-bottom: 1.5rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+        <span style="font-size: 1.25rem;">&#128221;</span>
+        <h2 style="font-size: 1.15rem; color: var(--text-primary); margin: 0;">Before You Begin</h2>
+      </div>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+        Please review the following essential instructions before beginning your experimental session:
+      </p>
+      <ul style="padding-left: 1.25rem; color: var(--text-secondary); font-size: 0.88rem; line-height: 1.8; margin-bottom: 0;">
+        <li><strong>Complete experiment in one sitting:</strong> The study evaluates uninterrupted cognitive processing; please allocate a quiet, continuous session.</li>
+        <li><strong>Follow the required order:</strong> Complete Brain-Only, GenAI-Assisted, and Delayed Recall in sequence.</li>
+        <li><strong>Use GenAI only during permitted phase:</strong> Generative AI tools (e.g. ChatGPT, Gemini, Copilot) are allowed only in the designated AI-assisted condition. External tools are strictly prohibited during independent and recall assessments.</li>
+        <li><strong>Estimated duration: 35–40 minutes:</strong> Covers reading passages, immediate comprehension checks, and the final delayed retention test.</li>
+      </ul>
+    </div>
+
+    <!-- Research Notice -->
+    <div class="research-notice">
+      <span class="notice-icon">&#9432;</span>
+      <div>
+        <strong>Experimental Sequence:</strong> All participants complete Brain-Only first, GenAI-Assisted second, and Delayed Recall third. Each phase is available from the dashboard.
+      </div>
+    </div>
+
+    <!-- Three Experimental Phases Grid -->
+    <section>
+      <h2 style="font-size: 1.3rem; margin-bottom: 0.5rem; color: var(--text-primary);">Experimental Phases</h2>
+      <p style="font-size: 0.92rem; color: var(--text-secondary); margin-bottom: 1.25rem;" id="phaseSectionSubtitle">
+        Complete the phases in order: Brain-Only, GenAI-Assisted, then Delayed Recall.
+      </p>
+
+      <div class="phase-grid" id="phaseGridContainer">
+        
+        <!-- Phase 1: Brain-only Learning Condition -->
+        <div class="phase-card">
+          <div>
+            <div class="phase-header">
+              <span class="phase-number">Phase 01</span>
+              <span class="phase-badge ready">Ready to Begin</span>
+            </div>
+            <h3 class="phase-name">Brain-only Learning Condition</h3>
+            <p class="phase-description">
+              Autonomous cognitive synthesis stage. The participant engages with complex technical reading material without access to AI tools, calculators, or external search. Evaluates organic cognitive encoding.
+            </p>
+            
+            <div class="phase-meta">
+              <div class="phase-meta-item">
+                <span>Modality:</span>
+                <strong>Human-Only (Self-Directed)</strong>
+              </div>
+              <div class="phase-meta-item">
+                <span>Estimated Time:</span>
+                <strong>15 Minutes</strong>
+              </div>
+              <div class="phase-meta-item">
+                <span>Telemetry:</span>
+                <strong>Time-on-task, Reading speed</strong>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <a href="brain_only.html" class="btn btn-primary" id="btnPhase1Action" style="width: 100%;">
+              Start Phase 1 (Brain-Only) &rarr;
+            </a>
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 0.5rem;" id="phase1Notice">
+              Autonomous study & assessment condition
+            </p>
+          </div>
+        </div>
+
+        <!-- Phase 2: GenAI-Assisted Learning Condition -->
+        <div class="phase-card">
+          <div>
+            <div class="phase-header">
+              <span class="phase-number">Phase 02</span>
+              <span class="phase-badge ready">Ready to Begin</span>
+            </div>
+            <h3 class="phase-name">GenAI-Assisted Learning Condition</h3>
+            <p class="phase-description">
+              AI-augmented cognitive stage. The participant studies an equivalent conceptual topic with an embedded conversational GenAI assistant. Evaluates prompt formulation patterns, query frequency, and AI reliance.
+            </p>
+
+            <div class="phase-meta">
+              <div class="phase-meta-item">
+                <span>Modality:</span>
+                <strong>GenAI Co-Pilot (Interactive)</strong>
+              </div>
+              <div class="phase-meta-item">
+                <span>Estimated Time:</span>
+                <strong>15 Minutes</strong>
+              </div>
+              <div class="phase-meta-item">
+                <span>Telemetry:</span>
+                <strong>Prompts, Response times, Tokens</strong>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <a href="genai_assisted.html" class="btn btn-primary" id="btnPhase2Action" style="width: 100%;">
+              Continue Phase 2 (GenAI-Assisted) &rarr;
+            </a>
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 0.5rem;" id="phase2Notice">
+              AI tools permitted during this phase
+            </p>
+          </div>
+        </div>
+
+        <!-- Phase 3: Delayed Recall Test -->
+        <div class="phase-card">
+          <div>
+            <div class="phase-header">
+              <span class="phase-number">Phase 03</span>
+              <span class="phase-badge ready">Ready to Begin</span>
+            </div>
+            <h3 class="phase-name">Delayed Recall Test</h3>
+            <p class="phase-description">
+              Post-intervention retention evaluation. A standardized assessment combining multiple-choice recall questions and short-answer conceptual transfer questions administered after a brief distractor delay.
+            </p>
+
+            <div class="phase-meta">
+              <div class="phase-meta-item">
+                <span>Modality:</span>
+                <strong>Objective Knowledge Assessment</strong>
+              </div>
+              <div class="phase-meta-item">
+                <span>Estimated Time:</span>
+                <strong>10 Minutes</strong>
+              </div>
+              <div class="phase-meta-item">
+                <span>Metrics:</span>
+                <strong>Accuracy, Confidence score, Retention rate</strong>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <a href="delayed_recall.html" class="btn btn-primary" id="btnPhase3Action" style="width: 100%;">
+              Start Step 3 (Delayed Recall) &rarr;
+            </a>
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 0.5rem;" id="phase3Notice">
+              Available from the dashboard
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Researcher Observation & Telemetry Preview -->
+    <div class="card" style="margin-top: 2rem;">
+      <h3 class="card-title" style="font-size: 1.1rem;">Data Collection Telemetry Monitor (Preview)</h3>
+      <p class="card-subtitle">Telemetry pipeline status for backend integration.</p>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+        <div style="background: var(--background-bg); padding: 0.75rem 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+          <div class="meta-label">Database Target</div>
+          <div style="font-weight: 600; font-size: 0.9rem; margin-top: 0.2rem;">research.db (SQLite)</div>
+        </div>
+        <div style="background: var(--background-bg); padding: 0.75rem 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+          <div class="meta-label">Backend Service</div>
+          <div style="font-weight: 600; font-size: 0.9rem; margin-top: 0.2rem;">Flask REST API (/api/...)</div>
+        </div>
+        <div style="background: var(--background-bg); padding: 0.75rem 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+          <div class="meta-label">Current State</div>
+          <div style="font-weight: 600; font-size: 0.9rem; margin-top: 0.2rem; color: var(--secondary-color);">Step 1: Scaffolding Complete</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>University Final-Year Dissertation Project &bull; Experimental Research Prototype</span>
+      <span><a href="admin_dashboard.html" style="color: var(--text-muted); text-decoration: underline; font-size: 0.8rem;">Researcher Dashboard</a></span>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

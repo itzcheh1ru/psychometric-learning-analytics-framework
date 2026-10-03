@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phase 3: Delayed Recall & Retention Evaluation | GenAI Learning Evaluation</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand-wrapper">
+        <span class="brand-label">Academic Research Project &bull; Phase 3</span>
+        <a href="dashboard.html" class="brand-title">Cognitive Engagement & Recall Evaluation</a>
+      </div>
+      <nav class="site-nav">
+        <a href="dashboard.html" class="nav-link">&larr; Back to Dashboard</a>
+        <span class="nav-link active">Delayed Recall Test</span>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="page-header">
+      <span class="page-badge ready" style="background-color: #fef3c7; color: #92400e;">
+        Phase 3: Retention & Recall Assessment
+      </span>
+      <h1 class="page-title">Delayed Recall and Learning Retention Evaluation</h1>
+      <p class="page-description">
+        This final evaluation phase measures long-term conceptual retention, memory decay, and cognitive ownership comparing the Brain-Only and GenAI-Assisted conditions.
+      </p>
+    </div>
+
+    <!-- Global Progress Stepper Container -->
+    <div id="globalProgressContainer"></div>
+
+    <!-- Phase Guidance Card -->
+    <div class="phase-guidance-card">
+      <div class="phase-guidance-header">
+        <span class="phase-guidance-title">&#129505; Experimental Phase Guidance: Delayed Knowledge Retention</span>
+        <span class="time-estimate-badge">&#9201; Estimated Duration: ~10 Minutes</span>
+      </div>
+      <p class="phase-guidance-desc">
+        This final evaluation measures Brain-Only delayed recall and cognitive ownership. Complete the single recall assessment from memory without using AI tools or external notes.
+      </p>
+      <div class="phase-guidance-meta">
+        <span class="modality-badge">&#128221; Modality: Objective Memory Retrieval (No AI / External Aids)</span>
+        <span class="modality-badge" style="background: rgba(245, 158, 11, 0.1); color: #b45309;">&#128203; Format: 10 MCQs &bull; 2 Short Answers &bull; Reflection</span>
+      </div>
+    </div>
+
+    <!-- Strict Academic Condition Notice -->
+    <div class="research-notice ethical">
+      <span class="notice-icon">&#9888;</span>
+      <div>
+        <strong>Experimental Testing Protocol:</strong> Please answer the following questions <strong>without using Generative AI or external resources</strong>. 
+        Your responses must reflect solely your personal memory and conceptual recall.
+      </div>
+    </div>
+
+    <!-- Active Participant State Bar -->
+    <div class="participant-bar">
+      <div class="participant-info">
+        <div>
+          <div class="meta-label">Participant ID</div>
+          <div class="meta-value" id="displayParticipantId">&mdash;</div>
+        </div>
+        <div>
+          <div class="meta-label">Phase 1 Immediate Baseline</div>
+          <div class="meta-value" id="dispP1Immediate">Recorded</div>
+        </div>
+        <div>
+          <div class="meta-label">Phase 2 Immediate Baseline</div>
+          <div class="meta-value" id="dispP2Immediate">Recorded</div>
+        </div>
+        <div>
+          <div class="meta-label">Evaluation State</div>
+          <div class="meta-value" style="color: var(--secondary-color);">Delayed Post-Test Active</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Multi-Step Progress Tracker -->
+    <div class="experiment-stepper">
+      <div class="step-item active" id="stepIndicator1">
+        <span class="step-badge">1</span>
+        <span>Brain-Only Recall</span>
+      </div>
+      <div class="step-item" id="stepIndicator2">
+        <span class="step-badge">2</span>
+        <span>Cognitive Reflection & Ownership</span>
+      </div>
+      <div class="step-item" id="stepIndicator3">
+        <span class="step-badge">3</span>
+        <span>Retention Dashboard</span>
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         SECTION 1: Brain-Only Retention Test (Phase 1 Material)
+         ========================================================================= -->
+    <section id="section1-container">
+      <div class="card" style="border-left: 4px solid var(--primary-color);">
+        <div class="phase-number" style="color: var(--primary-color);">Delayed Recall Assessment</div>
+        <h2 class="card-title" style="margin-top: 0.25rem;">
+          Brain-Only Condition Retention Test
+        </h2>
+        <p class="card-subtitle">
+          Recall the same 10 multiple-choice questions and 2 short-answer questions from Step 1, without using AI or external notes.
+        </p>
+      </div>
+
+      <!-- Quiz Progress Tracker Section 1 -->
+      <div class="quiz-progress-wrap" id="delayedSection1ProgressWrap">
+        <div class="quiz-progress-meta">
+          <span>Section 1 Progress (Brain-Only Recall)</span>
+          <strong id="delayedSection1ProgressText">0 of 10 MCQs answered</strong>
+        </div>
+        <div class="quiz-progress-bar-bg">
+          <div class="quiz-progress-bar-fill" id="delayedSection1ProgressBar" style="width: 0%;"></div>
+        </div>
+        <div class="q-pill-tracker" id="delayedSection1PillTracker"></div>
+      </div>
+
+      <form id="formSection1" novalidate onsubmit="return handleSection1Submit(event)">
+        <div class="assessment-section">
+
+          <!-- Q1 -->
+          <div class="question-card">
+            <div class="question-number">Question 01 &bull; Recall</div>
+            <div class="question-prompt">Which planet is known as the Red Planet?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_1" value="A" required>
+                <span>A. Venus</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_1" value="B">
+                <span>B. Mars</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_1" value="C">
+                <span>C. Jupiter</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_1" value="D">
+                <span>D. Mercury</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Q2 -->
+          <div class="question-card">
+            <div class="question-number">Question 02 &bull; Recall</div>
+            <div class="question-prompt">What is the main purpose of the Internet?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_2" value="A" required>
+                <span>A. Enable global data communication and resource sharing by connecting computers and networks worldwide</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_2" value="B">
+                <span>B. To store electricity</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_2" value="C">
+                <span>C. To replace computer hardware</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_2" value="D">
+                <span>D. To increase battery capacity</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Q3 -->
+          <div class="question-card">
+            <div class="question-number">Question 03 &bull; Concept Understanding</div>
+            <div class="question-prompt">Which organ is mainly responsible for pumping blood through the human body?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_3" value="A" required>
+                <span>A. Brain</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_3" value="B">
+                <span>B. Liver</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_3" value="C">
+                <span>C. Heart</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_3" value="D">
+                <span>D. Kidney</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Q4 -->
+          <div class="question-card">
+            <div class="question-number">Question 04 &bull; Concept Understanding</div>
+            <div class="question-prompt">What does CPU stand for?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_4" value="A" required>
+                <span>A. Central Processing Unit</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_4" value="B">
+                <span>B. Computer Personal Unit</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_4" value="C">
+                <span>C. Central Program Utility</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_4" value="D">
+                <span>D. Computer Processing User</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Q5 -->
+          <div class="question-card">
+            <div class="question-number">Question 05 &bull; Concept Understanding</div>
+            <div class="question-prompt">Which gas is most abundant in Earth's atmosphere?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_5" value="A" required>
+                <span>A. Oxygen</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_5" value="B">
+                <span>B. Carbon dioxide</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_5" value="C">
+                <span>C. Nitrogen</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_5" value="D">
+                <span>D. Hydrogen</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Q6 -->
+          <div class="question-card">
+            <div class="question-number">Question 06 &bull; Application Ability</div>
+            <div class="question-prompt">What is the primary purpose of education?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_6" value="A" required>
+                <span>A. Only to obtain certificates</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_6" value="B">
+                <span>B. To develop knowledge, skills, and understanding</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_6" value="C">
+                <span>C. Only to obtain employment</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_6" value="D">
+                <span>D. To memorize information</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Q7 -->
+          <div class="question-card">
+            <div class="question-number">Question 07 &bull; Recall</div>
+            <div class="question-prompt">Which of the following is an example of renewable energy?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_7" value="A" required>
+                <span>A. Coal</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_7" value="B">
+                <span>B. Petroleum</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_7" value="C">
+                <span>C. Solar energy</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_7" value="D">
+                <span>D. Natural gas</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Q8 -->
+          <div class="question-card">
+            <div class="question-number">Question 08 &bull; Concept Understanding</div>
+            <div class="question-prompt">What is the purpose of a password?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_8" value="A" required>
+                <span>A. To increase internet speed</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_8" value="B">
+                <span>B. To protect access to information or systems</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_8" value="C">
+                <span>C. To increase computer storage</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_8" value="D">
+                <span>D. To improve screen quality</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Q9 -->
+          <div class="question-card">
+            <div class="question-number">Question 09 &bull; Application Ability</div>
+            <div class="question-prompt">Which skill is most important when evaluating information from different sources?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_9" value="A" required>
+                <span>A. Critical thinking</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_9" value="B">
+                <span>B. Typing speed</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_9" value="C">
+                <span>C. Memorization</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_9" value="D">
+                <span>D. Drawing</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Q10 -->
+          <div class="question-card">
+            <div class="question-number">Question 10 &bull; Concept Understanding</div>
+            <div class="question-prompt">What is the main purpose of recycling?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_10" value="A" required>
+                <span>A. To increase waste</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_10" value="B">
+                <span>B. To reuse materials and reduce waste</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_10" value="C">
+                <span>C. To increase energy consumption</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p1_mcq_10" value="D">
+                <span>D. To produce more pollution</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Short Answer 1 -->
+          <div class="question-card">
+            <div class="question-number">Question 11 &bull; Conceptual Retention</div>
+            <div class="question-prompt">Explain two ways technology has changed the way university students learn.</div>
+            <textarea 
+              id="p1ShortAnswer1" 
+              class="short-answer-area" 
+              placeholder="Type your explanation from memory..." 
+              required
+            ></textarea>
+          </div>
+
+          <!-- Short Answer 2 -->
+          <div class="question-card">
+            <div class="question-number">Question 12 &bull; Application & Contrast</div>
+            <div class="question-prompt">Why is critical thinking important when making decisions or evaluating information?</div>
+            <textarea 
+              id="p1ShortAnswer2" 
+              class="short-answer-area" 
+              placeholder="Type your comparison from memory..." 
+              required
+            ></textarea>
+          </div>
+
+        </div>
+
+        <div class="btn-group" style="margin-top: 2rem;">
+          <button type="submit" class="btn btn-primary">
+            Submit Recall & Continue to Reflection &rarr;
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- =========================================================================
+         SECTION 2: GenAI-Assisted Retention Test (Phase 2 Material)
+         ========================================================================= -->
+    <section id="section2-container" style="display: none;">
+      <div class="card" style="border-left: 4px solid var(--secondary-color);">
+        <div class="phase-number" style="color: var(--secondary-color);">Section 02 of 02</div>
+        <h2 class="card-title" style="margin-top: 0.25rem;">
+          GenAI-Assisted Condition Retention Test
+        </h2>
+        <p class="card-subtitle">
+          Recall the same 10 multiple-choice questions and 2 short-answer questions from Step 2, without using AI or external notes.
+        </p>
+      </div>
+
+      <!-- Quiz Progress Tracker Section 2 -->
+      <div class="quiz-progress-wrap" id="delayedSection2ProgressWrap">
+        <div class="quiz-progress-meta">
+          <span>Section 2 Progress (GenAI-Assisted Recall)</span>
+          <strong id="delayedSection2ProgressText">0 of 10 MCQs answered</strong>
+        </div>
+        <div class="quiz-progress-bar-bg">
+          <div class="quiz-progress-bar-fill" id="delayedSection2ProgressBar" style="width: 0%;"></div>
+        </div>
+        <div class="q-pill-tracker" id="delayedSection2PillTracker"></div>
+      </div>
+
+      <form id="formSection2" novalidate onsubmit="return handleSection2Submit(event)">
+        <div class="assessment-section">
+
+          <!-- Q1 -->
+          <div class="question-card">
+            <div class="question-number">Question 01 &bull; Concept Recall</div>
+            <div class="question-prompt">Which planet is known as the Red Planet?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_1" value="A" required>
+                <span>A. Venus</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_1" value="B">
+                <span>B. Mars</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_1" value="C">
+                <span>C. Jupiter</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_1" value="D">
+                <span>D. Mercury</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Q2 -->
+          <div class="question-card">
+            <div class="question-number">Question 02 &bull; Concept Understanding</div>
+            <div class="question-prompt">What is the main purpose of the Internet?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_2" value="A" required>
+                <span>A. Enable global data communication and resource sharing by connecting computers and networks worldwide</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_2" value="B">
+                <span>B. To store electricity</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_2" value="C">
+                <span>C. To replace computer hardware</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_2" value="D">
+                <span>D. To increase battery capacity</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Q3 -->
+          <div class="question-card">
+            <div class="question-number">Question 03 &bull; Concept Recall</div>
+            <div class="question-prompt">Which organ is mainly responsible for pumping blood through the human body?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_3" value="A" required>
+                <span>A. Brain</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_3" value="B">
+                <span>B. Liver</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_3" value="C">
+                <span>C. Heart</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_3" value="D">
+                <span>D. Kidney</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Q4 -->
+          <div class="question-card">
+            <div class="question-number">Question 04 &bull; Concept Understanding</div>
+            <div class="question-prompt">What does CPU stand for?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_4" value="A" required>
+                <span>A. Central Processing Unit</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_4" value="B">
+                <span>B. Computer Personal Unit</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_4" value="C">
+                <span>C. Central Program Utility</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_4" value="D">
+                <span>D. Computer Processing User</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Q5 -->
+          <div class="question-card">
+            <div class="question-number">Question 05 &bull; Concept Recall</div>
+            <div class="question-prompt">Which gas is most abundant in Earth's atmosphere?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_5" value="A" required>
+                <span>A. Oxygen</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_5" value="B">
+                <span>B. Carbon dioxide</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_5" value="C">
+                <span>C. Nitrogen</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_5" value="D">
+                <span>D. Hydrogen</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Q6 -->
+          <div class="question-card">
+            <div class="question-number">Question 06 &bull; Concept Understanding</div>
+            <div class="question-prompt">What is the primary purpose of education?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_6" value="A" required>
+                <span>A. Only to obtain certificates</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_6" value="B">
+                <span>B. To develop knowledge, skills, and understanding</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_6" value="C">
+                <span>C. Only to obtain employment</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_6" value="D">
+                <span>D. To memorize information</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Q7 -->
+          <div class="question-card">
+            <div class="question-number">Question 07 &bull; Concept Recall</div>
+            <div class="question-prompt">Which of the following is an example of renewable energy?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_7" value="A" required>
+                <span>A. Coal</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_7" value="B">
+                <span>B. Petroleum</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_7" value="C">
+                <span>C. Solar energy</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_7" value="D">
+                <span>D. Natural gas</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Q8 -->
+          <div class="question-card">
+            <div class="question-number">Question 08 &bull; Concept Understanding</div>
+            <div class="question-prompt">What is the purpose of a password?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_8" value="A" required>
+                <span>A. To increase internet speed</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_8" value="B">
+                <span>B. To protect access to information or systems</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_8" value="C">
+                <span>C. To increase computer storage</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_8" value="D">
+                <span>D. To improve screen quality</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Q9 -->
+          <div class="question-card">
+            <div class="question-number">Question 09 &bull; Application Ability</div>
+            <div class="question-prompt">Which skill is most important when evaluating information from different sources?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_9" value="A" required>
+                <span>A. Critical thinking</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_9" value="B">
+                <span>B. Typing speed</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_9" value="C">
+                <span>C. Memorization</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_9" value="D">
+                <span>D. Drawing</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Q10 -->
+          <div class="question-card">
+            <div class="question-number">Question 10 &bull; Application Ability</div>
+            <div class="question-prompt">What is the main purpose of recycling?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_10" value="A" required>
+                <span>A. To increase waste</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_10" value="B">
+                <span>B. To reuse materials and reduce waste</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_10" value="C">
+                <span>C. To increase energy consumption</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="p2_mcq_10" value="D">
+                <span>D. To produce more pollution</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Short Answer 1 -->
+          <div class="question-card">
+            <div class="question-number">Question 11 &bull; Conceptual Retention</div>
+            <div class="question-prompt">Explain two ways technology has changed the way university students learn.</div>
+            <textarea 
+              id="p2ShortAnswer1" 
+              class="short-answer-area" 
+              placeholder="Type your explanation from memory..." 
+              required
+            ></textarea>
+          </div>
+
+          <!-- Short Answer 2 -->
+          <div class="question-card">
+            <div class="question-number">Question 12 &bull; Application & Synthesis</div>
+            <div class="question-prompt">Why is critical thinking important when making decisions or evaluating information?</div>
+            <textarea 
+              id="p2ShortAnswer2" 
+              class="short-answer-area" 
+              placeholder="Type your explanation from memory..." 
+              required
+            ></textarea>
+          </div>
+
+        </div>
+
+        <div class="btn-group" style="margin-top: 2rem;">
+          <button type="submit" class="btn btn-primary">
+            Submit
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- =========================================================================
+         STAGE 3: Ownership & Cognitive Reflection (1-5 Likert Scales)
+         ========================================================================= -->
+    <section id="stage3-container" style="display: none;">
+      <div class="research-notice ethical">
+        <span class="notice-icon">&#9432;</span>
+        <div>
+          <strong>Cognitive Ownership & Metacognitive Reflection:</strong> Reflect upon your overall learning journey across the experiment and rate the following statements on a 1–5 scale (1: Strongly Disagree &rarr; 5: Strongly Agree).
+        </div>
+      </div>
+
+      <form id="likertForm" novalidate onsubmit="return handleLikertSubmit(event)">
+        
+        <!-- Likert 1: Explanation Autonomy -->
+        <div class="likert-card">
+          <div class="likert-question">1. I can explain this topic using my own understanding.</div>
+          <div class="likert-description">Assessing autonomous cognitive synthesis and mastery over the domain concepts.</div>
+          <div class="likert-scale">
+            <label class="likert-option">
+              <input type="radio" name="explanationScore" value="1" required>
+              <span class="likert-val">1</span>
+              <span class="likert-label">Strongly Disagree</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="explanationScore" value="2">
+              <span class="likert-val">2</span>
+              <span class="likert-label">Disagree</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="explanationScore" value="3">
+              <span class="likert-val">3</span>
+              <span class="likert-label">Neutral</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="explanationScore" value="4">
+              <span class="likert-val">4</span>
+              <span class="likert-label">Agree</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="explanationScore" value="5">
+              <span class="likert-val">5</span>
+              <span class="likert-label">Strongly Agree</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Likert 2: Memory Recall -->
+        <div class="likert-card">
+          <div class="likert-question">2. I remember the main concepts without external assistance.</div>
+          <div class="likert-description">Self-assessed memory durability and recall retention over time.</div>
+          <div class="likert-scale">
+            <label class="likert-option">
+              <input type="radio" name="rememberScore" value="1" required>
+              <span class="likert-val">1</span>
+              <span class="likert-label">Strongly Disagree</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="rememberScore" value="2">
+              <span class="likert-val">2</span>
+              <span class="likert-label">Disagree</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="rememberScore" value="3">
+              <span class="likert-val">3</span>
+              <span class="likert-label">Neutral</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="rememberScore" value="4">
+              <span class="likert-val">4</span>
+              <span class="likert-label">Agree</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="rememberScore" value="5">
+              <span class="likert-val">5</span>
+              <span class="likert-label">Strongly Agree</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Likert 3: Knowledge Ownership -->
+        <div class="likert-card">
+          <div class="likert-question">3. I feel the knowledge was personally learned by me.</div>
+          <div class="likert-description">Cognitive ownership index evaluating internalized self-attribution versus external attribution.</div>
+          <div class="likert-scale">
+            <label class="likert-option">
+              <input type="radio" name="ownershipScore" value="1" required>
+              <span class="likert-val">1</span>
+              <span class="likert-label">Strongly Disagree</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="ownershipScore" value="2">
+              <span class="likert-val">2</span>
+              <span class="likert-label">Disagree</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="ownershipScore" value="3">
+              <span class="likert-val">3</span>
+              <span class="likert-label">Neutral</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="ownershipScore" value="4">
+              <span class="likert-val">4</span>
+              <span class="likert-label">Agree</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="ownershipScore" value="5">
+              <span class="likert-val">5</span>
+              <span class="likert-label">Strongly Agree</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Likert 4: Cognitive Dependency -->
+        <div class="likert-card">
+          <div class="likert-question">4. I depended on external help to understand this topic.</div>
+          <div class="likert-description">Cognitive reliance measurement evaluating dependence on external resources or AI tools.</div>
+          <div class="likert-scale">
+            <label class="likert-option">
+              <input type="radio" name="dependencyScore" value="1" required>
+              <span class="likert-val">1</span>
+              <span class="likert-label">Strongly Disagree</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="dependencyScore" value="2">
+              <span class="likert-val">2</span>
+              <span class="likert-label">Disagree</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="dependencyScore" value="3">
+              <span class="likert-val">3</span>
+              <span class="likert-label">Neutral</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="dependencyScore" value="4">
+              <span class="likert-val">4</span>
+              <span class="likert-label">Agree</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="dependencyScore" value="5">
+              <span class="likert-val">5</span>
+              <span class="likert-label">Strongly Agree</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="btn-group" style="margin-top: 2rem;">
+          <button type="submit" class="btn btn-primary" id="btnFinalizeRetention">
+            Calculate Retention & Finalize Evaluation &rarr;
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- =========================================================================
+         STAGE 4: Retention Comparison Dashboard
+         ========================================================================= -->
+    <section id="stage4-container" style="display: none;">
+      <div class="results-modal-card">
+        <span class="page-badge ready" style="background-color: var(--tag-success-bg); color: var(--tag-success-text);">
+          Experiment Completed &bull; Final Retention Analysis
+        </span>
+        <h2 style="font-size: 1.6rem; color: var(--primary-color); margin-top: 0.5rem;">
+          Delayed Recall Results
+        </h2>
+        <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+          Brain-Only delayed recall results and cognitive reflection. GenAI delayed recall was not assessed.
+        </p>
+
+        <!-- Big Metric Retention Rate Highlights -->
+        <div class="score-stats-grid" style="margin: 2rem 0;">
+          <div class="score-stat-box" style="border-top: 4px solid var(--primary-color);">
+            <div class="stat-num" id="dispBrainRetention">0%</div>
+            <div class="stat-desc">Brain-Only Retention</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">
+              Delayed (<span id="dispP1DelayedScore">0</span>) / Immediate (<span id="dispP1ImmScore">0</span>)
+            </div>
+          </div>
+
+          <div class="score-stat-box" style="border-top: 4px solid var(--secondary-color);">
+            <div class="stat-num" id="dispGenAiRetention" style="color: var(--secondary-color);">Not assessed</div>
+            <div class="stat-desc">GenAI-Assisted Retention</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">
+              Delayed (<span id="dispP2DelayedScore">N/A</span>) / Immediate (<span id="dispP2ImmScore">0</span>)
+            </div>
+          </div>
+
+          <div class="score-stat-box" style="border-top: 4px solid var(--accent-color);">
+            <div class="stat-num" id="dispRetentionDiff" style="color: var(--accent-color);">0%</div>
+            <div class="stat-desc">Retention Difference</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;" id="dispDiffDirection">
+              Delta Comparison
+            </div>
+          </div>
+        </div>
+
+        <!-- Detailed Statistical Retention Comparison Table -->
+        <div class="card" style="border: 1px solid var(--border-color);">
+          <h3 style="font-size: 1.15rem; color: var(--primary-color); margin-bottom: 0.5rem;">
+            Comparative Statistical Summary
+          </h3>
+          <p class="card-subtitle">
+            Within-subjects cognitive evaluation across immediate learning and delayed recall conditions.
+          </p>
+
+          <div class="comparison-table-wrapper">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Experimental Metric</th>
+                  <th>Phase 1: Brain-Only</th>
+                  <th>Phase 2: GenAI-Assisted</th>
+                  <th>Observed Difference</th>
+                </tr>
+              </thead>
+              <tbody id="detailedComparisonBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Cognitive Ownership & Dependency Summary -->
+        <div class="card" style="border: 1px solid var(--border-color); margin-top: 1rem;">
+          <h3 style="font-size: 1.15rem; color: var(--primary-color); margin-bottom: 0.5rem;">
+            Cognitive Reflection & Ownership Ratings
+          </h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+            <div style="background: var(--background-bg); padding: 0.75rem 1rem; border-radius: 6px;">
+              <div class="meta-label">Explanation Autonomy</div>
+              <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin-top: 0.25rem;" id="resExplanationRating">0 / 5</div>
+            </div>
+            <div style="background: var(--background-bg); padding: 0.75rem 1rem; border-radius: 6px;">
+              <div class="meta-label">Memory Retention</div>
+              <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin-top: 0.25rem;" id="resRememberRating">0 / 5</div>
+            </div>
+            <div style="background: var(--background-bg); padding: 0.75rem 1rem; border-radius: 6px;">
+              <div class="meta-label">Knowledge Ownership</div>
+              <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin-top: 0.25rem;" id="resOwnershipRating">0 / 5</div>
+            </div>
+            <div style="background: var(--background-bg); padding: 0.75rem 1rem; border-radius: 6px;">
+              <div class="meta-label">Cognitive Dependency</div>
+              <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin-top: 0.25rem;" id="resDependencyRating">0 / 5</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Database Ingestion Status -->
+        <div style="background: var(--background-bg); padding: 1rem 1.25rem; border-radius: 6px; border: 1px solid var(--border-color); margin-top: 1.5rem; margin-bottom: 1.5rem;">
+          <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.25rem;">Server Ingestion Status</div>
+          <div id="resServerStatus" style="font-weight: 600; font-size: 0.95rem; color: var(--secondary-color);">
+            Saving Phase 3 results...
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary" id="btnRetryPhase3Save" onclick="retryPhase3Save()" hidden>
+          Retry saving Phase 3 results
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>University Final-Year Dissertation Project &bull; Experimental Research Platform</span>
+      <span>Phase 3: Delayed Recall & Retention Evaluation</span>
+    </div>
+  </footer>
+
+  <!-- Scripts for Phase 3 Retention Assessment & API Connection -->
+  <script src="js/app.js"></script>
+  <script>
+    // --- Ground-Truth Answer Keys ---
+    const P1_RECALL_KEY = {
+      p1_mcq_1: "B",
+      p1_mcq_2: "A",
+      p1_mcq_3: "C",
+      p1_mcq_4: "A",
+      p1_mcq_5: "C",
+      p1_mcq_6: "B",
+      p1_mcq_7: "C",
+      p1_mcq_8: "B",
+      p1_mcq_9: "A",
+      p1_mcq_10: "B"
+    };
+
+    function validateRecallForm(form) {
+      form.querySelectorAll(".recall-validation-message").forEach(message => message.remove());
+      const invalidField = form.querySelector(":invalid");
+      if (!invalidField) return true;
+
+      const questionCard = invalidField.closest(".question-card, .likert-card");
+      if (questionCard) {
+        const questionLabel = questionCard.querySelector(".question-number, .likert-question")?.textContent.trim() || "this question";
+        const message = document.createElement("div");
+        message.className = "research-notice ethical recall-validation-message";
+        message.setAttribute("role", "alert");
+        message.textContent = `Please answer ${questionLabel} before continuing.`;
+        questionCard.prepend(message);
+        questionCard.scrollIntoView({ behavior: "smooth", block: "center" });
+        invalidField.focus({ preventScroll: true });
+      }
+
+      return false;
+    }
+
+    // State Variables
+    let currentParticipantId = "";
+    let experimentGroup = "A";
+    let brainImmediateScore = 8.0;
+    let genaiImmediateScore = 9.0;
+
+    let brainRecallScore = 0;
+    let genaiRecallScore = null;
+    let pendingPhase3Payload = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // 1. Participant ID & Assigned Group retrieval
+      const storedParticipant = sessionStorage.getItem("currentParticipant");
+      if (storedParticipant) {
+        try {
+          const parsed = JSON.parse(storedParticipant);
+          if (parsed.participantId) {
+            currentParticipantId = parsed.participantId;
+          }
+          if (parsed.experimentGroup) {
+            experimentGroup = parsed.experimentGroup;
+          }
+        } catch (e) {
+          console.warn("Could not read participant session:", e);
+        }
+      }
+      const sessionGroup = sessionStorage.getItem("experiment_group");
+      if (sessionGroup) experimentGroup = sessionGroup;
+
+      document.getElementById("displayParticipantId").textContent = currentParticipantId;
+
+      // 2. Read Immediate Baseline Scores from Phase 1 and Phase 2
+      const storedP1 = sessionStorage.getItem("phase1_score");
+      if (storedP1) {
+        brainImmediateScore = parseFloat(storedP1);
+      }
+      const storedP2 = sessionStorage.getItem("phase2_score");
+      if (storedP2) {
+        genaiImmediateScore = parseFloat(storedP2);
+      }
+
+      document.getElementById("dispP1Immediate").textContent = `${brainImmediateScore} / 10`;
+      document.getElementById("dispP2Immediate").textContent = `${genaiImmediateScore} / 10`;
+
+      // 3. Initialize Unload Warning & Section 1 Progress Tracker
+      setupUnloadWarning("You have an active experimental session in progress. Leaving this page will discard your recall responses.");
+      initQuizProgressTracker("formSection1", 10, "delayedSection1ProgressBar", "delayedSection1ProgressText", "delayedSection1PillTracker");
+    });
+
+    /**
+     * Section 1 Submission: Brain-Only Retention Test
+     */
+    function handleSection1Submit(event) {
+      event.preventDefault();
+      if (!validateRecallForm(event.currentTarget)) return false;
+
+      const confirmed = window.confirm("Are you ready to submit the Brain-Only recall assessment and proceed to reflection measures? You will not be able to revise your answers.");
+      if (!confirmed) return false;
+
+      brainRecallScore = 0;
+      for (let i = 1; i <= 10; i++) {
+        const qKey = `p1_mcq_${i}`;
+        const val = document.querySelector(`input[name="${qKey}"]:checked`)?.value;
+        if (val === P1_RECALL_KEY[qKey]) {
+          brainRecallScore += 1;
+        }
+      }
+
+      // Transition directly to reflection after the single recall section.
+      document.getElementById("section1-container").style.display = "none";
+      document.getElementById("stage3-container").style.display = "block";
+
+      document.getElementById("stepIndicator1").classList.remove("active");
+      document.getElementById("stepIndicator1").classList.add("completed");
+      document.getElementById("stepIndicator2").classList.add("active");
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return false;
+    }
+
+    async function savePhase3Results(payload) {
+      const statusEl = document.getElementById("resServerStatus");
+      const retryButton = document.getElementById("btnRetryPhase3Save");
+      const pendingStorageKey = `phase3_pending_result_${payload.participant_id}`;
+      retryButton.hidden = true;
+      statusEl.textContent = "Saving Phase 3 results...";
+      statusEl.style.color = "var(--text-primary)";
+
+      try {
+        localStorage.setItem(pendingStorageKey, JSON.stringify(payload));
+        markExperimentPhaseComplete("delayed_recall_completed", "phase3_completed");
+        sessionStorage.setItem("brain_retention", String(payload.brain_retention_score));
+        sessionStorage.setItem("genai_retention", "Not assessed");
+        sessionStorage.setItem("retention_diff", "Not assessed");
+
+        const response = await fetch("/api/delayed-recall-result", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+          throw new Error("The server did not save the Phase 3 results.");
+        }
+
+        const result = await response.json().catch(() => ({}));
+  localStorage.removeItem(pendingStorageKey);
+        statusEl.textContent = `Phase 3 saved successfully (Record ID: #${result.result_id || "OK"}). Returning to the dashboard...`;
+        statusEl.style.color = "var(--secondary-color)";
+        window.setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 1200);
+      } catch (error) {
+        console.error("Could not save Phase 3 results:", error);
+        if (localStorage.getItem(pendingStorageKey)) {
+          statusEl.textContent = "Phase 3 is saved on this device. Server sync is pending; returning to the dashboard...";
+          statusEl.style.color = "var(--secondary-color)";
+          window.setTimeout(() => {
+            window.location.href = "dashboard.html";
+          }, 1500);
+        } else {
+          statusEl.textContent = "Phase 3 could not be saved on this device. Please retry.";
+          statusEl.style.color = "var(--error-color, #b91c1c)";
+          retryButton.hidden = false;
+        }
+      }
+    }
+
+    function retryPhase3Save() {
+      if (pendingPhase3Payload) {
+        savePhase3Results(pendingPhase3Payload);
+      }
+    }
+
+    /**
+     * Stage 3 Submission: Cognitive Ownership & API Ingestion
+     */
+    async function handleLikertSubmit(event) {
+      event.preventDefault();
+      if (!validateRecallForm(event.currentTarget)) return false;
+
+      const explanationScore = parseInt(document.querySelector('input[name="explanationScore"]:checked')?.value || "0", 10);
+      const rememberScore = parseInt(document.querySelector('input[name="rememberScore"]:checked')?.value || "0", 10);
+      const ownershipScore = parseInt(document.querySelector('input[name="ownershipScore"]:checked')?.value || "0", 10);
+      const dependencyScore = parseInt(document.querySelector('input[name="dependencyScore"]:checked')?.value || "0", 10);
+
+      // --- Step B: Retention Metric Calculations ---
+      const brainRetentionScore = brainImmediateScore > 0 
+        ? Math.round((brainRecallScore / brainImmediateScore) * 100 * 10) / 10
+        : (brainRecallScore * 10);
+
+      const genaiRetentionScore = null;
+      const retentionDifference = null;
+
+      // Construct Payload
+      const payload = {
+        participant_id: currentParticipantId,
+        brain_immediate_score: brainImmediateScore,
+        brain_recall_score: brainRecallScore,
+        brain_retention_score: brainRetentionScore,
+        genai_immediate_score: genaiImmediateScore,
+        genai_recall_score: genaiRecallScore,
+        genai_retention_score: genaiRetentionScore,
+        ownership_score: ownershipScore,
+        explanation_score: explanationScore,
+        dependency_score: dependencyScore,
+        experiment_group: experimentGroup
+      };
+
+      // Switch to Stage 4 (Dashboard)
+      document.getElementById("stage3-container").style.display = "none";
+      document.getElementById("stage4-container").style.display = "block";
+
+      document.getElementById("stepIndicator2").classList.remove("active");
+      document.getElementById("stepIndicator2").classList.add("completed");
+      document.getElementById("stepIndicator3").classList.add("completed");
+
+      // Populate Visual Dashboards
+      document.getElementById("dispBrainRetention").textContent = `${brainRetentionScore}%`;
+      document.getElementById("dispGenAiRetention").textContent = "Not assessed";
+      document.getElementById("dispP1DelayedScore").textContent = brainRecallScore;
+      document.getElementById("dispP1ImmScore").textContent = brainImmediateScore;
+      document.getElementById("dispP2DelayedScore").textContent = "N/A";
+      document.getElementById("dispP2ImmScore").textContent = genaiImmediateScore;
+
+      document.getElementById("dispRetentionDiff").textContent = "N/A";
+      
+      const diffDirEl = document.getElementById("dispDiffDirection");
+      diffDirEl.textContent = "GenAI delayed recall not assessed";
+
+      // Populate Detailed Statistical Comparison Table
+      const tableBody = document.getElementById("detailedComparisonBody");
+      tableBody.innerHTML = `
+        <tr>
+          <td><strong>Immediate Learning Score</strong></td>
+          <td>${brainImmediateScore} / 10 (${brainImmediateScore * 10}%)</td>
+          <td>${genaiImmediateScore} / 10 (${genaiImmediateScore * 10}%)</td>
+          <td>${genaiImmediateScore - brainImmediateScore >= 0 ? '+' : ''}${genaiImmediateScore - brainImmediateScore} pts</td>
+        </tr>
+        <tr>
+          <td><strong>Delayed Recall Score</strong></td>
+          <td>${brainRecallScore} / 10 (${brainRecallScore * 10}%)</td>
+          <td>Not assessed</td>
+          <td>Not assessed</td>
+        </tr>
+        <tr>
+          <td><strong>Retention Percentage</strong></td>
+          <td><strong style="color: var(--primary-color);">${brainRetentionScore}%</strong></td>
+          <td>Not assessed</td>
+          <td>Not assessed</td>
+        </tr>
+        <tr>
+          <td><strong>Knowledge Decay</strong></td>
+          <td>${Math.max(0, Math.round((brainImmediateScore - brainRecallScore) * 10))}% decay</td>
+          <td>Not assessed</td>
+          <td>Not assessed</td>
+        </tr>
+      `;
+
+      // Reflection Ratings
+      document.getElementById("resExplanationRating").textContent = `${explanationScore} / 5`;
+      document.getElementById("resRememberRating").textContent = `${rememberScore} / 5`;
+      document.getElementById("resOwnershipRating").textContent = `${ownershipScore} / 5`;
+      document.getElementById("resDependencyRating").textContent = `${dependencyScore} / 5`;
+
+      // Stop the active-trial warning while Phase 3 results are being saved.
+      clearUnloadWarning();
+      pendingPhase3Payload = payload;
+      await savePhase3Results(payload);
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return false;
+    }
+  </script>
+</body>
+</html>

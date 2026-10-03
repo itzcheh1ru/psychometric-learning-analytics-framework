@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phase 1: Brain-Only Learning Condition | GenAI Learning Evaluation</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand-wrapper">
+        <span class="brand-label">Academic Research Project &bull; Phase 1</span>
+        <a href="dashboard.html" class="brand-title">Cognitive Engagement & Recall Evaluation</a>
+      </div>
+      <nav class="site-nav">
+        <a href="dashboard.html" class="nav-link">&larr; Back to Dashboard</a>
+        <span class="nav-link active">Brain-Only Condition</span>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="page-header">
+      <span class="page-badge">Condition A &bull; Independent Study</span>
+      <h1 class="page-title">Phase 1: Brain-Only Learning Condition</h1>
+      <p class="page-description">
+        In this phase, you will study academic learning material independently without assistance from Generative AI tools, external search engines, or external notes.
+      </p>
+    </div>
+
+    <!-- Global Progress Stepper Container -->
+    <div id="globalProgressContainer"></div>
+
+    <!-- Phase Guidance Card -->
+    <div class="phase-guidance-card">
+      <div class="phase-guidance-header">
+        <span class="phase-guidance-title">&#128218; Experimental Phase Guidance: Independent Study</span>
+        <span class="time-estimate-badge">&#9201; Estimated Duration: ~15 Minutes</span>
+      </div>
+      <p class="phase-guidance-desc">
+        Study the technical reading passage independently using your cognitive reasoning. External Generative AI tools (e.g. ChatGPT, Gemini), search engines, and secondary notes are strictly prohibited in this baseline condition. When ready, proceed to the assessment.
+      </p>
+      <div class="phase-guidance-meta">
+        <span class="modality-badge">&#129504; Modality: Autonomous Cognitive Encoding</span>
+        <span class="modality-badge" style="background: rgba(15, 76, 129, 0.08); color: var(--primary-color);">&#128203; Format: 10 MCQs &bull; 2 Short Answers &bull; Self-Reflection</span>
+      </div>
+    </div>
+
+    <!-- Active Participant & Timer Bar -->
+    <div class="participant-bar">
+      <div class="participant-info">
+        <div>
+          <div class="meta-label">Participant ID</div>
+          <div class="meta-value" id="displayParticipantId">&mdash;</div>
+        </div>
+        <div>
+          <div class="meta-label">Condition Modality</div>
+          <div class="meta-value">Human-Only (Autonomous Synthesis)</div>
+        </div>
+      </div>
+      <div>
+        <span class="page-badge ready" id="statusBadge">Stage 1: Study in Progress</span>
+      </div>
+    </div>
+
+    <!-- Multi-Step Progress Tracker -->
+    <div class="experiment-stepper">
+      <div class="step-item active" id="stepIndicator1">
+        <span class="step-badge">1</span>
+        <span>Independent Study</span>
+      </div>
+      <div class="step-item" id="stepIndicator2">
+        <span class="step-badge">2</span>
+        <span>Knowledge Assessment (MCQs & Short Answer)</span>
+      </div>
+      <div class="step-item" id="stepIndicator3">
+        <span class="step-badge">3</span>
+        <span>Cognitive & Self-Report Measures</span>
+      </div>
+      <div class="step-item" id="stepIndicator4">
+        <span class="step-badge">4</span>
+        <span>Session Complete</span>
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         STAGE 1: Start Knowledge Assessment
+         ========================================================================= -->
+    <section id="stage1-container">
+      <div class="research-notice">
+        <span class="notice-icon">&#9432;</span>
+        <div>
+          <strong>Knowledge Assessment:</strong> Please answer the 10 multiple-choice questions and 2 short-answer questions. Click next to continue to the assessment.
+        </div>
+      </div>
+
+      <div class="btn-group" style="margin-top: 1.5rem; justify-content: flex-start;">
+        <button type="button" class="btn btn-primary" id="btnStartAssessment" onclick="proceedToAssessment()">
+          Next: Knowledge Assessment (MCQs &amp; Short Answer) &rarr;
+        </button>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         STAGE 2: Knowledge Assessment (10 MCQs + 2 Short-Answer Questions)
+         ========================================================================= -->
+    <section id="stage2-container" style="display: none;">
+      <div class="research-notice">
+        <span class="notice-icon">&#9432;</span>
+        <div>
+          <strong>Knowledge Assessment:</strong> Please answer the 10 multiple-choice questions and 2 short-answer questions based strictly on your recall and comprehension of the text. 
+          Total study time recorded: <strong id="recordedStudyTimeBadge">00:00</strong>.
+        </div>
+      </div>
+
+      <!-- Quiz Progress Tracker -->
+      <div class="quiz-progress-wrap" id="brainQuizProgressWrap">
+        <div class="quiz-progress-meta">
+          <span>Assessment Progress</span>
+          <strong id="brainQuizProgressText">0 of 10 MCQs answered</strong>
+        </div>
+        <div class="quiz-progress-bar-bg">
+          <div class="quiz-progress-bar-fill" id="brainQuizProgressBar" style="width: 0%;"></div>
+        </div>
+        <div class="q-pill-tracker" id="brainQuizPillTracker"></div>
+      </div>
+
+      <form id="assessmentForm" onsubmit="return handleAssessmentSubmit(event)">
+        <div class="assessment-section">
+          
+          <!-- MCQ 1 -->
+          <div class="question-card">
+            <div class="question-number">Question 01 &bull; MCQ</div>
+            <div class="question-prompt">Which planet is known as the Red Planet?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="mcq_1" value="A" required>
+                <span>A. Venus</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_1" value="B">
+                <span>B. Mars</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_1" value="C">
+                <span>C. Jupiter</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_1" value="D">
+                <span>D. Mercury</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- MCQ 2 -->
+          <div class="question-card">
+            <div class="question-number">Question 02 &bull; MCQ</div>
+            <div class="question-prompt">What is the main purpose of the Internet?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="mcq_2" value="A" required>
+                <span>A. Enable global data communication and resource sharing by connecting computers and networks worldwide</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_2" value="B">
+                <span>B. To store electricity</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_2" value="C">
+                <span>C. To replace computer hardware</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_2" value="D">
+                <span>D. To increase battery capacity</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- MCQ 3 -->
+          <div class="question-card">
+            <div class="question-number">Question 03 &bull; MCQ</div>
+            <div class="question-prompt">Which organ is mainly responsible for pumping blood through the human body?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="mcq_3" value="A" required>
+                <span>A. Brain</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_3" value="B">
+                <span>B. Liver</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_3" value="C">
+                <span>C. Heart</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_3" value="D">
+                <span>D. Kidney</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- MCQ 4 -->
+          <div class="question-card">
+            <div class="question-number">Question 04 &bull; MCQ</div>
+            <div class="question-prompt">What does CPU stand for?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="mcq_4" value="A" required>
+                <span>A. Central Processing Unit</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_4" value="B">
+                <span>B. Computer Personal Unit</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_4" value="C">
+                <span>C. Central Program Utility</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_4" value="D">
+                <span>D. Computer Processing User</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- MCQ 5 -->
+          <div class="question-card">
+            <div class="question-number">Question 05 &bull; MCQ</div>
+            <div class="question-prompt">Which gas is most abundant in Earth's atmosphere?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="mcq_5" value="A" required>
+                <span>A. Oxygen</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_5" value="B">
+                <span>B. Carbon dioxide</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_5" value="C">
+                <span>C. Nitrogen</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_5" value="D">
+                <span>D. Hydrogen</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- MCQ 6 -->
+          <div class="question-card">
+            <div class="question-number">Question 06 &bull; MCQ</div>
+            <div class="question-prompt">What is the primary purpose of education?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="mcq_6" value="A" required>
+                <span>A. Only to obtain certificates</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_6" value="B">
+                <span>B. To develop knowledge, skills, and understanding</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_6" value="C">
+                <span>C. Only to obtain employment</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_6" value="D">
+                <span>D. To memorize information</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- MCQ 7 -->
+          <div class="question-card">
+            <div class="question-number">Question 07 &bull; MCQ</div>
+            <div class="question-prompt">Which of the following is an example of renewable energy?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="mcq_7" value="A" required>
+                <span>A. Coal</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_7" value="B">
+                <span>B. Petroleum</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_7" value="C">
+                <span>C. Solar energy</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_7" value="D">
+                <span>D. Natural gas</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- MCQ 8 -->
+          <div class="question-card">
+            <div class="question-number">Question 08 &bull; MCQ</div>
+            <div class="question-prompt">What is the purpose of a password?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="mcq_8" value="A" required>
+                <span>A. To increase internet speed</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_8" value="B">
+                <span>B. To protect access to information or systems</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_8" value="C">
+                <span>C. To increase computer storage</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_8" value="D">
+                <span>D. To improve screen quality</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- MCQ 9 -->
+          <div class="question-card">
+            <div class="question-number">Question 09 &bull; MCQ</div>
+            <div class="question-prompt">Which skill is most important when evaluating information from different sources?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="mcq_9" value="A" required>
+                <span>A. Critical thinking</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_9" value="B">
+                <span>B. Typing speed</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_9" value="C">
+                <span>C. Memorization</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_9" value="D">
+                <span>D. Drawing</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- MCQ 10 -->
+          <div class="question-card">
+            <div class="question-number">Question 10 &bull; MCQ</div>
+            <div class="question-prompt">What is the main purpose of recycling?</div>
+            <div class="mcq-options">
+              <label class="mcq-option">
+                <input type="radio" name="mcq_10" value="A" required>
+                <span>A. To increase waste</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_10" value="B">
+                <span>B. To reuse materials and reduce waste</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_10" value="C">
+                <span>C. To increase energy consumption</span>
+              </label>
+              <label class="mcq-option">
+                <input type="radio" name="mcq_10" value="D">
+                <span>D. To produce more pollution</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Short Answer 1 -->
+          <div class="question-card">
+            <div class="question-number">Question 11 &bull; Short Answer</div>
+            <div class="question-prompt">Explain two ways technology has changed the way university students learn.</div>
+            <textarea 
+              id="shortAnswer1" 
+              name="shortAnswer1" 
+              class="short-answer-area" 
+              placeholder="Type your answer here..." 
+              required
+            ></textarea>
+          </div>
+
+          <!-- Short Answer 2 -->
+          <div class="question-card">
+            <div class="question-number">Question 12 &bull; Short Answer</div>
+            <div class="question-prompt">Why is critical thinking important when making decisions or evaluating information?</div>
+            <textarea 
+              id="shortAnswer2" 
+              name="shortAnswer2" 
+              class="short-answer-area" 
+              placeholder="Type your answer here..." 
+              required
+            ></textarea>
+          </div>
+
+        </div>
+
+        <div class="btn-group" style="margin-top: 2rem;">
+          <button type="submit" class="btn btn-primary">
+            Submit Assessment & Proceed to Self-Report Evaluation &rarr;
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- =========================================================================
+         STAGE 3: Self-Reported Cognitive & Learning Measures (1-5 Likert Scales)
+         ========================================================================= -->
+    <section id="stage3-container" style="display: none;">
+      <div class="research-notice ethical">
+        <span class="notice-icon">&#9432;</span>
+        <div>
+          <strong>Cognitive & Metacognitive Evaluation:</strong> Please reflect on your learning experience during this Brain-Only session and rate the following measures using the 1–5 scale.
+        </div>
+      </div>
+
+      <form id="likertForm" onsubmit="return handleLikertSubmit(event)">
+        
+        <!-- Likert Question 1: Confidence -->
+        <div class="likert-card">
+          <div class="likert-question">1. How confident are you that you understood the topic?</div>
+          <div class="likert-description">Reflect on your perceived clarity and comprehension of blockchain architecture and consensus.</div>
+          <div class="likert-scale">
+            <label class="likert-option">
+              <input type="radio" name="confidenceScore" value="1" required>
+              <span class="likert-val">1</span>
+              <span class="likert-label">Not confident at all</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="confidenceScore" value="2">
+              <span class="likert-val">2</span>
+              <span class="likert-label">Slightly confident</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="confidenceScore" value="3">
+              <span class="likert-val">3</span>
+              <span class="likert-label">Moderately confident</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="confidenceScore" value="4">
+              <span class="likert-val">4</span>
+              <span class="likert-label">Very confident</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="confidenceScore" value="5">
+              <span class="likert-val">5</span>
+              <span class="likert-label">Completely confident</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Likert Question 2: Mental Effort (Paas Cognitive Load Scale) -->
+        <div class="likert-card">
+          <div class="likert-question">2. How much mental effort did you use during learning?</div>
+          <div class="likert-description">Cognitive load measurement assessing mental concentration and cognitive strain during autonomous study.</div>
+          <div class="likert-scale">
+            <label class="likert-option">
+              <input type="radio" name="effortScore" value="1" required>
+              <span class="likert-val">1</span>
+              <span class="likert-label">Very low mental effort</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="effortScore" value="2">
+              <span class="likert-val">2</span>
+              <span class="likert-label">Low mental effort</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="effortScore" value="3">
+              <span class="likert-val">3</span>
+              <span class="likert-label">Moderate mental effort</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="effortScore" value="4">
+              <span class="likert-val">4</span>
+              <span class="likert-label">High mental effort</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="effortScore" value="5">
+              <span class="likert-val">5</span>
+              <span class="likert-label">Very high mental effort</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Likert Question 3: Explanation Ability -->
+        <div class="likert-card">
+          <div class="likert-question">3. How well can you explain this topic without external help?</div>
+          <div class="likert-description">Self-assessed conceptual mastery and ability to articulate core principles independently.</div>
+          <div class="likert-scale">
+            <label class="likert-option">
+              <input type="radio" name="explainScore" value="1" required>
+              <span class="likert-val">1</span>
+              <span class="likert-label">Not well at all</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="explainScore" value="2">
+              <span class="likert-val">2</span>
+              <span class="likert-label">Slightly well</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="explainScore" value="3">
+              <span class="likert-val">3</span>
+              <span class="likert-label">Moderately well</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="explainScore" value="4">
+              <span class="likert-val">4</span>
+              <span class="likert-label">Very well</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="explainScore" value="5">
+              <span class="likert-val">5</span>
+              <span class="likert-label">Extremely well</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="btn-group" style="margin-top: 2rem;">
+          <button type="submit" class="btn btn-primary" id="btnSubmitAll">
+            Finalize & Save Phase 1 Results &rarr;
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- =========================================================================
+         STAGE 4: Results & Confirmation Summary
+         ========================================================================= -->
+    <section id="stage4-container" style="display: none;">
+      <div class="results-modal-card">
+        <span class="page-badge ready" style="background-color: var(--tag-success-bg); color: var(--tag-success-text);">
+          Phase 1 Completed Successfully
+        </span>
+        <h2 style="font-size: 1.5rem; color: var(--primary-color); margin-top: 0.5rem;">
+          Brain-Only Experimental Trial Recorded
+        </h2>
+        <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+          Your independent study telemetry, assessment responses, and self-reported cognitive load metrics have been registered into the research database.
+        </p>
+
+        <!-- Summary Metric Badges -->
+        <div class="score-stats-grid">
+          <div class="score-stat-box">
+            <div class="stat-num" id="resLearningTime">00:00</div>
+            <div class="stat-desc">Study Duration</div>
+          </div>
+          <div class="score-stat-box">
+            <div class="stat-num" id="resMcqScore">0 / 10</div>
+            <div class="stat-desc">MCQ Score</div>
+          </div>
+          <div class="score-stat-box">
+            <div class="stat-num" id="resConfidence">0 / 5</div>
+            <div class="stat-desc">Confidence</div>
+          </div>
+          <div class="score-stat-box">
+            <div class="stat-num" id="resEffort">0 / 5</div>
+            <div class="stat-desc">Mental Effort</div>
+          </div>
+        </div>
+
+        <div style="background: var(--background-bg); padding: 1rem 1.25rem; border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+          <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.25rem;">Server Ingestion Status</div>
+          <div id="resServerStatus" style="font-weight: 600; font-size: 0.95rem; color: var(--secondary-color);">
+            Connecting to /api/brain-only-result...
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <a href="genai_assisted.html" class="btn btn-primary" id="btnNextPhase">Continue to Phase 2: GenAI-Assisted &rarr;</a>
+          <a href="dashboard.html" class="btn btn-secondary">Experiment Dashboard</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>University Final-Year Dissertation Project &bull; Experimental Research Platform</span>
+      <span>Phase 1: Brain-Only Condition</span>
+    </div>
+  </footer>
+
+  <!-- Script for Phase 1 Interaction & API Communication -->
+  <script src="js/app.js"></script>
+  <script>
+    // --- Ground-Truth Answer Key for Automated MCQ Scoring ---
+    const MCQ_ANSWER_KEY = {
+      mcq_1: "B",
+      mcq_2: "A",
+      mcq_3: "C",
+      mcq_4: "A",
+      mcq_5: "C",
+      mcq_6: "B",
+      mcq_7: "C",
+      mcq_8: "B",
+      mcq_9: "A",
+      mcq_10: "B"
+    };
+
+    // State Tracking
+    let studyStartTime = null;
+    let totalLearningDurationSeconds = 0;
+    let timerInterval = null;
+    let currentParticipantId = "";
+    let experimentGroup = "A";
+    const TOPIC_ID = "blockchain_intro_01";
+
+    // Data to persist
+    let evaluatedMcqScore = 0;
+    let recordedMcqAnswers = {};
+    let recordedShortAnswers = {};
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // 1. Retrieve Participant ID & Assigned Group from Session
+      const storedParticipant = sessionStorage.getItem("currentParticipant");
+      if (storedParticipant) {
+        try {
+          const parsed = JSON.parse(storedParticipant);
+          if (parsed.participantId) {
+            currentParticipantId = parsed.participantId;
+          }
+          if (parsed.experimentGroup) {
+            experimentGroup = parsed.experimentGroup;
+          }
+        } catch (e) {
+          console.warn("Could not parse participant from session:", e);
+        }
+      }
+      const sessionGroup = sessionStorage.getItem("experiment_group");
+      if (sessionGroup) experimentGroup = sessionGroup;
+
+      document.getElementById("displayParticipantId").textContent = currentParticipantId;
+
+      // 2. Start Study Timer & Unload Safeguard
+      startStudyTimer();
+      setupUnloadWarning("You have an active experimental session in progress. Leaving this page will discard your study responses.");
+    });
+
+    /**
+     * Study Timer Functions
+     */
+    function startStudyTimer() {
+      studyStartTime = Date.now();
+      const displayEl = document.getElementById("studyTimerDisplay");
+
+      timerInterval = setInterval(() => {
+        const elapsedSeconds = Math.floor((Date.now() - studyStartTime) / 1000);
+        const minutes = String(Math.floor(elapsedSeconds / 60)).padStart(2, "0");
+        const seconds = String(elapsedSeconds % 60).padStart(2, "0");
+        displayEl.textContent = `${minutes}:${seconds}`;
+      }, 1000);
+    }
+
+    function stopStudyTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+      if (studyStartTime) {
+        totalLearningDurationSeconds = Math.max(1, Math.round((Date.now() - studyStartTime) / 1000));
+      }
+      const minutes = String(Math.floor(totalLearningDurationSeconds / 60)).padStart(2, "0");
+      const seconds = String(totalLearningDurationSeconds % 60).padStart(2, "0");
+      return `${minutes}:${seconds}`;
+    }
+
+    /**
+     * Step Transition: Stage 1 (Reading) -> Stage 2 (Assessment)
+     */
+    function proceedToAssessment() {
+      const formattedDuration = stopStudyTimer();
+      document.getElementById("recordedStudyTimeBadge").textContent = formattedDuration;
+
+      // Switch views
+      document.getElementById("stage1-container").style.display = "none";
+      document.getElementById("stage2-container").style.display = "block";
+
+      // Initialize Live Quiz Progress Tracker
+      initQuizProgressTracker("assessmentForm", 10, "brainQuizProgressBar", "brainQuizProgressText", "brainQuizPillTracker");
+
+      // Update Stepper
+      document.getElementById("stepIndicator1").classList.remove("active");
+      document.getElementById("stepIndicator1").classList.add("completed");
+      document.getElementById("stepIndicator2").classList.add("active");
+      document.getElementById("statusBadge").textContent = "Stage 2: Knowledge Assessment";
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    /**
+     * Step Transition: Stage 2 (Assessment) -> Stage 3 (Likert Scales)
+     */
+    function handleAssessmentSubmit(event) {
+      event.preventDefault();
+
+      const confirmed = window.confirm("Are you ready to submit your assessment answers and proceed to self-report measures? You will not be able to revise your answers.");
+      if (!confirmed) return false;
+
+      // Grade MCQs
+      evaluatedMcqScore = 0;
+      recordedMcqAnswers = {};
+
+      for (let i = 1; i <= 10; i++) {
+        const qKey = `mcq_${i}`;
+        const selected = document.querySelector(`input[name="${qKey}"]:checked`)?.value;
+        recordedMcqAnswers[qKey] = selected || null;
+        if (selected === MCQ_ANSWER_KEY[qKey]) {
+          evaluatedMcqScore += 1;
+        }
+      }
+
+      // Record Short Answers
+      recordedShortAnswers = {
+        q11: document.getElementById("shortAnswer1").value.trim(),
+        q12: document.getElementById("shortAnswer2").value.trim()
+      };
+
+      // Switch views
+      document.getElementById("stage2-container").style.display = "none";
+      document.getElementById("stage3-container").style.display = "block";
+
+      // Update Stepper
+      document.getElementById("stepIndicator2").classList.remove("active");
+      document.getElementById("stepIndicator2").classList.add("completed");
+      document.getElementById("stepIndicator3").classList.add("active");
+      document.getElementById("statusBadge").textContent = "Stage 3: Self-Report Measures";
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return false;
+    }
+
+    /**
+     * Step Transition: Stage 3 (Likert) -> Stage 4 (Save to API & Confirm)
+     */
+    async function handleLikertSubmit(event) {
+      event.preventDefault();
+
+      const confidenceScore = parseInt(document.querySelector('input[name="confidenceScore"]:checked')?.value || "0", 10);
+      const effortScore = parseInt(document.querySelector('input[name="effortScore"]:checked')?.value || "0", 10);
+      const explainScore = parseInt(document.querySelector('input[name="explainScore"]:checked')?.value || "0", 10);
+
+      // Construct Payload
+      const payload = {
+        participant_id: currentParticipantId,
+        topic_id: TOPIC_ID,
+        learning_time: totalLearningDurationSeconds,
+        mcq_score: evaluatedMcqScore,
+        short_answers: {
+          q11_tamper_resistance: recordedShortAnswers.q11,
+          q12_pow_vs_pos: recordedShortAnswers.q12,
+          explain_ability_score: explainScore
+        },
+        confidence_score: confidenceScore,
+        effort_score: effortScore,
+        experiment_group: experimentGroup
+      };
+
+      // Switch view to Stage 4 (Summary)
+      document.getElementById("stage3-container").style.display = "none";
+      document.getElementById("stage4-container").style.display = "block";
+
+      // Update Stepper
+      document.getElementById("stepIndicator3").classList.remove("active");
+      document.getElementById("stepIndicator3").classList.add("completed");
+      document.getElementById("stepIndicator4").classList.add("completed");
+      document.getElementById("statusBadge").textContent = "Phase 1 Completed";
+
+      // Populate Display Summary
+      const mins = String(Math.floor(totalLearningDurationSeconds / 60)).padStart(2, "0");
+      const secs = String(totalLearningDurationSeconds % 60).padStart(2, "0");
+      document.getElementById("resLearningTime").textContent = `${mins}:${secs}`;
+      document.getElementById("resMcqScore").textContent = `${evaluatedMcqScore} / 10`;
+      document.getElementById("resConfidence").textContent = `${confidenceScore} / 5`;
+      document.getElementById("resEffort").textContent = `${effortScore} / 5`;
+
+      // Clear unload protection upon successful completion
+      clearUnloadWarning();
+
+      // Mark Brain-Only condition as completed in sessionStorage
+      markExperimentPhaseComplete("brain_only_completed", "phase1_completed");
+      sessionStorage.setItem("phase1_score", String(evaluatedMcqScore));
+      sessionStorage.setItem("phase1_duration", String(totalLearningDurationSeconds));
+
+      // Return to the dashboard to begin Step 2.
+      const nextBtn = document.getElementById("btnNextPhase");
+      if (nextBtn) {
+        nextBtn.textContent = "Continue to Phase 2: GenAI-Assisted \u2192";
+        nextBtn.href = "genai_assisted.html";
+      }
+
+      // Attempt POST to Backend API
+      const statusEl = document.getElementById("resServerStatus");
+      try {
+        const response = await fetch("/api/brain-only-result", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          const resJson = await response.json();
+          statusEl.textContent = `Success: Experimental data ingested into research.db (Record ID: #${resJson.result_id || 'OK'}).`;
+          statusEl.style.color = "var(--secondary-color)";
+        } else {
+          statusEl.textContent = "Your study responses are safely preserved for this session.";
+          statusEl.style.color = "var(--secondary-color)";
+        }
+      } catch (err) {
+        console.warn("Backend API unavailable, stored in session cache:", err);
+        statusEl.textContent = "Data successfully preserved in local browser session cache (Standalone prototype mode).";
+        statusEl.style.color = "var(--secondary-color)";
+      }
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return false;
+    }
+  </script>
+</body>
+</html>

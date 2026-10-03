@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Participant Registration | GenAI Learning Evaluation</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Header & Navigation -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand-wrapper">
+        <span class="brand-label">Academic Research Project</span>
+        <a href="index.html" class="brand-title">Cognitive Engagement & Recall Evaluation</a>
+      </div>
+      <nav class="site-nav">
+        <a href="index.html" class="nav-link">Study Overview</a>
+        <a href="register.html" class="nav-link active">Participant Registration</a>
+        <a href="dashboard.html" class="nav-link">Experiment Dashboard</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="page-header">
+      <span class="page-badge">Phase 0: Enrollment</span>
+      <h1 class="page-title">Participant Registration & Baseline Profile</h1>
+      <p class="page-description">
+        Please complete the demographic and background questions below prior to commencing the experimental conditions.
+      </p>
+    </div>
+
+    <!-- Global Progress Stepper Container -->
+    <div id="globalProgressContainer"></div>
+
+    <!-- Ethical Notice -->
+    <div class="research-notice ethical">
+      <span class="notice-icon">&#128274;</span>
+      <div>
+        <strong>Privacy &amp; Data Ethics Guarantee:</strong> This university dissertation study does not collect your name, email, or direct contact information. Your experimental responses are linked exclusively through an anonymous pseudonymous code. Participation is completely voluntary.
+      </div>
+    </div>
+
+    <!-- Before You Begin Guidance Card -->
+    <div class="card" style="border-left: 4px solid var(--accent-color); background: #ffffff; margin-bottom: 2rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+        <span style="font-size: 1.25rem;">&#128221;</span>
+        <h2 style="font-size: 1.15rem; color: var(--text-primary); margin: 0;">Before You Begin</h2>
+      </div>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+        Please review the following essential instructions before beginning your experimental session:
+      </p>
+      <ul style="padding-left: 1.25rem; color: var(--text-secondary); font-size: 0.88rem; line-height: 1.8; margin-bottom: 0.75rem;">
+        <li><strong>Complete experiment in one sitting:</strong> The study evaluates uninterrupted cognitive processing; please allocate a quiet, continuous session.</li>
+        <li><strong>Follow the required order:</strong> Complete Brain-Only, GenAI-Assisted, and Delayed Recall in sequence.</li>
+        <li><strong>Use GenAI only during permitted phase:</strong> Generative AI tools (e.g. ChatGPT, Gemini, Copilot) are allowed only in the designated AI-assisted condition. External tools are strictly prohibited during independent and recall assessments.</li>
+        <li><strong>Estimated duration: 35–40 minutes:</strong> Covers reading passages, immediate comprehension checks, and the final delayed retention test.</li>
+      </ul>
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.5rem;">
+        <span class="time-estimate-badge">&#9201; Estimated Duration: 35–40 minutes</span>
+        <span class="modality-badge">&#127891; Randomized Sequence Protocol</span>
+        <span class="modality-badge" style="background: rgba(30, 41, 59, 0.06); color: var(--text-secondary);">&#128274; Confidential Academic Research</span>
+      </div>
+    </div>
+
+    <!-- Registration Form -->
+    <section class="form-section">
+      <form id="registrationForm" onsubmit="return handleRegistration(event)">
+        
+        <!-- SECTION 01: Participant Eligibility & Demographic Profile -->
+        <div class="card" style="margin-bottom: 2rem;">
+          <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 1.25rem;">
+            <span class="phase-number" style="font-size: 0.75rem;">Section 01</span>
+            <h2 style="font-size: 1.2rem; color: var(--text-primary); margin: 0.25rem 0;">Participant Eligibility &amp; Academic Background</h2>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); margin: 0;">
+              Please confirm your eligibility and provide your basic academic profile before continuing.
+            </p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Q1. Please confirm that you are currently enrolled as an undergraduate student in a recognized university in Sri Lanka. <span style="color: #dc2626;">*</span>
+            </label>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="undergraduateStudent" value="yes" required>
+                <span>Yes</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="undergraduateStudent" value="no">
+                <span>No</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="universityName" class="form-label">
+              Q2. What is the name of your university/institution? <span style="color: #dc2626;">*</span>
+            </label>
+            <select id="universityName" name="universityName" class="form-select" required>
+              <option value="" disabled selected>Select your university or institution</option>
+              <optgroup label="Government Universities">
+                <option value="University of Colombo">University of Colombo</option>
+                <option value="University of Peradeniya">University of Peradeniya</option>
+                <option value="University of Sri Jayewardenepura">University of Sri Jayewardenepura</option>
+                <option value="University of Kelaniya">University of Kelaniya</option>
+                <option value="University of Moratuwa">University of Moratuwa</option>
+                <option value="University of Jaffna">University of Jaffna</option>
+                <option value="University of Ruhuna">University of Ruhuna</option>
+                <option value="Eastern University, Sri Lanka">Eastern University, Sri Lanka</option>
+                <option value="South Eastern University of Sri Lanka">South Eastern University of Sri Lanka</option>
+                <option value="Rajarata University of Sri Lanka">Rajarata University of Sri Lanka</option>
+                <option value="Sabaragamuwa University of Sri Lanka">Sabaragamuwa University of Sri Lanka</option>
+                <option value="Wayamba University of Sri Lanka">Wayamba University of Sri Lanka</option>
+                <option value="Uva Wellassa University of Sri Lanka">Uva Wellassa University of Sri Lanka</option>
+                <option value="The Open University of Sri Lanka">The Open University of Sri Lanka</option>
+                <option value="University of the Visual and Performing Arts">University of the Visual and Performing Arts</option>
+                <option value="Gampaha Wickramarachchi University of Indigenous Medicine">Gampaha Wickramarachchi University of Indigenous Medicine</option>
+                <option value="University of Vavuniya">University of Vavuniya</option>
+              </optgroup>
+              <optgroup label="Private Institutions">
+                <option value="SLIIT">SLIIT</option>
+                <option value="NSBM Green University">NSBM Green University</option>
+                <option value="CINEC Campus">CINEC Campus</option>
+                <option value="IIT">IIT</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Q3. What is your current academic year? <span style="color: #dc2626;">*</span>
+            </label>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="academicYear" value="Year 1" required>
+                <span>Year 1</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="academicYear" value="Year 2">
+                <span>Year 2</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="academicYear" value="Year 3">
+                <span>Year 3</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="academicYear" value="Year 4">
+                <span>Year 4</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Q4. Which academic field does your degree belong to? <span style="color: #dc2626;">*</span>
+            </label>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="academicField" value="Computing & IT" required>
+                <span>Computing &amp; IT</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="academicField" value="Engineering">
+                <span>Engineering</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="academicField" value="Business & Management">
+                <span>Business &amp; Management</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="academicField" value="Science">
+                <span>Science</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="academicField" value="Humanities & Social Sciences">
+                <span>Humanities &amp; Social Sciences</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="academicField" value="Other">
+                <span>Other</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Q5. How would you rate your confidence in academic writing? <span style="color: #dc2626;">*</span>
+            </label>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="writingConfidence" value="Very Low" required>
+                <span>Very Low</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="writingConfidence" value="Low">
+                <span>Low</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="writingConfidence" value="Moderate">
+                <span>Moderate</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="writingConfidence" value="High">
+                <span>High</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Q6. How long have you been using Generative AI tools (e.g. ChatGPT, Gemini, Copilot) for academic or learning activities? <span style="color: #dc2626;">*</span>
+            </label>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="genaiExperienceDuration" value="Never used" required>
+                <span>Never used</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="genaiExperienceDuration" value="Less than 6 months">
+                <span>Less than 6 months</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="genaiExperienceDuration" value="6–12 months">
+                <span>6–12 months</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="genaiExperienceDuration" value="More than 1 year">
+                <span>More than 1 year</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Q7. What is your primary language used for academic learning? <span style="color: #dc2626;">*</span>
+            </label>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="primaryLanguage" value="Sinhala" required>
+                <span>Sinhala</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="primaryLanguage" value="Tamil">
+                <span>Tamil</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="primaryLanguage" value="English">
+                <span>English</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="primaryLanguage" value="Other">
+                <span>Other</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Q8. How frequently do you write academic assignments or reports? <span style="color: #dc2626;">*</span>
+            </label>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="writingFrequency" value="Rarely" required>
+                <span>Rarely</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="writingFrequency" value="Monthly">
+                <span>Monthly</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="writingFrequency" value="Several times per month">
+                <span>Several times per month</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="writingFrequency" value="Weekly">
+                <span>Weekly</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Q9. Have you received any formal training or guidance on responsible GenAI usage? <span style="color: #dc2626;">*</span>
+            </label>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="genaiTraining" value="Yes" required>
+                <span>Yes</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="genaiTraining" value="No">
+                <span>No</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Q10. What is your usual level of experience with academic research or research-based assignments? <span style="color: #dc2626;">*</span>
+            </label>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="researchExperience" value="No experience" required>
+                <span>No experience</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="researchExperience" value="Very limited experience">
+                <span>Very limited experience</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="researchExperience" value="Some experience">
+                <span>Some experience</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="researchExperience" value="Moderate experience">
+                <span>Moderate experience</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="researchExperience" value="Extensive experience">
+                <span>Extensive experience</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Consent Confirmation Checkbox -->
+        <div class="card" style="margin-bottom: 2rem;">
+          <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 1.25rem;">
+            <span class="phase-number" style="font-size: 0.75rem;">Section 02</span>
+            <h2 style="font-size: 1.2rem; color: var(--text-primary); margin: 0.25rem 0;">Informed Research Consent</h2>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); margin: 0;">
+              Formal ethical participation agreement under university research ethics standards.
+            </p>
+          </div>
+
+          <div class="consent-box" style="margin-bottom: 0;">
+            <p class="consent-statement">
+              I confirm that I have read and understood the participant information for the project <em>"GenAI-Assisted Cognitive Engagement, Recall, and Learning Retention Evaluation"</em>. I understand that my participation is voluntary, my responses will remain strictly anonymous under a research participant code, and I am free to withdraw at any time.
+            </p>
+            <label class="checkbox-label" style="margin-top: 1rem;">
+              <input type="checkbox" id="consentCheckbox" name="consentCheckbox" required>
+              <span><strong>I consent to participate in this research study and permit anonymized data collection.</strong></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="btn-group" style="align-items: center;">
+          <button type="submit" class="btn btn-primary" style="padding: 0.75rem 1.75rem; font-size: 1rem;">
+            Complete Registration &amp; Begin Experiment &rarr;
+          </button>
+          <span style="font-size: 0.85rem; color: var(--text-muted);">&#9201; Estimated Study Duration: 35–40 Minutes Total</span>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>University Final-Year Dissertation Project &bull; Experimental Research Prototype</span>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

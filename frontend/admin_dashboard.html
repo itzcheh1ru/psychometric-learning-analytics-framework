@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Researcher Admin Dashboard | GenAI Learning Evaluation</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Header & Navigation -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand-wrapper">
+        <span class="brand-label">Academic Research Project</span>
+        <a href="index.html" class="brand-title">Cognitive Engagement &amp; Recall Evaluation</a>
+      </div>
+      <nav class="site-nav">
+        <a href="index.html" class="nav-link">Study Overview</a>
+        <a href="register.html" class="nav-link">Participant Registration</a>
+        <a href="dashboard.html" class="nav-link">Experiment Dashboard</a>
+        <a href="admin_dashboard.html" class="nav-link active" style="font-weight: 700; color: #b45309;">&#128274; Researcher Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <span class="admin-badge">&#128274; Restricted Researcher Access</span>
+        <h1 class="page-title" style="margin-top: 0.5rem;">Researcher Admin Dashboard</h1>
+        <p class="page-description">
+          Experimental monitoring console, multi-phase participant tracking, and standardized CSV dataset exports.
+        </p>
+      </div>
+      <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <button id="btnRefreshData" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.45rem 0.9rem;">
+          &#8635; Refresh Telemetry
+        </button>
+        <button id="btnAdminLogout" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.45rem 0.9rem; border-color: #fecaca; color: #b91c1c;" title="Sign out of admin session">
+          &#128682; Sign Out
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick CSV Export Toolbar -->
+    <section class="export-toolbar">
+      <div class="export-toolbar-title">
+        <span>&#128190;</span>
+        <span>Download Research Datasets (RFC 4180 CSV)</span>
+      </div>
+      <div class="export-btn-group">
+        <a href="/api/export/participants" class="export-btn" download="participants.csv" title="Export participant demographics, groups, and recorded sequences">
+          <span>&#128101;</span> Participants CSV
+        </a>
+        <a href="/api/export/brain-only" class="export-btn" download="brain_only_results.csv" title="Export Phase 1 Brain-Only learning metrics">
+          <span>&#129504;</span> Brain-Only CSV
+        </a>
+        <a href="/api/export/genai-assisted" class="export-btn" download="genai_assisted_results.csv" title="Export Phase 2 GenAI-assisted telemetry &amp; quiz metrics">
+          <span>&#129302;</span> GenAI-Assisted CSV
+        </a>
+        <a href="/api/export/delayed-recall" class="export-btn primary" download="delayed_recall_results.csv" title="Export Phase 3 longitudinal recall &amp; retention scores">
+          <span>&#9201;</span> Delayed Recall CSV
+        </a>
+      </div>
+    </section>
+
+    <!-- SECTION 1: Participant Overview -->
+    <section style="margin-bottom: 2.5rem;">
+      <h2 style="font-size: 1.25rem; color: var(--text-primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+        <span>&#128202;</span> Section 1: Participant Overview
+      </h2>
+
+      <div class="admin-kpi-grid">
+        <div class="admin-kpi-card kpi-blue">
+          <span class="admin-kpi-label">Total Registered</span>
+          <span class="admin-kpi-value" id="kpiTotalParticipants">&mdash;</span>
+          <span class="admin-kpi-sub">Total enrolled sample</span>
+        </div>
+
+        <div class="admin-kpi-card kpi-green">
+          <span class="admin-kpi-label">Completed Protocols</span>
+          <span class="admin-kpi-value" id="kpiCompletedExperiments">&mdash;</span>
+          <span class="admin-kpi-sub">Completed Phase 1, 2, &amp; 3</span>
+        </div>
+
+        <div class="admin-kpi-card kpi-amber">
+          <span class="admin-kpi-label">Completion Rate</span>
+          <span class="admin-kpi-value" id="kpiCompletionRate">&mdash;</span>
+          <span class="admin-kpi-sub">% of registered participants</span>
+        </div>
+
+        <div class="admin-kpi-card kpi-teal">
+          <span class="admin-kpi-label">Group A (Brain-First)</span>
+          <span class="admin-kpi-value" id="kpiGroupA">&mdash;</span>
+          <span class="admin-kpi-sub">Sequence: Brain &rarr; AI &rarr; Recall</span>
+        </div>
+
+        <div class="admin-kpi-card kpi-purple">
+          <span class="admin-kpi-label">Group B (AI-First)</span>
+          <span class="admin-kpi-value" id="kpiGroupB">&mdash;</span>
+          <span class="admin-kpi-sub">Sequence: AI &rarr; Brain &rarr; Recall</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: Experimental Results Summary -->
+    <section style="margin-bottom: 2.5rem;">
+      <h2 style="font-size: 1.25rem; color: var(--text-primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+        <span>&#9878;</span> Section 3: Experimental Results Summary
+      </h2>
+
+      <div class="results-summary-grid">
+        <!-- Brain-Only Results Summary -->
+        <div class="results-summary-card">
+          <div class="results-summary-header">
+            <div class="results-summary-title">
+              <span>&#129504;</span> Brain-Only Condition
+            </div>
+            <span class="status-pill completed">Independent</span>
+          </div>
+
+          <div class="stat-rows">
+            <div class="stat-row">
+              <span class="stat-label">Total Attempts:</span>
+              <span class="stat-val" id="sumBrainAttempts">&mdash;</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Average MCQ Score:</span>
+              <span class="stat-val" id="sumBrainAvgMCQ">&mdash; <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-muted);">/ 10</span></span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Average Learning Time:</span>
+              <span class="stat-val" id="sumBrainAvgTime">&mdash;</span>
+            </div>
+          </div>
+          <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted); background: #f8fafc; padding: 0.6rem 0.8rem; border-radius: 6px;">
+            Baseline cognitive absorption measure without generative AI scaffolding.
+          </div>
+        </div>
+
+        <!-- GenAI-Assisted Results Summary -->
+        <div class="results-summary-card">
+          <div class="results-summary-header">
+            <div class="results-summary-title">
+              <span>&#129302;</span> GenAI-Assisted Condition
+            </div>
+            <span class="status-pill completed" style="background: #f3e8ff; color: #7e22ce; border-color: #e9d5ff;">AI Scaffolded</span>
+          </div>
+
+          <div class="stat-rows">
+            <div class="stat-row">
+              <span class="stat-label">Total Attempts:</span>
+              <span class="stat-val" id="sumGenAIAttempts">&mdash;</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Average MCQ Score:</span>
+              <span class="stat-val" id="sumGenAIAvgMCQ">&mdash; <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-muted);">/ 10</span></span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Average Learning Time:</span>
+              <span class="stat-val" id="sumGenAIAvgTime">&mdash;</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Average Prompt Count:</span>
+              <span class="stat-val" id="sumGenAIAvgPrompts">&mdash;</span>
+            </div>
+          </div>
+          <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted); background: #f8fafc; padding: 0.6rem 0.8rem; border-radius: 6px;">
+            Measures acquisition with interactive LLM scaffolding and prompt engagement.
+          </div>
+        </div>
+
+        <!-- Retention Results Summary -->
+        <div class="results-summary-card">
+          <div class="results-summary-header">
+            <div class="results-summary-title">
+              <span>&#9201;</span> Retention Evaluation
+            </div>
+            <span class="status-pill completed" style="background: #e0f2fe; color: #0369a1; border-color: #bae6fd;">Longitudinal</span>
+          </div>
+
+          <div class="stat-rows">
+            <div class="stat-row">
+              <span class="stat-label">Completed Tests:</span>
+              <span class="stat-val" id="sumRetentionAttempts">&mdash;</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Avg Brain-Only Retention:</span>
+              <span class="stat-val" id="sumBrainAvgRetention" style="color: #0284c7;">&mdash;%</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Avg GenAI Retention:</span>
+              <span class="stat-val" id="sumGenAIAvgRetention" style="color: #8b5cf6;">&mdash;%</span>
+            </div>
+          </div>
+
+          <div class="retention-comparison-bar">
+            <div class="retention-metric">
+              <div class="retention-metric-header">
+                <span>Brain-Only Retention</span>
+                <span id="labelBrainRetentionBar">0%</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill fill-brain" id="barBrainRetention" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="retention-metric">
+              <div class="retention-metric-header">
+                <span>GenAI-Assisted Retention</span>
+                <span id="labelGenAIRetentionBar">0%</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill fill-genai" id="barGenAIRetention" style="width: 0%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: Participant Data Table -->
+    <section>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
+        <h2 style="font-size: 1.25rem; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem; margin: 0;">
+          <span>&#128100;</span> Section 2: Participant Data Table
+        </h2>
+        <span style="font-size: 0.85rem; color: var(--text-secondary);" id="tableCountLabel">Showing 0 participants</span>
+      </div>
+
+      <div class="admin-table-controls">
+        <div class="search-input-wrap">
+          <input type="text" id="participantSearchInput" placeholder="Search by Participant ID, Degree...">
+        </div>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <select id="groupFilterSelect" class="filter-select">
+            <option value="ALL">All Groups (A &amp; B)</option>
+            <option value="A">Group A (Brain-First)</option>
+            <option value="B">Group B (GenAI-First)</option>
+          </select>
+          <select id="statusFilterSelect" class="filter-select">
+            <option value="ALL">All Statuses</option>
+            <option value="COMPLETED">Fully Completed (3/3)</option>
+            <option value="IN_PROGRESS">In Progress</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="admin-table-container">
+        <table class="admin-table" id="participantsTable">
+          <thead>
+            <tr>
+              <th>Participant ID</th>
+              <th>Experiment Group</th>
+              <th>Assigned Sequence</th>
+              <th>Registration Date</th>
+              <th>Phase 1 Status</th>
+              <th>Phase 2 Status</th>
+              <th>Phase 3 Status</th>
+            </tr>
+          </thead>
+          <tbody id="participantsTableBody">
+            <tr>
+              <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                Loading participant records...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>University Final-Year Dissertation Project &bull; Experimental Research Prototype</span>
+      <span>Researcher Admin &amp; Data Pipeline</span>
+    </div>
+  </footer>
+
+  <script>
+    // -------------------------------------------------------
+    // Admin Authentication Guard
+    // Runs immediately — redirects unauthenticated visitors
+    // to admin_login.html before any data is loaded.
+    // -------------------------------------------------------
+    (function enforceAdminAuth() {
+      if (sessionStorage.getItem('admin_authenticated') !== 'true') {
+        window.location.replace(
+          'admin_login.html?reason=unauthorized&msg=' +
+          encodeURIComponent('Admin authentication required to access the research dashboard.')
+        );
+      }
+    })();
+
+    // Researcher Admin Dashboard Controller
+    (function() {
+      let rawParticipants = [];
+
+      // -------------------------------------------------------
+      // Logout Handler
+      // -------------------------------------------------------
+      function handleAdminLogout() {
+        sessionStorage.removeItem('admin_authenticated');
+        fetch('/api/admin/logout', { method: 'POST' }).catch(function() {});
+        window.location.replace(
+          'admin_login.html?reason=logout&msg=' +
+          encodeURIComponent('You have been signed out of the admin session.')
+        );
+      }
+
+      function formatDuration(seconds) {
+        if (!seconds || isNaN(seconds) || seconds <= 0) return '0s';
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.round(seconds % 60);
+        if (mins === 0) return `${secs}s`;
+        return `${mins}m ${secs}s`;
+      }
+
+      function formatDateTime(isoString) {
+        if (!isoString) return '&mdash;';
+        try {
+          const d = new Date(isoString);
+          return d.toLocaleDateString(undefined, {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+        } catch (e) {
+          return isoString;
+        }
+      }
+
+      async function loadSummary() {
+        try {
+          const res = await fetch('/api/admin/summary');
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const data = await res.json();
+
+          // Section 1: Participant Overview
+          const po = data.participant_overview || {};
+          document.getElementById('kpiTotalParticipants').textContent = po.total_participants ?? 0;
+          document.getElementById('kpiCompletedExperiments').textContent = po.completed_experiments ?? 0;
+          document.getElementById('kpiGroupA').textContent = po.group_a_count ?? 0;
+          document.getElementById('kpiGroupB').textContent = po.group_b_count ?? 0;
+          document.getElementById('kpiCompletionRate').textContent = `${po.completion_rate ?? 0}%`;
+
+          // Section 3: Brain-Only
+          const bo = data.brain_only_results || {};
+          document.getElementById('sumBrainAttempts').textContent = bo.attempts ?? 0;
+          document.getElementById('sumBrainAvgMCQ').innerHTML = `${bo.average_mcq_score ?? 0} <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-muted);">/ 10</span>`;
+          document.getElementById('sumBrainAvgTime').textContent = formatDuration(bo.average_learning_time);
+
+          // Section 3: GenAI-Assisted
+          const ga = data.genai_assisted_results || {};
+          document.getElementById('sumGenAIAttempts').textContent = ga.attempts ?? 0;
+          document.getElementById('sumGenAIAvgMCQ').innerHTML = `${ga.average_mcq_score ?? 0} <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-muted);">/ 10</span>`;
+          document.getElementById('sumGenAIAvgTime').textContent = formatDuration(ga.average_learning_time);
+          document.getElementById('sumGenAIAvgPrompts').textContent = ga.average_prompt_count ?? 0;
+
+          // Section 3: Retention
+          const dr = data.retention_results || {};
+          const brainRetention = dr.average_brain_retention ?? 0;
+          const genaiRetention = dr.average_genai_retention;
+          const genaiRetentionLabel = genaiRetention == null ? 'Not assessed' : `${genaiRetention}%`;
+
+          document.getElementById('sumRetentionAttempts').textContent = dr.attempts ?? 0;
+          document.getElementById('sumBrainAvgRetention').textContent = `${brainRetention}%`;
+          document.getElementById('sumGenAIAvgRetention').textContent = genaiRetentionLabel;
+
+          document.getElementById('labelBrainRetentionBar').textContent = `${brainRetention}%`;
+          document.getElementById('barBrainRetention').style.width = `${Math.min(100, Math.max(0, brainRetention))}%`;
+
+          document.getElementById('labelGenAIRetentionBar').textContent = genaiRetentionLabel;
+          document.getElementById('barGenAIRetention').style.width = `${Math.min(100, Math.max(0, genaiRetention || 0))}%`;
+
+        } catch (err) {
+          console.error('Failed to load admin summary:', err);
+        }
+      }
+
+      async function loadParticipants() {
+        try {
+          const res = await fetch('/api/admin/participants');
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          rawParticipants = await res.json();
+          renderParticipantsTable();
+        } catch (err) {
+          console.error('Failed to load admin participants:', err);
+          document.getElementById('participantsTableBody').innerHTML = `
+            <tr>
+              <td colspan="7" style="text-align: center; color: #dc2626; padding: 2rem;">
+                Failed to load participant records. Ensure backend server is running.
+              </td>
+            </tr>
+          `;
+        }
+      }
+
+      function renderParticipantsTable() {
+        const query = (document.getElementById('participantSearchInput').value || '').trim().toLowerCase();
+        const groupFilter = document.getElementById('groupFilterSelect').value;
+        const statusFilter = document.getElementById('statusFilterSelect').value;
+
+        const filtered = rawParticipants.filter(p => {
+          // Search query filter
+          if (query) {
+            const pid = (p.participant_id || '').toLowerCase();
+            const deg = (p.degree_programme || '').toLowerCase();
+            const age = (p.age_group || '').toLowerCase();
+            if (!pid.includes(query) && !deg.includes(query) && !age.includes(query)) {
+              return false;
+            }
+          }
+
+          // Group filter
+          if (groupFilter !== 'ALL' && p.experiment_group !== groupFilter) {
+            return false;
+          }
+
+          // Status filter
+          const isComplete = p.phase1_completed === 1 && p.phase2_completed === 1 && p.phase3_completed === 1;
+          if (statusFilter === 'COMPLETED' && !isComplete) return false;
+          if (statusFilter === 'IN_PROGRESS' && isComplete) return false;
+
+          return true;
+        });
+
+        const tbody = document.getElementById('participantsTableBody');
+        document.getElementById('tableCountLabel').textContent = `Showing ${filtered.length} of ${rawParticipants.length} participants`;
+
+        if (filtered.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                No participants match the selected filter criteria.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = filtered.map(p => {
+          const groupClass = p.experiment_group === 'A' ? 'group-a' : 'group-b';
+          const seqLabel = p.experiment_group === 'A' 
+            ? 'Brain-Only &rarr; GenAI &rarr; Recall' 
+            : 'GenAI &rarr; Brain-Only &rarr; Recall';
+
+          // Phase 1 Status
+          const p1Badge = p.phase1_completed === 1
+            ? `<span class="status-pill completed">&#10003; Done (${p.phase1_score !== null ? p.phase1_score + '/10' : 'Recorded'})</span>`
+            : `<span class="status-pill not-started">&bull; Pending</span>`;
+
+          // Phase 2 Status
+          const p2Badge = p.phase2_completed === 1
+            ? `<span class="status-pill completed">&#10003; Done (${p.phase2_score !== null ? p.phase2_score + '/10' : 'Recorded'})</span>`
+            : `<span class="status-pill not-started">&bull; Pending</span>`;
+
+          // Phase 3 Status
+          const p3Badge = p.phase3_completed === 1
+            ? `<span class="status-pill completed">&#10003; Done (Brain ${p.brain_retention_score ?? '&mdash;'}%; GenAI ${p.genai_retention_score === null ? 'Not assessed' : `${p.genai_retention_score}%`})</span>`
+            : `<span class="status-pill not-started">&bull; Pending</span>`;
+
+          return `
+            <tr>
+              <td class="text-mono" style="font-weight: 700; color: var(--primary-color);">${escapeHtml(p.participant_id)}</td>
+              <td><span class="group-badge ${groupClass}">Group ${escapeHtml(p.experiment_group || 'A')}</span></td>
+              <td style="font-size: 0.82rem; color: var(--text-secondary);">${seqLabel}</td>
+              <td style="font-size: 0.82rem; color: var(--text-muted);">${formatDateTime(p.registered_at)}</td>
+              <td>${p1Badge}</td>
+              <td>${p2Badge}</td>
+              <td>${p3Badge}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      function escapeHtml(text) {
+        if (!text) return '';
+        const map = {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#039;'
+        };
+        return String(text).replace(/[&<>"']/g, m => map[m]);
+      }
+
+      // Wire event listeners
+      document.getElementById('participantSearchInput').addEventListener('input', renderParticipantsTable);
+      document.getElementById('groupFilterSelect').addEventListener('change', renderParticipantsTable);
+      document.getElementById('statusFilterSelect').addEventListener('change', renderParticipantsTable);
+      document.getElementById('btnRefreshData').addEventListener('click', function() {
+        loadSummary();
+        loadParticipants();
+      });
+      document.getElementById('btnAdminLogout').addEventListener('click', handleAdminLogout);
+
+      // Initial load
+      loadSummary();
+      loadParticipants();
+    })();
+  </script>
+</body>
+</html>
