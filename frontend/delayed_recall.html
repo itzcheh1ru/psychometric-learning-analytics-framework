@@ -705,149 +705,313 @@
     </section>
 
     <!-- =========================================================================
-         STAGE 3: Ownership & Cognitive Reflection (1-5 Likert Scales)
+         STAGE 3: Cognitive Engagement (1-5 Likert Scales)
          ========================================================================= -->
     <section id="stage3-container" style="display: none;">
       <div class="research-notice ethical">
         <span class="notice-icon">&#9432;</span>
         <div>
-          <strong>Cognitive Ownership & Metacognitive Reflection:</strong> Reflect upon your overall learning journey across the experiment and rate the following statements on a 1–5 scale (1: Strongly Disagree &rarr; 5: Strongly Agree).
+          <strong>Cognitive Engagement:</strong> Reflect upon your overall learning journey across the experiment and rate the following statements on a 1–5 scale (1: Strongly Disagree &rarr; 5: Strongly Agree).
         </div>
       </div>
 
       <form id="likertForm" novalidate onsubmit="return handleLikertSubmit(event)">
         
-        <!-- Likert 1: Explanation Autonomy -->
+        <!-- Likert 1: Active Thought -->
         <div class="likert-card">
-          <div class="likert-question">1. I can explain this topic using my own understanding.</div>
-          <div class="likert-description">Assessing autonomous cognitive synthesis and mastery over the domain concepts.</div>
+          <div class="likert-question">1. I actively thought about the information while completing the task.</div>
+          <div class="likert-description">Evaluates whether the learner was cognitively engaged and mentally processing the material.</div>
           <div class="likert-scale">
             <label class="likert-option">
-              <input type="radio" name="explanationScore" value="1" required>
+              <input type="radio" name="activeThoughtScore" value="1" required>
               <span class="likert-val">1</span>
               <span class="likert-label">Strongly Disagree</span>
             </label>
             <label class="likert-option">
-              <input type="radio" name="explanationScore" value="2">
+              <input type="radio" name="activeThoughtScore" value="2">
               <span class="likert-val">2</span>
               <span class="likert-label">Disagree</span>
             </label>
             <label class="likert-option">
-              <input type="radio" name="explanationScore" value="3">
+              <input type="radio" name="activeThoughtScore" value="3">
               <span class="likert-val">3</span>
               <span class="likert-label">Neutral</span>
             </label>
             <label class="likert-option">
-              <input type="radio" name="explanationScore" value="4">
+              <input type="radio" name="activeThoughtScore" value="4">
               <span class="likert-val">4</span>
               <span class="likert-label">Agree</span>
             </label>
             <label class="likert-option">
-              <input type="radio" name="explanationScore" value="5">
+              <input type="radio" name="activeThoughtScore" value="5">
               <span class="likert-val">5</span>
               <span class="likert-label">Strongly Agree</span>
             </label>
           </div>
         </div>
 
-        <!-- Likert 2: Memory Recall -->
+        <!-- Likert 2: Understanding vs Completion -->
         <div class="likert-card">
-          <div class="likert-question">2. I remember the main concepts without external assistance.</div>
-          <div class="likert-description">Self-assessed memory durability and recall retention over time.</div>
+          <div class="likert-question">2. I tried to understand the concepts rather than simply complete the task.</div>
+          <div class="likert-description">Measures depth-oriented engagement and conceptual processing.</div>
           <div class="likert-scale">
             <label class="likert-option">
-              <input type="radio" name="rememberScore" value="1" required>
+              <input type="radio" name="understandConceptsScore" value="1" required>
               <span class="likert-val">1</span>
               <span class="likert-label">Strongly Disagree</span>
             </label>
             <label class="likert-option">
-              <input type="radio" name="rememberScore" value="2">
+              <input type="radio" name="understandConceptsScore" value="2">
               <span class="likert-val">2</span>
               <span class="likert-label">Disagree</span>
             </label>
             <label class="likert-option">
-              <input type="radio" name="rememberScore" value="3">
+              <input type="radio" name="understandConceptsScore" value="3">
               <span class="likert-val">3</span>
               <span class="likert-label">Neutral</span>
             </label>
             <label class="likert-option">
-              <input type="radio" name="rememberScore" value="4">
+              <input type="radio" name="understandConceptsScore" value="4">
               <span class="likert-val">4</span>
               <span class="likert-label">Agree</span>
             </label>
             <label class="likert-option">
-              <input type="radio" name="rememberScore" value="5">
+              <input type="radio" name="understandConceptsScore" value="5">
               <span class="likert-val">5</span>
               <span class="likert-label">Strongly Agree</span>
             </label>
           </div>
         </div>
 
-        <!-- Likert 3: Knowledge Ownership -->
+        <!-- Likert 3: Careful Consideration -->
         <div class="likert-card">
-          <div class="likert-question">3. I feel the knowledge was personally learned by me.</div>
-          <div class="likert-description">Cognitive ownership index evaluating internalized self-attribution versus external attribution.</div>
+          <div class="likert-question">3. I carefully considered the information before using it in my answer.</div>
+          <div class="likert-description">Assesses deliberate reasoning and evidence-based answer selection.</div>
           <div class="likert-scale">
             <label class="likert-option">
-              <input type="radio" name="ownershipScore" value="1" required>
+              <input type="radio" name="carefulConsiderationScore" value="1" required>
               <span class="likert-val">1</span>
               <span class="likert-label">Strongly Disagree</span>
             </label>
             <label class="likert-option">
-              <input type="radio" name="ownershipScore" value="2">
+              <input type="radio" name="carefulConsiderationScore" value="2">
               <span class="likert-val">2</span>
               <span class="likert-label">Disagree</span>
             </label>
             <label class="likert-option">
-              <input type="radio" name="ownershipScore" value="3">
+              <input type="radio" name="carefulConsiderationScore" value="3">
               <span class="likert-val">3</span>
               <span class="likert-label">Neutral</span>
             </label>
             <label class="likert-option">
-              <input type="radio" name="ownershipScore" value="4">
+              <input type="radio" name="carefulConsiderationScore" value="4">
               <span class="likert-val">4</span>
               <span class="likert-label">Agree</span>
             </label>
             <label class="likert-option">
-              <input type="radio" name="ownershipScore" value="5">
+              <input type="radio" name="carefulConsiderationScore" value="5">
               <span class="likert-val">5</span>
               <span class="likert-label">Strongly Agree</span>
             </label>
           </div>
         </div>
 
-        <!-- Likert 4: Cognitive Dependency -->
+        <!-- Likert 4: Active Involvement -->
         <div class="likert-card">
-          <div class="likert-question">4. I depended on external help to understand this topic.</div>
-          <div class="likert-description">Cognitive reliance measurement evaluating dependence on external resources or AI tools.</div>
+          <div class="likert-question">4. I was actively involved in solving the task.</div>
+          <div class="likert-description">Measures the degree of direct participation and engagement in problem solving.</div>
           <div class="likert-scale">
             <label class="likert-option">
-              <input type="radio" name="dependencyScore" value="1" required>
+              <input type="radio" name="activeInvolvementScore" value="1" required>
               <span class="likert-val">1</span>
               <span class="likert-label">Strongly Disagree</span>
             </label>
             <label class="likert-option">
-              <input type="radio" name="dependencyScore" value="2">
+              <input type="radio" name="activeInvolvementScore" value="2">
               <span class="likert-val">2</span>
               <span class="likert-label">Disagree</span>
             </label>
             <label class="likert-option">
-              <input type="radio" name="dependencyScore" value="3">
+              <input type="radio" name="activeInvolvementScore" value="3">
               <span class="likert-val">3</span>
               <span class="likert-label">Neutral</span>
             </label>
             <label class="likert-option">
-              <input type="radio" name="dependencyScore" value="4">
+              <input type="radio" name="activeInvolvementScore" value="4">
               <span class="likert-val">4</span>
               <span class="likert-label">Agree</span>
             </label>
             <label class="likert-option">
-              <input type="radio" name="dependencyScore" value="5">
+              <input type="radio" name="activeInvolvementScore" value="5">
               <span class="likert-val">5</span>
               <span class="likert-label">Strongly Agree</span>
             </label>
           </div>
         </div>
+
+        <!-- Likert 5: Reflection -->
+        <div class="likert-card">
+          <div class="likert-question">5. I reflected on what I learned during the activity.</div>
+          <div class="likert-description">Captures metacognitive reflection and self-assessment of learning gains.</div>
+          <div class="likert-scale">
+            <label class="likert-option">
+              <input type="radio" name="reflectedLearningScore" value="1" required>
+              <span class="likert-val">1</span>
+              <span class="likert-label">Strongly Disagree</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="reflectedLearningScore" value="2">
+              <span class="likert-val">2</span>
+              <span class="likert-label">Disagree</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="reflectedLearningScore" value="3">
+              <span class="likert-val">3</span>
+              <span class="likert-label">Neutral</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="reflectedLearningScore" value="4">
+              <span class="likert-val">4</span>
+              <span class="likert-label">Agree</span>
+            </label>
+            <label class="likert-option">
+              <input type="radio" name="reflectedLearningScore" value="5">
+              <span class="likert-val">5</span>
+              <span class="likert-label">Strongly Agree</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Likert 6: Mental Effort -->
+        <div class="likert-card">
+          <div class="likert-question">6. The task required a lot of mental effort from me.</div>
+          <div class="likert-description">Measures the degree of cognitive workload experienced while completing the task.</div>
+          <div class="likert-scale">
+            <label class="likert-option"><input type="radio" name="mentalEffortRequiredScore" value="1" required><span class="likert-val">1</span><span class="likert-label">Strongly Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="mentalEffortRequiredScore" value="2"><span class="likert-val">2</span><span class="likert-label">Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="mentalEffortRequiredScore" value="3"><span class="likert-val">3</span><span class="likert-label">Neutral</span></label>
+            <label class="likert-option"><input type="radio" name="mentalEffortRequiredScore" value="4"><span class="likert-val">4</span><span class="likert-label">Agree</span></label>
+            <label class="likert-option"><input type="radio" name="mentalEffortRequiredScore" value="5"><span class="likert-val">5</span><span class="likert-label">Strongly Agree</span></label>
+          </div>
+        </div>
+
+        <!-- Likert 7: Careful Thinking -->
+        <div class="likert-card">
+          <div class="likert-question">7. I had to think carefully to complete the task.</div>
+          <div class="likert-description">Captures the amount of deliberate reasoning needed for successful completion.</div>
+          <div class="likert-scale">
+            <label class="likert-option"><input type="radio" name="carefulThinkingScore" value="1" required><span class="likert-val">1</span><span class="likert-label">Strongly Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="carefulThinkingScore" value="2"><span class="likert-val">2</span><span class="likert-label">Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="carefulThinkingScore" value="3"><span class="likert-val">3</span><span class="likert-label">Neutral</span></label>
+            <label class="likert-option"><input type="radio" name="carefulThinkingScore" value="4"><span class="likert-val">4</span><span class="likert-label">Agree</span></label>
+            <label class="likert-option"><input type="radio" name="carefulThinkingScore" value="5"><span class="likert-val">5</span><span class="likert-label">Strongly Agree</span></label>
+          </div>
+        </div>
+
+        <!-- Likert 8: Concentration -->
+        <div class="likert-card">
+          <div class="likert-question">8. I had to concentrate strongly during the activity.</div>
+          <div class="likert-description">Assesses sustained attentional control and focus under cognitive load.</div>
+          <div class="likert-scale">
+            <label class="likert-option"><input type="radio" name="concentrationScore" value="1" required><span class="likert-val">1</span><span class="likert-label">Strongly Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="concentrationScore" value="2"><span class="likert-val">2</span><span class="likert-label">Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="concentrationScore" value="3"><span class="likert-val">3</span><span class="likert-label">Neutral</span></label>
+            <label class="likert-option"><input type="radio" name="concentrationScore" value="4"><span class="likert-val">4</span><span class="likert-label">Agree</span></label>
+            <label class="likert-option"><input type="radio" name="concentrationScore" value="5"><span class="likert-val">5</span><span class="likert-label">Strongly Agree</span></label>
+          </div>
+        </div>
+
+        <!-- Likert 9: Mental Demand -->
+        <div class="likert-card">
+          <div class="likert-question">9. I found the task mentally demanding.</div>
+          <div class="likert-description">Measures perceived mental strain and task difficulty.</div>
+          <div class="likert-scale">
+            <label class="likert-option"><input type="radio" name="mentallyDemandingScore" value="1" required><span class="likert-val">1</span><span class="likert-label">Strongly Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="mentallyDemandingScore" value="2"><span class="likert-val">2</span><span class="likert-label">Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="mentallyDemandingScore" value="3"><span class="likert-val">3</span><span class="likert-label">Neutral</span></label>
+            <label class="likert-option"><input type="radio" name="mentallyDemandingScore" value="4"><span class="likert-val">4</span><span class="likert-label">Agree</span></label>
+            <label class="likert-option"><input type="radio" name="mentallyDemandingScore" value="5"><span class="likert-val">5</span><span class="likert-label">Strongly Agree</span></label>
+          </div>
+        </div>
+
+        <!-- Likert 10: Considerable Mental Effort -->
+        <div class="likert-card">
+          <div class="likert-question">10. I made a considerable mental effort to understand the information.</div>
+          <div class="likert-description">Evaluates the depth of cognitive investment involved in comprehension.</div>
+          <div class="likert-scale">
+            <label class="likert-option"><input type="radio" name="considerableMentalEffortScore" value="1" required><span class="likert-val">1</span><span class="likert-label">Strongly Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="considerableMentalEffortScore" value="2"><span class="likert-val">2</span><span class="likert-label">Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="considerableMentalEffortScore" value="3"><span class="likert-val">3</span><span class="likert-label">Neutral</span></label>
+            <label class="likert-option"><input type="radio" name="considerableMentalEffortScore" value="4"><span class="likert-val">4</span><span class="likert-label">Agree</span></label>
+            <label class="likert-option"><input type="radio" name="considerableMentalEffortScore" value="5"><span class="likert-val">5</span><span class="likert-label">Strongly Agree</span></label>
+          </div>
+        </div>
+
+        <!-- Likert 11: Own Ideas -->
+        <div class="likert-card">
+          <div class="likert-question">11. I feel that the final work represents my own ideas and understanding.</div>
+          <div class="likert-description">Assesses the extent to which the response reflects personal conceptual ownership.</div>
+          <div class="likert-scale">
+            <label class="likert-option"><input type="radio" name="ownIdeasScore" value="1" required><span class="likert-val">1</span><span class="likert-label">Strongly Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="ownIdeasScore" value="2"><span class="likert-val">2</span><span class="likert-label">Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="ownIdeasScore" value="3"><span class="likert-val">3</span><span class="likert-label">Neutral</span></label>
+            <label class="likert-option"><input type="radio" name="ownIdeasScore" value="4"><span class="likert-val">4</span><span class="likert-label">Agree</span></label>
+            <label class="likert-option"><input type="radio" name="ownIdeasScore" value="5"><span class="likert-val">5</span><span class="likert-label">Strongly Agree</span></label>
+          </div>
+        </div>
+
+        <!-- Likert 12: Responsibility -->
+        <div class="likert-card">
+          <div class="likert-question">12. I feel responsible for the content of my final answer.</div>
+          <div class="likert-description">Measures accountability and ownership of the submitted response.</div>
+          <div class="likert-scale">
+            <label class="likert-option"><input type="radio" name="responsibilityScore" value="1" required><span class="likert-val">1</span><span class="likert-label">Strongly Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="responsibilityScore" value="2"><span class="likert-val">2</span><span class="likert-label">Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="responsibilityScore" value="3"><span class="likert-val">3</span><span class="likert-label">Neutral</span></label>
+            <label class="likert-option"><input type="radio" name="responsibilityScore" value="4"><span class="likert-val">4</span><span class="likert-label">Agree</span></label>
+            <label class="likert-option"><input type="radio" name="responsibilityScore" value="5"><span class="likert-val">5</span><span class="likert-label">Strongly Agree</span></label>
+          </div>
+        </div>
+
+        <!-- Likert 13: Understanding of Submitted Work -->
+        <div class="likert-card">
+          <div class="likert-question">13. I understand the content of the work I submitted.</div>
+          <div class="likert-description">Assesses comprehension and confidence in the substantive content of the final answer.</div>
+          <div class="likert-scale">
+            <label class="likert-option"><input type="radio" name="understandSubmittedWorkScore" value="1" required><span class="likert-val">1</span><span class="likert-label">Strongly Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="understandSubmittedWorkScore" value="2"><span class="likert-val">2</span><span class="likert-label">Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="understandSubmittedWorkScore" value="3"><span class="likert-val">3</span><span class="likert-label">Neutral</span></label>
+            <label class="likert-option"><input type="radio" name="understandSubmittedWorkScore" value="4"><span class="likert-val">4</span><span class="likert-label">Agree</span></label>
+            <label class="likert-option"><input type="radio" name="understandSubmittedWorkScore" value="5"><span class="likert-val">5</span><span class="likert-label">Strongly Agree</span></label>
+          </div>
+        </div>
+
+        <!-- Likert 14: Explain Without Assistance -->
+        <div class="likert-card">
+          <div class="likert-question">14. I feel that I can explain the main ideas in my answer without assistance.</div>
+          <div class="likert-description">Measures confidence in independent explanation and conceptual recall.</div>
+          <div class="likert-scale">
+            <label class="likert-option"><input type="radio" name="explainWithoutAssistanceScore" value="1" required><span class="likert-val">1</span><span class="likert-label">Strongly Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="explainWithoutAssistanceScore" value="2"><span class="likert-val">2</span><span class="likert-label">Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="explainWithoutAssistanceScore" value="3"><span class="likert-val">3</span><span class="likert-label">Neutral</span></label>
+            <label class="likert-option"><input type="radio" name="explainWithoutAssistanceScore" value="4"><span class="likert-val">4</span><span class="likert-label">Agree</span></label>
+            <label class="likert-option"><input type="radio" name="explainWithoutAssistanceScore" value="5"><span class="likert-val">5</span><span class="likert-label">Strongly Agree</span></label>
+          </div>
+        </div>
+
+        <!-- Likert 15: Academic Ownership -->
+        <div class="likert-card">
+          <div class="likert-question">15. I consider the final work to be my own academic work.</div>
+          <div class="likert-description">Measures academic ownership and self-attribution of the final product.</div>
+          <div class="likert-scale">
+            <label class="likert-option"><input type="radio" name="academicOwnershipScore" value="1" required><span class="likert-val">1</span><span class="likert-label">Strongly Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="academicOwnershipScore" value="2"><span class="likert-val">2</span><span class="likert-label">Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="academicOwnershipScore" value="3"><span class="likert-val">3</span><span class="likert-label">Neutral</span></label>
+            <label class="likert-option"><input type="radio" name="academicOwnershipScore" value="4"><span class="likert-val">4</span><span class="likert-label">Agree</span></label>
+            <label class="likert-option"><input type="radio" name="academicOwnershipScore" value="5"><span class="likert-val">5</span><span class="likert-label">Strongly Agree</span></label>
+          </div>
+        </div>
+
 
         <div class="btn-group" style="margin-top: 2rem;">
           <button type="submit" class="btn btn-primary" id="btnFinalizeRetention">
@@ -925,10 +1089,10 @@
           </div>
         </div>
 
-        <!-- Cognitive Ownership & Dependency Summary -->
+        <!-- Cognitive Reflection Summary -->
         <div class="card" style="border: 1px solid var(--border-color); margin-top: 1rem;">
           <h3 style="font-size: 1.15rem; color: var(--primary-color); margin-bottom: 0.5rem;">
-            Cognitive Reflection & Ownership Ratings
+            Cognitive Engagement Ratings
           </h3>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
             <div style="background: var(--background-bg); padding: 0.75rem 1rem; border-radius: 6px;">
@@ -944,8 +1108,41 @@
               <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin-top: 0.25rem;" id="resOwnershipRating">0 / 5</div>
             </div>
             <div style="background: var(--background-bg); padding: 0.75rem 1rem; border-radius: 6px;">
-              <div class="meta-label">Cognitive Dependency</div>
-              <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin-top: 0.25rem;" id="resDependencyRating">0 / 5</div>
+              <div class="meta-label">Active Thought</div>
+              <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin-top: 0.25rem;" id="resActiveThoughtRating">0 / 5</div>
+            </div>
+            <div style="background: var(--background-bg); padding: 0.75rem 1rem; border-radius: 6px;">
+              <div class="meta-label">Concept Understanding</div>
+              <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin-top: 0.25rem;" id="resUnderstandConceptsRating">0 / 5</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cognitive Effort Summary -->
+        <div class="card" style="border: 1px solid var(--border-color); margin-top: 1rem;">
+          <h3 style="font-size: 1.15rem; color: var(--primary-color); margin-bottom: 0.5rem;">
+            Cognitive Effort Ratings
+          </h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+            <div style="background: var(--background-bg); padding: 0.75rem 1rem; border-radius: 6px;">
+              <div class="meta-label">Mental Effort Required</div>
+              <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin-top: 0.25rem;" id="resMentalEffortRequiredRating">0 / 5</div>
+            </div>
+            <div style="background: var(--background-bg); padding: 0.75rem 1rem; border-radius: 6px;">
+              <div class="meta-label">Careful Thinking</div>
+              <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin-top: 0.25rem;" id="resCarefulThinkingRating">0 / 5</div>
+            </div>
+            <div style="background: var(--background-bg); padding: 0.75rem 1rem; border-radius: 6px;">
+              <div class="meta-label">Concentration</div>
+              <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin-top: 0.25rem;" id="resConcentrationRating">0 / 5</div>
+            </div>
+            <div style="background: var(--background-bg); padding: 0.75rem 1rem; border-radius: 6px;">
+              <div class="meta-label">Mental Demand</div>
+              <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin-top: 0.25rem;" id="resMentallyDemandingRating">0 / 5</div>
+            </div>
+            <div style="background: var(--background-bg); padding: 0.75rem 1rem; border-radius: 6px;">
+              <div class="meta-label">Considerable Mental Effort</div>
+              <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin-top: 0.25rem;" id="resConsiderableMentalEffortRating">0 / 5</div>
             </div>
           </div>
         </div>
@@ -961,6 +1158,84 @@
           Retry saving Phase 3 results
         </button>
       </div>
+    </section>
+
+    <!-- =========================================================================
+         STAGE 4: Cognitive Effort (1-5 Likert Scales)
+         ========================================================================= -->
+    <section id="stage5-container" style="display: none;">
+      <div class="research-notice ethical">
+        <span class="notice-icon">&#9432;</span>
+        <div>
+          <strong>Cognitive Effort:</strong> Please rate how demanding the task felt mentally during the learning activity on a 1–5 scale (1: Strongly Disagree &rarr; 5: Strongly Agree).
+        </div>
+      </div>
+
+      <form id="cognitiveEffortForm" novalidate onsubmit="return handleCognitiveEffortSubmit(event)">
+        <div class="likert-card">
+          <div class="likert-question">1. The task required a lot of mental effort from me.</div>
+          <div class="likert-description">Measures the degree of cognitive workload experienced while completing the activity.</div>
+          <div class="likert-scale">
+            <label class="likert-option"><input type="radio" name="mentalEffortRequiredScore" value="1" required><span class="likert-val">1</span><span class="likert-label">Strongly Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="mentalEffortRequiredScore" value="2"><span class="likert-val">2</span><span class="likert-label">Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="mentalEffortRequiredScore" value="3"><span class="likert-val">3</span><span class="likert-label">Neutral</span></label>
+            <label class="likert-option"><input type="radio" name="mentalEffortRequiredScore" value="4"><span class="likert-val">4</span><span class="likert-label">Agree</span></label>
+            <label class="likert-option"><input type="radio" name="mentalEffortRequiredScore" value="5"><span class="likert-val">5</span><span class="likert-label">Strongly Agree</span></label>
+          </div>
+        </div>
+
+        <div class="likert-card">
+          <div class="likert-question">2. I had to think carefully to complete the task.</div>
+          <div class="likert-description">Captures the amount of deliberate reasoning needed for successful completion.</div>
+          <div class="likert-scale">
+            <label class="likert-option"><input type="radio" name="carefulThinkingScore" value="1" required><span class="likert-val">1</span><span class="likert-label">Strongly Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="carefulThinkingScore" value="2"><span class="likert-val">2</span><span class="likert-label">Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="carefulThinkingScore" value="3"><span class="likert-val">3</span><span class="likert-label">Neutral</span></label>
+            <label class="likert-option"><input type="radio" name="carefulThinkingScore" value="4"><span class="likert-val">4</span><span class="likert-label">Agree</span></label>
+            <label class="likert-option"><input type="radio" name="carefulThinkingScore" value="5"><span class="likert-val">5</span><span class="likert-label">Strongly Agree</span></label>
+          </div>
+        </div>
+
+        <div class="likert-card">
+          <div class="likert-question">3. I had to concentrate strongly during the activity.</div>
+          <div class="likert-description">Assesses sustained attentional control and focus under cognitive load.</div>
+          <div class="likert-scale">
+            <label class="likert-option"><input type="radio" name="concentrationScore" value="1" required><span class="likert-val">1</span><span class="likert-label">Strongly Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="concentrationScore" value="2"><span class="likert-val">2</span><span class="likert-label">Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="concentrationScore" value="3"><span class="likert-val">3</span><span class="likert-label">Neutral</span></label>
+            <label class="likert-option"><input type="radio" name="concentrationScore" value="4"><span class="likert-val">4</span><span class="likert-label">Agree</span></label>
+            <label class="likert-option"><input type="radio" name="concentrationScore" value="5"><span class="likert-val">5</span><span class="likert-label">Strongly Agree</span></label>
+          </div>
+        </div>
+
+        <div class="likert-card">
+          <div class="likert-question">4. I found the task mentally demanding.</div>
+          <div class="likert-description">Measures perceived mental strain and task difficulty.</div>
+          <div class="likert-scale">
+            <label class="likert-option"><input type="radio" name="mentallyDemandingScore" value="1" required><span class="likert-val">1</span><span class="likert-label">Strongly Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="mentallyDemandingScore" value="2"><span class="likert-val">2</span><span class="likert-label">Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="mentallyDemandingScore" value="3"><span class="likert-val">3</span><span class="likert-label">Neutral</span></label>
+            <label class="likert-option"><input type="radio" name="mentallyDemandingScore" value="4"><span class="likert-val">4</span><span class="likert-label">Agree</span></label>
+            <label class="likert-option"><input type="radio" name="mentallyDemandingScore" value="5"><span class="likert-val">5</span><span class="likert-label">Strongly Agree</span></label>
+          </div>
+        </div>
+
+        <div class="likert-card">
+          <div class="likert-question">5. I made a considerable mental effort to understand the information.</div>
+          <div class="likert-description">Evaluates the perceived depth of cognitive investment involved in comprehension.</div>
+          <div class="likert-scale">
+            <label class="likert-option"><input type="radio" name="considerableMentalEffortScore" value="1" required><span class="likert-val">1</span><span class="likert-label">Strongly Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="considerableMentalEffortScore" value="2"><span class="likert-val">2</span><span class="likert-label">Disagree</span></label>
+            <label class="likert-option"><input type="radio" name="considerableMentalEffortScore" value="3"><span class="likert-val">3</span><span class="likert-label">Neutral</span></label>
+            <label class="likert-option"><input type="radio" name="considerableMentalEffortScore" value="4"><span class="likert-val">4</span><span class="likert-label">Agree</span></label>
+            <label class="likert-option"><input type="radio" name="considerableMentalEffortScore" value="5"><span class="likert-val">5</span><span class="likert-label">Strongly Agree</span></label>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
+          <button type="submit" class="btn btn-primary">Submit Cognitive Effort & Continue</button>
+        </div>
+      </form>
     </section>
 
   </main>
@@ -1090,6 +1365,39 @@
       return false;
     }
 
+    async function handleCognitiveEffortSubmit(event) {
+      event.preventDefault();
+      if (!validateRecallForm(event.currentTarget)) return false;
+
+      const mentalEffortRequiredScore = parseInt(document.querySelector('input[name="mentalEffortRequiredScore"]:checked')?.value || "0", 10);
+      const carefulThinkingScore = parseInt(document.querySelector('input[name="carefulThinkingScore"]:checked')?.value || "0", 10);
+      const concentrationScore = parseInt(document.querySelector('input[name="concentrationScore"]:checked')?.value || "0", 10);
+      const mentallyDemandingScore = parseInt(document.querySelector('input[name="mentallyDemandingScore"]:checked')?.value || "0", 10);
+      const considerableMentalEffortScore = parseInt(document.querySelector('input[name="considerableMentalEffortScore"]:checked')?.value || "0", 10);
+
+      const payload = {
+        ...pendingPhase3Payload,
+        mental_effort_required_score: mentalEffortRequiredScore,
+        careful_thinking_score: carefulThinkingScore,
+        concentration_score: concentrationScore,
+        mentally_demanding_score: mentallyDemandingScore,
+        considerable_mental_effort_score: considerableMentalEffortScore
+      };
+
+      document.getElementById("stage5-container").style.display = "none";
+      document.getElementById("stage4-container").style.display = "block";
+      document.getElementById("stepIndicator3").classList.remove("active");
+      document.getElementById("stepIndicator3").classList.add("completed");
+
+      const statusEl = document.getElementById("resServerStatus");
+      statusEl.textContent = "Saving Phase 3 and Phase 4 results...";
+      statusEl.style.color = "var(--text-primary)";
+
+      pendingPhase3Payload = payload;
+      await savePhase3Results(payload);
+      return false;
+    }
+
     async function savePhase3Results(payload) {
       const statusEl = document.getElementById("resServerStatus");
       const retryButton = document.getElementById("btnRetryPhase3Save");
@@ -1154,7 +1462,8 @@
       const explanationScore = parseInt(document.querySelector('input[name="explanationScore"]:checked')?.value || "0", 10);
       const rememberScore = parseInt(document.querySelector('input[name="rememberScore"]:checked')?.value || "0", 10);
       const ownershipScore = parseInt(document.querySelector('input[name="ownershipScore"]:checked')?.value || "0", 10);
-      const dependencyScore = parseInt(document.querySelector('input[name="dependencyScore"]:checked')?.value || "0", 10);
+      const activeThoughtScore = parseInt(document.querySelector('input[name="activeThoughtScore"]:checked')?.value || "0", 10);
+      const understandConceptsScore = parseInt(document.querySelector('input[name="understandConceptsScore"]:checked')?.value || "0", 10);
 
       // --- Step B: Retention Metric Calculations ---
       const brainRetentionScore = brainImmediateScore > 0 
@@ -1175,17 +1484,19 @@
         genai_retention_score: genaiRetentionScore,
         ownership_score: ownershipScore,
         explanation_score: explanationScore,
-        dependency_score: dependencyScore,
+        dependency_score: null,
+        active_thought_score: activeThoughtScore,
+        understand_concepts_score: understandConceptsScore,
         experiment_group: experimentGroup
       };
 
-      // Switch to Stage 4 (Dashboard)
+      // Switch to Phase 4: Cognitive Effort
       document.getElementById("stage3-container").style.display = "none";
-      document.getElementById("stage4-container").style.display = "block";
+      document.getElementById("stage5-container").style.display = "block";
 
       document.getElementById("stepIndicator2").classList.remove("active");
       document.getElementById("stepIndicator2").classList.add("completed");
-      document.getElementById("stepIndicator3").classList.add("completed");
+      document.getElementById("stepIndicator3").classList.add("active");
 
       // Populate Visual Dashboards
       document.getElementById("dispBrainRetention").textContent = `${brainRetentionScore}%`;
@@ -1233,7 +1544,13 @@
       document.getElementById("resExplanationRating").textContent = `${explanationScore} / 5`;
       document.getElementById("resRememberRating").textContent = `${rememberScore} / 5`;
       document.getElementById("resOwnershipRating").textContent = `${ownershipScore} / 5`;
-      document.getElementById("resDependencyRating").textContent = `${dependencyScore} / 5`;
+      document.getElementById("resActiveThoughtRating").textContent = `${activeThoughtScore} / 5`;
+      document.getElementById("resUnderstandConceptsRating").textContent = `${understandConceptsScore} / 5`;
+      document.getElementById("resMentalEffortRequiredRating").textContent = `${payload.mental_effort_required_score || 0} / 5`;
+      document.getElementById("resCarefulThinkingRating").textContent = `${payload.careful_thinking_score || 0} / 5`;
+      document.getElementById("resConcentrationRating").textContent = `${payload.concentration_score || 0} / 5`;
+      document.getElementById("resMentallyDemandingRating").textContent = `${payload.mentally_demanding_score || 0} / 5`;
+      document.getElementById("resConsiderableMentalEffortRating").textContent = `${payload.considerable_mental_effort_score || 0} / 5`;
 
       // Stop the active-trial warning while Phase 3 results are being saved.
       clearUnloadWarning();

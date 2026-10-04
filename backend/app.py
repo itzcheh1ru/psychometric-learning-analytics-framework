@@ -129,6 +129,16 @@ SELECT
     d.ownership_score,
     d.explanation_score,
     d.dependency_score,
+    d.active_thought_score,
+    d.understand_concepts_score,
+    d.careful_consideration_score,
+    d.active_involvement_score,
+    d.reflected_learning_score,
+    d.mental_effort_required_score,
+    d.careful_thinking_score,
+    d.concentration_score,
+    d.mentally_demanding_score,
+    d.considerable_mental_effort_score,
     d.created_at
 FROM delayed_recall_results d
 LEFT JOIN participants p ON d.participant_id = p.participant_id
@@ -631,7 +641,17 @@ if HAS_FLASK:
             "genai_retention_score": 66.7,
             "ownership_score": 4,
             "explanation_score": 4,
-            "dependency_score": 2
+            "dependency_score": 2,
+            "active_thought_score": 5,
+            "understand_concepts_score": 4,
+            "careful_consideration_score": 5,
+            "active_involvement_score": 4,
+            "reflected_learning_score": 5,
+            "mental_effort_required_score": 5,
+            "careful_thinking_score": 4,
+            "concentration_score": 5,
+            "mentally_demanding_score": 4,
+            "considerable_mental_effort_score": 5
         }
         """
         data = request.get_json() or {}
@@ -645,6 +665,16 @@ if HAS_FLASK:
         ownership_score = data.get("ownership_score")
         explanation_score = data.get("explanation_score")
         dependency_score = data.get("dependency_score")
+        active_thought_score = data.get("active_thought_score")
+        understand_concepts_score = data.get("understand_concepts_score")
+        careful_consideration_score = data.get("careful_consideration_score")
+        active_involvement_score = data.get("active_involvement_score")
+        reflected_learning_score = data.get("reflected_learning_score")
+        mental_effort_required_score = data.get("mental_effort_required_score")
+        careful_thinking_score = data.get("careful_thinking_score")
+        concentration_score = data.get("concentration_score")
+        mentally_demanding_score = data.get("mentally_demanding_score")
+        considerable_mental_effort_score = data.get("considerable_mental_effort_score")
         experiment_group = data.get("experiment_group")
 
         if not participant_id:
@@ -663,8 +693,13 @@ if HAS_FLASK:
                     participant_id, brain_immediate_score, brain_recall_score,
                     brain_retention_score, genai_immediate_score, genai_recall_score,
                     genai_retention_score, ownership_score, explanation_score,
-                    dependency_score, experiment_group
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    dependency_score, active_thought_score, understand_concepts_score,
+                    careful_consideration_score, active_involvement_score,
+                    reflected_learning_score, mental_effort_required_score,
+                    careful_thinking_score, concentration_score,
+                    mentally_demanding_score, considerable_mental_effort_score,
+                    experiment_group
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 participant_id,
                 float(brain_immediate_score),
@@ -676,6 +711,16 @@ if HAS_FLASK:
                 int(ownership_score) if ownership_score is not None else None,
                 int(explanation_score) if explanation_score is not None else None,
                 int(dependency_score) if dependency_score is not None else None,
+                int(active_thought_score) if active_thought_score is not None else None,
+                int(understand_concepts_score) if understand_concepts_score is not None else None,
+                int(careful_consideration_score) if careful_consideration_score is not None else None,
+                int(active_involvement_score) if active_involvement_score is not None else None,
+                int(reflected_learning_score) if reflected_learning_score is not None else None,
+                int(mental_effort_required_score) if mental_effort_required_score is not None else None,
+                int(careful_thinking_score) if careful_thinking_score is not None else None,
+                int(concentration_score) if concentration_score is not None else None,
+                int(mentally_demanding_score) if mentally_demanding_score is not None else None,
+                int(considerable_mental_effort_score) if considerable_mental_effort_score is not None else None,
                 experiment_group
             ))
             result_id = cursor.lastrowid
@@ -1059,6 +1104,16 @@ else:
                 ownership_score = data.get("ownership_score")
                 explanation_score = data.get("explanation_score")
                 dependency_score = data.get("dependency_score")
+                active_thought_score = data.get("active_thought_score")
+                understand_concepts_score = data.get("understand_concepts_score")
+                careful_consideration_score = data.get("careful_consideration_score")
+                active_involvement_score = data.get("active_involvement_score")
+                reflected_learning_score = data.get("reflected_learning_score")
+                mental_effort_required_score = data.get("mental_effort_required_score")
+                careful_thinking_score = data.get("careful_thinking_score")
+                concentration_score = data.get("concentration_score")
+                mentally_demanding_score = data.get("mentally_demanding_score")
+                considerable_mental_effort_score = data.get("considerable_mental_effort_score")
                 experiment_group = data.get("experiment_group")
 
                 if not participant_id:
@@ -1077,8 +1132,13 @@ else:
                             participant_id, brain_immediate_score, brain_recall_score,
                             brain_retention_score, genai_immediate_score, genai_recall_score,
                             genai_retention_score, ownership_score, explanation_score,
-                            dependency_score, experiment_group
-                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                            dependency_score, active_thought_score, understand_concepts_score,
+                            careful_consideration_score, active_involvement_score,
+                            reflected_learning_score, mental_effort_required_score,
+                            careful_thinking_score, concentration_score,
+                            mentally_demanding_score, considerable_mental_effort_score,
+                            experiment_group
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """, (
                         participant_id,
                         float(brain_immediate_score),
@@ -1090,6 +1150,16 @@ else:
                         int(ownership_score) if ownership_score is not None else None,
                         int(explanation_score) if explanation_score is not None else None,
                         int(dependency_score) if dependency_score is not None else None,
+                        int(active_thought_score) if active_thought_score is not None else None,
+                        int(understand_concepts_score) if understand_concepts_score is not None else None,
+                        int(careful_consideration_score) if careful_consideration_score is not None else None,
+                        int(active_involvement_score) if active_involvement_score is not None else None,
+                        int(reflected_learning_score) if reflected_learning_score is not None else None,
+                        int(mental_effort_required_score) if mental_effort_required_score is not None else None,
+                        int(careful_thinking_score) if careful_thinking_score is not None else None,
+                        int(concentration_score) if concentration_score is not None else None,
+                        int(mentally_demanding_score) if mentally_demanding_score is not None else None,
+                        int(considerable_mental_effort_score) if considerable_mental_effort_score is not None else None,
                         experiment_group
                     ))
                     result_id = cursor.lastrowid

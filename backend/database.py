@@ -139,6 +139,16 @@ def init_db():
         ownership_score INTEGER,
         explanation_score INTEGER,
         dependency_score INTEGER,
+        active_thought_score INTEGER,
+        understand_concepts_score INTEGER,
+        careful_consideration_score INTEGER,
+        active_involvement_score INTEGER,
+        reflected_learning_score INTEGER,
+        mental_effort_required_score INTEGER,
+        careful_thinking_score INTEGER,
+        concentration_score INTEGER,
+        mentally_demanding_score INTEGER,
+        considerable_mental_effort_score INTEGER,
         experiment_group TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (participant_id) REFERENCES participants(participant_id)
@@ -161,6 +171,16 @@ def init_db():
             ownership_score INTEGER,
             explanation_score INTEGER,
             dependency_score INTEGER,
+            active_thought_score INTEGER,
+            understand_concepts_score INTEGER,
+            careful_consideration_score INTEGER,
+            active_involvement_score INTEGER,
+            reflected_learning_score INTEGER,
+            mental_effort_required_score INTEGER,
+            careful_thinking_score INTEGER,
+            concentration_score INTEGER,
+            mentally_demanding_score INTEGER,
+            considerable_mental_effort_score INTEGER,
             experiment_group TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (participant_id) REFERENCES participants(participant_id)
@@ -171,12 +191,20 @@ def init_db():
             id, participant_id, brain_immediate_score, brain_recall_score,
             brain_retention_score, genai_immediate_score, genai_recall_score,
             genai_retention_score, ownership_score, explanation_score,
-            dependency_score, experiment_group, created_at
+            dependency_score, active_thought_score, understand_concepts_score,
+            careful_consideration_score, active_involvement_score,
+            reflected_learning_score, mental_effort_required_score,
+            careful_thinking_score, concentration_score,
+            mentally_demanding_score, considerable_mental_effort_score,
+            experiment_group, created_at
         )
         SELECT id, participant_id, brain_immediate_score, brain_recall_score,
             brain_retention_score, genai_immediate_score, genai_recall_score,
             genai_retention_score, ownership_score, explanation_score,
-            dependency_score, experiment_group, created_at
+            dependency_score, active_thought_score, understand_concepts_score,
+            careful_consideration_score, active_involvement_score,
+            reflected_learning_score, NULL, NULL, NULL, NULL, NULL,
+            experiment_group, created_at
         FROM delayed_recall_results
         """)
         cursor.execute("DROP TABLE delayed_recall_results")
@@ -199,6 +227,16 @@ def init_db():
     ensure_column("brain_only_results", "experiment_group", "TEXT")
     ensure_column("genai_assisted_results", "experiment_group", "TEXT")
     ensure_column("delayed_recall_results", "experiment_group", "TEXT")
+    ensure_column("delayed_recall_results", "active_thought_score", "INTEGER")
+    ensure_column("delayed_recall_results", "understand_concepts_score", "INTEGER")
+    ensure_column("delayed_recall_results", "careful_consideration_score", "INTEGER")
+    ensure_column("delayed_recall_results", "active_involvement_score", "INTEGER")
+    ensure_column("delayed_recall_results", "reflected_learning_score", "INTEGER")
+    ensure_column("delayed_recall_results", "mental_effort_required_score", "INTEGER")
+    ensure_column("delayed_recall_results", "careful_thinking_score", "INTEGER")
+    ensure_column("delayed_recall_results", "concentration_score", "INTEGER")
+    ensure_column("delayed_recall_results", "mentally_demanding_score", "INTEGER")
+    ensure_column("delayed_recall_results", "considerable_mental_effort_score", "INTEGER")
 
     conn.commit()
     conn.close()
