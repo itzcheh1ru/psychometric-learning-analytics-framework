@@ -265,6 +265,30 @@ body {
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
+.phase2-search-form {
+  display: flex;
+  align-items: end;
+  gap: 0.75rem;
+  max-width: 760px;
+  margin: 1rem 0 1.5rem;
+}
+
+.phase2-search-field {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 520px) {
+  .phase2-search-form {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .phase2-search-form .btn {
+    width: 100%;
+  }
+}
+
 .radio-group {
   display: flex;
   flex-direction: column;

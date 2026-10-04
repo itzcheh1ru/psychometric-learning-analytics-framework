@@ -1,0 +1,212 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Check source diff formatting",
+			"type": "shell",
+			"command": "C:/Users/USER/.cache/codex-runtimes/codex-primary-runtime/dependencies/native/git/cmd/git.exe",
+			"args": [
+				"-C",
+				"c:/Users/USER/Downloads/Research Project (1)/Research Project",
+				"diff",
+				"--check",
+				"--",
+				"backend/app.py",
+				"backend/database.py",
+				"frontend/delayed_recall.html"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Check source diff formatting",
+			"type": "shell",
+			"command": "C:/Users/USER/.cache/codex-runtimes/codex-primary-runtime/dependencies/native/git/cmd/git.exe",
+			"args": [
+				"-C",
+				"c:/Users/USER/Downloads/Research Project (1)/Research Project",
+				"-c",
+				"core.pager=cat",
+				"diff",
+				"--check",
+				"--",
+				"backend/app.py",
+				"backend/database.py",
+				"frontend/delayed_recall.html"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Check source diff formatting",
+			"type": "shell",
+			"command": "C:/Users/USER/.cache/codex-runtimes/codex-primary-runtime/dependencies/native/git/cmd/git.exe",
+			"args": [
+				"--no-pager",
+				"-C",
+				"c:/Users/USER/Downloads/Research Project (1)/Research Project",
+				"diff",
+				"--check",
+				"--",
+				"backend/app.py",
+				"backend/database.py",
+				"frontend/delayed_recall.html"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Stage questionnaire source files",
+			"type": "shell",
+			"command": "C:/Users/USER/.cache/codex-runtimes/codex-primary-runtime/dependencies/native/git/cmd/git.exe",
+			"args": [
+				"-C",
+				"c:/Users/USER/Downloads/Research Project (1)/Research Project",
+				"add",
+				"--",
+				"backend/app.py",
+				"backend/database.py",
+				"frontend/delayed_recall.html"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Commit questionnaire updates",
+			"type": "shell",
+			"command": "C:/Users/USER/.cache/codex-runtimes/codex-primary-runtime/dependencies/native/git/cmd/git.exe",
+			"args": [
+				"-C",
+				"c:/Users/USER/Downloads/Research Project (1)/Research Project",
+				"commit",
+				"-m",
+				"Update delayed recall questionnaire metrics"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Verify new commit status",
+			"type": "shell",
+			"command": "C:/Users/USER/.cache/codex-runtimes/codex-primary-runtime/dependencies/native/git/cmd/git.exe",
+			"args": [
+				"-C",
+				"c:/Users/USER/Downloads/Research Project (1)/Research Project",
+				"status",
+				"-sb"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Push committed questionnaire update",
+			"type": "shell",
+			"command": "C:/Users/USER/.cache/codex-runtimes/codex-primary-runtime/dependencies/native/git/cmd/git.exe",
+			"args": [
+				"-C",
+				"c:/Users/USER/Downloads/Research Project (1)/Research Project",
+				"push",
+				"origin",
+				"it23155220"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Run Flask research app",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"backend/app.py"
+			],
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Git commit changes",
+			"type": "shell",
+			"command": "git status --short --branch; git add -A; git commit -m \"Update research app wording and workflow\"",
+			"args": [],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Find git executable",
+			"type": "shell",
+			"command": "where.exe git; Get-Command git -All | Format-List *",
+			"args": [],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Locate Git in standard install paths",
+			"type": "shell",
+			"command": "Get-ChildItem -Path \"C:\\Program Files\",\"C:\\Program Files (x86)\" -Filter git.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName -First 20; Get-ChildItem -Path \"$env:LOCALAPPDATA\" -Filter git.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName -First 20",
+			"args": [],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Locate Git in standard install paths",
+			"type": "shell",
+			"command": "Get-ChildItem -Path @(\"C:\\Program Files\",\"C:\\Program Files (x86)\",\"$env:LOCALAPPDATA\") -Filter git.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName -First 50",
+			"args": [],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Check likely Git install paths",
+			"type": "shell",
+			"command": "cmd /c \"if exist \\\"C:\\Program Files\\Git\\bin\\git.exe\\\" echo FOUND1 & if exist \\\"C:\\Program Files\\Git\\cmd\\git.exe\\\" echo FOUND2 & if exist \\\"C:\\Users\\USER\\AppData\\Local\\Programs\\Git\\bin\\git.exe\\\" echo FOUND3 & if exist \\\"C:\\Users\\USER\\AppData\\Local\\Programs\\Git\\cmd\\git.exe\\\" echo FOUND4 & if exist \\\"C:\\Program Files (x86)\\Git\\bin\\git.exe\\\" echo FOUND5 & if exist \\\"C:\\Program Files (x86)\\Git\\cmd\\git.exe\\\" echo FOUND6\"",
+			"args": [],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Check likely Git install paths",
+			"type": "shell",
+			"command": "$paths = @('C:\\Program Files\\Git\\bin\\git.exe','C:\\Program Files\\Git\\cmd\\git.exe','C:\\Users\\USER\\AppData\\Local\\Programs\\Git\\bin\\git.exe','C:\\Users\\USER\\AppData\\Local\\Programs\\Git\\cmd\\git.exe','C:\\Program Files (x86)\\Git\\bin\\git.exe','C:\\Program Files (x86)\\Git\\cmd\\git.exe'); foreach ($p in $paths) { if (Test-Path -LiteralPath $p) { Write-Output \"FOUND $p\" } }",
+			"args": [],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Find Git install",
+			"type": "shell",
+			"command": "$paths = @('C:\\Program Files\\Git\\bin\\git.exe','C:\\Program Files\\Git\\cmd\\git.exe','C:\\Users\\USER\\AppData\\Local\\Programs\\Git\\bin\\git.exe','C:\\Users\\USER\\AppData\\Local\\Programs\\Git\\cmd\\git.exe','C:\\Program Files (x86)\\Git\\bin\\git.exe','C:\\Program Files (x86)\\Git\\cmd\\git.exe'); foreach ($p in $paths) { if (Test-Path -LiteralPath $p) { Write-Output $p } }",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Search Windows for Git binary",
+			"type": "shell",
+			"command": "Get-ChildItem -Path @('C:\\','D:\\','E:\\','$env:USERPROFILE') -Filter git.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 50 -ExpandProperty FullName",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Commit repo changes on branch",
+			"type": "shell",
+			"command": "$git = 'C:\\Users\\USER\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\git\\cmd\\git.exe'; $repo = 'C:\\Users\\USER\\Downloads\\Research Project (1)\\Research Project'; & $git -C $repo status --short --branch; & $git -C $repo add -A; & $git -C $repo commit -m \"Update research app wording and workflow\"",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		}
+	]
+}

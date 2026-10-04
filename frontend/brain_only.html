@@ -78,7 +78,7 @@
       </div>
       <div class="step-item" id="stepIndicator3">
         <span class="step-badge">3</span>
-        <span>Cognitive & Self-Report Measures</span>
+        <span>Finalize Phase 1</span>
       </div>
       <div class="step-item" id="stepIndicator4">
         <span class="step-badge">4</span>
@@ -408,117 +408,18 @@
     </section>
 
     <!-- =========================================================================
-         STAGE 3: Self-Reported Cognitive & Learning Measures (1-5 Likert Scales)
+         STAGE 3: Finalize Phase 1 Results
          ========================================================================= -->
     <section id="stage3-container" style="display: none;">
       <div class="research-notice ethical">
         <span class="notice-icon">&#9432;</span>
         <div>
-          <strong>Cognitive & Metacognitive Evaluation:</strong> Please reflect on your learning experience during this Brain-Only session and rate the following measures using the 1–5 scale.
+          <strong>Assessment Complete:</strong> Review your Phase 1 responses, then finalize to save your results.
         </div>
       </div>
 
       <form id="likertForm" onsubmit="return handleLikertSubmit(event)">
         
-        <!-- Likert Question 1: Confidence -->
-        <div class="likert-card">
-          <div class="likert-question">1. How confident are you that you understood the topic?</div>
-          <div class="likert-description">Reflect on your perceived clarity and comprehension of blockchain architecture and consensus.</div>
-          <div class="likert-scale">
-            <label class="likert-option">
-              <input type="radio" name="confidenceScore" value="1" required>
-              <span class="likert-val">1</span>
-              <span class="likert-label">Not confident at all</span>
-            </label>
-            <label class="likert-option">
-              <input type="radio" name="confidenceScore" value="2">
-              <span class="likert-val">2</span>
-              <span class="likert-label">Slightly confident</span>
-            </label>
-            <label class="likert-option">
-              <input type="radio" name="confidenceScore" value="3">
-              <span class="likert-val">3</span>
-              <span class="likert-label">Moderately confident</span>
-            </label>
-            <label class="likert-option">
-              <input type="radio" name="confidenceScore" value="4">
-              <span class="likert-val">4</span>
-              <span class="likert-label">Very confident</span>
-            </label>
-            <label class="likert-option">
-              <input type="radio" name="confidenceScore" value="5">
-              <span class="likert-val">5</span>
-              <span class="likert-label">Completely confident</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Likert Question 2: Mental Effort (Paas Cognitive Load Scale) -->
-        <div class="likert-card">
-          <div class="likert-question">2. How much mental effort did you use during learning?</div>
-          <div class="likert-description">Cognitive load measurement assessing mental concentration and cognitive strain during autonomous study.</div>
-          <div class="likert-scale">
-            <label class="likert-option">
-              <input type="radio" name="effortScore" value="1" required>
-              <span class="likert-val">1</span>
-              <span class="likert-label">Very low mental effort</span>
-            </label>
-            <label class="likert-option">
-              <input type="radio" name="effortScore" value="2">
-              <span class="likert-val">2</span>
-              <span class="likert-label">Low mental effort</span>
-            </label>
-            <label class="likert-option">
-              <input type="radio" name="effortScore" value="3">
-              <span class="likert-val">3</span>
-              <span class="likert-label">Moderate mental effort</span>
-            </label>
-            <label class="likert-option">
-              <input type="radio" name="effortScore" value="4">
-              <span class="likert-val">4</span>
-              <span class="likert-label">High mental effort</span>
-            </label>
-            <label class="likert-option">
-              <input type="radio" name="effortScore" value="5">
-              <span class="likert-val">5</span>
-              <span class="likert-label">Very high mental effort</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Likert Question 3: Explanation Ability -->
-        <div class="likert-card">
-          <div class="likert-question">3. How well can you explain this topic without external help?</div>
-          <div class="likert-description">Self-assessed conceptual mastery and ability to articulate core principles independently.</div>
-          <div class="likert-scale">
-            <label class="likert-option">
-              <input type="radio" name="explainScore" value="1" required>
-              <span class="likert-val">1</span>
-              <span class="likert-label">Not well at all</span>
-            </label>
-            <label class="likert-option">
-              <input type="radio" name="explainScore" value="2">
-              <span class="likert-val">2</span>
-              <span class="likert-label">Slightly well</span>
-            </label>
-            <label class="likert-option">
-              <input type="radio" name="explainScore" value="3">
-              <span class="likert-val">3</span>
-              <span class="likert-label">Moderately well</span>
-            </label>
-            <label class="likert-option">
-              <input type="radio" name="explainScore" value="4">
-              <span class="likert-val">4</span>
-              <span class="likert-label">Very well</span>
-            </label>
-            <label class="likert-option">
-              <input type="radio" name="explainScore" value="5">
-              <span class="likert-val">5</span>
-              <span class="likert-label">Extremely well</span>
-            </label>
-          </div>
-        </div>
-
         <div class="btn-group" style="margin-top: 2rem;">
           <button type="submit" class="btn btn-primary" id="btnSubmitAll">
             Finalize & Save Phase 1 Results &rarr;
@@ -539,7 +440,7 @@
           Brain-Only Experimental Trial Recorded
         </h2>
         <p style="color: var(--text-secondary); margin-top: 0.5rem;">
-          Your independent study telemetry, assessment responses, and self-reported cognitive load metrics have been registered into the research database.
+          Your independent study telemetry and assessment responses have been registered into the research database.
         </p>
 
         <!-- Summary Metric Badges -->
@@ -551,14 +452,6 @@
           <div class="score-stat-box">
             <div class="stat-num" id="resMcqScore">0 / 10</div>
             <div class="stat-desc">MCQ Score</div>
-          </div>
-          <div class="score-stat-box">
-            <div class="stat-num" id="resConfidence">0 / 5</div>
-            <div class="stat-desc">Confidence</div>
-          </div>
-          <div class="score-stat-box">
-            <div class="stat-num" id="resEffort">0 / 5</div>
-            <div class="stat-desc">Mental Effort</div>
           </div>
         </div>
 
@@ -694,12 +587,12 @@
     }
 
     /**
-     * Step Transition: Stage 2 (Assessment) -> Stage 3 (Likert Scales)
+    * Step Transition: Stage 2 (Assessment) -> Stage 3 (Finalize Phase 1)
      */
     function handleAssessmentSubmit(event) {
       event.preventDefault();
 
-      const confirmed = window.confirm("Are you ready to submit your assessment answers and proceed to self-report measures? You will not be able to revise your answers.");
+      const confirmed = window.confirm("Are you ready to submit your assessment answers and finalize Phase 1? You will not be able to revise your answers.");
       if (!confirmed) return false;
 
       // Grade MCQs
@@ -729,7 +622,7 @@
       document.getElementById("stepIndicator2").classList.remove("active");
       document.getElementById("stepIndicator2").classList.add("completed");
       document.getElementById("stepIndicator3").classList.add("active");
-      document.getElementById("statusBadge").textContent = "Stage 3: Self-Report Measures";
+      document.getElementById("statusBadge").textContent = "Stage 3: Finalize Results";
 
       window.scrollTo({ top: 0, behavior: "smooth" });
       return false;
@@ -741,10 +634,6 @@
     async function handleLikertSubmit(event) {
       event.preventDefault();
 
-      const confidenceScore = parseInt(document.querySelector('input[name="confidenceScore"]:checked')?.value || "0", 10);
-      const effortScore = parseInt(document.querySelector('input[name="effortScore"]:checked')?.value || "0", 10);
-      const explainScore = parseInt(document.querySelector('input[name="explainScore"]:checked')?.value || "0", 10);
-
       // Construct Payload
       const payload = {
         participant_id: currentParticipantId,
@@ -753,11 +642,8 @@
         mcq_score: evaluatedMcqScore,
         short_answers: {
           q11_tamper_resistance: recordedShortAnswers.q11,
-          q12_pow_vs_pos: recordedShortAnswers.q12,
-          explain_ability_score: explainScore
+          q12_pow_vs_pos: recordedShortAnswers.q12
         },
-        confidence_score: confidenceScore,
-        effort_score: effortScore,
         experiment_group: experimentGroup
       };
 
@@ -776,8 +662,6 @@
       const secs = String(totalLearningDurationSeconds % 60).padStart(2, "0");
       document.getElementById("resLearningTime").textContent = `${mins}:${secs}`;
       document.getElementById("resMcqScore").textContent = `${evaluatedMcqScore} / 10`;
-      document.getElementById("resConfidence").textContent = `${confidenceScore} / 5`;
-      document.getElementById("resEffort").textContent = `${effortScore} / 5`;
 
       // Clear unload protection upon successful completion
       clearUnloadWarning();
