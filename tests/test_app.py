@@ -617,9 +617,9 @@ def test_component3_page_returns_200(client):
 
 
 def test_component3_page_contains_title(client):
-    """Component 3 page must contain 'Longitudinal AI-Assisted Study Pattern Analytics'."""
+    """Component 3 page must contain 'Longitudinal AI-Assisted Study Pattern Evolution'."""
     data = client.get("/component3/").data
-    assert b"Longitudinal AI-Assisted Study Pattern Analytics" in data
+    assert b"Longitudinal AI-Assisted Study Pattern Evolution" in data
 
 
 def test_component3_page_contains_prototype_record(client):
