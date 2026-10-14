@@ -8,8 +8,23 @@
     <h1 class="page-heading__title">Project Information</h1>
     <p class="page-heading__desc">
         Overview of the research project, current prototype status, technology
-        direction and architectural approach.
+        architecture and research integrity commitments.
     </p>
+</div>
+
+<!-- Research Integrity Notice -->
+<div class="independence-notice" role="note" aria-label="Research prototype notice" style="margin-bottom: var(--space-lg);">
+    <svg class="independence-notice__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+    </svg>
+    <div>
+        <p class="independence-notice__title" style="margin: 0 0 4px 0;">Research Integrity Notice</p>
+        <p class="independence-notice__body" style="margin: 0;">
+            This prototype demonstrates software architecture and planned analytical workflows.
+            No pending analytical output should be interpreted as a research finding.
+            All analytical content will reflect actual empirical results once data collection and validation are completed.
+        </p>
+    </div>
 </div>
 
 <!-- Core project info -->
@@ -21,7 +36,7 @@
             <tbody>
                 <tr>
                     <th scope="row">Project</th>
-                    <td>Psychometric Learning Analytics Framework for Generative AI-Assisted Learning</td>
+                    <td><strong>Psychometric Learning Analytics Framework</strong></td>
                 </tr>
                 <tr>
                     <th scope="row">Project ID</th>
@@ -29,7 +44,7 @@
                 </tr>
                 <tr>
                     <th scope="row">Research Area</th>
-                    <td>Data Science &mdash; Learning Analytics &mdash; Educational Data Mining &mdash; Explainable AI</td>
+                    <td>GenAI-Assisted Learning / Learning Analytics / Data Science</td>
                 </tr>
                 <tr>
                     <th scope="row">Institution</th>
@@ -40,11 +55,11 @@
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row">Prototype Status</th>
+                    <th scope="row">Development Stage</th>
                     <td>
                         <span class="status-badge status-badge--collection">
                             <span class="status-badge__dot" aria-hidden="true"></span>
-                            Data Collection and Prototype Development
+                            Prototype Development + Data Collection
                         </span>
                     </td>
                 </tr>
@@ -62,86 +77,85 @@
                 <tr>
                     <th scope="col">Student ID</th>
                     <th scope="col">Research Component</th>
+                    <th scope="col">Component Role</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>IT23426580</td>
+                    <td><strong>IT23426580</strong></td>
                     <td>Explainable Cognitive Offloading Risk Prediction</td>
+                    <td>Component 1 &middot; Machine Learning &amp; SHAP</td>
                 </tr>
                 <tr>
-                    <td>IT23217904</td>
+                    <td><strong>IT23217904</strong></td>
                     <td>Algorithmic Trust &amp; Verification SEM Model</td>
+                    <td>Component 2 &middot; CFA &amp; Structural Equation Modelling</td>
                 </tr>
                 <tr>
-                    <td>IT23426344</td>
+                    <td><strong>IT23426344</strong></td>
                     <td>Longitudinal Study Pattern Analytics</td>
+                    <td>Component 3 &middot; Longitudinal &amp; Trend Analytics</td>
                 </tr>
                 <tr>
-                    <td>IT23165220</td>
+                    <td><strong>IT23165220</strong></td>
                     <td>NLP-Based Cognitive Retention Evaluation</td>
+                    <td>Component 4 &middot; Experimental &amp; NLP Evaluation</td>
                 </tr>
             </tbody>
         </table>
     </div>
 </section>
 
-<!-- Technology direction -->
+<!-- Technology stack: Current vs Planned -->
 <section class="content-section" aria-labelledby="techHeading">
-    <h2 class="section-heading" id="techHeading">Technology Direction</h2>
-    <div class="card-grid card-grid--3">
+    <h2 class="section-heading" id="techHeading">Technology Stack</h2>
+    <p class="section-subheading">
+        Clearly distinguishing currently active application technologies from planned analytical technologies that activate upon completion of research data collection.
+    </p>
 
-        <div class="tech-card">
-            <h3 class="tech-card__heading">Backend</h3>
+    <div class="card-grid card-grid--2" style="margin-top: var(--space-md);">
+
+        <!-- Current Application Technology -->
+        <div class="tech-card" style="border: 2px solid var(--color-primary); background: var(--bg-card, #ffffff);">
+            <div style="display: flex; align-items: center; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+                <span class="status-badge status-badge--development" style="margin: 0;">Active in Prototype</span>
+            </div>
+            <h3 class="tech-card__heading" style="color: var(--color-primary); font-size: 1.15rem; margin-bottom: var(--space-xs);">
+                Current Application Technology
+            </h3>
+            <p style="font-size: var(--font-size-xs, 0.85rem); color: var(--text-muted); margin-bottom: var(--space-sm);">
+                Software infrastructure actively running this research dashboard:
+            </p>
             <ul class="tech-list">
-                <li>Python 3.11+</li>
-                <li>Flask</li>
-                <li>python-dotenv</li>
+                <li><strong>Python 3.11+</strong> &mdash; Core backend language</li>
+                <li><strong>Flask 3.1</strong> &mdash; Application factory, blueprints, routing</li>
+                <li><strong>Gunicorn</strong> &mdash; Production WSGI HTTP server</li>
+                <li><strong>HTML5 / CSS3</strong> &mdash; Semantic, accessible academic UI with design tokens</li>
+                <li><strong>Vanilla JavaScript</strong> &mdash; Lightweight DOM interaction &amp; validation (no framework overhead)</li>
+                <li><strong>python-dotenv</strong> &mdash; Environment configuration</li>
+                <li><strong>pytest</strong> &mdash; Automated test suite and regression verification</li>
             </ul>
         </div>
 
-        <div class="tech-card">
-            <h3 class="tech-card__heading">Frontend</h3>
+        <!-- Planned Analytical Technology -->
+        <div class="tech-card" style="border: 2px dashed var(--border, #e5e7eb); background: var(--bg-surface-alt, #f7f9fc);">
+            <div style="display: flex; align-items: center; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+                <span class="status-badge status-badge--collection" style="margin: 0;">Pending Validated Research Data</span>
+            </div>
+            <h3 class="tech-card__heading" style="color: var(--text-secondary); font-size: 1.15rem; margin-bottom: var(--space-xs);">
+                Planned Analytical Technology
+            </h3>
+            <p style="font-size: var(--font-size-xs, 0.85rem); color: var(--text-muted); margin-bottom: var(--space-sm);">
+                Analytical libraries to be executed after empirical participant data collection:
+            </p>
             <ul class="tech-list">
-                <li>HTML5 / CSS3</li>
-                <li>Vanilla JavaScript</li>
-                <li>Chart.js (planned)</li>
-            </ul>
-        </div>
-
-        <div class="tech-card">
-            <h3 class="tech-card__heading">Data &amp; Analytics</h3>
-            <ul class="tech-list">
-                <li>Pandas, NumPy</li>
-                <li>scikit-learn</li>
-                <li>XGBoost</li>
-                <li>SHAP</li>
-                <li>SciPy</li>
-                <li>NLTK / spaCy</li>
-            </ul>
-        </div>
-
-        <div class="tech-card">
-            <h3 class="tech-card__heading">Statistical Modelling</h3>
-            <ul class="tech-list">
-                <li>R</li>
-                <li>lavaan (SEM/CFA)</li>
-            </ul>
-        </div>
-
-        <div class="tech-card">
-            <h3 class="tech-card__heading">Database (Prototype)</h3>
-            <ul class="tech-list">
-                <li>SQLite (planned)</li>
-            </ul>
-        </div>
-
-        <div class="tech-card">
-            <h3 class="tech-card__heading">Development</h3>
-            <ul class="tech-list">
-                <li>Git / GitHub</li>
-                <li>pytest</li>
-                <li>Jupyter Notebooks</li>
+                <li><strong>scikit-learn</strong> &mdash; Supervised learning (Logistic Regression, Random Forest)</li>
+                <li><strong>XGBoost</strong> &mdash; Gradient boosted decision trees for cognitive offloading</li>
+                <li><strong>SHAP</strong> &mdash; Explainable AI (TreeExplainer &amp; individual attribution)</li>
+                <li><strong>R / lavaan</strong> &mdash; Confirmatory Factor Analysis &amp; Structural Equation Modelling</li>
+                <li><strong>spaCy / NLTK</strong> &mdash; NLP linguistic metric extraction &amp; syntactic complexity</li>
+                <li><strong>Pandas / NumPy</strong> &mdash; Empirical dataset preprocessing &amp; manipulation</li>
+                <li><strong>SciPy</strong> &mdash; Hypothesis testing, paired comparisons &amp; effect sizes</li>
             </ul>
         </div>
 
@@ -150,7 +164,7 @@
 
 <!-- Architecture summary -->
 <section class="content-section" aria-labelledby="archSummaryHeading">
-    <h2 class="section-heading" id="archSummaryHeading">Architecture Summary</h2>
+    <h2 class="section-heading" id="archSummaryHeading">Architecture &amp; Integration Principle</h2>
     <div class="prose-block">
         <p>
             The framework is structured around <strong>four fully independent analytical
@@ -167,19 +181,8 @@
             Once research data collection is complete and each component has been
             individually analysed, their outputs will be presented together in this
             shared research analytics dashboard for <strong>complementary interpretation</strong>.
-            The four components are not combined into a single unified model.
+            The four components are <strong>not</strong> combined into a single unified predictive model or overall student score.
         </p>
-    </div>
-
-    <div class="info-banner info-banner--prototype" role="note" style="margin-top: 1.5rem;">
-        <svg class="info-banner__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-        </svg>
-        <div>
-            No final research findings, model outputs, SEM coefficients, or statistical
-            results are presented in this prototype. All analytical content will reflect
-            actual research results after data collection is complete.
-        </div>
     </div>
 </section>
 

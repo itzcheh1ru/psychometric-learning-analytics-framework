@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Application Error{% endblock %}
+
+{% block content %}
+<div class="error-page" role="main" aria-labelledby="errorHeading">
+    <div class="error-card error-card--server">
+        <div class="error-card__code" aria-hidden="true">500</div>
+        <h1 class="error-card__title" id="errorHeading">Application Error</h1>
+        <p class="error-card__message">
+            The research prototype encountered an unexpected error.
+        </p>
+        <p class="error-card__hint">
+            The error has been safely caught. Internal system details and stack traces are withheld to maintain research integrity and security.
+        </p>
+        <div class="error-card__actions">
+            <a href="{{ url_for('main.dashboard') }}" class="btn btn--primary">
+                Return to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

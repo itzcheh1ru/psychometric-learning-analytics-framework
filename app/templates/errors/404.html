@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found{% endblock %}
+
+{% block content %}
+<div class="error-page" role="main" aria-labelledby="errorHeading">
+    <div class="error-card">
+        <div class="error-card__code" aria-hidden="true">404</div>
+        <h1 class="error-card__title" id="errorHeading">Page Not Found</h1>
+        <p class="error-card__message">
+            The requested research prototype page could not be found.
+        </p>
+        <p class="error-card__hint">
+            Please check the URL or use the navigation actions below to return to the active research prototype.
+        </p>
+        <div class="error-card__actions">
+            <a href="{{ url_for('main.dashboard') }}" class="btn btn--primary">
+                Return to Dashboard
+            </a>
+            <a href="{{ url_for('framework.index') }}" class="btn btn--outline">
+                View Framework
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

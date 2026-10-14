@@ -1532,3 +1532,228 @@ def test_dashboard_page_contains_badges_and_integration_principle(client):
     assert "Research Prototype" in html
     assert "Data Collection" in html
     assert "Complementary Evidence" in html
+
+
+# ===========================================================================
+# Feature 008 – Presentation Polish, Reliability & Deployment Readiness
+# ===========================================================================
+
+# --------------------------------------------------------------------------- #
+# Health Check Tests (Requirements 2, 3, 4)                                   #
+# --------------------------------------------------------------------------- #
+
+def test_health_check_returns_200(client):
+    """GET /health must return HTTP 200."""
+    response = client.get("/health")
+    assert response.status_code == 200
+
+
+def test_health_check_status_is_ok(client):
+    """GET /health status must equal 'ok'."""
+    response = client.get("/health")
+    data = response.get_json()
+    assert data["status"] == "ok"
+
+
+def test_health_check_contains_project_id(client):
+    """GET /health response must contain project ID 'J26-DS-310'."""
+    response = client.get("/health")
+    data = response.get_json()
+    assert data.get("project_id") == "J26-DS-310"
+    assert "Psychometric Learning Analytics Framework" in data.get("application", "")
+
+
+# --------------------------------------------------------------------------- #
+# Error Page Tests (Requirements 5, 6, 7, 22)                                 #
+# --------------------------------------------------------------------------- #
+
+def test_unknown_web_route_returns_custom_404(client):
+    """GET unknown route returns HTTP 404 with custom error page."""
+    response = client.get("/this-route-does-not-exist-xyz")
+    assert response.status_code == 404
+    html = response.data.decode()
+    assert "Page Not Found" in html
+
+
+def test_custom_404_contains_required_message_and_actions(client):
+    """Custom 404 page contains required explanatory message and links to dashboard and framework."""
+    response = client.get("/missing-resource-route")
+    assert response.status_code == 404
+    html = response.data.decode()
+    assert "The requested research prototype page could not be found." in html
+    assert "/dashboard" in html
+    assert "Return to Dashboard" in html
+    assert "/framework" in html or "/framework/" in html
+
+
+def test_custom_404_does_not_expose_stack_traces(client):
+    """Custom 404 page does not expose Python stack traces or internal paths."""
+    response = client.get("/non-existent-debug-path")
+    html = response.data.decode().lower()
+    assert "traceback (most recent call last)" not in html
+    assert "site-packages" not in html
+    assert "internal server error" not in html
+    assert ".py\"," not in html
+
+
+def test_unknown_api_route_returns_json_404(client):
+    """GET unknown /api/* route returns JSON error response."""
+    response = client.get("/api/unknown-endpoint")
+    assert response.status_code == 404
+    data = response.get_json()
+    assert data is not None
+    assert data.get("status") == "error"
+    assert "not found" in data.get("message", "").lower()
+
+
+# --------------------------------------------------------------------------- #
+# Security & Cache Headers Tests (Requirements 8, 9, 10)                      #
+# --------------------------------------------------------------------------- #
+
+def test_security_header_content_type_options(client):
+    """Response must contain X-Content-Type-Options: nosniff."""
+    response = client.get("/dashboard")
+    assert response.headers.get("X-Content-Type-Options") == "nosniff"
+
+
+def test_security_header_frame_options(client):
+    """Response must contain X-Frame-Options: SAMEORIGIN."""
+    response = client.get("/dashboard")
+    assert response.headers.get("X-Frame-Options") == "SAMEORIGIN"
+
+
+def test_security_header_referrer_policy(client):
+    """Response must contain Referrer-Policy header."""
+    response = client.get("/dashboard")
+    assert response.headers.get("Referrer-Policy") == "strict-origin-when-cross-origin"
+
+
+def test_api_cache_control_header_is_no_store(client):
+    """API responses must include Cache-Control: no-store to prevent stale prototype demo states."""
+    response = client.get("/api/framework/status")
+    cache_control = response.headers.get("Cache-Control", "")
+    assert "no-store" in cache_control
+
+
+# --------------------------------------------------------------------------- #
+# Route Availability Tests (Requirements 11, 12, 13, 14)                      #
+# --------------------------------------------------------------------------- #
+
+def test_dashboard_route_returns_200(client):
+    """GET /dashboard must return HTTP 200."""
+    response = client.get("/dashboard")
+    assert response.status_code == 200
+
+
+def test_framework_route_without_trailing_slash_returns_200(client):
+    """GET /framework without trailing slash must return HTTP 200 directly without redirect."""
+    response = client.get("/framework")
+    assert response.status_code == 200
+
+
+def test_project_route_returns_200(client):
+    """GET /project must return HTTP 200."""
+    response = client.get("/project")
+    assert response.status_code == 200
+
+
+def test_all_components_without_trailing_slash_return_200(client):
+    """GET /component1 through /component4 without trailing slash must all return HTTP 200."""
+    for comp_route in ["/component1", "/component2", "/component3", "/component4"]:
+        response = client.get(comp_route)
+        assert response.status_code == 200, f"Route {comp_route} should return 200"
+
+
+def test_all_components_with_trailing_slash_return_200(client):
+    """GET /component1/ through /component4/ with trailing slash must all return HTTP 200."""
+    for comp_route in ["/component1/", "/component2/", "/component3/", "/component4/"]:
+        response = client.get(comp_route)
+        assert response.status_code == 200, f"Route {comp_route} should return 200"
+
+
+# --------------------------------------------------------------------------- #
+# Framework Integrity Invariants (Requirements 15, 16, 17, 18)                #
+# --------------------------------------------------------------------------- #
+
+def test_framework_status_api_maintains_no_combined_model(client):
+    """Framework status API must continue to assert single_combined_model=False."""
+    response = client.get("/api/framework/status")
+    data = response.get_json()
+    assert data["single_combined_model"] is False
+
+
+def test_framework_status_api_maintains_overall_score_unavailable(client):
+    """Framework status API must continue to report overall_score_available=False."""
+    response = client.get("/api/framework/status")
+    data = response.get_json()
+    assert data["overall_score_available"] is False
+
+
+def test_no_page_contains_fake_analytical_findings(client):
+    """No page should contain fabricated p-values, artificial R2, or fake scores."""
+    pages = ["/", "/dashboard", "/framework", "/project", "/component1", "/component2", "/component3", "/component4"]
+    for page in pages:
+        response = client.get(page)
+        assert response.status_code == 200
+        html = response.data.decode().lower()
+        assert "p < 0.001" not in html
+        assert "p < 0.05" not in html
+        assert "r-squared = 0." not in html
+        assert "overall_risk_score" not in html
+        assert "critical risk" not in html
+
+
+# --------------------------------------------------------------------------- #
+# Accessibility and Metadata (Requirements 19, 20)                           #
+# --------------------------------------------------------------------------- #
+
+def test_base_page_contains_viewport_meta(client):
+    """Base layout must contain proper viewport meta tag."""
+    response = client.get("/dashboard")
+    html = response.data.decode()
+    assert '<meta name="viewport" content="width=device-width, initial-scale=1.0"' in html
+
+
+def test_base_page_contains_skip_to_content_link(client):
+    """Base layout must contain skip-to-content accessibility link."""
+    response = client.get("/dashboard")
+    html = response.data.decode()
+    assert 'href="#mainContent"' in html
+    assert "Skip to main content" in html
+
+
+# --------------------------------------------------------------------------- #
+# Project Page Polish & Technologies (Requirement 21)                         #
+# --------------------------------------------------------------------------- #
+
+def test_project_page_distinguishes_current_vs_planned_technologies(client):
+    """GET /project must clearly distinguish current application technologies from planned ones."""
+    response = client.get("/project")
+    html = response.data.decode()
+    assert "Current Application Technology" in html
+    assert "Planned Analytical Technology" in html
+    assert "scikit-learn" in html
+    assert "lavaan" in html
+    assert "This prototype demonstrates software architecture and planned analytical workflows." in html
+    assert "No pending analytical output should be interpreted as a research finding." in html
+
+
+# --------------------------------------------------------------------------- #
+# Presentation Mode Tests                                                     #
+# --------------------------------------------------------------------------- #
+
+def test_dashboard_presentation_mode_query(client):
+    """GET /dashboard?presentation=1 must render presentation mode class on body."""
+    response = client.get("/dashboard?presentation=1")
+    assert response.status_code == 200
+    html = response.data.decode()
+    assert "presentation-mode" in html
+    assert "Exit Presentation" in html
+
+
+def test_framework_presentation_mode_query(client):
+    """GET /framework?presentation=1 must render presentation mode class on body."""
+    response = client.get("/framework?presentation=1")
+    assert response.status_code == 200
+    html = response.data.decode()
+    assert "presentation-mode" in html

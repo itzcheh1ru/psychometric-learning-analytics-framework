@@ -445,14 +445,68 @@ analysis is available. The integration layer:
 - Reads component service readiness via direct Python import only.
 - Does **not** make HTTP requests to the application's own APIs.
 
-### Framework API Routes
+### Dashboard Presentation Layer
 
-| Method | Route | Purpose |
-|--------|-------|---------|
-| GET | `/framework/` | Full architectural integration page |
-| GET | `/api/framework/status` | Aggregated component readiness |
-| GET | `/api/framework/specification` | Framework metadata + integration principle |
+The research overview dashboard (`GET /dashboard`) and integration page (`GET /framework`) provide clear, accessible visualization of the four independent components:
+
+- **Above-the-fold component clarity:** Project ID, prototype status, and immediate visibility of all 4 components.
+- **Presentation Mode:** Query-based (`?presentation=1`) or interactive toggle in the header. Hides navigation clutter, widens content container, and increases typography scale for projector visibility during academic reviews and supervisor evaluations.
+- **No Mathematical Aggregation:** The presentation layer strictly respects component boundaries. No overall student score, combined AI index, or cross-component decision matrix is computed.
 
 ---
 
-*Last updated: Feature 007 – Integrated four-component research dashboard*
+## Reliability, Security & Deployment Layer (Feature 008)
+
+### Application Lifecycle & Request Architecture
+
+Incoming HTTP requests are processed through a structured application pipeline:
+
+```
+Request -> WSGI Server (Gunicorn / Flask) -> Flask App Factory (create_app)
+        -> Blueprints (main, framework, component1-4, api_*)
+        -> Response -> after_request (Security Headers + API Cache-Control)
+        -> Client Browser / API Consumer
+```
+
+### Security & Cache Headers
+
+Every outgoing response is automatically augmented in `app/__init__.py` with protective headers:
+
+- `X-Content-Type-Options: nosniff` &mdash; Prevents MIME-type sniffing.
+- `X-Frame-Options: SAMEORIGIN` &mdash; Protects against clickjacking.
+- `Referrer-Policy: strict-origin-when-cross-origin` &mdash; Limits referrer leakage.
+- `Cache-Control: no-store, no-cache, must-revalidate, max-age=0` &mdash; Applied to all `/api/*` endpoints to prevent stale prototype demo states from caching in evaluators' browsers.
+
+### Error Handling Architecture
+
+Custom error handlers intercept HTTP 404 and 500 conditions:
+
+- **Web Requests:** Render academic error templates (`errors/404.html`, `errors/500.html`) with clear navigation links back to `/dashboard` and `/framework`.
+- **API Requests:** Automatically detect JSON requests (`/api/*` or `Accept: application/json`) and return structured JSON (`{"status": "error", "message": "..."}`).
+- **Information Protection:** No internal Python stack traces, file paths, or system details are exposed in error responses.
+
+### Health Check Endpoint
+
+- **Route:** `GET /health`
+- **Output:** Lightweight JSON payload indicating application health and project ID (`J26-DS-310`).
+- **Purpose:** Cloud health checks, container readiness probes, and local hosting verification. Excludes participant data, research models, and environment secrets.
+
+### Configuration & Environment Boundary
+
+Application environments are isolated using Python class-based configurations in `app/config.py`:
+
+- `DevelopmentConfig` &mdash; Local development with debug mode enabled.
+- `TestingConfig` &mdash; Automated test runner configuration with `TESTING = True`.
+- `ProductionConfig` &mdash; Hardened configuration with debugging disabled.
+- `.env.example` &mdash; Template environment file documenting necessary variables without credentials.
+
+### WSGI Deployment Entry Points
+
+- `app.py` &mdash; Local development entry point (`python app.py`).
+- `wsgi.py` &mdash; Standard WSGI production entry point (`gunicorn wsgi:app`).
+- `app:app` &mdash; Package-level WSGI access via PEP 562 module `__getattr__` (`gunicorn app:app`).
+
+---
+
+*Last updated: Feature 008 – Presentation polish, reliability & deployment readiness*
+

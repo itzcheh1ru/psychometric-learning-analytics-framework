@@ -17,9 +17,24 @@
 > Data collection from undergraduate student participants is **currently in progress**.
 > No real research findings, model predictions, SEM coefficients, or statistical
 > results are presented at this stage.
->
-> All analytical modules will be populated with real results once data collection
-> and analysis are complete.
+
+### Prototype Status Summary
+
+- **C1 Prototype:** Implemented (`/component1`)
+- **C2 Prototype:** Implemented (`/component2`)
+- **C3 Prototype:** Implemented (`/component3`)
+- **C4 Prototype:** Implemented (`/component4`)
+- **Framework Integration:** Implemented (`/framework` & `/dashboard`)
+- **Final Research Analyses:** Pending validated data
+
+### Research Integrity
+
+Pending analytical outputs are intentionally unavailable until validated research data and methodological analysis are completed.
+
+This software prototype demonstrates application architecture, data schemas, validation workflows, and visual presentation systems. It strictly avoids generating, presenting, or simulating fabricated empirical findings, mock statistical significance values ($p < 0.05$), synthetic factor loadings, or artificial machine learning predictions.
+
+**Integration Principle:** The framework integrates component findings as **complementary evidence** rather than merging them into a single combined predictive model or overall student/AI risk score.
+
 
 ### Development Progress
 
@@ -32,22 +47,27 @@
 | Feature 005 | Component 3 longitudinal analytics prototype workflow | ✅ Complete |
 | Feature 006 | Component 4 cognitive retention prototype workflow | ✅ Complete |
 | Feature 007 | Integrated four-component research dashboard | ✅ Complete |
+| Feature 008 | Presentation polish, reliability & deployment readiness | ✅ Complete |
+
+**Feature 008 notes:**
+- **Presentation Polish:** Responsive presentation mode (`?presentation=1` query or header toggle button) expanding view area, hiding sidebar clutter, and increasing typography for projector visibility.
+- **Reliability & Monitoring:** Lightweight `GET /health` endpoint returning application identity and project ID `J26-DS-310`.
+- **Custom Error Handling:** Academic 404 and 500 error pages with clean navigation actions and zero stack-trace leakage; JSON error format for API endpoints.
+- **Security & Cache Headers:** Applied `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, and `Referrer-Policy: strict-origin-when-cross-origin`; `Cache-Control: no-store` on all `/api/*` routes to prevent stale demo states.
+- **Deployment Readiness:** Production-ready WSGI entry point via `wsgi.py` and `app.py` supporting `gunicorn wsgi:app` and `gunicorn app:app`; clean environment configuration via `app/config.py` and `.env.example`.
+- **Accessibility:** Skip-to-content accessibility link (`#mainContent`), semantic landmarks, enhanced focus indicators, and ARIA labels.
+- **Routing Reliability:** Both `/framework` and `/component1`–`/component4` resolve cleanly with or without trailing slashes.
+- **Tests:** 167 tests passing (all regression and contract tests green).
 
 **Feature 007 notes:**
-- Framework Integration layer: Implemented (`app/services/framework/`, `app/routes/framework.py`).
-- `GET /framework/`: Full architectural page with integration diagram, data source mapping,
-  method comparison matrix, analytical independence section, system readiness table,
-  readiness cards, and Integrated Insights empty state.
-- `GET /api/framework/status`: Returns per-component readiness. `single_combined_model = false`,
-  `overall_score_available = false`. Aggregates by direct service import — no HTTP calls to own APIs.
-- `GET /api/framework/specification`: Returns component roles, methods, data sources,
-  and integration principle. `single_combined_model = false`.
-- Integration principle: Complementary Evidence — outputs are interpreted together, not combined
-  into a single model or overall score. No cross-component classification rules.
+- Framework integration dashboard: Implemented (`GET /framework`).
+- Framework status API: Implemented (`GET /api/framework/status`).
+- Real component analyses: Pending validated research data.
+- Final integrated insights: Pending validated component-level results.
+- Integration principle: Complementary Evidence — outputs are interpreted together, not merged into a single model or overall score. No cross-component classification rules.
 - Sidebar: "Framework Integration" link added between Overview and Research Components.
-- Dashboard: Upgraded with project badges (J26-DS-310, Research Prototype, Data Collection)
-  and an integration principle notice linking to `/framework/`.
-- Tests: 28 new tests added. Total: 143 tests passing.
+- Dashboard: Upgraded with project badges (J26-DS-310, Research Prototype, Data Collection) and an integration principle notice linking to `/framework`.
+- Tests: 28 tests added in Feature 007; all passing.
 
 **Feature 006 notes:**
 - Component 4 prototype: Implemented (specification API, status API, session validation, learning outcomes, NLP feature framework).
@@ -247,18 +267,35 @@ pip install -r requirements.txt
 
 ## Running Locally
 
+### Development Server
 ```bash
-# Start the development server
 python app.py
 ```
-
-Then open your browser at: [http://127.0.0.1:5000](http://127.0.0.1:5000)
+Open your browser at: [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
 Alternatively, using the Flask CLI:
-
 ```bash
 flask --app app run --debug
 ```
+
+### Production WSGI Server (Deployment Readiness)
+```bash
+# Using the dedicated WSGI module:
+gunicorn wsgi:app
+
+# Or directly using the package factory:
+gunicorn app:app
+
+# Custom host and port:
+gunicorn --bind 0.0.0.0:8000 wsgi:app
+```
+
+### Health Check Endpoint
+```bash
+curl http://127.0.0.1:5000/health
+# Response: {"application":"Psychometric Learning Analytics Framework","project_id":"J26-DS-310","status":"ok"}
+```
+
 
 ---
 
