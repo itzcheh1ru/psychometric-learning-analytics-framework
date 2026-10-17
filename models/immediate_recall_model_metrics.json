@@ -1,0 +1,22 @@
+{
+  "brain_only": {
+    "model": "brain_only_immediate_recall_regressor",
+    "target": "brain_immediate_score",
+    "data_source": "simulation_only_formula_generated_targets_not_participant_data",
+    "sample_size": 300,
+    "test_sample_size": 60,
+    "mae": 0.2457,
+    "rmse": 0.2986,
+    "r2": 0.7534
+  },
+  "genai_assisted": {
+    "model": "genai_assisted_immediate_recall_regressor",
+    "target": "genai_immediate_score",
+    "data_source": "simulation_only_formula_generated_targets_not_participant_data",
+    "sample_size": 300,
+    "test_sample_size": 60,
+    "mae": 0.3095,
+    "rmse": 0.3997,
+    "r2": 0.6891
+  }
+}

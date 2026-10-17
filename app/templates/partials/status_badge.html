@@ -1,0 +1,11 @@
+{#
+  partials/status_badge.html
+  Reusable status/phase badge.
+  Variables:
+    label (str)      - badge text
+    variant (str)    - 'collection' | 'preparation' | 'development' | 'pending'
+#}
+<span class="status-badge status-badge--{{ variant }}" aria-label="Status: {{ label }}">
+    <span class="status-badge__dot" aria-hidden="true"></span>
+    {{ label }}
+</span>

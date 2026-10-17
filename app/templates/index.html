@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="page-hero page-hero--home">
+    <div class="page-hero__inner">
+        <span class="page-hero__eyebrow">Research Prototype &mdash; J26-DS-310</span>
+        <h1 class="page-hero__title">Psychometric Learning Analytics Framework</h1>
+        <p class="page-hero__desc">
+            A data-driven research framework analysing the impact of Generative AI on
+            undergraduate learning behaviour, cognitive engagement, algorithmic trust,
+            and knowledge retention across four independent analytical research components.
+        </p>
+        <div class="page-hero__actions">
+            <a href="{{ url_for('main.dashboard') }}" class="btn btn--primary">
+                View Research Dashboard
+            </a>
+            <a href="{{ url_for('main.project') }}" class="btn btn--ghost">
+                Project Information
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Research Components Quick Overview -->
+<section class="content-section">
+    <div class="content-section__header">
+        <h2 class="section-heading">Four Independent Research Components</h2>
+        <p class="section-subheading">
+            Each component applies distinct analytical methodologies and remains
+            methodologically independent. Their outputs will be integrated into a
+            shared research analytics dashboard.
+        </p>
+    </div>
+
+    <div class="card-grid card-grid--4">
+
+        <div class="overview-card overview-card--c1">
+            <div class="overview-card__num" aria-hidden="true">01</div>
+            <h3 class="overview-card__title">Cognitive Offloading Risk Prediction</h3>
+            <p class="overview-card__tech">ML · XGBoost · SHAP</p>
+            <p class="overview-card__desc">
+                Predicts cognitive-offloading risk using behavioural predictors
+                with SHAP-based explainability.
+            </p>
+        </div>
+
+        <div class="overview-card overview-card--c2">
+            <div class="overview-card__num" aria-hidden="true">02</div>
+            <h3 class="overview-card__title">Algorithmic Trust & Verification</h3>
+            <p class="overview-card__tech">CFA · SEM · Psychometrics</p>
+            <p class="overview-card__desc">
+                Models trust pathways between AI trust, verification behaviour
+                and learning confidence using SEM.
+            </p>
+        </div>
+
+        <div class="overview-card overview-card--c3">
+            <div class="overview-card__num" aria-hidden="true">03</div>
+            <h3 class="overview-card__title">Longitudinal Study Pattern Analytics</h3>
+            <p class="overview-card__tech">Longitudinal · Trend · Prompt Analysis</p>
+            <p class="overview-card__desc">
+                Tracks how AI-assisted and independent study behaviours evolve
+                across the academic term.
+            </p>
+        </div>
+
+        <div class="overview-card overview-card--c4">
+            <div class="overview-card__num" aria-hidden="true">04</div>
+            <h3 class="overview-card__title">Engagement & Learning Retention</h3>
+            <p class="overview-card__tech">NLP · Statistics · Recall</p>
+            <p class="overview-card__desc">
+                Evaluates writing quality, recall, retention and cognitive
+                ownership using NLP and statistical testing.
+            </p>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

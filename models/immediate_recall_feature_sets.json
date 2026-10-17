@@ -1,0 +1,25 @@
+{
+  "features": {
+    "brain_only": [
+      "bo_learning_time_sec",
+      "bo_confidence",
+      "bo_mental_effort",
+      "bo_word_count",
+      "bo_lexical_diversity_ttr"
+    ],
+    "genai_assisted": [
+      "ga_learning_time_sec",
+      "ga_prompt_count",
+      "ga_confidence",
+      "ga_ai_usefulness",
+      "ga_mental_effort",
+      "ga_explanation_ease",
+      "ga_word_count",
+      "ga_lexical_diversity_ttr"
+    ]
+  },
+  "targets": {
+    "brain_only": "brain_immediate_score",
+    "genai_assisted": "genai_immediate_score"
+  }
+}

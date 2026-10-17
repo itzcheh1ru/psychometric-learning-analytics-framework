@@ -1,0 +1,18 @@
+{
+  "perceived_ai_dependency_score": 0.1186,
+  "bo_lexical_diversity_ttr": 0.0935,
+  "ga_immediate_mcq": 0.0916,
+  "bo_learning_time_sec": 0.0878,
+  "ga_learning_time_sec": 0.0858,
+  "ga_mental_effort": 0.0771,
+  "cognitive_ownership_score": 0.0656,
+  "bo_immediate_mcq": 0.0608,
+  "ga_prompt_count": 0.0588,
+  "ga_lexical_diversity_ttr": 0.0569,
+  "ga_word_count": 0.0482,
+  "bo_mental_effort": 0.0424,
+  "explanation_autonomy_score": 0.0376,
+  "ga_explanation_ease": 0.0328,
+  "ga_confidence": 0.0212,
+  "ga_ai_usefulness": 0.0212
+}

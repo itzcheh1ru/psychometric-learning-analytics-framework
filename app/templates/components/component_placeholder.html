@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}{{ component_title }} – Psychometric Learning Analytics Framework{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="page-header-inner">
+        <p class="breadcrumb">
+            <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+            &rsaquo; Module {{ component_number }}
+        </p>
+        <h1 class="page-title">{{ component_title }}</h1>
+        <p class="page-subtitle">{{ component_description }}</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-container">
+        <div class="placeholder-card">
+            <div class="placeholder-icon">&#x1F6A7;</div>
+            <h2 class="placeholder-title">Module under development</h2>
+            <p class="placeholder-body">
+                This analytical module is currently being designed.
+                Data collection for the research study is in progress.
+                Analytical charts, model outputs and statistical results will
+                appear here once data collection and processing are complete.
+            </p>
+            <p class="placeholder-note">
+                <strong>Note:</strong> No research findings are presented at this stage.
+                All content shown after data collection will reflect actual research results.
+            </p>
+            <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline">
+                &larr; Back to Dashboard
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

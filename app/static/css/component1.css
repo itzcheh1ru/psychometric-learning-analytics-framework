@@ -1,0 +1,599 @@
+/* =============================================================================
+   component1.css – Styles specific to Component 1 prototype workflow.
+   Psychometric Learning Analytics Framework – J26-DS-310
+   Feature 003: Cognitive Offloading Prototype Workflow
+============================================================================= */
+
+/* --------------------------------------------------------------------------
+   Prototype notice banner (in-page, inside a form section)
+-------------------------------------------------------------------------- */
+.proto-notice {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    color: #1e40af;
+    margin-bottom: 1.25rem;
+}
+
+/* --------------------------------------------------------------------------
+   Research Workflow Diagram
+-------------------------------------------------------------------------- */
+.workflow-diagram {
+    margin-top: 1rem;
+    overflow-x: auto;
+}
+
+.workflow-steps {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    max-width: 340px;
+    margin: 0 auto;
+}
+
+.workflow-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.85rem 1.25rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    width: 100%;
+    text-align: center;
+    transition: box-shadow 0.15s;
+}
+
+.workflow-step--ready {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+.workflow-step--pending {
+    background: var(--bg-surface-alt);
+    border-color: var(--border);
+    opacity: 0.75;
+}
+
+.workflow-step__icon {
+    color: var(--text-muted);
+}
+
+.workflow-step--ready .workflow-step__icon {
+    color: #16a34a;
+}
+
+.workflow-step__label {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.workflow-step__status {
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 20px;
+}
+
+.workflow-step--ready .workflow-step__status {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.workflow-step--pending .workflow-step__status {
+    background: #f1f5f9;
+    color: var(--text-muted);
+}
+
+.workflow-arrow {
+    font-size: 0.9rem;
+    color: #16a34a;
+    padding: 0.1rem 0;
+    line-height: 1;
+}
+
+.workflow-arrow--pending {
+    color: var(--text-light);
+}
+
+/* --------------------------------------------------------------------------
+   Predictor Form
+-------------------------------------------------------------------------- */
+.predictor-form {
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-fieldset {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.1rem 1.25rem;
+    background: var(--bg-surface);
+}
+
+.form-fieldset__legend {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    padding: 0 0.4rem;
+}
+
+.form-fieldset__optional {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--text-muted);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-top: 0.85rem;
+}
+
+.form-group:first-of-type {
+    margin-top: 0.5rem;
+}
+
+.form-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.form-label__required {
+    color: #dc2626;
+    margin-left: 0.15rem;
+}
+
+.form-input,
+.form-select {
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    color: var(--text-primary);
+    background: var(--bg-surface);
+    width: 100%;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.form-input:focus,
+.form-select:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(26, 68, 128, 0.1);
+}
+
+.form-input.input--error,
+.form-select.input--error {
+    border-color: #dc2626;
+}
+
+.form-help {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.form-error {
+    font-size: 0.8rem;
+    color: #dc2626;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    padding-top: 0.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   Validation Result Section
+-------------------------------------------------------------------------- */
+.validation-success-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #166534;
+    margin-bottom: 1.25rem;
+}
+
+.validation-error-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #991b1b;
+    margin-bottom: 1rem;
+}
+
+.subsection-heading {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin: 1.25rem 0 0.6rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--border);
+}
+
+/* Input Summary Table */
+.summary-table-wrap {
+    overflow-x: auto;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    margin-bottom: 0.25rem;
+}
+
+.summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.summary-table tr {
+    border-bottom: 1px solid var(--border);
+}
+
+.summary-table tr:last-child {
+    border-bottom: none;
+}
+
+.summary-table td:first-child {
+    font-weight: 600;
+    color: var(--text-secondary);
+    padding: 0.6rem 1rem;
+    width: 50%;
+    background: var(--bg-surface-alt);
+}
+
+.summary-table td:last-child {
+    padding: 0.6rem 1rem;
+    color: var(--text-primary);
+}
+
+/* Validation check list */
+.check-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.check-list__item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.45rem 0.75rem;
+    border-radius: var(--radius-sm);
+}
+
+.check-list__item--pass {
+    background: #f0fdf4;
+    color: #166534;
+}
+
+/* Model status card */
+.model-status-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.model-status-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.model-status-row:last-child {
+    border-bottom: none;
+}
+
+.model-status-label {
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.model-status-value--unavailable {
+    color: var(--text-muted);
+    font-style: italic;
+    font-size: 0.82rem;
+}
+
+/* Error list */
+.error-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+}
+
+.error-list li {
+    font-size: 0.85rem;
+    color: #991b1b;
+    padding: 0.5rem 0.75rem;
+    background: #fef2f2;
+    border-left: 3px solid #dc2626;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* --------------------------------------------------------------------------
+   Planned Output Cards (disabled state)
+-------------------------------------------------------------------------- */
+.output-card {
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    padding: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.output-card--disabled {
+    background: var(--bg-surface-alt);
+    opacity: 0.75;
+}
+
+.output-card__title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.output-card__unavailable {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-style: italic;
+    border: 1px dashed var(--border);
+    padding: 0.6rem 0.75rem;
+    border-radius: var(--radius-sm);
+}
+
+/* --------------------------------------------------------------------------
+   Data Leakage Protection Diagram
+-------------------------------------------------------------------------- */
+.leakage-diagram {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.leakage-side {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.leakage-side__header {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    border-radius: 4px;
+    margin-bottom: 0.25rem;
+}
+
+.leakage-side--target .leakage-side__header {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.leakage-side--predictors .leakage-side__header {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.leakage-item {
+    width: 100%;
+    text-align: center;
+    padding: 0.55rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.82rem;
+    font-weight: 500;
+}
+
+.leakage-item--target {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.leakage-item--output {
+    background: #fff7ed;
+    color: #92400e;
+    border: 1px solid #fed7aa;
+}
+
+.leakage-item--predictor {
+    background: #eff6ff;
+    color: #1e40af;
+    border: 1px solid #bfdbfe;
+}
+
+.leakage-item--model {
+    background: #dbeafe;
+    color: #1e40af;
+    border: 1px solid #93c5fd;
+    font-weight: 700;
+}
+
+.leakage-arrow {
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+.leakage-not-equal {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #dc2626;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: var(--radius-sm);
+    padding: 0.3rem 0.6rem;
+    text-align: center;
+    margin-top: 0.25rem;
+}
+
+.leakage-separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-align: center;
+    letter-spacing: 0.06em;
+    min-width: 60px;
+    padding: 0 0.5rem;
+    align-self: center;
+}
+
+/* --------------------------------------------------------------------------
+   Future Model Architecture Diagram
+-------------------------------------------------------------------------- */
+.model-arch-diagram {
+    margin-top: 1rem;
+    overflow-x: auto;
+}
+
+.model-arch-steps {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    max-width: 380px;
+    margin: 0 auto;
+}
+
+.model-arch-step {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.7rem 1.25rem;
+    width: 100%;
+    text-align: center;
+}
+
+.model-arch-step--highlight {
+    background: var(--color-primary-light);
+    border-color: #93c5fd;
+}
+
+.model-arch-step--dashboard {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+.model-arch-step__label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.model-arch-step__sub {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    margin-top: 0.15rem;
+}
+
+.model-arch-arrow {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    padding: 0.05rem 0;
+    line-height: 1;
+}
+
+.model-arch-models {
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.model-arch-model {
+    flex: 1;
+    min-width: 100px;
+    background: var(--color-primary-light);
+    border: 1px solid #93c5fd;
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 0.5rem;
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+-------------------------------------------------------------------------- */
+@media (max-width: 720px) {
+    .predictor-form {
+        max-width: 100%;
+    }
+
+    .leakage-diagram {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .leakage-separator {
+        align-self: center;
+    }
+
+    .model-arch-models {
+        flex-direction: column;
+    }
+
+    .model-arch-model {
+        min-width: unset;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

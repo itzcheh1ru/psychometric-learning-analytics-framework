@@ -1,0 +1,89 @@
+# =============================================================================
+# Psychometric Learning Analytics Framework – .gitignore
+# =============================================================================
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.whl
+MANIFEST
+
+# ---------- Virtual Environments ----------
+.venv/
+venv/
+env/
+ENV/
+.env/
+
+# ---------- Environment Files (Secrets) ----------
+.env
+.env.*
+*.env
+secrets.py
+
+# ---------- Flask / Application ----------
+instance/
+*.db
+*.sqlite
+*.sqlite3
+flask_session/
+
+# ---------- Research Data (never commit real participant data) ----------
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# ---------- Jupyter / Notebooks ----------
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ---------- ML Models (large binary artefacts) ----------
+models/*.pkl
+models/*.joblib
+models/*.h5
+models/*.pt
+models/*.onnx
+
+# ---------- OS / System ----------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---------- IDE / Editors ----------
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+
+# ---------- Testing ----------
+.pytest_cache/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+
+# ---------- Type Checking ----------
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# ---------- Logs ----------
+*.log
+logs/
+
+# ---------- Temporary Files ----------
+*.tmp
+*.bak
+*.orig
