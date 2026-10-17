@@ -319,7 +319,7 @@
 .model-node--at .model-node__code { background: #1a6fa3; }
 .model-node--pu .model-node__code { background: #2563eb; }
 .model-node--vb .model-node__code { background: #217a50; }
-.model-node--ad .model-node__code { background: #a3531a; }
+.model-node--ad .model-node__code { background: #a3531ac0; }
 .model-node--lc .model-node__code { background: #6a3fa3; }
 
 .model-node__name {
