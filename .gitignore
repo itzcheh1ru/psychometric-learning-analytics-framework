@@ -40,6 +40,7 @@ data/raw/*
 data/processed/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
+!data/processed/component4_master_dataset_300.csv
 
 # ---------- Jupyter / Notebooks ----------
 .ipynb_checkpoints/

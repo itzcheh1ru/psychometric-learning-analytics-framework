@@ -9,10 +9,12 @@ import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 MODELS_DIR = PROJECT_ROOT / "models"
+GRAPHS_DIR = MODELS_DIR / "delayed_recall_graphs"
 DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "component4_master_dataset_300.csv"
 
 
@@ -49,11 +51,65 @@ def build_regressor_model(X_train, y_train, X_test, y_test, model_name: str):
         "r2": round(float(r2), 4),
     }
 
-    return model, metrics
+    return model, metrics, preds
+
+
+def save_model_graphs(condition: str, y_test, predictions, model, feature_names) -> None:
+    """Save held-out prediction and random-forest feature-importance graphs."""
+    GRAPHS_DIR.mkdir(parents=True, exist_ok=True)
+    label = "GenAI-Assisted" if condition == "genai" else "Brain-Only"
+
+    fig, ax = plt.subplots(figsize=(7, 6))
+    ax.scatter(y_test, predictions, alpha=0.75, edgecolor="white", linewidth=0.5)
+    low = min(float(np.min(y_test)), float(np.min(predictions)))
+    high = max(float(np.max(y_test)), float(np.max(predictions)))
+    ax.plot([low, high], [low, high], "--", color="#d97706", label="Perfect prediction")
+    ax.set(title=f"{label} Delayed Recall: Actual vs Predicted (Test Set)",
+           xlabel="Actual delayed recall (items)", ylabel="Predicted delayed recall (items)")
+    ax.legend()
+    ax.grid(alpha=0.2)
+    fig.tight_layout()
+    fig.savefig(GRAPHS_DIR / f"{condition}_actual_vs_predicted.png", dpi=160)
+    plt.close(fig)
+
+    importance = pd.Series(model.feature_importances_, index=feature_names).sort_values()
+    fig, ax = plt.subplots(figsize=(8, max(4, len(importance) * 0.38)))
+    importance.plot.barh(ax=ax, color="#3977c3")
+    ax.set(title=f"{label} Delayed Recall: Feature Importance",
+           xlabel="Relative feature importance", ylabel="Input feature")
+    ax.grid(axis="x", alpha=0.2)
+    fig.tight_layout()
+    fig.savefig(GRAPHS_DIR / f"{condition}_feature_importance.png", dpi=160)
+    plt.close(fig)
+
+
+def save_metric_comparison(genai_metrics: dict, brain_metrics: dict) -> None:
+    """Plot held-out error metrics for both models (lower is better)."""
+    GRAPHS_DIR.mkdir(parents=True, exist_ok=True)
+    labels = ["GenAI-Assisted", "Brain-Only"]
+    fig, axes = plt.subplots(1, 2, figsize=(10, 4.5))
+    for ax, key, title in zip(axes, ("mae", "rmse"), ("Mean Absolute Error (MAE)", "Root Mean Squared Error (RMSE)")):
+        values = [genai_metrics[key], brain_metrics[key]]
+        bars = ax.bar(labels, values, color=["#e88922", "#3977c3"])
+        ax.set_title(f"Test-Set {title}")
+        ax.set_ylabel("Error (items; lower is better)")
+        ax.bar_label(bars, fmt="%.3f", padding=3)
+        ax.grid(axis="y", alpha=0.2)
+    fig.suptitle("Delayed Recall Model Error Comparison")
+    fig.tight_layout()
+    fig.savefig(GRAPHS_DIR / "model_error_comparison.png", dpi=160)
+    plt.close(fig)
 
 
 def main():
     MODELS_DIR.mkdir(exist_ok=True)
+
+    print("=" * 72)
+    print("DELAYED RECALL MODEL TRAINING")
+    print("=" * 72)
+    print("Purpose: train separate Brain-Only and GenAI-Assisted regressors.")
+    print("Evaluation: held-out 20% test split; not proof of real-world performance.")
+    print(f"Dataset: {DATASET_PATH}")
 
     if not DATASET_PATH.exists():
         raise FileNotFoundError(f"Dataset not found: {DATASET_PATH}")
@@ -105,7 +161,8 @@ def main():
         X_ga, y_ga, test_size=0.2, random_state=42
     )
 
-    ga_model, ga_metrics = build_regressor_model(
+    print("\n[1/4] Training GenAI-Assisted delayed-recall model...")
+    ga_model, ga_metrics, ga_predictions = build_regressor_model(
         X_ga_train, y_ga_train, X_ga_test, y_ga_test, "genai_delayed_recall_regressor"
     )
 
@@ -116,7 +173,8 @@ def main():
         X_brain, y_brain, test_size=0.2, random_state=42
     )
 
-    brain_model, brain_metrics = build_regressor_model(
+    print("[2/4] Training Brain-Only delayed-recall model...")
+    brain_model, brain_metrics, brain_predictions = build_regressor_model(
         X_brain_train, y_brain_train, X_brain_test, y_brain_test, "brain_delayed_recall_regressor"
     )
 
@@ -139,13 +197,19 @@ def main():
         feature_path,
     )
 
-    print("=== GenAI Delayed Recall Model ===")
+    print("[3/4] Creating graphs...")
+    save_model_graphs("genai", y_ga_test, ga_predictions, ga_model, genai_features)
+    save_model_graphs("brain", y_brain_test, brain_predictions, brain_model, brain_features)
+    save_metric_comparison(ga_metrics, brain_metrics)
+
+    print("\n[4/4] TRAINING RESULTS")
+    print("--- GenAI-Assisted Delayed Recall ---")
     print(f"MAE: {ga_metrics['mae']}")
     print(f"RMSE: {ga_metrics['rmse']}")
     print(f"R²: {ga_metrics['r2']}")
     print(f"Saved to: {ga_model_path}")
 
-    print("\n=== Brain-only Delayed Recall Model ===")
+    print("\n--- Brain-Only Delayed Recall ---")
     print(f"MAE: {brain_metrics['mae']}")
     print(f"RMSE: {brain_metrics['rmse']}")
     print(f"R²: {brain_metrics['r2']}")
@@ -153,6 +217,8 @@ def main():
 
     print(f"\nMetrics summary saved to: {metrics_path}")
     print(f"Feature metadata saved to: {feature_path}")
+    print(f"Evaluation graphs saved in: {GRAPHS_DIR}")
+    print("Note: these graphs describe the held-out split only; feature importance is not causal evidence.")
 
 
 if __name__ == "__main__":
