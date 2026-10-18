@@ -210,11 +210,11 @@ def predict_immediate_recall(condition: str, input_features: dict) -> dict:
         values.append(value)
 
     prediction = float(model.predict([values])[0])
-    prediction = max(0.0, min(10.0, prediction))
+    prediction = int(round(max(0.0, min(10.0, prediction))))
     metrics = get_immediate_recall_model_metrics().get(condition, {})
     return {
         "condition": condition,
-        "predicted_immediate_recall": round(prediction, 1),
+        "predicted_immediate_recall": prediction,
         "scale_max": 10,
         "model": "Random Forest Regressor",
         "metrics": metrics,
@@ -300,15 +300,16 @@ def predict_delayed_recall(condition: str, input_features: dict) -> dict:
         raise FileNotFoundError("Delayed-recall model artifact could not be loaded.") from exc
 
     prediction = float(model.predict([values])[0])
-    prediction = max(0.0, min(immediate_score, prediction))
+    maximum_possible_count = int(math.floor(immediate_score))
+    prediction = int(round(max(0.0, min(float(maximum_possible_count), prediction))))
     metrics = get_delayed_recall_model_metrics().get(config["metrics_key"], {})
     return {
         "condition": condition,
-        "predicted_delayed_recall": round(prediction, 1),
-        "maximum_possible_count": immediate_score,
+        "predicted_delayed_recall": prediction,
+        "maximum_possible_count": maximum_possible_count,
         "model": "Random Forest Regressor",
         "metrics": metrics,
-        "note": "Prototype prediction from the processed synthetic dataset. These metrics are not validated real-participant performance.",
+        "note": "Simulation-only prediction trained on the processed synthetic dataset. Metrics are not real-world or empirical performance.",
     }
 
 

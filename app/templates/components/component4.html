@@ -3,7 +3,7 @@
 {% block title %}Cognitive Engagement & Learning Retention — Component 4{% endblock %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/component4.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/component4.css', v='prototype-status-1') }}" />
 {% endblock %}
 
 {% block content %}
@@ -56,17 +56,17 @@
         <div class="recall-summary-grid">
             <div class="recall-summary-card recall-summary-card--brain">
                 <div class="recall-summary-card__label">Brain-only average</div>
-                <div class="recall-summary-card__value">{{ recall_summary.brain_immediate_avg }} items</div>
+                <div class="recall-summary-card__value">{{ ('%.2f'|format(recall_summary.brain_immediate_avg)) if recall_summary.brain_immediate_avg is not none else '—' }} items</div>
                 <div class="recall-summary-card__meta">Average recalled items in prototype data</div>
             </div>
             <div class="recall-summary-card recall-summary-card--genai">
                 <div class="recall-summary-card__label">GenAI-assisted average</div>
-                <div class="recall-summary-card__value">{{ recall_summary.genai_immediate_avg }} items</div>
+                <div class="recall-summary-card__value">{{ ('%.2f'|format(recall_summary.genai_immediate_avg)) if recall_summary.genai_immediate_avg is not none else '—' }} items</div>
                 <div class="recall-summary-card__meta">Average recalled items in prototype data</div>
             </div>
             <div class="recall-summary-card recall-summary-card--gap">
                 <div class="recall-summary-card__label">Difference (GenAI minus brain-only)</div>
-                <div class="recall-summary-card__value">{{ recall_summary.immediate_difference }} items</div>
+                <div class="recall-summary-card__value">{{ ('%.2f'|format(recall_summary.immediate_difference)) if recall_summary.immediate_difference is not none else '—' }} items</div>
                 <div class="recall-summary-card__meta">Immediate recall</div>
             </div>
         </div>
@@ -77,64 +77,24 @@
         <div class="recall-summary-grid">
             <div class="recall-summary-card recall-summary-card--brain">
                 <div class="recall-summary-card__label">Brain-only average</div>
-                <div class="recall-summary-card__value">{{ recall_summary.brain_delayed_avg }} items</div>
+                <div class="recall-summary-card__value">{{ ('%.2f'|format(recall_summary.brain_delayed_avg)) if recall_summary.brain_delayed_avg is not none else '—' }} items</div>
                 <div class="recall-summary-card__meta">Average recalled items in prototype data</div>
             </div>
             <div class="recall-summary-card recall-summary-card--genai">
                 <div class="recall-summary-card__label">GenAI-assisted average</div>
-                <div class="recall-summary-card__value">{{ recall_summary.genai_delayed_avg }} items</div>
+                <div class="recall-summary-card__value">{{ ('%.2f'|format(recall_summary.genai_delayed_avg)) if recall_summary.genai_delayed_avg is not none else '—' }} items</div>
                 <div class="recall-summary-card__meta">Average recalled items in prototype data</div>
             </div>
             <div class="recall-summary-card recall-summary-card--gap">
                 <div class="recall-summary-card__label">Difference (GenAI minus brain-only)</div>
-                <div class="recall-summary-card__value">{{ recall_summary.delayed_difference }} items</div>
+                <div class="recall-summary-card__value">{{ ('%.2f'|format(recall_summary.delayed_difference)) if recall_summary.delayed_difference is not none else '—' }} items</div>
                 <div class="recall-summary-card__meta">Delayed recall</div>
             </div>
         </div>
     </div>
 
     <div class="prototype-note-banner">
-        <strong>Prototype note:</strong> {{ recall_summary.note }} ({{ recall_summary.sample_size }} records)
-    </div>
-</section>
-
-<!-- Immediate recall count preview -->
-<section class="content-section" aria-labelledby="immediateRecallHeading4">
-    <div class="content-section__header">
-        <h2 class="section-heading" id="immediateRecallHeading4">Immediate Recall Prototype</h2>
-        <p class="section-subheading">
-            Preview manually counted recalled items for the same task. Enter whole-number counts; this prototype does not save them or calculate research statistics.
-        </p>
-    </div>
-
-    <div class="proto-notice" role="note">
-        <strong>Prototype only:</strong> Use demonstration values, not identifiable participant information. Actual recall answers are not collected.
-    </div>
-
-    <form id="immediateRecallForm" class="immediate-recall-form" novalidate>
-        <div class="immediate-recall-field">
-            <label class="form-label" for="brainImmediateCount">Brain-only items recalled immediately</label>
-            <input class="form-input" type="number" id="brainImmediateCount" name="brain_only_count" min="0" step="1" inputmode="numeric" required />
-        </div>
-        <div class="immediate-recall-field">
-            <label class="form-label" for="genaiImmediateCount">GenAI-assisted items recalled immediately</label>
-            <input class="form-input" type="number" id="genaiImmediateCount" name="genai_assisted_count" min="0" step="1" inputmode="numeric" required />
-        </div>
-        <div class="form-actions">
-            <button type="submit" class="btn btn--primary" id="previewImmediateRecallBtn">Preview item-count comparison</button>
-            <button type="reset" class="btn btn--outline" id="resetImmediateRecallBtn">Clear counts</button>
-        </div>
-    </form>
-
-    <div id="immediateRecallError" class="validation-error-banner" role="alert" hidden></div>
-    <div id="immediateRecallResult" class="immediate-recall-result" aria-live="polite" hidden>
-        <h3 class="subsection-heading">In-memory comparison preview</h3>
-        <dl class="immediate-recall-result__grid">
-            <div><dt>Brain-only items recalled</dt><dd id="previewBrainCount"></dd></div>
-            <div><dt>GenAI-assisted items recalled</dt><dd id="previewGenaiCount"></dd></div>
-            <div><dt>Difference (GenAI minus brain-only)</dt><dd id="previewRecallDifference"></dd></div>
-        </dl>
-        <p id="immediateRecallNote" class="preview-disclaimer"></p>
+        <strong>Prototype note:</strong> {{ recall_summary.note }} ({{ recall_summary.loaded_records }} records loaded{% if recall_summary.dataset %} from {{ recall_summary.dataset }}{% endif %}{% if recall_summary.skipped_records %}; {{ recall_summary.skipped_records }} incomplete or invalid rows skipped{% endif %})
     </div>
 </section>
 
@@ -172,58 +132,62 @@
         <div class="immediate-model-feature-group" data-model-condition="brain_only">
             <div class="immediate-recall-field">
                 <label class="form-label" for="modelBoTime">Brain-only learning time (seconds)</label>
-                <input class="form-input" type="number" id="modelBoTime" data-feature="bo_learning_time_sec" min="0" step="any" value="225" required />
+                <select class="form-select" id="modelBoTime" data-feature="bo_learning_time_sec" required>
+                    <option value="60">60</option><option value="90">90</option><option value="120">120</option><option value="150">150</option><option value="180">180</option><option value="210">210</option><option value="225" selected>225</option><option value="240">240</option><option value="300">300</option><option value="360">360</option>
+                </select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="modelBoConfidence">Confidence (1–5)</label>
-                <input class="form-input" type="number" id="modelBoConfidence" data-feature="bo_confidence" min="1" max="5" step="1" value="4" required />
+                <select class="form-select" id="modelBoConfidence" data-feature="bo_confidence" required><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="modelBoEffort">Mental effort (1–5)</label>
-                <input class="form-input" type="number" id="modelBoEffort" data-feature="bo_mental_effort" min="1" max="5" step="1" value="4" required />
+                <select class="form-select" id="modelBoEffort" data-feature="bo_mental_effort" required><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="modelBoWords">Writing word count</label>
-                <input class="form-input" type="number" id="modelBoWords" data-feature="bo_word_count" min="0" step="1" value="45" required />
+                <select class="form-select" id="modelBoWords" data-feature="bo_word_count" required><option value="0">0</option><option value="25">25</option><option value="45" selected>45</option><option value="50">50</option><option value="75">75</option><option value="100">100</option><option value="125">125</option><option value="150">150</option><option value="200">200</option><option value="250">250</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="modelBoTtr">Writing lexical diversity (TTR, 0–1)</label>
-                <input class="form-input" type="number" id="modelBoTtr" data-feature="bo_lexical_diversity_ttr" min="0" max="1" step="any" value="0.72" required />
+                <select class="form-select" id="modelBoTtr" data-feature="bo_lexical_diversity_ttr" required><option value="0.40">0.40</option><option value="0.45">0.45</option><option value="0.50">0.50</option><option value="0.55">0.55</option><option value="0.60">0.60</option><option value="0.65">0.65</option><option value="0.70">0.70</option><option value="0.72" selected>0.72</option><option value="0.75">0.75</option><option value="0.80">0.80</option><option value="0.85">0.85</option><option value="0.90">0.90</option></select>
             </div>
         </div>
 
         <div class="immediate-model-feature-group" data-model-condition="genai_assisted" hidden>
             <div class="immediate-recall-field">
                 <label class="form-label" for="modelGaTime">GenAI learning time (seconds)</label>
-                <input class="form-input" type="number" id="modelGaTime" data-feature="ga_learning_time_sec" min="0" step="any" value="170" required />
+                <select class="form-select" id="modelGaTime" data-feature="ga_learning_time_sec" required>
+                    <option value="60">60</option><option value="90">90</option><option value="120">120</option><option value="150">150</option><option value="170" selected>170</option><option value="180">180</option><option value="210">210</option><option value="225">225</option><option value="240">240</option><option value="300">300</option><option value="360">360</option>
+                </select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="modelGaPrompts">GenAI prompt count</label>
-                <input class="form-input" type="number" id="modelGaPrompts" data-feature="ga_prompt_count" min="0" step="1" value="3" required />
+                <select class="form-select" id="modelGaPrompts" data-feature="ga_prompt_count" required><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="modelGaConfidence">Confidence (1–5)</label>
-                <input class="form-input" type="number" id="modelGaConfidence" data-feature="ga_confidence" min="1" max="5" step="1" value="4" required />
+                <select class="form-select" id="modelGaConfidence" data-feature="ga_confidence" required><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="modelGaUsefulness">Perceived AI usefulness (1–5)</label>
-                <input class="form-input" type="number" id="modelGaUsefulness" data-feature="ga_ai_usefulness" min="1" max="5" step="1" value="4" required />
+                <select class="form-select" id="modelGaUsefulness" data-feature="ga_ai_usefulness" required><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="modelGaEffort">Mental effort (1–5)</label>
-                <input class="form-input" type="number" id="modelGaEffort" data-feature="ga_mental_effort" min="1" max="5" step="1" value="2" required />
+                <select class="form-select" id="modelGaEffort" data-feature="ga_mental_effort" required><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="modelGaExplanation">Explanation ease (1–5)</label>
-                <input class="form-input" type="number" id="modelGaExplanation" data-feature="ga_explanation_ease" min="1" max="5" step="1" value="4" required />
+                <select class="form-select" id="modelGaExplanation" data-feature="ga_explanation_ease" required><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="modelGaWords">Writing word count</label>
-                <input class="form-input" type="number" id="modelGaWords" data-feature="ga_word_count" min="0" step="1" value="50" required />
+                <select class="form-select" id="modelGaWords" data-feature="ga_word_count" required><option value="0">0</option><option value="25">25</option><option value="45">45</option><option value="50" selected>50</option><option value="75">75</option><option value="100">100</option><option value="125">125</option><option value="150">150</option><option value="200">200</option><option value="250">250</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="modelGaTtr">Writing lexical diversity (TTR, 0–1)</label>
-                <input class="form-input" type="number" id="modelGaTtr" data-feature="ga_lexical_diversity_ttr" min="0" max="1" step="any" value="0.65" required />
+                <select class="form-select" id="modelGaTtr" data-feature="ga_lexical_diversity_ttr" required><option value="0.40">0.40</option><option value="0.45">0.45</option><option value="0.50">0.50</option><option value="0.55">0.55</option><option value="0.60">0.60</option><option value="0.65" selected>0.65</option><option value="0.70">0.70</option><option value="0.72">0.72</option><option value="0.75">0.75</option><option value="0.80">0.80</option><option value="0.85">0.85</option><option value="0.90">0.90</option></select>
             </div>
         </div>
 
@@ -237,46 +201,6 @@
         <h3 class="subsection-heading">Prototype model prediction</h3>
         <p class="recall-prediction-value"><strong id="predictedImmediateRecall"></strong></p>
         <p id="immediateRecallPredictionNote" class="preview-disclaimer"></p>
-    </div>
-</section>
-
-<!-- Delayed recall count preview -->
-<section class="content-section" aria-labelledby="delayedRecallHeading4">
-    <div class="content-section__header">
-        <h2 class="section-heading" id="delayedRecallHeading4">Delayed Recall Prototype</h2>
-        <p class="section-subheading">
-            Preview manually counted recalled items after the protocol-defined delay. Enter whole-number counts for the same task; this prototype does not save them or calculate research statistics.
-        </p>
-    </div>
-
-    <div class="proto-notice" role="note">
-        <strong>Prototype only:</strong> Use demonstration values, not identifiable participant information. Actual delayed-recall answers are not collected.
-    </div>
-
-    <form id="delayedRecallForm" class="immediate-recall-form" novalidate>
-        <div class="immediate-recall-field">
-            <label class="form-label" for="brainDelayedCount">Brain-only items recalled after the delay</label>
-            <input class="form-input" type="number" id="brainDelayedCount" name="brain_only_count" min="0" step="1" inputmode="numeric" required />
-        </div>
-        <div class="immediate-recall-field">
-            <label class="form-label" for="genaiDelayedCount">GenAI-assisted items recalled after the delay</label>
-            <input class="form-input" type="number" id="genaiDelayedCount" name="genai_assisted_count" min="0" step="1" inputmode="numeric" required />
-        </div>
-        <div class="form-actions">
-            <button type="submit" class="btn btn--primary" id="previewDelayedRecallBtn">Preview delayed-recall comparison</button>
-            <button type="reset" class="btn btn--outline">Clear counts</button>
-        </div>
-    </form>
-
-    <div id="delayedRecallError" class="validation-error-banner" role="alert" hidden></div>
-    <div id="delayedRecallResult" class="immediate-recall-result" aria-live="polite" hidden>
-        <h3 class="subsection-heading">In-memory comparison preview</h3>
-        <dl class="immediate-recall-result__grid">
-            <div><dt>Brain-only items recalled</dt><dd id="previewBrainDelayedCount"></dd></div>
-            <div><dt>GenAI-assisted items recalled</dt><dd id="previewGenaiDelayedCount"></dd></div>
-            <div><dt>Difference (GenAI minus brain-only)</dt><dd id="previewDelayedRecallDifference"></dd></div>
-        </dl>
-        <p id="delayedRecallNote" class="preview-disclaimer"></p>
     </div>
 </section>
 
@@ -314,86 +238,86 @@
         <div class="delayed-model-feature-group" data-model-condition="brain_only">
             <div class="immediate-recall-field">
                 <label class="form-label" for="delayedBoTime">Brain-only learning time (seconds)</label>
-                <input class="form-input" type="number" id="delayedBoTime" data-feature="bo_learning_time_sec" min="0" step="any" value="225" required />
+                <select class="form-select" id="delayedBoTime" data-feature="bo_learning_time_sec" required><option value="60">60</option><option value="90">90</option><option value="120">120</option><option value="150">150</option><option value="180">180</option><option value="210">210</option><option value="225" selected>225</option><option value="240">240</option><option value="300">300</option><option value="360">360</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="delayedBoImmediate">Brain-only immediate recall (items, max 10)</label>
-                <input class="form-input" type="number" id="delayedBoImmediate" data-feature="bo_immediate_mcq" min="0" max="10" step="any" value="8" required />
+                <select class="form-select" id="delayedBoImmediate" data-feature="bo_immediate_mcq" required><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8" selected>8</option><option value="9">9</option><option value="10">10</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="delayedBoEffort">Brain-only mental effort (1–5)</label>
-                <input class="form-input" type="number" id="delayedBoEffort" data-feature="bo_mental_effort" min="1" max="5" step="1" value="4" required />
+                <select class="form-select" id="delayedBoEffort" data-feature="bo_mental_effort" required><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="delayedBoWords">Brain-only writing word count</label>
-                <input class="form-input" type="number" id="delayedBoWords" data-feature="bo_word_count" min="0" step="1" value="45" required />
+                <select class="form-select" id="delayedBoWords" data-feature="bo_word_count" required><option value="0">0</option><option value="25">25</option><option value="45" selected>45</option><option value="50">50</option><option value="75">75</option><option value="100">100</option><option value="125">125</option><option value="150">150</option><option value="200">200</option><option value="250">250</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="delayedBoTtr">Brain-only lexical diversity (TTR, 0–1)</label>
-                <input class="form-input" type="number" id="delayedBoTtr" data-feature="bo_lexical_diversity_ttr" min="0" max="1" step="any" value="0.72" required />
+                <select class="form-select" id="delayedBoTtr" data-feature="bo_lexical_diversity_ttr" required><option value="0.40">0.40</option><option value="0.45">0.45</option><option value="0.50">0.50</option><option value="0.55">0.55</option><option value="0.60">0.60</option><option value="0.65">0.65</option><option value="0.70">0.70</option><option value="0.72" selected>0.72</option><option value="0.75">0.75</option><option value="0.80">0.80</option><option value="0.85">0.85</option><option value="0.90">0.90</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="delayedBoOwnership">Cognitive ownership (1–5)</label>
-                <input class="form-input" type="number" id="delayedBoOwnership" data-feature="cognitive_ownership_score" min="1" max="5" step="1" value="4" required />
+                <select class="form-select" id="delayedBoOwnership" data-feature="cognitive_ownership_score" required><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="delayedBoAutonomy">Explanation autonomy (1–5)</label>
-                <input class="form-input" type="number" id="delayedBoAutonomy" data-feature="explanation_autonomy_score" min="1" max="5" step="1" value="4" required />
+                <select class="form-select" id="delayedBoAutonomy" data-feature="explanation_autonomy_score" required><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="delayedBoDependency">Perceived GenAI dependency (1–5)</label>
-                <input class="form-input" type="number" id="delayedBoDependency" data-feature="perceived_ai_dependency_score" min="1" max="5" step="1" value="3" required />
+                <select class="form-select" id="delayedBoDependency" data-feature="perceived_ai_dependency_score" required><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
             </div>
         </div>
 
         <div class="delayed-model-feature-group" data-model-condition="genai_assisted" hidden>
             <div class="immediate-recall-field">
                 <label class="form-label" for="delayedGaTime">GenAI learning time (seconds)</label>
-                <input class="form-input" type="number" id="delayedGaTime" data-feature="ga_learning_time_sec" min="0" step="any" value="170" required />
+                <select class="form-select" id="delayedGaTime" data-feature="ga_learning_time_sec" required><option value="60">60</option><option value="90">90</option><option value="120">120</option><option value="150">150</option><option value="170" selected>170</option><option value="180">180</option><option value="210">210</option><option value="225">225</option><option value="240">240</option><option value="300">300</option><option value="360">360</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="delayedGaImmediate">GenAI immediate recall (items, max 10)</label>
-                <input class="form-input" type="number" id="delayedGaImmediate" data-feature="ga_immediate_mcq" min="0" max="10" step="any" value="9" required />
+                <select class="form-select" id="delayedGaImmediate" data-feature="ga_immediate_mcq" required><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9" selected>9</option><option value="10">10</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="delayedGaPrompts">GenAI prompt count</label>
-                <input class="form-input" type="number" id="delayedGaPrompts" data-feature="ga_prompt_count" min="0" step="1" value="3" required />
+                <select class="form-select" id="delayedGaPrompts" data-feature="ga_prompt_count" required><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="delayedGaConfidence">GenAI confidence (1–5)</label>
-                <input class="form-input" type="number" id="delayedGaConfidence" data-feature="ga_confidence" min="1" max="5" step="1" value="4" required />
+                <select class="form-select" id="delayedGaConfidence" data-feature="ga_confidence" required><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="delayedGaUsefulness">AI usefulness (1–5)</label>
-                <input class="form-input" type="number" id="delayedGaUsefulness" data-feature="ga_ai_usefulness" min="1" max="5" step="1" value="4" required />
+                <select class="form-select" id="delayedGaUsefulness" data-feature="ga_ai_usefulness" required><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="delayedGaEffort">GenAI mental effort (1–5)</label>
-                <input class="form-input" type="number" id="delayedGaEffort" data-feature="ga_mental_effort" min="1" max="5" step="1" value="2" required />
+                <select class="form-select" id="delayedGaEffort" data-feature="ga_mental_effort" required><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="delayedGaExplanation">Explanation ease (1–5)</label>
-                <input class="form-input" type="number" id="delayedGaExplanation" data-feature="ga_explanation_ease" min="1" max="5" step="1" value="4" required />
+                <select class="form-select" id="delayedGaExplanation" data-feature="ga_explanation_ease" required><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="delayedGaWords">GenAI writing word count</label>
-                <input class="form-input" type="number" id="delayedGaWords" data-feature="ga_word_count" min="0" step="1" value="50" required />
+                <select class="form-select" id="delayedGaWords" data-feature="ga_word_count" required><option value="0">0</option><option value="25">25</option><option value="45">45</option><option value="50" selected>50</option><option value="75">75</option><option value="100">100</option><option value="125">125</option><option value="150">150</option><option value="200">200</option><option value="250">250</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="delayedGaTtr">GenAI lexical diversity (TTR, 0–1)</label>
-                <input class="form-input" type="number" id="delayedGaTtr" data-feature="ga_lexical_diversity_ttr" min="0" max="1" step="any" value="0.65" required />
+                <select class="form-select" id="delayedGaTtr" data-feature="ga_lexical_diversity_ttr" required><option value="0.40">0.40</option><option value="0.45">0.45</option><option value="0.50">0.50</option><option value="0.55">0.55</option><option value="0.60">0.60</option><option value="0.65" selected>0.65</option><option value="0.70">0.70</option><option value="0.72">0.72</option><option value="0.75">0.75</option><option value="0.80">0.80</option><option value="0.85">0.85</option><option value="0.90">0.90</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="delayedGaOwnership">Cognitive ownership (1–5)</label>
-                <input class="form-input" type="number" id="delayedGaOwnership" data-feature="cognitive_ownership_score" min="1" max="5" step="1" value="3" required />
+                <select class="form-select" id="delayedGaOwnership" data-feature="cognitive_ownership_score" required><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="delayedGaAutonomy">Explanation autonomy (1–5)</label>
-                <input class="form-input" type="number" id="delayedGaAutonomy" data-feature="explanation_autonomy_score" min="1" max="5" step="1" value="3" required />
+                <select class="form-select" id="delayedGaAutonomy" data-feature="explanation_autonomy_score" required><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="delayedGaDependency">Perceived GenAI dependency (1–5)</label>
-                <input class="form-input" type="number" id="delayedGaDependency" data-feature="perceived_ai_dependency_score" min="1" max="5" step="1" value="4" required />
+                <select class="form-select" id="delayedGaDependency" data-feature="perceived_ai_dependency_score" required><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select>
             </div>
         </div>
 
@@ -1192,8 +1116,8 @@
 ================================================================ -->
 <section class="content-section" aria-labelledby="statusHeading4">
     <div class="content-section__header">
-        <h2 class="section-heading" id="statusHeading4">Experimental Evaluation Readiness Status</h2>
-        <p class="section-subheading">Live readiness state queried from the Component 4 backend service.</p>
+        <h2 class="section-heading" id="statusHeading4">Prototype Implementation Status</h2>
+        <p class="section-subheading">Prototype features and demo outputs are complete. Real participant data collection and validated research findings remain pending.</p>
     </div>
 
     <div class="retention-status-panel">
@@ -1202,32 +1126,36 @@
             <span class="retention-status-val">GenAI-Assisted Cognitive Engagement &amp; Learning Retention Evaluation</span>
         </div>
         <div class="retention-status-row">
-            <span class="retention-status-label">Research Stage</span>
-            <span class="retention-status-val">Prototype Development</span>
+            <span class="retention-status-label">Prototype Implementation</span>
+            <span class="retention-status-val retention-status-val--complete">Complete</span>
         </div>
         <div class="retention-status-row">
-            <span class="retention-status-label">Experimental Data Collection</span>
+            <span class="retention-status-label">Real Participant Data Collection</span>
             <span class="retention-status-val retention-status-val--active">In Progress</span>
         </div>
         <div class="retention-status-row">
-            <span class="retention-status-label">Dataset Ready</span>
-            <span class="retention-status-val retention-status-val--pending">{{ research_status.dataset_ready }}</span>
+            <span class="retention-status-label">Demo Dataset Ready ({{ research_status.prototype_completion.sample_size }} records)</span>
+            <span class="retention-status-val retention-status-val--complete">{{ 'Complete' if research_status.prototype_completion.dataset_ready else 'Pending' }}</span>
         </div>
         <div class="retention-status-row">
-            <span class="retention-status-label">NLP Analysis Available</span>
-            <span class="retention-status-val retention-status-val--pending">{{ research_status.nlp_analysis_available }}</span>
+            <span class="retention-status-label">Prototype NLP Analysis</span>
+            <span class="retention-status-val retention-status-val--complete">{{ 'Complete' if research_status.prototype_completion.nlp_analysis_available else 'Pending' }}</span>
         </div>
         <div class="retention-status-row">
-            <span class="retention-status-label">Recall Analysis Available</span>
-            <span class="retention-status-val retention-status-val--pending">{{ research_status.recall_analysis_available }}</span>
+            <span class="retention-status-label">Prototype Recall Analysis</span>
+            <span class="retention-status-val retention-status-val--complete">{{ 'Complete' if research_status.prototype_completion.recall_analysis_available else 'Pending' }}</span>
         </div>
         <div class="retention-status-row">
-            <span class="retention-status-label">Paired Analysis Available</span>
-            <span class="retention-status-val retention-status-val--pending">{{ research_status.paired_analysis_available }}</span>
+            <span class="retention-status-label">Prototype Paired Comparison</span>
+            <span class="retention-status-val retention-status-val--complete">{{ 'Complete' if research_status.prototype_completion.paired_analysis_available else 'Pending' }}</span>
         </div>
         <div class="retention-status-row">
-            <span class="retention-status-label">Final Results Available</span>
-            <span class="retention-status-val retention-status-val--pending">{{ research_status.final_results_available }}</span>
+            <span class="retention-status-label">Prototype Dashboard Results</span>
+            <span class="retention-status-val retention-status-val--complete">{{ 'Complete' if research_status.prototype_completion.final_results_available else 'Pending' }}</span>
+        </div>
+        <div class="retention-status-row">
+            <span class="retention-status-label">Validated Research Results</span>
+            <span class="retention-status-val retention-status-val--pending">Pending real participant data</span>
         </div>
     </div>
 </section>
@@ -1248,12 +1176,12 @@
     <div class="recall-summary-grid">
         <div class="recall-summary-card recall-summary-card--brain">
             <div class="recall-summary-card__label">Immediate recall average</div>
-            <div class="recall-summary-card__value">{{ recall_summary.brain_immediate_avg }} / {{ recall_summary.genai_immediate_avg }}</div>
+            <div class="recall-summary-card__value">{{ ('%.2f'|format(recall_summary.brain_immediate_avg)) if recall_summary.brain_immediate_avg is not none else '—' }} / {{ ('%.2f'|format(recall_summary.genai_immediate_avg)) if recall_summary.genai_immediate_avg is not none else '—' }}</div>
             <div class="recall-summary-card__meta">Brain-only / GenAI-assisted items</div>
         </div>
         <div class="recall-summary-card recall-summary-card--genai">
             <div class="recall-summary-card__label">Delayed recall average</div>
-            <div class="recall-summary-card__value">{{ recall_summary.brain_delayed_avg }} / {{ recall_summary.genai_delayed_avg }}</div>
+            <div class="recall-summary-card__value">{{ ('%.2f'|format(recall_summary.brain_delayed_avg)) if recall_summary.brain_delayed_avg is not none else '—' }} / {{ ('%.2f'|format(recall_summary.genai_delayed_avg)) if recall_summary.genai_delayed_avg is not none else '—' }}</div>
             <div class="recall-summary-card__meta">Brain-only / GenAI-assisted items</div>
         </div>
         <div class="recall-summary-card recall-summary-card--gap">
@@ -1312,116 +1240,6 @@
         </li>
         {% endfor %}
     </ol>
-</section>
-
-
-<!-- ================================================================
-     L. Planned Analytical Outputs
-================================================================ -->
-<section class="content-section" aria-labelledby="outputsHeading4">
-    <div class="content-section__header">
-        <h2 class="section-heading" id="outputsHeading4">Planned Analytical Outputs</h2>
-        <p class="section-subheading">
-            Output visualisations and statistical reports to be populated once empirical evaluations are completed.
-        </p>
-    </div>
-
-    <div class="card-grid card-grid--4">
-        <div class="output-card output-card--disabled" aria-label="Writing Quality Comparison — not yet available">
-            <div class="output-card__title">Writing Quality Comparison</div>
-            <div class="output-card__unavailable">
-                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                Available after experimental analysis
-            </div>
-        </div>
-
-        <div class="output-card output-card--disabled" aria-label="NLP Feature Comparison — not yet available">
-            <div class="output-card__title">NLP Feature Comparison</div>
-            <div class="output-card__unavailable">
-                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                Available after experimental analysis
-            </div>
-        </div>
-
-        <div class="output-card output-card--disabled" aria-label="Immediate Recall — not yet available">
-            <div class="output-card__title">Immediate Recall</div>
-            <div class="output-card__unavailable">
-                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                Available after experimental analysis
-            </div>
-        </div>
-
-        <div class="output-card output-card--disabled" aria-label="Delayed Recall — not yet available">
-            <div class="output-card__title">Delayed Recall</div>
-            <div class="output-card__unavailable">
-                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                Available after experimental analysis
-            </div>
-        </div>
-
-        <div class="output-card output-card--disabled" aria-label="Learning Retention — not yet available">
-            <div class="output-card__title">Learning Retention</div>
-            <div class="output-card__unavailable">
-                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                Available after experimental analysis
-            </div>
-        </div>
-
-        <div class="output-card output-card--disabled" aria-label="Ownership — not yet available">
-            <div class="output-card__title">Ownership</div>
-            <div class="output-card__unavailable">
-                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                Available after experimental analysis
-            </div>
-        </div>
-
-        <div class="output-card output-card--disabled" aria-label="Cognitive Effort — not yet available">
-            <div class="output-card__title">Cognitive Effort</div>
-            <div class="output-card__unavailable">
-                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                Available after experimental analysis
-            </div>
-        </div>
-
-        <div class="output-card output-card--disabled" aria-label="Human Rubric Results — not yet available">
-            <div class="output-card__title">Human Rubric Results</div>
-            <div class="output-card__unavailable">
-                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                Available after experimental analysis
-            </div>
-        </div>
-
-        <div class="output-card output-card--disabled" aria-label="Inter-Rater Agreement — not yet available">
-            <div class="output-card__title">Inter-Rater Agreement</div>
-            <div class="output-card__unavailable">
-                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                Available after experimental analysis
-            </div>
-        </div>
-
-        <div class="output-card output-card--disabled" aria-label="Paired Condition Effects — not yet available">
-            <div class="output-card__title">Paired Condition Effects</div>
-            <div class="output-card__unavailable">
-                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                Available after experimental analysis
-            </div>
-        </div>
-    </div>
-
-    <!-- Empty analytics state for test compatibility & research integrity -->
-    <div class="empty-state">
-        <div class="empty-state__icon" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
-                <line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
-            </svg>
-        </div>
-        <h3 class="empty-state__title">NLP analytics not yet available</h3>
-        <p class="empty-state__body">
-            Writing analysis, recall results and statistical comparisons will become available after writing experiment data collection, NLP preprocessing and statistical analysis are completed.
-        </p>
-    </div>
 </section>
 
 
@@ -1513,89 +1331,6 @@
         </div>
     </div>
 
-    <!-- 3. Interactive Real-Time Predictor -->
-    <div class="predictor-container">
-        <h3 style="font-size: 1.2rem; font-weight: 700; color: #0f172a; margin-top: 0; margin-bottom: 0.35rem;">
-            Live Cognitive Retention Risk Predictor
-        </h3>
-        <p style="font-size: 0.85rem; color: #64748b; margin-top: 0; margin-bottom: 1.5rem;">
-            Adjust student learning metrics below to test real-time inference using the trained Random Forest pipeline.
-        </p>
-
-        <div class="predictor-grid">
-            <!-- Form Inputs -->
-            <form id="c4PredictorForm" class="predictor-form" onsubmit="return false;">
-                <div class="predictor-field">
-                    <label for="inpDependency">
-                        GenAI Dependency Rating (1 &ndash; 5):
-                        <span id="lblDependency" class="range-val-badge">4</span>
-                    </label>
-                    <span class="field-desc">How strongly the student relies on GenAI output without critical reflection.</span>
-                    <input type="range" id="inpDependency" min="1" max="5" value="4" step="1" oninput="document.getElementById('lblDependency').textContent=this.value;">
-                </div>
-
-                <div class="predictor-field">
-                    <label for="inpEffort">
-                        Mental Effort with GenAI (1 &ndash; 5):
-                        <span id="lblEffort" class="range-val-badge">2</span>
-                    </label>
-                    <span class="field-desc">Self-reported cognitive load / mental effort invested during GenAI study.</span>
-                    <input type="range" id="inpEffort" min="1" max="5" value="2" step="1" oninput="document.getElementById('lblEffort').textContent=this.value;">
-                </div>
-
-                <div class="predictor-field">
-                    <label for="inpOwnership">
-                        Knowledge Ownership (1 &ndash; 5):
-                        <span id="lblOwnership" class="range-val-badge">2</span>
-                    </label>
-                    <span class="field-desc">Perceived authorship and intellectual ownership of generated answers.</span>
-                    <input type="range" id="inpOwnership" min="1" max="5" value="2" step="1" oninput="document.getElementById('lblOwnership').textContent=this.value;">
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="predictor-field">
-                        <label for="inpTime">GenAI Study Duration (sec)</label>
-                        <input type="number" id="inpTime" value="130" min="30" max="600">
-                    </div>
-                    <div class="predictor-field">
-                        <label for="inpMcq">Immediate Score (/10)</label>
-                        <input type="number" id="inpMcq" value="9.0" min="0" max="10" step="0.5">
-                    </div>
-                </div>
-
-                <button type="button" id="btnRunPrediction" class="btn-predict">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/>
-                    </svg>
-                    Predict Retention Risk
-                </button>
-            </form>
-
-            <!-- Results Output -->
-            <div id="predictionResultBox" class="prediction-result-box">
-                <div style="font-size: 0.8rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">AI Prediction Output</div>
-                <div id="riskBadge" class="risk-badge risk-badge--high">
-                    High Retention Risk
-                </div>
-                
-                <div class="pred-metrics-row">
-                    <div class="pred-metric-box">
-                        <div id="riskProbVal" class="metric-val">86.7%</div>
-                        <div class="metric-lbl">Risk Probability</div>
-                    </div>
-                    <div class="pred-metric-box">
-                        <div id="predRetentionVal" class="metric-val">60.7%</div>
-                        <div class="metric-lbl">Predicted Retention Rate</div>
-                    </div>
-                </div>
-
-                <div id="recommendationText" class="recommendation-alert">
-                    <strong>Pedagogical Insight:</strong> High risk of cognitive offloading: Student relies heavily on AI assistance with low mental effort. Recommendation: Introduce structured reflection prompts and enforce unassisted recall phases.
-                </div>
-                <div style="font-size: 0.75rem; color: #94a3b8; text-align: right;">Engine: Random Forest Classifier (88.5% Test Accuracy)</div>
-            </div>
-        </div>
-    </div>
 </section>
 
 
@@ -1802,5 +1537,5 @@
 {% endblock %}
 
 {% block extra_scripts %}
-<script src="{{ url_for('static', filename='js/component4.js') }}"></script>
+<script src="{{ url_for('static', filename='js/component4.js', v='risk-predictor-removed-1') }}"></script>
 {% endblock %}

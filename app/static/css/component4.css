@@ -1227,6 +1227,11 @@
     font-weight: 600;
 }
 
+.retention-status-val--complete {
+    color: #15803d;
+    font-weight: 600;
+}
+
 .retention-status-val--pending {
     color: var(--text-muted);
     font-style: italic;

@@ -40,69 +40,6 @@
 
     var REF_PATTERN = /^[A-Za-z0-9_-]{2,20}$/;
 
-    var immediateRecallForm = document.getElementById("immediateRecallForm");
-    var immediateRecallError = document.getElementById("immediateRecallError");
-    var immediateRecallResult = document.getElementById("immediateRecallResult");
-
-    if (immediateRecallForm) {
-        immediateRecallForm.addEventListener("submit", function (event) {
-            event.preventDefault();
-            if (immediateRecallError) {
-                immediateRecallError.hidden = true;
-                immediateRecallError.textContent = "";
-            }
-
-            var payload = {
-                brain_only_count: document.getElementById("brainImmediateCount").value,
-                genai_assisted_count: document.getElementById("genaiImmediateCount").value,
-            };
-
-            fetch("/api/component4/preview-immediate-recall", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
-            })
-                .then(function (response) {
-                    return response.json().then(function (data) {
-                        return { ok: response.ok, body: data };
-                    });
-                })
-                .then(function (response) {
-                    if (!response.ok) {
-                        if (immediateRecallError) {
-                            immediateRecallError.textContent = (response.body.errors || []).join(" ");
-                            immediateRecallError.hidden = false;
-                        }
-                        if (immediateRecallResult) immediateRecallResult.hidden = true;
-                        return;
-                    }
-
-                    var preview = response.body.preview;
-                    document.getElementById("previewBrainCount").textContent = preview.brain_only_count + " items";
-                    document.getElementById("previewGenaiCount").textContent = preview.genai_assisted_count + " items";
-                    var difference = preview.difference_genai_minus_brain;
-                    var unit = Math.abs(difference) === 1 ? " item" : " items";
-                    document.getElementById("previewRecallDifference").textContent = difference + unit;
-                    document.getElementById("immediateRecallNote").textContent = response.body.note;
-                    if (immediateRecallResult) immediateRecallResult.hidden = false;
-                })
-                .catch(function () {
-                    if (immediateRecallError) {
-                        immediateRecallError.textContent = "Could not preview these scores. Please try again.";
-                        immediateRecallError.hidden = false;
-                    }
-                });
-        });
-
-        immediateRecallForm.addEventListener("reset", function () {
-            if (immediateRecallError) {
-                immediateRecallError.hidden = true;
-                immediateRecallError.textContent = "";
-            }
-            if (immediateRecallResult) immediateRecallResult.hidden = true;
-        });
-    }
-
     var predictorForm = document.getElementById("immediateRecallPredictorForm");
     var conditionSelect = document.getElementById("immediateModelCondition");
     var predictorError = document.getElementById("immediateRecallPredictionError");
@@ -113,8 +50,8 @@
         document.querySelectorAll(".immediate-model-feature-group").forEach(function (group) {
             var active = group.dataset.modelCondition === conditionSelect.value;
             group.hidden = !active;
-            group.querySelectorAll("input").forEach(function (input) {
-                input.disabled = !active;
+            group.querySelectorAll("[data-feature]").forEach(function (control) {
+                control.disabled = !active;
             });
         });
     }
@@ -134,8 +71,8 @@
                 '.immediate-model-feature-group[data-model-condition="' + conditionSelect.value + '"]'
             );
             var features = {};
-            activeGroup.querySelectorAll("input[data-feature]").forEach(function (input) {
-                features[input.dataset.feature] = input.value;
+            activeGroup.querySelectorAll("[data-feature]").forEach(function (control) {
+                features[control.dataset.feature] = control.value;
             });
 
             fetch("/api/component4/predict-immediate-recall", {
@@ -159,7 +96,7 @@
                     }
 
                     document.getElementById("predictedImmediateRecall").textContent =
-                        response.body.predicted_immediate_recall.toFixed(1) + " / 10 correct MCQs";
+                        response.body.predicted_immediate_recall + " / 10 correct MCQs";
                     document.getElementById("immediateRecallPredictionNote").textContent = response.body.note;
                     if (predictorResult) predictorResult.hidden = false;
                 })
@@ -182,8 +119,8 @@
         document.querySelectorAll(".delayed-model-feature-group").forEach(function (group) {
             var active = group.dataset.modelCondition === delayedConditionSelect.value;
             group.hidden = !active;
-            group.querySelectorAll("input").forEach(function (input) {
-                input.disabled = !active;
+            group.querySelectorAll("[data-feature]").forEach(function (control) {
+                control.disabled = !active;
             });
         });
     }
@@ -203,8 +140,8 @@
                 '.delayed-model-feature-group[data-model-condition="' + delayedConditionSelect.value + '"]'
             );
             var features = {};
-            activeGroup.querySelectorAll("input[data-feature]").forEach(function (input) {
-                features[input.dataset.feature] = input.value;
+            activeGroup.querySelectorAll("[data-feature]").forEach(function (control) {
+                features[control.dataset.feature] = control.value;
             });
 
             fetch("/api/component4/predict-delayed-recall", {
@@ -228,7 +165,7 @@
                     }
 
                     document.getElementById("predictedDelayedRecall").textContent =
-                        response.body.predicted_delayed_recall.toFixed(1) + " items";
+                        response.body.predicted_delayed_recall + " / 10 correct MCQs";
                     document.getElementById("delayedRecallPredictionNote").textContent = response.body.note;
                     if (delayedPredictorResult) delayedPredictorResult.hidden = false;
                 })
@@ -238,69 +175,6 @@
                         delayedPredictorError.hidden = false;
                     }
                 });
-        });
-    }
-
-    var delayedRecallForm = document.getElementById("delayedRecallForm");
-    var delayedRecallError = document.getElementById("delayedRecallError");
-    var delayedRecallResult = document.getElementById("delayedRecallResult");
-
-    if (delayedRecallForm) {
-        delayedRecallForm.addEventListener("submit", function (event) {
-            event.preventDefault();
-            if (delayedRecallError) {
-                delayedRecallError.hidden = true;
-                delayedRecallError.textContent = "";
-            }
-
-            var payload = {
-                brain_only_count: document.getElementById("brainDelayedCount").value,
-                genai_assisted_count: document.getElementById("genaiDelayedCount").value,
-            };
-
-            fetch("/api/component4/preview-delayed-recall", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
-            })
-                .then(function (response) {
-                    return response.json().then(function (data) {
-                        return { ok: response.ok, body: data };
-                    });
-                })
-                .then(function (response) {
-                    if (!response.ok) {
-                        if (delayedRecallError) {
-                            delayedRecallError.textContent = (response.body.errors || []).join(" ");
-                            delayedRecallError.hidden = false;
-                        }
-                        if (delayedRecallResult) delayedRecallResult.hidden = true;
-                        return;
-                    }
-
-                    var preview = response.body.preview;
-                    document.getElementById("previewBrainDelayedCount").textContent = preview.brain_only_count + " items";
-                    document.getElementById("previewGenaiDelayedCount").textContent = preview.genai_assisted_count + " items";
-                    var difference = preview.difference_genai_minus_brain;
-                    var unit = Math.abs(difference) === 1 ? " item" : " items";
-                    document.getElementById("previewDelayedRecallDifference").textContent = difference + unit;
-                    document.getElementById("delayedRecallNote").textContent = response.body.note;
-                    if (delayedRecallResult) delayedRecallResult.hidden = false;
-                })
-                .catch(function () {
-                    if (delayedRecallError) {
-                        delayedRecallError.textContent = "Could not preview these delayed-recall counts. Please try again.";
-                        delayedRecallError.hidden = false;
-                    }
-                });
-        });
-
-        delayedRecallForm.addEventListener("reset", function () {
-            if (delayedRecallError) {
-                delayedRecallError.hidden = true;
-                delayedRecallError.textContent = "";
-            }
-            if (delayedRecallResult) delayedRecallResult.hidden = true;
         });
     }
 
@@ -847,68 +721,6 @@
             clearFieldError(f.errorId, f.id);
         });
     });
-
-    // ----------------------------------------------------------------------
-    // Real-Time Machine Learning Retention Predictor Handler
-    // ----------------------------------------------------------------------
-    var btnPredict = document.getElementById("btnRunPrediction");
-    if (btnPredict) {
-        btnPredict.addEventListener("click", function () {
-            var dep = parseInt(document.getElementById("inpDependency").value, 10);
-            var eff = parseInt(document.getElementById("inpEffort").value, 10);
-            var own = parseInt(document.getElementById("inpOwnership").value, 10);
-            var timeVal = parseFloat(document.getElementById("inpTime").value) || 150.0;
-            var mcqVal = parseFloat(document.getElementById("inpMcq").value) || 8.5;
-
-            var payload = {
-                perceived_ai_dependency_score: dep,
-                ga_mental_effort: eff,
-                cognitive_ownership_score: own,
-                ga_learning_time_sec: timeVal,
-                ga_immediate_mcq: mcqVal
-            };
-
-            btnPredict.disabled = true;
-            btnPredict.textContent = "Analyzing Patterns...";
-
-            fetch("/api/component4/predict-risk", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            })
-            .then(function (res) { return res.json(); })
-            .then(function (data) {
-                btnPredict.disabled = false;
-                btnPredict.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg> Predict Retention Risk';
-
-                var badge = document.getElementById("riskBadge");
-                var probVal = document.getElementById("riskProbVal");
-                var retVal = document.getElementById("predRetentionVal");
-                var rec = document.getElementById("recommendationText");
-
-                if (badge) {
-                    badge.className = "risk-badge " + (data.risk_class === 1 ? "risk-badge--high" : "risk-badge--stable");
-                    badge.textContent = data.prediction || (data.risk_class === 1 ? "High Retention Risk" : "Stable Retention");
-                }
-
-                if (probVal) {
-                    probVal.textContent = (data.risk_probability * 100).toFixed(1) + "%";
-                }
-
-                if (retVal) {
-                    retVal.textContent = (data.predicted_retention_rate || 70.0) + "%";
-                }
-
-                if (rec && data.recommendation) {
-                    rec.innerHTML = "<strong>Pedagogical Insight:</strong> " + data.recommendation;
-                }
-            })
-            .catch(function () {
-                btnPredict.disabled = false;
-                btnPredict.textContent = "Predict Retention Risk";
-            });
-        });
-    }
 
     // ----------------------------------------------------------------------
     // Real-Time NLP Text Comparison Handler
