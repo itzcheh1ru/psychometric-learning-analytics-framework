@@ -90,19 +90,48 @@ class LongitudinalAnalysisService:
         if df.empty:
             return []
 
+        df = df.copy()
+        df["ai_study_hours"] = pd.to_numeric(
+            df["ai_study_hours"],
+            errors="coerce"
+        )
+        df["independent_study_hours"] = pd.to_numeric(
+            df["independent_study_hours"],
+            errors="coerce"
+        )
+        df["total_study_hours"] = (
+            df["ai_study_hours"]
+            + df["independent_study_hours"]
+        )
+        df = df[
+            df["total_study_hours"].gt(0)
+            & df["ai_study_hours"].notna()
+            & df["independent_study_hours"].notna()
+        ]
+
+        if df.empty:
+            return []
+
         result = (
             df.groupby("study_week")
             .agg(
-                ai_study_share=(
-                    "ai_study_share",
-                    "mean"
-                ),
-                independent_study_share=(
-                    "independent_study_share",
-                    "mean"
-                )
+                ai_study_hours=("ai_study_hours", "sum"),
+                independent_study_hours=("independent_study_hours", "sum"),
+                total_study_hours=("total_study_hours", "sum"),
+                records=("study_week", "size"),
+                participants=("participant_reference", "nunique"),
             )
             .reset_index()
+        )
+        result["ai_study_share"] = (
+            result["ai_study_hours"]
+            / result["total_study_hours"]
+            * 100
+        )
+        result["independent_study_share"] = (
+            result["independent_study_hours"]
+            / result["total_study_hours"]
+            * 100
         )
 
         return result.to_dict(
@@ -160,7 +189,9 @@ class LongitudinalAnalysisService:
                 average_prompts=(
                     "prompt_count",
                     "mean"
-                )
+                ),
+                records=("prompt_count", "count"),
+                participants=("participant_reference", "nunique"),
             )
             .reset_index()
         )
@@ -245,13 +276,29 @@ class LongitudinalAnalysisService:
         if df.empty:
             return []
 
+        df = df.sort_values(
+            ["participant_reference", "study_week"]
+        ).copy()
+        df["_previous_study_week"] = (
+            df.groupby("participant_reference")["study_week"].shift()
+        )
+        comparisons = df[
+            df["_previous_study_week"].notna()
+            & df["study_week"].gt(df["_previous_study_week"])
+        ].dropna(
+            subset=["study_pattern_shift"]
+        )
+
+        if comparisons.empty:
+            return []
+
         result = (
-            df.groupby("study_week")
+            comparisons.groupby("study_week")
             .agg(
-                average_shift=(
-                    "study_pattern_shift",
-                    "mean"
-                )
+                average_shift=("study_pattern_shift", "mean"),
+                median_shift=("study_pattern_shift", "median"),
+                records=("study_pattern_shift", "count"),
+                participants=("participant_reference", "nunique"),
             )
             .reset_index()
         )

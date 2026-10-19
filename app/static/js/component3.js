@@ -890,6 +890,10 @@
                     "studyShareChart"
                 );
 
+            var status =
+                document.getElementById(
+                    "studyShareChartStatus"
+                );
 
             if (!canvas) {
 
@@ -916,6 +920,19 @@
 
             var data =
                 await response.json();
+
+            if (!Array.isArray(data) || data.length === 0) {
+
+                if (status) {
+
+                    status.textContent =
+                        "Study-share data is not yet available because no records contain valid study-hour totals.";
+
+                }
+
+                return;
+
+            }
 
 
             var labels =
@@ -949,6 +966,13 @@
 
                     }
                 );
+
+            if (status) {
+
+                status.textContent =
+                    "Shares are weighted by reported study hours. Sample sizes are shown in the chart tooltips.";
+
+            }
 
 
             new Chart(
@@ -1083,6 +1107,28 @@
 
                                 }
 
+                            },
+
+                            tooltip: {
+
+                                callbacks: {
+
+                                    afterBody: function (items) {
+
+                                        var item =
+                                            data[items[0].dataIndex];
+
+                                        return [
+                                            "Valid records: " + item.records,
+                                            "Participants: " + item.participants,
+                                            "Reported study hours: " +
+                                                Number(item.total_study_hours).toFixed(1)
+                                        ];
+
+                                    }
+
+                                }
+
                             }
 
                         },
@@ -1173,6 +1219,20 @@
         }
 
         catch (error) {
+
+            var status =
+                document.getElementById(
+                    "studyShareChartStatus"
+                );
+
+            if (status) {
+
+                status.textContent =
+                    "Study-share data could not be loaded. Please check the dataset and refresh the page.";
+
+                status.classList.add("is-error");
+
+            }
 
             console.error(
                 "Study share chart error:",
@@ -1419,7 +1479,7 @@
                                             context.dataset.label +
                                             ": " +
                                             context.parsed.y +
-                                            " records"
+                                            " records mentioning this category"
                                         );
 
                                     }
@@ -1434,7 +1494,7 @@
 
                             x: {
 
-                                stacked: true,
+                                stacked: false,
 
                                 grid: {
 
@@ -1470,7 +1530,7 @@
 
                             y: {
 
-                                stacked: true,
+                                stacked: false,
 
                                 beginAtZero: true,
 
@@ -1492,7 +1552,7 @@
 
                                     display: true,
 
-                                    text: "Weekly records",
+                                    text: "Records mentioning category",
 
                                     color: "#475467"
 
@@ -1512,7 +1572,7 @@
                 weeks.length +
                 " study week" +
                 (weeks.length === 1 ? "" : "s") +
-                " from the processed dataset.";
+                " from the processed dataset. Categories can overlap within a record.";
 
         }
 
@@ -1569,6 +1629,24 @@
             var data =
                 await response.json();
 
+            var status =
+                document.getElementById(
+                    "promptFrequencyChartStatus"
+                );
+
+            if (!Array.isArray(data) || data.length === 0) {
+
+                if (status) {
+
+                    status.textContent =
+                        "Prompt-frequency data is not yet available in the processed dataset.";
+
+                }
+
+                return;
+
+            }
+
 
             var labels =
                 data.map(
@@ -1587,10 +1665,17 @@
                 data.map(
                     function (item) {
 
-                        return item.total_prompts;
+                        return item.average_prompts;
 
                     }
                 );
+
+            if (status) {
+
+                status.textContent =
+                    "Bars show average prompts per weekly record. Total prompts and sample sizes are available in each tooltip.";
+
+            }
 
 
             new Chart(
@@ -1608,7 +1693,7 @@
                             {
 
                                 label:
-                                    "Total Academic Prompts",
+                                    "Average Prompts per Record",
 
                                 data:
                                     values,
@@ -1671,6 +1756,37 @@
 
                                 }
 
+                            },
+
+                            tooltip: {
+
+                                callbacks: {
+
+                                    label: function (context) {
+
+                                        return (
+                                            "Average: " +
+                                            Number(context.parsed.y).toFixed(1) +
+                                            " prompts per record"
+                                        );
+
+                                    },
+
+                                    afterBody: function (items) {
+
+                                        var item =
+                                            data[items[0].dataIndex];
+
+                                        return [
+                                            "Total prompts: " + item.total_prompts,
+                                            "Records: " + item.records,
+                                            "Participants: " + item.participants
+                                        ];
+
+                                    }
+
+                                }
+
                             }
 
                         },
@@ -1706,7 +1822,7 @@
                                     display: true,
 
                                     text:
-                                        "Number of Prompts"
+                                        "Average prompts per record"
 
                                 }
 
@@ -1756,6 +1872,20 @@
 
         catch (error) {
 
+            var status =
+                document.getElementById(
+                    "promptFrequencyChartStatus"
+                );
+
+            if (status) {
+
+                status.textContent =
+                    "Prompt-frequency data could not be loaded. Please check the dataset and refresh the page.";
+
+                status.classList.add("is-error");
+
+            }
+
             console.error(
                 "Prompt chart error:",
                 error
@@ -1777,6 +1907,11 @@
             var canvas =
                 document.getElementById(
                     "studyShiftChart"
+                );
+
+            var status =
+                document.getElementById(
+                    "studyShiftChartStatus"
                 );
 
 
@@ -1805,6 +1940,26 @@
 
             var data =
                 await response.json();
+
+            if (!Array.isArray(data) || data.length === 0) {
+
+                if (status) {
+
+                    status.textContent =
+                        "Study pattern shift is not yet available. At least two study weeks for the same participant are required.";
+
+                }
+
+                return;
+
+            }
+
+            if (status) {
+
+                status.textContent =
+                    "Showing week-to-week comparisons. The shift value is the average absolute percentage-point change across AI-assisted and independent study shares; sample sizes are shown in tooltips.";
+
+            }
 
 
             var labels =
@@ -1926,6 +2081,39 @@
 
                                     }
 
+                                },
+
+                                tooltip: {
+
+                                    callbacks: {
+
+                                        label: function (context) {
+
+                                            return (
+                                                "Average shift: " +
+                                                Number(context.parsed.y).toFixed(1) +
+                                                " percentage points"
+                                            );
+
+                                        },
+
+                                        afterBody: function (items) {
+
+                                            var item =
+                                                data[items[0].dataIndex];
+
+                                            return [
+                                                "Comparisons: " + item.records,
+                                                "Participants: " + item.participants,
+                                                "Median shift: " +
+                                                    Number(item.median_shift).toFixed(1) +
+                                                    " percentage points"
+                                            ];
+
+                                        }
+
+                                    }
+
                                 }
 
                             }
@@ -2010,6 +2198,20 @@
         }
 
         catch (error) {
+
+            var status =
+                document.getElementById(
+                    "studyShiftChartStatus"
+                );
+
+            if (status) {
+
+                status.textContent =
+                    "Study-shift data could not be loaded. Please check the dataset and refresh the page.";
+
+                status.classList.add("is-error");
+
+            }
 
             console.error(
                 "Study shift chart error:",

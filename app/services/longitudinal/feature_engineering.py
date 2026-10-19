@@ -62,10 +62,9 @@ def generate_indicators(df: pd.DataFrame) -> pd.DataFrame:
     # 4. AI Study Share
     # ---------------------------------------------------------
 
-    df["ai_study_share"] = 0.0
-
     valid_total = df["total_recorded_study_hours"] > 0
 
+    df["ai_study_share"] = float("nan")
     df.loc[valid_total, "ai_study_share"] = (
         df.loc[valid_total, "ai_study_hours"]
         / df.loc[valid_total, "total_recorded_study_hours"]
@@ -76,8 +75,7 @@ def generate_indicators(df: pd.DataFrame) -> pd.DataFrame:
     # 5. Independent Learning Share
     # ---------------------------------------------------------
 
-    df["independent_study_share"] = 0.0
-
+    df["independent_study_share"] = float("nan")
     df.loc[valid_total, "independent_study_share"] = (
         df.loc[valid_total, "independent_study_hours"]
         / df.loc[valid_total, "total_recorded_study_hours"]
@@ -139,10 +137,9 @@ def calculate_shift_index(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
 
     df["study_pattern_shift"] = (
-        df["ai_share_change"].abs().fillna(0)
-        +
-        df["independent_share_change"].abs().fillna(0)
-    )
+        df["ai_share_change"].abs()
+        + df["independent_share_change"].abs()
+    ) / 2
 
     return df
 
