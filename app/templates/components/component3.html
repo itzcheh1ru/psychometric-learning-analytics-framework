@@ -168,6 +168,22 @@
     <p class="c3-data-note">This visualisation is shown only when the backend provides sufficient validated observations.</p>
 </section>
 
+<section class="c3-chart-section" aria-labelledby="promptPurposeHeading">
+    <h2 id="promptPurposeHeading">Prompt Purpose by Study Week</h2>
+    <p class="c3-chart-description">
+        Number of weekly records reporting each prompt-purpose category, including primary and other-purpose selections. New study weeks appear when the processed dataset is updated and this page is refreshed.
+    </p>
+    <div class="prompt-purpose-chart__canvas">
+        <canvas
+            id="promptPurposeChart"
+            aria-label="Weekly counts of records by primary prompt purpose"
+        ></canvas>
+    </div>
+    <p id="promptPurposeChartStatus" class="c3-chart-status" role="status" aria-live="polite">
+        Loading prompt-purpose data…
+    </p>
+</section>
+
 
 <!-- ================================================================
      C. Weekly Study Record Prototype (Form)
@@ -526,38 +542,6 @@
         </div>
     </div>
 
-    <div class="prompt-purpose-chart">
-        <h3 class="subsection-heading">Prompt Purpose by Study Week</h3>
-        <p class="prompt-purpose-chart__description">
-            Number of weekly records in each primary prompt-purpose category. New study weeks appear when the processed dataset is updated and this page is refreshed.
-        </p>
-        <div class="prompt-purpose-chart__canvas">
-            <canvas
-                id="promptPurposeChart"
-                aria-label="Weekly counts of records by primary prompt purpose"
-            ></canvas>
-        </div>
-        <p id="promptPurposeChartStatus" class="c3-chart-status" role="status" aria-live="polite">
-            Loading prompt-purpose data…
-        </p>
-    </div>
-
-    <div class="prompt-flow" role="img" aria-label="Prompt behaviour analytical workflow: Academic Prompt Records to Anonymisation and Cleaning to Academic Purpose Categorisation to Weekly Prompt Frequency to Prompt Purpose Trends to Longitudinal Interpretation">
-        <div class="prompt-flow__tag">Planned analytical workflow</div>
-        <div class="prompt-flow__steps">
-            <span class="prompt-step">Academic Prompt Records</span>
-            <span class="prompt-flow-arrow" aria-hidden="true">&rarr;</span>
-            <span class="prompt-step">Anonymisation / Cleaning</span>
-            <span class="prompt-flow-arrow" aria-hidden="true">&rarr;</span>
-            <span class="prompt-step">Academic-Purpose Categorisation</span>
-            <span class="prompt-flow-arrow" aria-hidden="true">&rarr;</span>
-            <span class="prompt-step">Weekly Prompt Frequency</span>
-            <span class="prompt-flow-arrow" aria-hidden="true">&rarr;</span>
-            <span class="prompt-step">Prompt-Purpose Trends</span>
-            <span class="prompt-flow-arrow" aria-hidden="true">&rarr;</span>
-            <span class="prompt-step">Longitudinal Interpretation</span>
-        </div>
-    </div>
 </section>
 
 

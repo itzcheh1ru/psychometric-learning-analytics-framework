@@ -180,17 +180,54 @@ class LongitudinalAnalysisService:
         if df.empty:
             return []
 
-        result = (
-            df.groupby(
-                [
-                    "study_week",
-                    "prompt_purpose"
+        primary_purposes = df[
+            ["study_week", "prompt_purpose"]
+        ].copy()
+        primary_purposes["_record_id"] = df.index
+
+        purpose_records = [primary_purposes]
+
+        if "other_prompt_purposes" in df.columns:
+            other_purposes = df[
+                ["study_week", "other_prompt_purposes"]
+            ].copy()
+            other_purposes["_record_id"] = df.index
+            other_purposes["prompt_purpose"] = (
+                other_purposes.pop("other_prompt_purposes")
+                .fillna("")
+                .astype(str)
+                .str.split(";")
+            )
+            other_purposes = other_purposes.explode("prompt_purpose")
+            purpose_records.append(
+                other_purposes[
+                    ["study_week", "prompt_purpose", "_record_id"]
                 ]
             )
-            .size()
-            .reset_index(
-                name="count"
+
+        purposes = pd.concat(
+            purpose_records,
+            ignore_index=True
+        )
+        purposes["prompt_purpose"] = (
+            purposes["prompt_purpose"]
+            .fillna("")
+            .astype(str)
+            .str.strip()
+        )
+        purposes = purposes[
+            purposes["prompt_purpose"].ne("")
+            & purposes["prompt_purpose"].ne("-")
+        ].drop_duplicates(
+            subset=["study_week", "prompt_purpose", "_record_id"]
+        )
+
+        result = (
+            purposes.groupby(
+                ["study_week", "prompt_purpose"]
             )
+            .size()
+            .reset_index(name="count")
         )
 
         return result.to_dict(
