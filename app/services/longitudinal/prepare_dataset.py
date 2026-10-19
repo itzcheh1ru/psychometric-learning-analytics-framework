@@ -26,7 +26,13 @@ COLUMN_MAP = {
         "learning_activity",
 
     "What was the academic workload/deadline pressure this week?":
-        "academic_period",
+        "workload_pressure",
+
+    "Which study methods did you mainly use this week?":
+        "study_methods",
+
+    "How productive do you feel your studying was this week?":
+        "perceived_productivity",
 
     "Approximately how many academic GenAI prompts did you use this week?":
         "prompt_count",
@@ -40,8 +46,6 @@ COLUMN_MAP = {
     "Rate the average detail/specificity of your academic prompts this week.":
         "prompt_detail",
 
-    "Optional: Please provide up to three examples of what you typed/asked GenAI (your prompts only — not the AI's response) during this week.":
-        "prompt_text",
 }
 
 
@@ -69,12 +73,13 @@ def clean_week_file(file_path, week_number):
         "independent_study_hours",
         "ai_sessions",
         "learning_activity",
-        "academic_period",
+        "workload_pressure",
+        "study_methods",
+        "perceived_productivity",
         "prompt_count",
         "prompt_purpose",
         "other_prompt_purposes",
         "prompt_detail",
-        "prompt_text",
     ]
 
     for column in required_columns:
@@ -90,6 +95,49 @@ def clean_week_file(file_path, week_number):
         .str.strip()
         .str.upper()
     )
+    df["participant_reference"] = df["participant_reference"].replace(
+        "",
+        pd.NA
+    )
+
+    missing_reference_count = int(
+        df["participant_reference"].isna().sum()
+    )
+    if missing_reference_count:
+        print(
+            f"Excluding {missing_reference_count} row(s) with no participant code "
+            f"from {Path(file_path).name}."
+        )
+        df = df[df["participant_reference"].notna()].copy()
+
+    duplicate_mask = df.duplicated(
+        subset=["participant_reference", "study_week"],
+        keep="first"
+    )
+    duplicate_count = int(duplicate_mask.sum())
+    if duplicate_count:
+        print(
+            f"Excluding {duplicate_count} duplicate participant-week row(s) "
+            f"from {Path(file_path).name}; retaining the first source row."
+        )
+        df = df.loc[~duplicate_mask].copy()
+
+    df["study_methods"] = (
+        df["study_methods"]
+        .astype("string")
+        .str.split(";")
+        .apply(
+            lambda methods: ";".join(
+                dict.fromkeys(
+                    method.strip()
+                    for method in methods
+                    if method.strip()
+                )
+            )
+            if isinstance(methods, list)
+            else pd.NA
+        )
+    )
 
     # Convert numerical fields
     numeric_columns = [
@@ -101,6 +149,13 @@ def clean_week_file(file_path, week_number):
 
     for column in numeric_columns:
         df[column] = pd.to_numeric(df[column], errors="coerce")
+
+    df["prompt_detail"] = pd.to_numeric(
+        df["prompt_detail"]
+        .astype("string")
+        .str.extract(r"^\s*([1-5])", expand=False),
+        errors="coerce"
+    )
 
     return df
 
@@ -126,12 +181,60 @@ def build_dataset():
 
     combined = pd.concat(frames, ignore_index=True)
 
+    duplicate_mask = combined.duplicated(
+        subset=["participant_reference", "study_week"],
+        keep="first"
+    )
+    duplicate_count = int(duplicate_mask.sum())
+    if duplicate_count:
+        print(
+            f"Excluding {duplicate_count} duplicate participant-week row(s) "
+            "across weekly files; retaining the first source row."
+        )
+        combined = combined.loc[~duplicate_mask].copy()
+
     output = PROCESSED_DIR / "component3_weekly_clean.csv"
 
     combined.to_csv(output, index=False)
 
     print(f"\nSaved: {output}")
     print(f"Rows: {len(combined)}")
+    print(
+        "Weeks included: "
+        f"{sorted(combined['study_week'].dropna().unique().tolist())}"
+    )
+    print(
+        "Participants included: "
+        f"{combined['participant_reference'].nunique()}"
+    )
+    print(
+        "Missing workload pressure: "
+        f"{int(combined['workload_pressure'].isna().sum())}"
+    )
+    print(
+        "Missing study methods: "
+        f"{int(combined['study_methods'].isna().sum())}"
+    )
+    print(
+        "Missing perceived productivity: "
+        f"{int(combined['perceived_productivity'].isna().sum())}"
+    )
+    print(
+        "Missing prompt-detail ratings: "
+        f"{int(combined['prompt_detail'].isna().sum())}"
+    )
+    print(
+        "Missing AI study hours: "
+        f"{int(combined['ai_study_hours'].isna().sum())}"
+    )
+    print(
+        "Missing independent study hours: "
+        f"{int(combined['independent_study_hours'].isna().sum())}"
+    )
+    print(
+        "Missing prompt counts: "
+        f"{int(combined['prompt_count'].isna().sum())}"
+    )
 
     return combined
 

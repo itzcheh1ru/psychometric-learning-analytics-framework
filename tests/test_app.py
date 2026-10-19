@@ -99,7 +99,6 @@ def valid_weekly_payload():
         "study_week": "Week 2",
         "ai_study_hours": 5.5,
         "independent_study_hours": 8.0,
-        "academic_period": "Regular study week",
         "learning_activity": "Concept learning",
         "prompt_count": 12,
         "prompt_purpose": "Concept explanation",
@@ -628,10 +627,10 @@ def test_component3_page_contains_prototype_record(client):
     assert b"Prototype record" in data or b"prototype record" in data.lower()
 
 
-def test_component3_page_contains_available_after_longitudinal_data_collection(client):
-    """Component 3 page must display 'Available after longitudinal data collection'."""
+def test_component3_page_explains_repeat_week_requirement(client):
+    """Component 3 explains that shift comparisons require repeat participant observations."""
     data = client.get("/component3/").data
-    assert b"Available after longitudinal data collection" in data
+    assert b"At least two study weeks for the same participant are required" in data
 
 
 # 2. Status API
@@ -791,9 +790,9 @@ def test_validate_weekly_record_negative_independent_hours_returns_400(client, v
     assert any("cannot be negative" in err for err in body["errors"])
 
 
-def test_validate_weekly_record_invalid_academic_period_returns_400(client, valid_weekly_payload):
-    """Invalid academic period returns HTTP 400."""
-    valid_weekly_payload["academic_period"] = "Summer vacation holiday"
+def test_validate_weekly_record_invalid_workload_pressure_returns_400(client, valid_weekly_payload):
+    """Invalid workload pressure returns HTTP 400."""
+    valid_weekly_payload["workload_pressure"] = "Extreme"
     response = client.post(
         "/api/component3/validate-weekly-record",
         data=json.dumps(valid_weekly_payload),
@@ -801,7 +800,7 @@ def test_validate_weekly_record_invalid_academic_period_returns_400(client, vali
     )
     assert response.status_code == 400
     body = response.get_json()
-    assert any("academic period" in err for err in body["errors"])
+    assert any("workload pressure" in err for err in body["errors"])
 
 
 def test_validate_weekly_record_invalid_learning_activity_returns_400(client, valid_weekly_payload):

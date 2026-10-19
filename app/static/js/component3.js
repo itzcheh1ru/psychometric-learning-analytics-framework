@@ -52,11 +52,6 @@
             errorId: "ind_hours_error"
         },
         {
-            id: "academic_period",
-            label: "Academic Period",
-            errorId: "period_error"
-        },
-        {
             id: "learning_activity",
             label: "Learning Activity",
             errorId: "activity_error"
@@ -88,9 +83,6 @@
         independent_study_hours:
             "Independent Study Hours",
 
-        academic_period:
-            "Academic Period / Context",
-
         learning_activity:
             "Main Learning Activity",
 
@@ -98,7 +90,19 @@
             "Academic GenAI Prompt Count",
 
         prompt_purpose:
-            "Primary Prompt Purpose"
+            "Primary Prompt Purpose",
+
+        study_methods:
+            "Study Methods",
+
+        perceived_productivity:
+            "Perceived Productivity",
+
+        workload_pressure:
+            "Workload / Deadline Pressure",
+
+        prompt_detail:
+            "Self-Reported Prompt Detail Rating"
 
     };
 
@@ -328,7 +332,7 @@
 
     function buildPayload() {
 
-        return {
+        var payload = {
 
             participant_reference:
                 document.getElementById(
@@ -354,11 +358,6 @@
                     ).value.trim()
                 ),
 
-            academic_period:
-                document.getElementById(
-                    "academic_period"
-                ).value.trim(),
-
             learning_activity:
                 document.getElementById(
                     "learning_activity"
@@ -378,6 +377,38 @@
                 ).value.trim()
 
         };
+
+        var studyMethods =
+            Array.from(
+                document.getElementById("study_methods").selectedOptions
+            ).map(function (option) {
+                return option.value;
+            });
+
+        if (studyMethods.length > 0) {
+            payload.study_methods = studyMethods;
+        }
+
+        [
+            "perceived_productivity",
+            "workload_pressure"
+        ].forEach(function (field) {
+            var value =
+                document.getElementById(field).value.trim();
+
+            if (value) {
+                payload[field] = value;
+            }
+        });
+
+        var promptDetail =
+            document.getElementById("prompt_detail").value;
+
+        if (promptDetail) {
+            payload.prompt_detail = parseInt(promptDetail, 10);
+        }
+
+        return payload;
 
     }
 
@@ -808,6 +839,11 @@
                     "c3-participants"
                 );
 
+            var repeatedParticipants =
+                document.getElementById(
+                    "c3-repeated-participants"
+                );
+
 
             var weeks =
                 document.getElementById(
@@ -835,6 +871,14 @@
 
             }
 
+            if (repeatedParticipants) {
+
+                repeatedParticipants.textContent =
+                    data.repeated_participants ??
+                    0;
+
+            }
+
 
             if (weeks) {
 
@@ -858,8 +902,8 @@
 
                 status.textContent =
                     data.trend_analysis_available
-                        ? "Available"
-                        : "Baseline Only";
+                        ? "Repeat-week comparisons available"
+                        : "Baseline only — awaiting repeat weeks";
 
             }
 
@@ -1304,7 +1348,8 @@
 
             var weeks = [];
             var categories = [];
-            var countsByWeek = {};
+            var purposeByWeek = {};
+            var purposeWeekTotals = {};
 
             rows.forEach(
                 function (row) {
@@ -1336,14 +1381,15 @@
                     var weekKey =
                         String(week);
 
-                    if (!countsByWeek[weekKey]) {
+                    if (!purposeByWeek[weekKey]) {
 
-                        countsByWeek[weekKey] = {};
+                        purposeByWeek[weekKey] = {};
 
                     }
 
-                    countsByWeek[weekKey][category] =
-                        Number(row.count) || 0;
+                    purposeByWeek[weekKey][category] = row;
+                    purposeWeekTotals[weekKey] =
+                        Number(row.valid_records) || 0;
 
                 }
             );
@@ -1388,9 +1434,12 @@
                             data: weeks.map(
                                 function (week) {
 
-                                    return (
-                                        countsByWeek[String(week)][category] || 0
-                                    );
+                                    var item =
+                                        purposeByWeek[String(week)][category];
+
+                                    return item
+                                        ? Number(item.percentage)
+                                        : 0;
 
                                 }
                             ),
@@ -1475,11 +1524,22 @@
 
                                     label: function (context) {
 
+                                        var weekKey =
+                                            String(weeks[context.dataIndex]);
+                                        var item =
+                                            purposeByWeek[weekKey][
+                                                context.dataset.label
+                                            ];
+
                                         return (
                                             context.dataset.label +
                                             ": " +
-                                            context.parsed.y +
-                                            " records mentioning this category"
+                                            Number(context.parsed.y).toFixed(1) +
+                                            "% (" +
+                                            (item ? item.count : 0) +
+                                            " of " +
+                                            purposeWeekTotals[weekKey] +
+                                            " records)"
                                         );
 
                                     }
@@ -1552,7 +1612,7 @@
 
                                     display: true,
 
-                                    text: "Records mentioning category",
+                                    text: "Share of valid-purpose records (%)",
 
                                     color: "#475467"
 
@@ -1572,7 +1632,7 @@
                 weeks.length +
                 " study week" +
                 (weeks.length === 1 ? "" : "s") +
-                " from the processed dataset. Categories can overlap within a record.";
+                " from the processed dataset. Category percentages can sum above 100% because responses overlap.";
 
         }
 
@@ -2222,6 +2282,372 @@
 
     }
 
+    async function loadStudyMethodsChart() {
+
+        var canvas = document.getElementById("studyMethodsChart");
+        var status = document.getElementById("studyMethodsChartStatus");
+
+        if (!canvas || !status) {
+            return;
+        }
+
+        try {
+            var response = await fetch("/api/component3/study-methods");
+            if (!response.ok) {
+                throw new Error("Study-method API returned " + response.status);
+            }
+
+            var rows = await response.json();
+            if (!Array.isArray(rows) || rows.length === 0) {
+                status.textContent = "Study-method data is not yet available.";
+                return;
+            }
+
+            var weeks = Array.from(new Set(rows.map(function (row) {
+                return Number(row.study_week);
+            }))).sort(function (a, b) { return a - b; });
+            var methods = Array.from(new Set(rows.map(function (row) {
+                return row.study_method;
+            }))).sort();
+            var validRecordsByWeek = {};
+            rows.forEach(function (row) {
+                validRecordsByWeek[String(row.study_week)] =
+                    Number(row.valid_records) || 0;
+            });
+            var palette = ["#2563eb", "#7c3aed", "#0f766e", "#d97706", "#db2777", "#4f46e5", "#64748b", "#0891b2", "#65a30d"];
+            var datasets = methods.map(function (method, index) {
+                return {
+                    label: method,
+                    data: weeks.map(function (week) {
+                        var item = rows.find(function (row) {
+                            return Number(row.study_week) === week && row.study_method === method;
+                        });
+                        return item ? item.percentage : 0;
+                    }),
+                    records: weeks.map(function (week) {
+                        var item = rows.find(function (row) {
+                            return Number(row.study_week) === week && row.study_method === method;
+                        });
+                        return item ? item.records : 0;
+                    }),
+                    validRecords: weeks.map(function (week) {
+                        var item = rows.find(function (row) {
+                            return Number(row.study_week) === week && row.study_method === method;
+                        });
+                        return item ? item.valid_records : 0;
+                    }),
+                    backgroundColor: palette[index % palette.length],
+                    borderRadius: 4,
+                    maxBarThickness: 46
+                };
+            });
+
+            new Chart(canvas, {
+                type: "bar",
+                data: {
+                    labels: weeks.map(function (week) { return "Week " + week; }),
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { intersect: false, mode: "index" },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    var item = rows.find(function (row) {
+                                        return Number(row.study_week) === weeks[context.dataIndex]
+                                            && row.study_method === context.dataset.label;
+                                    });
+                                    return context.dataset.label + ": "
+                                        + Number(context.parsed.y).toFixed(1) + "% ("
+                                        + (item ? item.records : 0) + " of "
+                                        + (validRecordsByWeek[
+                                            String(weeks[context.dataIndex])
+                                        ] || 0) + " records)";
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, title: { display: true, text: "Study Week" } },
+                        y: {
+                            beginAtZero: true,
+                            ticks: { precision: 0 },
+                            title: { display: true, text: "Share of records reporting method (%)" }
+                        }
+                    }
+                }
+            });
+
+            status.textContent = "Method percentages use valid method responses and may sum above 100% because participants may report multiple methods.";
+        } catch (error) {
+            status.textContent = "Study-method data could not be loaded. Please refresh the page.";
+            status.classList.add("is-error");
+            console.error("Study-method chart error:", error);
+        }
+    }
+
+    async function loadProductivityChart() {
+
+        var canvas = document.getElementById("productivityChart");
+        var status = document.getElementById("productivityChartStatus");
+
+        if (!canvas || !status) {
+            return;
+        }
+
+        try {
+            var response = await fetch("/api/component3/productivity");
+            if (!response.ok) {
+                throw new Error("Productivity API returned " + response.status);
+            }
+
+            var rows = await response.json();
+            if (!Array.isArray(rows) || rows.length === 0) {
+                status.textContent = "Perceived-productivity data is not yet available.";
+                return;
+            }
+
+            var weeks = Array.from(new Set(rows.map(function (row) {
+                return Number(row.study_week);
+            }))).sort(function (a, b) { return a - b; });
+            var ratings = [
+                "Very unproductive",
+                "Somewhat unproductive",
+                "Neutral",
+                "Somewhat productive",
+                "Very productive"
+            ];
+            var palette = ["#b42318", "#f79009", "#98a2b3", "#12b76a", "#039855"];
+            var datasets = ratings.map(function (rating, index) {
+                return {
+                    label: rating,
+                    data: weeks.map(function (week) {
+                        var item = rows.find(function (row) {
+                            return Number(row.study_week) === week
+                                && row.perceived_productivity === rating;
+                        });
+                        return item ? item.percentage : 0;
+                    }),
+                    records: weeks.map(function (week) {
+                        var item = rows.find(function (row) {
+                            return Number(row.study_week) === week
+                                && row.perceived_productivity === rating;
+                        });
+                        return item ? item.records : 0;
+                    }),
+                    backgroundColor: palette[index]
+                };
+            });
+
+            new Chart(canvas, {
+                type: "bar",
+                data: {
+                    labels: weeks.map(function (week) { return "Week " + week; }),
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { intersect: false, mode: "index" },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return context.dataset.label + ": "
+                                        + Number(context.parsed.y).toFixed(1) + "% ("
+                                        + context.dataset.records[context.dataIndex] + " records)";
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { stacked: true, grid: { display: false }, title: { display: true, text: "Study Week" } },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { callback: function (value) { return value + "%"; } },
+                            title: { display: true, text: "Share of valid weekly ratings" }
+                        }
+                    }
+                }
+            });
+
+            status.textContent = "Each week is normalised to the respondents who provided a productivity rating.";
+        } catch (error) {
+            status.textContent = "Perceived-productivity data could not be loaded. Please refresh the page.";
+            status.classList.add("is-error");
+            console.error("Productivity chart error:", error);
+        }
+    }
+
+    async function loadPromptDetailChart() {
+
+        var canvas = document.getElementById("promptDetailChart");
+        var status = document.getElementById("promptDetailChartStatus");
+
+        if (!canvas || !status) {
+            return;
+        }
+
+        try {
+            var response = await fetch("/api/component3/prompt-detail");
+            if (!response.ok) {
+                throw new Error("Prompt-detail API returned " + response.status);
+            }
+
+            var rows = await response.json();
+            if (!Array.isArray(rows) || rows.length === 0) {
+                status.textContent = "Prompt-detail ratings are not yet available.";
+                return;
+            }
+
+            new Chart(canvas, {
+                type: "line",
+                data: {
+                    labels: rows.map(function (row) { return "Week " + row.study_week; }),
+                    datasets: [{
+                        label: "Average self-reported detail rating",
+                        data: rows.map(function (row) { return row.average_prompt_detail; }),
+                        borderColor: "#0f766e",
+                        backgroundColor: "rgba(15, 118, 110, 0.12)",
+                        pointBackgroundColor: "#0f766e",
+                        pointRadius: 5,
+                        borderWidth: 3,
+                        tension: 0.25,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                afterBody: function (items) {
+                                    var row = rows[items[0].dataIndex];
+                                    return ["Rated records: " + row.records, "Participants: " + row.participants];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 1,
+                            max: 5,
+                            ticks: { stepSize: 1 },
+                            title: { display: true, text: "Self-reported rating (1–5)" }
+                        },
+                        x: { grid: { display: false }, title: { display: true, text: "Study Week" } }
+                    }
+                }
+            });
+
+            status.textContent = "Rating sample sizes are shown in tooltips; this is a self-report measure, not a text-derived complexity score.";
+        } catch (error) {
+            status.textContent = "Prompt-detail data could not be loaded. Please refresh the page.";
+            status.classList.add("is-error");
+            console.error("Prompt-detail chart error:", error);
+        }
+    }
+
+    async function loadWorkloadComparisonCharts() {
+
+        var status = document.getElementById("workloadComparisonChartStatus");
+        var studyHoursCanvas = document.getElementById("workloadStudyHoursChart");
+        var promptCountCanvas = document.getElementById("workloadPromptCountChart");
+
+        if (!status || !studyHoursCanvas || !promptCountCanvas) {
+            return;
+        }
+
+        try {
+            var response = await fetch("/api/component3/workload-comparison");
+            if (!response.ok) {
+                throw new Error("Workload comparison API returned " + response.status);
+            }
+
+            var rows = await response.json();
+            if (!Array.isArray(rows) || rows.length === 0) {
+                status.textContent = "Workload comparisons are not yet available for the collected weekly records.";
+                return;
+            }
+
+            var pressures = ["Low", "Moderate", "High"];
+            var weeks = Array.from(new Set(rows.map(function (row) {
+                return Number(row.study_week);
+            }))).sort(function (a, b) { return a - b; });
+            var palette = ["#2563eb", "#7c3aed", "#0f766e", "#d97706", "#db2777", "#4f46e5"];
+
+            function drawMetric(canvas, field, title) {
+                var datasets = weeks.map(function (week, index) {
+                    return {
+                        label: "Week " + week,
+                        data: pressures.map(function (pressure) {
+                            var item = rows.find(function (row) {
+                                return Number(row.study_week) === week
+                                    && row.workload_pressure === pressure;
+                            });
+                            return item && item[field] !== null ? item[field] : null;
+                        }),
+                        backgroundColor: palette[index % palette.length],
+                        borderColor: palette[index % palette.length],
+                        borderWidth: 2,
+                        borderRadius: 4,
+                        maxBarThickness: 48
+                    };
+                });
+
+                new Chart(canvas, {
+                    type: "bar",
+                    data: { labels: pressures, datasets: datasets },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { intersect: false, mode: "index" },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    afterBody: function (items) {
+                                        var week = weeks[items[0].datasetIndex];
+                                        var row = rows.find(function (item) {
+                                            return Number(item.study_week) === week
+                                                && item.workload_pressure === pressures[items[0].dataIndex];
+                                        });
+                                        return row
+                                            ? [
+                                                "Records with this measure: " +
+                                                    (field === "average_prompts"
+                                                        ? row.prompt_records
+                                                        : row.ai_hours_records),
+                                                "Participants in workload group: " + row.participants
+                                            ]
+                                            : [];
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: { grid: { display: false }, title: { display: true, text: "Self-reported workload / deadline pressure" } },
+                            y: { beginAtZero: true, title: { display: true, text: title } }
+                        }
+                    }
+                });
+            }
+
+            drawMetric(studyHoursCanvas, "average_ai_study_hours", "Average hours per record");
+            drawMetric(promptCountCanvas, "average_prompts", "Average prompts per record");
+            status.textContent = "Hover for sample sizes. Categories may have different participants and group sizes; interpret as descriptive, not causal.";
+        } catch (error) {
+            status.textContent = "Workload comparisons could not be loaded. Please refresh the page.";
+            status.classList.add("is-error");
+            console.error("Workload comparison chart error:", error);
+        }
+    }
+
 
     /* ============================================================
        PART 10 — PAGE INITIALIZATION
@@ -2245,6 +2671,14 @@
             loadPromptPurposeChart();
 
             loadStudyShiftChart();
+
+            loadStudyMethodsChart();
+
+            loadProductivityChart();
+
+            loadPromptDetailChart();
+
+            loadWorkloadComparisonCharts();
 
         }
     );

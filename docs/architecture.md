@@ -217,10 +217,13 @@ Component 3 tracks study behaviour and academic prompt interactions across repea
 | `study_week` | Categorical ("Week 1" – "Week 6") | Observation week index |
 | `ai_study_hours` | Float ($0.0 \le h \le 168.0$) | Weekly study hours involving active Generative AI assistance |
 | `independent_study_hours` | Float ($0.0 \le h \le 168.0$) | Weekly study hours completed without direct AI assistance |
-| `academic_period` | Categorical (5 academic contexts) | Academic context (regular week, assignments, exams, projects) |
+| `workload_pressure` | Categorical (Low, Moderate, High) | Self-reported academic workload/deadline pressure |
 | `learning_activity` | Categorical (7 academic activities) | Dominant learning activity for the study week |
+| `study_methods` | Multi-select categories | Self-reported study methods; weekly category counts can overlap |
+| `perceived_productivity` | Five ordered self-report categories | Perceived weekly productivity, not objective performance |
 | `prompt_count` | Integer ($0 \le n \le 2000$) | Weekly count of academic GenAI prompts (no raw text stored) |
-| `prompt_purpose` | Categorical (7 academic purposes) | Primary academic purpose of student GenAI interactions |
+| `prompt_purpose` / `other_prompt_purposes` | Categorical, multi-select | Primary and additional academic prompt purposes |
+| `prompt_detail` | Integer rating (1–5) | Self-reported prompt detail/specificity; not a text-derived complexity score |
 
 ### Methodological Boundaries and Pipeline Architecture
 
@@ -229,45 +232,46 @@ A strict boundary exists between prototype data validation and empirical longitu
 ```
 ┌────────────────────────────────────────────────────────┐
 │           Weekly Diary Data Collection Layer           │
-│  - Anonymised weekly observation submission            │
-│  - Zero raw prompt text collection                     │
+│  - Repeated weekly exports, Weeks 1–6                   │
+│  - Consistent pseudonymous participant reference        │
 └───────────────────────────┬────────────────────────────┘
-                            │ Validation & Preprocessing
+                            │ Weekly Excel import and cleaning
                             ▼
 ┌────────────────────────────────────────────────────────┐
 │          Longitudinal Research Dataset Boundary        │
-│  - Multi-week participant consolidation (Weeks 1–6)    │
-│  - Baseline vs. subsequent week alignment              │
-│  - Missing-observation handling & screening            │
+│  - Consolidates every available weekly export          │
+│  - Excludes rows without a participant reference       │
+│  - Keeps first duplicate participant-week row          │
+│  - Does not copy optional free-text examples            │
 └───────────────────────────┬────────────────────────────┘
-                            │ Preprocessed time series
+                            │ Rebuilt clean and feature datasets
                             ▼
 ┌────────────────────────────────────────────────────────┐
 │           Behavioural Indicator Generation             │
-│  - AI Study Share = AI Hours / (AI + Independent Hours)│
-│  - Independent Study Share = Ind Hours / Total Hours   │
-│  - Prompt Frequency = Weekly Interaction Count         │
-│  - Study Pattern Shift Index across observation weeks  │
+│  - Weekly AI / independent study-hour shares            │
+│  - Prompt counts, purposes, study methods, productivity │
+│  - Self-reported prompt-detail rating (1–5)             │
+│  - Descriptive within-participant study-share change    │
 └───────────────────────────┬────────────────────────────┘
-                            │ Indicator matrices
+                            │ Weekly aggregate data
                             ▼
 ┌────────────────────────────────────────────────────────┐
-│             Trend & Prompt Analytics Engine            │
-│  - Time-series slope estimation & trajectory grouping  │
-│  - Academic-period comparative analysis (e.g. exams)   │
-│  - Prompt purpose distribution evolution               │
+│          Workload Comparison & Dashboard                │
+│  - AI hours and prompt counts by reported pressure      │
+│  - Repeated-week comparisons when a participant repeats│
+│  - Sample sizes and missing-data-aware summaries        │
 └───────────────────────────┬────────────────────────────┘
-                            │ Validated findings
+                            │ Descriptive visualisations
                             ▼
 ┌────────────────────────────────────────────────────────┐
 │         Dashboard Presentation Layer (/component3/)    │
-│  - Interactive prototype record validation             │
-│  - Displays longitudinal trends only after dataset is   │
-│    fully assembled and validated                       │
+│  - Refreshes as each weekly file is added               │
+│  - Separates baseline summaries from repeat-week shifts │
+│  - Does not infer causation or validated psychometrics  │
 └────────────────────────────────────────────────────────┘
 ```
 
-> **Research Integrity Principle:** **Prototype validation does not equal longitudinal research analysis.** The `/api/component3/validate-weekly-record` endpoint validates the structural soundness of an individual record; it does not calculate longitudinal trends, infer behavioural shifts, or persist data. Trend analysis will only be executed once the complete 4–6 week empirical dataset has been validated.
+> **Research Integrity Principle:** The weekly-record form validates a prototype entry but does not persist it. Empirical charts are rebuilt from the weekly exports. The study-pattern shift is a descriptive average absolute percentage-point change in study shares, not a validated psychometric scale. Workload comparisons are descriptive associations, not a causal or composite deadline-spike score. Optional free-text prompt examples are not copied into the analytical dataset.
 
 ---
 

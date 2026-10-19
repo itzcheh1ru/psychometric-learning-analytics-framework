@@ -37,20 +37,7 @@ def generate_indicators(df: pd.DataFrame) -> pd.DataFrame:
             )
 
     # ---------------------------------------------------------
-    # 2. Missing numerical values
-    # ---------------------------------------------------------
-
-    for column in [
-        "ai_study_hours",
-        "independent_study_hours",
-        "ai_sessions",
-        "prompt_count",
-    ]:
-        if column in df.columns:
-            df[column] = df[column].fillna(0)
-
-    # ---------------------------------------------------------
-    # 3. Total recorded study hours
+    # 2. Total recorded study hours
     # ---------------------------------------------------------
 
     df["total_recorded_study_hours"] = (
@@ -59,7 +46,7 @@ def generate_indicators(df: pd.DataFrame) -> pd.DataFrame:
     )
 
     # ---------------------------------------------------------
-    # 4. AI Study Share
+    # 3. AI Study Share
     # ---------------------------------------------------------
 
     valid_total = df["total_recorded_study_hours"] > 0
@@ -72,7 +59,7 @@ def generate_indicators(df: pd.DataFrame) -> pd.DataFrame:
     )
 
     # ---------------------------------------------------------
-    # 5. Independent Learning Share
+    # 4. Independent Learning Share
     # ---------------------------------------------------------
 
     df["independent_study_share"] = float("nan")
@@ -190,4 +177,7 @@ def build_feature_dataset():
 
 
 if __name__ == "__main__":
+    from app.services.longitudinal.prepare_dataset import build_dataset
+
+    build_dataset()
     build_feature_dataset()

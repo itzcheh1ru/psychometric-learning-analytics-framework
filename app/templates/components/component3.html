@@ -27,74 +27,47 @@
 </div>
 
 <!-- ================================================================
-     B. Longitudinal Research Workflow
+     B. Weekly Data Refresh
 ================================================================ -->
 <section class="content-section" aria-labelledby="workflowHeading3">
     <div class="content-section__header">
-        <h2 class="section-heading" id="workflowHeading3">Longitudinal Research Workflow</h2>
+        <h2 class="section-heading" id="workflowHeading3">Weekly Data Refresh</h2>
         <p class="section-subheading">
-            Planned multi-week data collection and analysis pipeline for tracking study pattern evolution and prompt behaviours over 4–6 observation weeks.
+            Add each collected export beside the previous weekly files, rebuild the cleaned and feature datasets, then refresh this page. The pipeline reads all available weeks each time, so earlier weeks remain included.
         </p>
     </div>
 
-    <div class="long-workflow" role="img" aria-label="Longitudinal research workflow: Participant Baseline to Weekly Study Records to Data Validation to Longitudinal Dataset to Behavioural Indicator Generation to Trend Analysis to Prompt Behaviour Analysis to Study Pattern Evolution to Dashboard Insights">
+    <div class="long-workflow">
         <div class="long-steps">
 
             <div class="long-step long-step--ready">
-                <span class="long-step__title">Participant Baseline</span>
-                <span class="long-step__tag">Prototype Ready</span>
+                <span class="long-step__title">1. Add the next weekly export</span>
+                <span class="long-step__tag">Week_02_REAL.xlsx, Week_03_REAL.xlsx, …</span>
             </div>
             <div class="long-arrow" aria-hidden="true">&#x25BC;</div>
 
             <div class="long-step long-step--ready">
-                <span class="long-step__title">Weekly Study Records</span>
-                <span class="long-step__tag">Prototype Ready</span>
-            </div>
-            <div class="long-arrow" aria-hidden="true">&#x25BC;</div>
-
-            <div class="long-step long-step--ready">
-                <span class="long-step__title">Data Validation</span>
-                <span class="long-step__tag">Prototype Ready</span>
+                <span class="long-step__title">2. Rebuild weekly data</span>
+                <span class="long-step__tag"><code>python -m app.services.longitudinal.feature_engineering</code></span>
             </div>
             <div class="long-arrow" aria-hidden="true">&#x25BC;</div>
 
             <div class="long-step long-step--progress">
-                <span class="long-step__title">Longitudinal Dataset</span>
-                <span class="long-step__tag">Data Collection in Progress</span>
+                <span class="long-step__title">3. Review data-quality counts</span>
+                <span class="long-step__tag">Uncoded and duplicate participant-weeks are reported during processing</span>
             </div>
             <div class="long-arrow" aria-hidden="true">&#x25BC;</div>
 
-            <div class="long-step long-step--pending">
-                <span class="long-step__title">Behavioural Indicator Generation</span>
-                <span class="long-step__tag">Pending Longitudinal Dataset</span>
-            </div>
-            <div class="long-arrow" aria-hidden="true">&#x25BC;</div>
-
-            <div class="long-step long-step--pending">
-                <span class="long-step__title">Trend Analysis</span>
-                <span class="long-step__tag">Pending Longitudinal Dataset</span>
-            </div>
-            <div class="long-arrow" aria-hidden="true">&#x25BC;</div>
-
-            <div class="long-step long-step--pending">
-                <span class="long-step__title">Prompt Behaviour Analysis</span>
-                <span class="long-step__tag">Pending Longitudinal Dataset</span>
-            </div>
-            <div class="long-arrow" aria-hidden="true">&#x25BC;</div>
-
-            <div class="long-step long-step--pending">
-                <span class="long-step__title">Study Pattern Evolution</span>
-                <span class="long-step__tag">Pending Longitudinal Dataset</span>
-            </div>
-            <div class="long-arrow" aria-hidden="true">&#x25BC;</div>
-
-            <div class="long-step long-step--pending">
-                <span class="long-step__title">Dashboard Insights</span>
-                <span class="long-step__tag">Pending Longitudinal Dataset</span>
+            <div class="long-step long-step--ready">
+                <span class="long-step__title">4. Refresh the dashboard</span>
+                <span class="long-step__tag">Charts use processed weekly records</span>
             </div>
 
         </div>
     </div>
+    <p class="c3-data-note">
+        Run the command from the repository root. Keep the original exports unchanged and use the same participant code in each week. The importer keeps the first row for a duplicate participant-week and excludes rows without a participant code; it reports both actions. Optional free-text prompt examples are not copied into the analytical dataset.
+    </p>
 </section>
 
 <section class="c3-summary">
@@ -106,6 +79,11 @@
         <div class="summary-card">
             <span>Participants</span>
             <strong id="c3-participants">-</strong>
+        </div>
+
+        <div class="summary-card">
+            <span>Participants with Repeat Weeks</span>
+            <strong id="c3-repeated-participants">-</strong>
         </div>
 
         <div class="summary-card">
@@ -167,6 +145,37 @@
     </p>
 </section>
 
+<section class="c3-chart-section" aria-labelledby="studyMethodsHeading">
+    <h2 id="studyMethodsHeading">Study Methods by Week</h2>
+    <p class="c3-chart-description">Number of weekly records reporting each study method. Participants may report multiple methods, so method counts overlap.</p>
+    <div class="c3-chart-wrap"><canvas id="studyMethodsChart" aria-label="Weekly study method record counts"></canvas></div>
+    <p id="studyMethodsChartStatus" class="c3-chart-status" role="status">Loading study-method data&hellip;</p>
+</section>
+
+<section class="c3-chart-section" aria-labelledby="productivityHeading">
+    <h2 id="productivityHeading">Perceived Productivity by Week</h2>
+    <p class="c3-chart-description">Distribution of self-reported weekly productivity ratings. This is perceived productivity, not an objective performance measure.</p>
+    <div class="c3-chart-wrap"><canvas id="productivityChart" aria-label="Weekly distribution of self-reported productivity ratings"></canvas></div>
+    <p id="productivityChartStatus" class="c3-chart-status" role="status">Loading productivity data&hellip;</p>
+</section>
+
+<section class="c3-chart-section" aria-labelledby="promptDetailHeading">
+    <h2 id="promptDetailHeading">Self-Reported Prompt Detail</h2>
+    <p class="c3-chart-description">Weekly average of the survey’s 1–5 prompt detail/specificity rating. Higher values indicate respondents reported more detailed prompts; this is not an independently measured complexity score.</p>
+    <div class="c3-chart-wrap"><canvas id="promptDetailChart" aria-label="Weekly average self-reported prompt detail rating"></canvas></div>
+    <p id="promptDetailChartStatus" class="c3-chart-status" role="status">Loading prompt-detail data&hellip;</p>
+</section>
+
+<section class="c3-chart-section" aria-labelledby="workloadComparisonHeading">
+    <h2 id="workloadComparisonHeading">AI Use Alongside Workload Pressure</h2>
+    <p class="c3-chart-description">Compare weekly average AI-assisted study hours and academic prompt counts across self-reported Low, Moderate, and High workload-pressure categories. These are descriptive associations, not a deadline-spike score or evidence that workload caused a change.</p>
+    <h3 class="subsection-heading">AI-Assisted Study Hours</h3>
+    <div class="c3-chart-wrap"><canvas id="workloadStudyHoursChart" aria-label="Average AI-assisted study hours by workload pressure and week"></canvas></div>
+    <h3 class="subsection-heading">Academic Prompt Count</h3>
+    <div class="c3-chart-wrap"><canvas id="workloadPromptCountChart" aria-label="Average academic prompts by workload pressure and week"></canvas></div>
+    <p id="workloadComparisonChartStatus" class="c3-chart-status" role="status">Loading workload comparison&hellip;</p>
+</section>
+
 
 <!-- ================================================================
      C. Weekly Study Record Prototype (Form)
@@ -175,7 +184,7 @@
     <div class="content-section__header">
         <h2 class="section-heading" id="formHeading3">Weekly Study Record Prototype</h2>
         <p class="section-subheading">
-            Enter prototype weekly study observations to test data validation and multi-week structure. No participant records are stored or persisted.
+            Validate a sample weekly observation against the research fields. This prototype form does not store records; add collected weekly exports to the data pipeline above.
         </p>
     </div>
 
@@ -302,24 +311,15 @@
 
             <div class="form-row-2">
                 <div class="form-group">
-                    <label class="form-label" for="academic_period">
-                        Academic Period / Context
-                        <span class="form-label__required" aria-hidden="true">*</span>
+                    <label class="form-label" for="workload_pressure">
+                        Workload / Deadline Pressure
                     </label>
-                    <select
-                        id="academic_period"
-                        name="academic_period"
-                        class="form-select"
-                        required
-                        aria-required="true"
-                        aria-describedby="period_error"
-                    >
-                        <option value="">— Select Context —</option>
-                        {% for p in academic_periods %}
-                        <option value="{{ p }}">{{ p }}</option>
+                    <select id="workload_pressure" name="workload_pressure" class="form-select">
+                        <option value="">— Not reported —</option>
+                        {% for pressure in workload_pressures %}
+                        <option value="{{ pressure }}">{{ pressure }}</option>
                         {% endfor %}
                     </select>
-                    <p class="form-error" id="period_error" aria-live="polite" hidden></p>
                 </div>
 
                 <div class="form-group">
@@ -397,6 +397,40 @@
             </div>
         </fieldset>
 
+        <fieldset class="form-fieldset">
+            <legend class="form-fieldset__legend">Additional Weekly Measures</legend>
+
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label class="form-label" for="study_methods">Study Methods</label>
+                    <select id="study_methods" name="study_methods" class="form-select" multiple size="5" aria-describedby="study_methods_help">
+                        {% for method in study_methods %}
+                        <option value="{{ method }}">{{ method }}</option>
+                        {% endfor %}
+                    </select>
+                    <p class="form-help" id="study_methods_help">Optional. Select all methods reported for the week.</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="perceived_productivity">Perceived Productivity</label>
+                    <select id="perceived_productivity" name="perceived_productivity" class="form-select">
+                        <option value="">— Not reported —</option>
+                        {% for rating in productivity_ratings %}
+                        <option value="{{ rating }}">{{ rating }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <label class="form-label" for="prompt_detail">Prompt Detail Rating (1–5)</label>
+                    <select id="prompt_detail" name="prompt_detail" class="form-select">
+                        <option value="">— Not reported —</option>
+                        {% for rating in range(1, 6) %}
+                        <option value="{{ rating }}">{{ rating }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+
         <!-- Actions -->
         <div class="form-actions">
             <button type="submit" class="btn btn--primary" id="validateWeeklyBtn">
@@ -463,7 +497,7 @@
             </li>
             <li class="check-list__item check-list__item--pass">
                 <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                No raw prompt text collected
+                Prototype validation does not accept or display prompt text
             </li>
         </ul>
     </div>
@@ -486,7 +520,7 @@
     <div class="content-section__header">
         <h2 class="section-heading" id="indicatorsHeading">Behavioural Indicator Definitions</h2>
         <p class="section-subheading">
-            Mathematical definitions of the longitudinal indicators to be computed once multi-week research records are collected.
+            Weekly descriptive summaries update as each dataset is added. Within-participant shift is shown only after the same participant has valid observations in at least two weeks. Self-reported measures and workload comparisons are not causal or validated psychometric scores.
         </p>
     </div>
 

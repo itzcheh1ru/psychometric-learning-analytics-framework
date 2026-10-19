@@ -14,16 +14,15 @@ Status: Prototype – data collection in progress.
 
 from flask import Blueprint, jsonify, render_template, request
 
-from app.services.longitudinal.analysis_service import (
-    analysis_service
-)
 from app.services.longitudinal import (
-    ACADEMIC_PERIODS,
     ALLOWED_WEEKS,
     BEHAVIOURAL_INDICATORS,
     LEARNING_ACTIVITIES,
     LONGITUDINAL_SPECIFICATION,
     PROMPT_PURPOSES,
+    PRODUCTIVITY_RATINGS,
+    STUDY_METHODS,
+    WORKLOAD_PRESSURES,
     analysis_service,
     validate_weekly_record,
 )
@@ -45,9 +44,11 @@ def index():
     return render_template(
         "components/component3.html",
         allowed_weeks=sorted(list(ALLOWED_WEEKS)),
-        academic_periods=sorted(list(ACADEMIC_PERIODS)),
         learning_activities=sorted(list(LEARNING_ACTIVITIES)),
         prompt_purposes=sorted(list(PROMPT_PURPOSES)),
+        study_methods=sorted(list(STUDY_METHODS)),
+        productivity_ratings=PRODUCTIVITY_RATINGS,
+        workload_pressures=["Low", "Moderate", "High"],
         indicators=BEHAVIOURAL_INDICATORS,
         specification=LONGITUDINAL_SPECIFICATION,
     )
@@ -86,6 +87,37 @@ def prompt_frequency():
 
     return jsonify(
         analysis_service.get_weekly_prompt_frequency()
+    )
+
+@api_component3_bp.route("/prompt-detail", methods=["GET"])
+def prompt_detail():
+
+    return jsonify(
+        analysis_service.get_weekly_prompt_detail()
+    )
+
+
+@api_component3_bp.route("/productivity", methods=["GET"])
+def productivity():
+
+    return jsonify(
+        analysis_service.get_weekly_productivity()
+    )
+
+
+@api_component3_bp.route("/study-methods", methods=["GET"])
+def study_methods():
+
+    return jsonify(
+        analysis_service.get_weekly_study_methods()
+    )
+
+
+@api_component3_bp.route("/workload-comparison", methods=["GET"])
+def workload_comparison():
+
+    return jsonify(
+        analysis_service.get_weekly_workload_comparison()
     )
 
 
