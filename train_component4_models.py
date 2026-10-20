@@ -27,6 +27,7 @@ import math
 import json
 import random
 import pickle
+import matplotlib.pyplot as plt
 
 random.seed(42)
 
@@ -93,6 +94,88 @@ def mean_absolute_error(y_true, y_pred):
 
 def root_mean_squared_error(y_true, y_pred):
     return math.sqrt(mean([(yt - yp) ** 2 for yt, yp in zip(y_true, y_pred)]))
+
+
+def save_training_graphs(graphs_dir, y_class_test, predictions, classification_metrics,
+                         y_reg_test, reg_predictions, feature_importances):
+    """Save clearly titled charts describing performance on the held-out test set."""
+    os.makedirs(graphs_dir, exist_ok=True)
+    model_names = ["Random Forest", "Logistic Regression", "Decision Tree"]
+    class_labels = [("Random Forest", predictions["rf"]),
+                    ("Logistic Regression", predictions["lr"]),
+                    ("Decision Tree", predictions["dt"])]
+
+    # Confusion matrices show correct and incorrect risk classifications.
+    for model_name, y_pred in class_labels:
+        matrix = confusion_matrix(y_class_test, y_pred)
+        fig, ax = plt.subplots(figsize=(5.5, 4.5))
+        image = ax.imshow(matrix, cmap="Blues")
+        ax.set(title=f"{model_name}: Retention Risk Confusion Matrix (Test Set)",
+               xlabel="Predicted class", ylabel="Actual class",
+               xticks=[0, 1], yticks=[0, 1],
+               xticklabels=["Low risk", "High risk"],
+               yticklabels=["Low risk", "High risk"])
+        threshold = max(matrix[0] + matrix[1]) / 2 if any(matrix[0] + matrix[1]) else 0
+        for row in range(2):
+            for col in range(2):
+                ax.text(col, row, str(matrix[row][col]), ha="center", va="center",
+                        color="white" if matrix[row][col] > threshold else "black", fontsize=12)
+        fig.colorbar(image, ax=ax, label="Number of test records")
+        fig.tight_layout()
+        fig.savefig(os.path.join(graphs_dir, f"{model_name.lower().replace(' ', '_')}_confusion_matrix.png"), dpi=160)
+        plt.close(fig)
+
+    # Compare the main classification scores on the same held-out records.
+    score_names = ["Accuracy", "Precision", "Recall", "F1 score"]
+    score_keys = ["accuracy", "precision", "recall", "f1_score"]
+    x_positions = list(range(len(score_names)))
+    width = 0.24
+    fig, ax = plt.subplots(figsize=(9, 5.5))
+    for model_index, model_name in enumerate(model_names):
+        scores = [classification_metrics[model_name][key] for key in score_keys]
+        positions = [x + (model_index - 1) * width for x in x_positions]
+        bars = ax.bar(positions, scores, width, label=model_name)
+        ax.bar_label(bars, fmt="%.2f", padding=2, fontsize=8)
+    ax.set(title="Retention Risk Classification: Test-Set Score Comparison",
+           ylabel="Score (0 to 1; higher is better)",
+           xticks=x_positions, xticklabels=score_names, ylim=(0, 1.12))
+    ax.legend()
+    ax.grid(axis="y", alpha=0.2)
+    fig.tight_layout()
+    fig.savefig(os.path.join(graphs_dir, "classification_score_comparison.png"), dpi=160)
+    plt.close(fig)
+
+    # Regression fit and residuals for predicted GenAI retention percentage.
+    fig, axes = plt.subplots(1, 2, figsize=(11, 5))
+    axes[0].scatter(y_reg_test, reg_predictions, alpha=0.75, color="#3977c3")
+    low = min(min(y_reg_test), min(reg_predictions))
+    high = max(max(y_reg_test), max(reg_predictions))
+    axes[0].plot([low, high], [low, high], "--", color="#d97706", label="Perfect prediction")
+    axes[0].set(title="Actual vs Predicted Retention (Test Set)",
+                xlabel="Actual GenAI retention (%)", ylabel="Predicted GenAI retention (%)")
+    axes[0].legend()
+    residuals = [actual - predicted for actual, predicted in zip(y_reg_test, reg_predictions)]
+    axes[1].hist(residuals, bins=12, color="#60a5a0", edgecolor="white")
+    axes[1].axvline(0, color="#d97706", linestyle="--", label="Zero error")
+    axes[1].set(title="Retention Prediction Errors (Test Set)",
+                xlabel="Actual minus predicted (percentage points)", ylabel="Number of records")
+    axes[1].legend()
+    for ax in axes:
+        ax.grid(alpha=0.2)
+    fig.tight_layout()
+    fig.savefig(os.path.join(graphs_dir, "retention_regression_evaluation.png"), dpi=160)
+    plt.close(fig)
+
+    # Show the highest ranked Random Forest classifier feature importances.
+    top_features = sorted(feature_importances.items(), key=lambda item: item[1])[-10:]
+    fig, ax = plt.subplots(figsize=(9, 6))
+    ax.barh([item[0] for item in top_features], [item[1] for item in top_features], color="#3977c3")
+    ax.set(title="Top 10 Random Forest Features for Retention Risk",
+           xlabel="Relative split frequency (not causal effect)", ylabel="Input feature")
+    ax.grid(axis="x", alpha=0.2)
+    fig.tight_layout()
+    fig.savefig(os.path.join(graphs_dir, "retention_risk_feature_importance.png"), dpi=160)
+    plt.close(fig)
 
 
 from app.services.retention.model_engine import (
@@ -264,18 +347,21 @@ def run_training_pipeline():
     default_path = os.path.join(base_dir, "data", "processed", "component4_master_dataset_300.csv")
     dataset_path = v2_path if os.path.exists(v2_path) else default_path
     models_dir = os.path.join(base_dir, "models")
+    graphs_dir = os.path.join(models_dir, "component4_training_graphs")
     os.makedirs(models_dir, exist_ok=True)
 
     print("=================================================================")
-    print("      Component 4: Machine Learning Training Pipeline            ")
+    print("COMPONENT 4: RETENTION MODEL TRAINING")
     print("=================================================================")
-    print(f"Reading dataset: {dataset_path}")
+    print("Goal: classify retention risk and estimate GenAI retention rate.")
+    print("Evaluation uses a stratified 80/20 train/test split.")
+    print(f"\n[1/6] DATASET AND INPUTS\nReading dataset: {dataset_path}")
 
     with open(dataset_path, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         raw_rows = list(reader)
 
-    print(f"Loaded {len(raw_rows)} participant records.\n")
+    print(f"Loaded {len(raw_rows)} records.")
 
     # Define Feature Names
     num_features = [
@@ -344,13 +430,16 @@ def run_training_pipeline():
     y_class_test = [y_class[i] for i in test_indices]
     y_reg_test = [y_reg[i] for i in test_indices]
 
-    print(f"Data Split: {len(X_train)} Train samples | {len(X_test)} Test samples")
-    print(f"Class Distribution: {sum(y_class_train)} High Risk ({sum(y_class_train)/len(y_class_train)*100:.1f}%) in Train\n")
+    print(f"\n[2/6] DATA PREPARATION AND SPLIT")
+    print(f"Training records: {len(X_train)} | Held-out test records: {len(X_test)}")
+    print("High-risk label: GenAI retention below 70%.")
+    print(f"High-risk training records: {sum(y_class_train)} ({sum(y_class_train)/len(y_class_train)*100:.1f}%)\n")
 
     # =========================================================================
     # Phase 1: Classification Models Comparison
     # =========================================================================
-    print("--- 1. Training Retention Risk Classification Models ---")
+    print("[3/6] RETENTION RISK CLASSIFICATION")
+    print("Predicting whether GenAI retention is below the 70% threshold.")
 
     # Model A: Random Forest Classifier
     rf_clf = RandomForestClassifierModel(n_estimators=45, max_depth=6)
@@ -383,7 +472,8 @@ def run_training_pipeline():
     # =========================================================================
     # Phase 2: Regression Models Comparison (Predict Exact Retention %)
     # =========================================================================
-    print("\n--- 2. Training Retention Rate Regression Models ---")
+    print("\n[4/6] RETENTION RATE REGRESSION")
+    print("Predicting the GenAI retention percentage.")
     rf_reg = RandomForestRegressorModel(n_estimators=35, max_depth=5)
     rf_reg.fit(X_train, y_reg_train)
     reg_preds = rf_reg.predict(X_test)
@@ -396,7 +486,8 @@ def run_training_pipeline():
     # Phase 3: Feature Importance Analysis (Explainability)
     # =========================================================================
     sorted_features = sorted(rf_clf.feature_importances.items(), key=lambda x: x[1], reverse=True)
-    print("\n--- 3. Top Predictors of Cognitive Retention Drop ---")
+    print("\n[5/6] FEATURE IMPORTANCE")
+    print("Top Random Forest split-frequency features (descriptive, not causal):")
     for feat, imp in sorted_features[:7]:
         print(f"  * {feat:30s}: {imp * 100:.1f}% importance")
 
@@ -467,11 +558,29 @@ def run_training_pipeline():
     with open(model_bundle_path, "wb") as f:
         pickle.dump(model_bundle, f)
 
+    print(f"\n[6/6] GENERATING GRAPHS")
+    classification_metrics = {
+        "Random Forest": {"accuracy": rf_acc, "precision": rf_prec, "recall": rf_rec, "f1_score": rf_f1},
+        "Logistic Regression": {"accuracy": lr_acc, "precision": lr_prec, "recall": lr_rec, "f1_score": lr_f1},
+        "Decision Tree": {"accuracy": dt_acc, "precision": dt_prec, "recall": dt_rec, "f1_score": dt_f1},
+    }
+    save_training_graphs(
+        graphs_dir,
+        y_class_test,
+        {"rf": rf_preds, "lr": lr_preds, "dt": dt_preds},
+        classification_metrics,
+        y_reg_test,
+        reg_preds,
+        rf_clf.feature_importances,
+    )
+
     print("\n=================================================================")
-    print("[SUCCESS] Model Training Complete!")
+    print("[SUCCESS] COMPONENT 4 MODEL TRAINING COMPLETE")
     print(f"  * Metrics Saved:            {metrics_file}")
     print(f"  * Feature Importance Saved: {importances_file}")
     print(f"  * Model Bundle Saved:       {model_bundle_path}")
+    print(f"  * Evaluation Graphs Saved:  {graphs_dir}")
+    print("  * Graphs show held-out test results; they are not evidence of real-world performance.")
     print("=================================================================")
 
 

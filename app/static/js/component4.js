@@ -42,6 +42,7 @@
 
     var predictorForm = document.getElementById("immediateRecallPredictorForm");
     var conditionSelect = document.getElementById("immediateModelCondition");
+    var immediateModelTtr = document.getElementById("immediateModelTtr");
     var predictorError = document.getElementById("immediateRecallPredictionError");
     var predictorResult = document.getElementById("immediateRecallPredictionResult");
 
@@ -50,10 +51,12 @@
         document.querySelectorAll(".immediate-model-feature-group").forEach(function (group) {
             var active = group.dataset.modelCondition === conditionSelect.value;
             group.hidden = !active;
-            group.querySelectorAll("[data-feature]").forEach(function (control) {
-                control.disabled = !active;
-            });
         });
+        if (immediateModelTtr) {
+            immediateModelTtr.dataset.feature = conditionSelect.value === "genai_assisted"
+                ? "ga_lexical_diversity_ttr"
+                : "bo_lexical_diversity_ttr";
+        }
     }
 
     if (predictorForm && conditionSelect) {
@@ -74,6 +77,9 @@
             activeGroup.querySelectorAll("[data-feature]").forEach(function (control) {
                 features[control.dataset.feature] = control.value;
             });
+            if (immediateModelTtr) {
+                features[immediateModelTtr.dataset.feature] = immediateModelTtr.value;
+            }
 
             fetch("/api/component4/predict-immediate-recall", {
                 method: "POST",
@@ -119,9 +125,6 @@
         document.querySelectorAll(".delayed-model-feature-group").forEach(function (group) {
             var active = group.dataset.modelCondition === delayedConditionSelect.value;
             group.hidden = !active;
-            group.querySelectorAll("[data-feature]").forEach(function (control) {
-                control.disabled = !active;
-            });
         });
     }
 

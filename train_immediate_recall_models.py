@@ -32,6 +32,9 @@ FEATURES = {
         "ga_explanation_ease",
         "ga_word_count",
         "ga_lexical_diversity_ttr",
+        "cognitive_ownership_score",
+        "explanation_autonomy_score",
+        "perceived_ai_dependency_score",
     ],
 }
 

@@ -15,8 +15,8 @@
     "data_source": "simulation_only_formula_generated_targets_not_participant_data",
     "sample_size": 300,
     "test_sample_size": 60,
-    "mae": 0.3095,
-    "rmse": 0.3997,
-    "r2": 0.6891
+    "mae": 0.3216,
+    "rmse": 0.409,
+    "r2": 0.6744
   }
 }

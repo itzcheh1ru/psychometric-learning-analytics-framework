@@ -9,6 +9,10 @@ import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
+import matplotlib
+
+# Use a file-only backend so training works without a local Tk installation.
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 
