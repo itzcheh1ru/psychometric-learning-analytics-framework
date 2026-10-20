@@ -621,10 +621,13 @@ def test_component3_page_contains_title(client):
     assert b"Longitudinal AI-Assisted Study Pattern Analytics" in data
 
 
-def test_component3_page_contains_prototype_record(client):
-    """Component 3 page must contain 'Prototype record'."""
+def test_component3_page_contains_separate_user_charts_and_save_form(client):
+    """Component 3 separates browser-saved user charts from imported dataset charts."""
     data = client.get("/component3/").data
-    assert b"Prototype record" in data or b"prototype record" in data.lower()
+    assert b"Your Weekly Data Charts" in data
+    assert b"Clear my entered data" in data
+    assert b"saved only in this browser" in data
+    assert b"Save Weekly Record" in data
 
 
 def test_component3_page_explains_repeat_week_requirement(client):

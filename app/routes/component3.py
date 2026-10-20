@@ -9,7 +9,8 @@ Endpoints:
   POST /api/component3/validate-weekly-record – Weekly record prototype validation (JSON)
 
 Status: Prototype – data collection in progress.
-        No empirical trend results or participant data persistence.
+        The validation API does not persist user-entered records; the page
+        stores validated prototype entries only in browser-local storage.
 """
 
 from flask import Blueprint, jsonify, render_template, request
@@ -48,7 +49,7 @@ def index():
         prompt_purposes=sorted(list(PROMPT_PURPOSES)),
         study_methods=sorted(list(STUDY_METHODS)),
         productivity_ratings=PRODUCTIVITY_RATINGS,
-        workload_pressures=["Low", "Moderate", "High"],
+        workload_pressures=sorted(WORKLOAD_PRESSURES),
         indicators=BEHAVIOURAL_INDICATORS,
         specification=LONGITUDINAL_SPECIFICATION,
     )

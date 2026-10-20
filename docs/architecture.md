@@ -271,7 +271,7 @@ A strict boundary exists between prototype data validation and empirical longitu
 └────────────────────────────────────────────────────────┘
 ```
 
-> **Research Integrity Principle:** The weekly-record form validates a prototype entry but does not persist it. Empirical charts are rebuilt from the weekly exports. The study-pattern shift is a descriptive average absolute percentage-point change in study shares, not a validated psychometric scale. Workload comparisons are descriptive associations, not a causal or composite deadline-spike score. Optional free-text prompt examples are not copied into the analytical dataset.
+> **Research Integrity Principle:** The weekly-record form sends entries to the validation endpoint and stores valid entries only in browser-local storage for separate, participant-tabbed preview charts; the server does not persist them, and they are not merged with the imported weekly-export dataset. Clearing browser-entered data does not affect imported-data charts. Empirical dataset charts continue to use the weekly exports. The study-pattern shift is a descriptive average absolute percentage-point change in study shares, not a validated psychometric scale. Workload comparisons are descriptive associations, not a causal or composite deadline-spike score. Optional free-text prompt examples are not copied into the analytical dataset.
 
 ---
 

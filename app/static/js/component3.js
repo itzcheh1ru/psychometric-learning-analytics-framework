@@ -4,8 +4,9 @@
  *
  * Responsibilities:
  *   - Client-side validation for weekly study record inputs
- *   - POST submission to /api/component3/validate-weekly-record
- *   - Display validation outcome and sanitised record preview
+ *   - Validate weekly records through /api/component3/validate-weekly-record
+ *   - Save validated prototype records in browser-local storage
+ *   - Render participant-specific charts separately from imported-dataset charts
  *   - Form reset
  *   - Load Component 3 analytical summary
  *   - Load AI-assisted vs independent study-share chart
@@ -13,10 +14,9 @@
  *   - Load study-pattern shift chart
  *
  * CRITICAL RESEARCH INTEGRITY:
- *   - No longitudinal trend calculation in JavaScript
- *   - No AI Study Share calculation as research findings
- *   - No study-pattern classification or mock histories
- *   - All analytical values are obtained from the backend APIs
+ *   - Imported-dataset analytical values are obtained from backend APIs
+ *   - Browser-local user charts are descriptive previews, not research findings
+ *   - User-entered records are never sent to or merged with the imported dataset
  */
 
 "use strict";
@@ -28,6 +28,9 @@
        ============================================================ */
 
     var VALIDATE_URL = "/api/component3/validate-weekly-record";
+    var USER_RECORDS_KEY = "component3.userWeeklyRecords.v1";
+    var activeUserParticipant = null;
+    var userCharts = [];
 
 
     var REQUIRED_FIELDS = [
@@ -144,6 +147,582 @@
         document.getElementById(
             "weeklyErrorList"
         );
+
+    var userDataSection =
+        document.querySelector(".c3-user-data");
+
+    var userDataStatus =
+        document.getElementById("userDataStatus");
+
+    var userParticipantTabs =
+        document.getElementById("userParticipantTabs");
+
+    var userParticipantCharts =
+        document.getElementById("userParticipantCharts");
+
+    var clearUserDataBtn =
+        document.getElementById("clearUserDataBtn");
+
+
+    function readUserRecords() {
+
+        var stored =
+            window.localStorage.getItem(USER_RECORDS_KEY);
+
+        if (stored === null) {
+            return [];
+        }
+
+        var records =
+            JSON.parse(stored);
+
+        if (
+            !Array.isArray(records) ||
+            records.some(function (record) {
+                return !record ||
+                    typeof record !== "object" ||
+                    typeof record.participant_reference !== "string" ||
+                    typeof record.study_week !== "string";
+            })
+        ) {
+            throw new Error("Saved browser data has an invalid format.");
+        }
+
+        return records;
+
+    }
+
+
+    function weekNumber(record) {
+
+        var match =
+            String(record.study_week || "").match(/\d+/);
+
+        return match ? Number(match[0]) : 0;
+
+    }
+
+
+    function destroyUserCharts() {
+
+        userCharts.forEach(function (chart) {
+            chart.destroy();
+        });
+
+        userCharts = [];
+
+    }
+
+
+    function renderUserDashboard(selectedParticipant) {
+
+        if (!userDataStatus || !userParticipantTabs || !userParticipantCharts) {
+            return;
+        }
+
+        var records;
+
+        try {
+            records = readUserRecords();
+        } catch (error) {
+            userDataStatus.textContent =
+                "Saved browser data could not be read. Clear the saved user data and try again.";
+            userDataStatus.classList.add("is-error");
+            if (clearUserDataBtn) {
+                clearUserDataBtn.disabled = false;
+            }
+            console.error("User-entered Component 3 data error:", error);
+            return;
+        }
+
+        userDataStatus.classList.remove("is-error");
+        if (clearUserDataBtn) {
+            clearUserDataBtn.disabled = records.length === 0;
+        }
+
+        if (records.length === 0) {
+            activeUserParticipant = null;
+            userParticipantTabs.hidden = true;
+            userParticipantTabs.replaceChildren();
+            destroyUserCharts();
+            userParticipantCharts.innerHTML =
+                '<p class="c3-user-data__empty">Save a weekly record below to create a participant tab and view its charts.</p>';
+            userDataStatus.textContent =
+                "No user-entered records saved in this browser yet.";
+            return;
+        }
+
+        var participantCodes =
+            Array.from(new Set(records.map(function (record) {
+                return String(record.participant_reference);
+            }))).sort(function (left, right) {
+                return left.localeCompare(right, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                });
+            });
+
+        var activeCode =
+            selectedParticipant || activeUserParticipant;
+
+        if (participantCodes.indexOf(activeCode) === -1) {
+            activeCode = participantCodes[0];
+        }
+
+        activeUserParticipant = activeCode;
+        userParticipantTabs.hidden = false;
+        userParticipantTabs.replaceChildren();
+
+        participantCodes.forEach(function (participantCode, index) {
+            var tab = document.createElement("button");
+            tab.type = "button";
+            tab.id = "userParticipantTab" + index;
+            tab.className = "c3-user-data__tab";
+            tab.setAttribute("role", "tab");
+            tab.setAttribute("aria-selected", String(participantCode === activeCode));
+            tab.setAttribute(
+                "tabindex",
+                participantCode === activeCode ? "0" : "-1"
+            );
+            tab.setAttribute(
+                "aria-controls",
+                "userParticipantCharts"
+            );
+            tab.textContent = participantCode;
+            tab.addEventListener("click", function () {
+                renderUserDashboard(participantCode);
+            });
+            tab.addEventListener("keydown", function (event) {
+                var currentIndex =
+                    participantCodes.indexOf(participantCode);
+                var nextIndex = currentIndex;
+
+                if (event.key === "ArrowRight") {
+                    nextIndex = (currentIndex + 1) % participantCodes.length;
+                } else if (event.key === "ArrowLeft") {
+                    nextIndex =
+                        (currentIndex - 1 + participantCodes.length) %
+                        participantCodes.length;
+                } else if (event.key === "Home") {
+                    nextIndex = 0;
+                } else if (event.key === "End") {
+                    nextIndex = participantCodes.length - 1;
+                } else {
+                    return;
+                }
+
+                event.preventDefault();
+                renderUserDashboard(participantCodes[nextIndex]);
+                var selectedTab =
+                    document.getElementById("userParticipantTab" + nextIndex);
+                if (selectedTab) {
+                    selectedTab.focus();
+                }
+            });
+            userParticipantTabs.appendChild(tab);
+            if (participantCode === activeCode) {
+                userParticipantCharts.setAttribute(
+                    "aria-labelledby",
+                    tab.id
+                );
+            }
+        });
+
+        var participantRecords =
+            records.filter(function (record) {
+                return String(record.participant_reference) === activeCode;
+            }).sort(function (left, right) {
+                return weekNumber(left) - weekNumber(right);
+            });
+
+        userDataStatus.textContent =
+            participantCodes.length +
+            " participant " +
+            (participantCodes.length === 1 ? "code" : "codes") +
+            " saved in this browser; showing " +
+            participantRecords.length +
+            " weekly " +
+            (participantRecords.length === 1 ? "record" : "records") +
+            " for " +
+            activeCode +
+            ".";
+
+        renderUserParticipantCharts(activeCode, participantRecords);
+
+    }
+
+
+    function renderUserParticipantCharts(participantCode, records) {
+
+        destroyUserCharts();
+        userParticipantCharts.replaceChildren();
+
+        var title = document.createElement("h3");
+        title.className = "subsection-heading";
+        title.textContent = "Weekly charts for " + participantCode;
+        userParticipantCharts.appendChild(title);
+
+        var note = document.createElement("p");
+        note.className = "c3-chart-description";
+        note.textContent =
+            "Charts use only this participant code's saved entries. A shift value appears only when a valid previous-week study-share comparison exists.";
+        userParticipantCharts.appendChild(note);
+
+        var chartDefinitions = [
+            {
+                id: "userStudyShareChart",
+                title: "Study-hour allocation",
+                type: "line",
+                datasets: [
+                    {
+                        label: "AI-assisted study share (%)",
+                        color: "#2563eb",
+                        values: records.map(function (record) {
+                            var total = Number(record.ai_study_hours) +
+                                Number(record.independent_study_hours);
+                            return total > 0
+                                ? Number(record.ai_study_hours) / total * 100
+                                : null;
+                        })
+                    },
+                    {
+                        label: "Independent study share (%)",
+                        color: "#7c3aed",
+                        values: records.map(function (record) {
+                            var total = Number(record.ai_study_hours) +
+                                Number(record.independent_study_hours);
+                            return total > 0
+                                ? Number(record.independent_study_hours) / total * 100
+                                : null;
+                        })
+                    }
+                ],
+                axisTitle: "Share of reported study hours (%)"
+            },
+            {
+                id: "userPromptFrequencyChart",
+                title: "Academic prompt count",
+                type: "bar",
+                datasets: [
+                    {
+                        label: "Prompts",
+                        color: "#0f766e",
+                        values: records.map(function (record) {
+                            return Number(record.prompt_count);
+                        })
+                    }
+                ],
+                axisTitle: "Prompts per week"
+            },
+            {
+                id: "userShiftChart",
+                title: "Study Pattern Shift",
+                type: "line",
+                datasets: [
+                    {
+                        label: "Average absolute share change (percentage points)",
+                        color: "#d97706",
+                        values: getUserShiftValues(records)
+                    }
+                ],
+                axisTitle: "Average absolute percentage-point change"
+            },
+            {
+                id: "userPromptDetailChart",
+                title: "Self-reported prompt detail",
+                type: "line",
+                datasets: [
+                    {
+                        label: "Prompt detail rating (1–5)",
+                        color: "#db2777",
+                        values: records.map(function (record) {
+                            return record.prompt_detail === undefined
+                                ? null
+                                : Number(record.prompt_detail);
+                        })
+                    }
+                ],
+                axisTitle: "Self-reported rating (1–5)"
+            }
+        ];
+
+        var grid = document.createElement("div");
+        grid.className = "c3-user-data__grid";
+
+        chartDefinitions.forEach(function (definition) {
+            var card = document.createElement("section");
+            card.className = "c3-user-data__chart-card";
+
+            var heading = document.createElement("h4");
+            heading.textContent = definition.title;
+            card.appendChild(heading);
+
+            var chartWrap = document.createElement("div");
+            chartWrap.className = "c3-user-data__chart-wrap";
+
+            var canvas = document.createElement("canvas");
+            canvas.id = definition.id;
+            canvas.setAttribute("role", "img");
+            canvas.setAttribute(
+                "aria-label",
+                definition.title + " for participant " + participantCode
+            );
+            chartWrap.appendChild(canvas);
+            card.appendChild(chartWrap);
+            grid.appendChild(card);
+
+            var chartDatasets =
+                definition.datasets.map(function (dataset) {
+                    return {
+                        label: dataset.label,
+                        data: dataset.values,
+                        borderColor: dataset.color,
+                        backgroundColor: dataset.color,
+                        pointRadius: 4,
+                        borderWidth: 2,
+                        tension: 0.25,
+                        spanGaps: false,
+                        fill: false,
+                        borderRadius: definition.type === "bar" ? 4 : 0
+                    };
+                });
+
+            userCharts.push(new Chart(canvas, {
+                type: definition.type,
+                data: {
+                    labels: records.map(function (record) {
+                        return record.study_week;
+                    }),
+                    datasets: chartDatasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: chartDatasets.length > 1,
+                            position: "bottom"
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    var value = Number(context.parsed.y);
+                                    return context.dataset.label + ": " +
+                                        (Number.isFinite(value)
+                                            ? value.toFixed(1)
+                                            : "Not available");
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            title: { display: true, text: "Observation week" }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            suggestedMax: definition.id === "userPromptDetailChart"
+                                ? 5
+                                : undefined,
+                            title: { display: true, text: definition.axisTitle }
+                        }
+                    }
+                }
+            }));
+
+            if (
+                definition.id === "userShiftChart" &&
+                definition.datasets[0].values.every(function (value) {
+                    return value === null;
+                })
+            ) {
+                var shiftNote = document.createElement("p");
+                shiftNote.className = "c3-data-note";
+                shiftNote.textContent =
+                    "Study Pattern Shift needs at least two weeks with non-zero total study hours for this participant.";
+                card.appendChild(shiftNote);
+            }
+        });
+
+        userParticipantCharts.appendChild(grid);
+
+        var detailsSection = document.createElement("section");
+        detailsSection.className = "c3-user-data__details";
+
+        var detailsHeading = document.createElement("h4");
+        detailsHeading.className = "c3-user-data__details-heading";
+        detailsHeading.textContent = "Weekly record details";
+        detailsSection.appendChild(detailsHeading);
+
+        var detailsIntro = document.createElement("p");
+        detailsIntro.className = "c3-user-data__details-intro";
+        detailsIntro.textContent =
+            "Review the values saved for each observation week. Optional items are marked when they were not reported.";
+        detailsSection.appendChild(detailsIntro);
+
+        records.forEach(function (record) {
+            var weekCard = document.createElement("article");
+            weekCard.className = "c3-user-data__week-card";
+
+            var weekHeading = document.createElement("h5");
+            weekHeading.className = "c3-user-data__week-heading";
+            weekHeading.textContent = record.study_week;
+            weekCard.appendChild(weekHeading);
+
+            var fields = [
+                {
+                    label: "AI-assisted study",
+                    value: record.ai_study_hours + " hours",
+                    group: "study"
+                },
+                {
+                    label: "Independent study",
+                    value: record.independent_study_hours + " hours",
+                    group: "study"
+                },
+                {
+                    label: "Academic prompts",
+                    value: record.prompt_count,
+                    group: "prompts"
+                },
+                {
+                    label: "Primary prompt purpose",
+                    value: record.prompt_purpose,
+                    group: "prompts"
+                },
+                {
+                    label: "Study methods",
+                    value: Array.isArray(record.study_methods) &&
+                        record.study_methods.length
+                        ? record.study_methods.join(", ")
+                        : "Not reported",
+                    group: "additional"
+                },
+                {
+                    label: "Perceived productivity",
+                    value: record.perceived_productivity || "Not reported",
+                    group: "additional"
+                },
+                {
+                    label: "Workload pressure",
+                    value: record.workload_pressure || "Not reported",
+                    group: "additional"
+                },
+                {
+                    label: "Prompt detail rating",
+                    value: record.prompt_detail === undefined
+                        ? "Not reported"
+                        : record.prompt_detail + " / 5",
+                    group: "additional"
+                }
+            ];
+
+            [
+                { key: "study", title: "Study time" },
+                { key: "prompts", title: "Prompt activity" },
+                { key: "additional", title: "Additional measures" }
+            ].forEach(function (group) {
+                var groupSection = document.createElement("section");
+                groupSection.className = "c3-user-data__detail-group";
+
+                var groupHeading = document.createElement("h6");
+                groupHeading.textContent = group.title;
+                groupSection.appendChild(groupHeading);
+
+                var fieldGrid = document.createElement("dl");
+                fieldGrid.className = "c3-user-data__field-grid";
+
+                fields.filter(function (field) {
+                    return field.group === group.key;
+                }).forEach(function (field) {
+                    var fieldItem = document.createElement("div");
+                    fieldItem.className = "c3-user-data__field";
+
+                    var label = document.createElement("dt");
+                    label.textContent = field.label;
+
+                    var value = document.createElement("dd");
+                    value.textContent = String(field.value);
+                    if (field.value === "Not reported") {
+                        value.className = "c3-user-data__not-reported";
+                    }
+
+                    fieldItem.appendChild(label);
+                    fieldItem.appendChild(value);
+                    fieldGrid.appendChild(fieldItem);
+                });
+
+                groupSection.appendChild(fieldGrid);
+                weekCard.appendChild(groupSection);
+            });
+
+            detailsSection.appendChild(weekCard);
+        });
+        userParticipantCharts.appendChild(detailsSection);
+
+    }
+
+
+    function getUserShiftValues(records) {
+
+        var previousShares = null;
+
+        return records.map(function (record) {
+            var total =
+                Number(record.ai_study_hours) +
+                Number(record.independent_study_hours);
+
+            if (!(total > 0)) {
+                return null;
+            }
+
+            var aiShare =
+                Number(record.ai_study_hours) / total * 100;
+            var independentShare =
+                Number(record.independent_study_hours) / total * 100;
+            var shift = previousShares === null
+                ? null
+                : (
+                    Math.abs(aiShare - previousShares.ai) +
+                    Math.abs(independentShare - previousShares.independent)
+                ) / 2;
+
+            previousShares = {
+                ai: aiShare,
+                independent: independentShare
+            };
+
+            return shift;
+        });
+
+    }
+
+
+    function saveUserRecord(record) {
+
+        var records =
+            readUserRecords();
+        var existingIndex =
+            records.findIndex(function (savedRecord) {
+                return String(savedRecord.participant_reference) ===
+                        String(record.participant_reference) &&
+                    String(savedRecord.study_week) ===
+                        String(record.study_week);
+            });
+
+        if (existingIndex === -1) {
+            records.push(record);
+        } else {
+            records[existingIndex] = record;
+        }
+
+        window.localStorage.setItem(
+            USER_RECORDS_KEY,
+            JSON.stringify(records)
+        );
+
+    }
 
 
     /* ============================================================
@@ -481,7 +1060,7 @@
     }
 
 
-    function showSuccess(data) {
+    function showSuccess(data, skipScroll) {
 
         if (!previewSection) {
 
@@ -523,13 +1102,12 @@
         }
 
 
-        previewSection.scrollIntoView({
-
-            behavior: "smooth",
-
-            block: "start"
-
-        });
+        if (!skipScroll) {
+            previewSection.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }
 
     }
 
@@ -640,6 +1218,36 @@
                 var payload =
                     buildPayload();
 
+                var savedRecords;
+                try {
+                    savedRecords = readUserRecords();
+                } catch (error) {
+                    showErrors([
+                        "Saved user data could not be read. Clear the browser-saved user data before submitting a new record."
+                    ]);
+                    console.error("Could not read user-entered records:", error);
+                    return;
+                }
+
+                var duplicate =
+                    savedRecords.some(function (record) {
+                        return String(record.participant_reference) ===
+                                String(payload.participant_reference) &&
+                            String(record.study_week) ===
+                                String(payload.study_week);
+                    });
+
+                if (
+                    duplicate &&
+                    !window.confirm(
+                        "A record for this participant and week already exists in this browser. Replace that saved entry?"
+                    )
+                ) {
+                    showErrors([
+                        "The existing participant-week record was kept unchanged."
+                    ]);
+                    return;
+                }
 
                 if (submitBtn) {
 
@@ -647,7 +1255,7 @@
                         true;
 
                     submitBtn.textContent =
-                        "Validating…";
+                        "Validating and saving…";
 
                 }
 
@@ -694,9 +1302,27 @@
 
                         if (result.ok) {
 
-                            showSuccess(
-                                result.data
+                            try {
+                                saveUserRecord(result.data.validated_record);
+                            } catch (error) {
+                                showErrors([
+                                    "The record passed validation, but could not be saved in this browser. Check browser storage settings and try again."
+                                ]);
+                                console.error("Could not save user-entered record:", error);
+                                return;
+                            }
+
+                            showSuccess(result.data, true);
+                            renderUserDashboard(
+                                result.data.validated_record.participant_reference
                             );
+
+                            if (userDataSection) {
+                                userDataSection.scrollIntoView({
+                                    behavior: "smooth",
+                                    block: "start"
+                                });
+                            }
 
                         }
 
@@ -743,7 +1369,7 @@
                                 false;
 
                             submitBtn.textContent =
-                                "Validate Weekly Record";
+                                "Save Weekly Record & Update Charts";
 
                         }
 
@@ -803,6 +1429,34 @@
             }
         );
 
+    }
+
+
+    if (clearUserDataBtn) {
+        clearUserDataBtn.addEventListener("click", function () {
+            if (!window.confirm(
+                "Clear all weekly records entered in this browser? Imported-dataset charts will not be affected."
+            )) {
+                return;
+            }
+
+            try {
+                window.localStorage.removeItem(USER_RECORDS_KEY);
+                renderUserDashboard();
+                if (form) {
+                    form.reset();
+                    clearAllErrors();
+                }
+                if (previewSection) {
+                    previewSection.setAttribute("hidden", "");
+                }
+            } catch (error) {
+                userDataStatus.textContent =
+                    "User-entered data could not be cleared from this browser.";
+                userDataStatus.classList.add("is-error");
+                console.error("Could not clear user-entered records:", error);
+            }
+        });
     }
 
 
@@ -2679,6 +3333,8 @@
             loadPromptDetailChart();
 
             loadWorkloadComparisonCharts();
+
+            renderUserDashboard();
 
         }
     );

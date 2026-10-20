@@ -62,7 +62,8 @@
 **Feature 005 notes:**
 - Component 3 prototype: Implemented (specification API, status API, weekly study-record validation, indicator definitions).
 - Weekly data structure: Implemented (4–6 week observation schema, time distribution, prompt frequency, academic context).
-- Longitudinal validation: Implemented (safe sanitisation, range checking, unknown field rejection, no persistence).
+- Longitudinal validation: Implemented (safe sanitisation, range checking, unknown field rejection).
+- User-entered chart preview: Implemented separately from the imported dataset; records are stored in browser-local storage, grouped into participant tabs, and cleared independently.
 - Longitudinal dataset: Pending collection (`dataset_ready = false`).
 - Trend analysis: Not yet enabled (`trend_analysis_available = false`, `LongitudinalAnalysisService` raises `LongitudinalAnalysisNotAvailableError`).
 - Prompt behaviour analysis: Not yet enabled (`prompt_analysis_available = false`).
