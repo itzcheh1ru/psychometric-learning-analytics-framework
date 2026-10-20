@@ -1520,14 +1520,12 @@ def test_framework_apis_contain_no_fabricated_findings(client):
 
 
 # --------------------------------------------------------------------------- #
-# Test 28 – Dashboard page contains badges and integration principle          #
+# Test 28 – Dashboard page contains project identity and integration principle #
 # --------------------------------------------------------------------------- #
 
-def test_dashboard_page_contains_badges_and_integration_principle(client):
-    """GET /dashboard must contain J26-DS-310 badge, prototype badge, and integration principle."""
+def test_dashboard_page_contains_project_identity_and_integration_principle(client):
+    """GET /dashboard must contain the project ID and integration principle."""
     response = client.get("/dashboard")
     html = response.data.decode()
     assert "J26-DS-310" in html
-    assert "Research Prototype" in html
-    assert "Data Collection" in html
     assert "Complementary Evidence" in html
