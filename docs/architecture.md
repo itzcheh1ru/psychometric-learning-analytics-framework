@@ -240,8 +240,10 @@ A strict boundary exists between prototype data validation and empirical longitu
 ┌────────────────────────────────────────────────────────┐
 │          Longitudinal Research Dataset Boundary        │
 │  - Consolidates every available weekly export          │
+│  - Includes only rows with confirmed research consent   │
 │  - Excludes rows without a participant reference       │
 │  - Keeps first duplicate participant-week row          │
+│  - Harmonises equivalent survey category labels        │
 │  - Does not copy optional free-text examples            │
 └───────────────────────────┬────────────────────────────┘
                             │ Rebuilt clean and feature datasets
@@ -259,7 +261,9 @@ A strict boundary exists between prototype data validation and empirical longitu
 │          Workload Comparison & Dashboard                │
 │  - AI hours and prompt counts by reported pressure      │
 │  - Repeated-week comparisons when a participant repeats│
-│  - Sample sizes and missing-data-aware summaries        │
+│  - Pooled and participant-median study-share summaries  │
+│  - Per-measure usable-response coverage by week          │
+│  - Labels non-consecutive observation comparisons       │
 └───────────────────────────┬────────────────────────────┘
                             │ Descriptive visualisations
                             ▼
@@ -272,6 +276,8 @@ A strict boundary exists between prototype data validation and empirical longitu
 ```
 
 > **Research Integrity Principle:** The weekly-record form sends entries to the validation endpoint and stores valid entries only in browser-local storage for separate, participant-tabbed preview charts; the server does not persist them, and they are not merged with the imported weekly-export dataset. Clearing browser-entered data does not affect imported-data charts. Empirical dataset charts continue to use the weekly exports. The study-pattern shift is a descriptive average absolute percentage-point change in study shares, not a validated psychometric scale. Workload comparisons are descriptive associations, not a causal or composite deadline-spike score. Optional free-text prompt examples are not copied into the analytical dataset.
+
+Weekly imports require the survey consent column and include only explicit “Yes, I agree” responses; missing consent fails closed. Activity and prompt-purpose responses are mapped to canonical dashboard categories without merging distinct presentation and “semester just started” activity responses. The weekly coverage table reports usable responses against all imported participant-week records; zero-total-hour rows are unavailable for study-share calculations rather than being treated as missing hours. Cohort study-share lines remain weighted by reported hours, with participant-level medians available in chart tooltips. Shift comparisons are labelled with the previous and current observed weeks so skipped collection weeks are visible.
 
 ---
 

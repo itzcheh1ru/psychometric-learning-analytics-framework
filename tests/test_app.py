@@ -29,6 +29,8 @@ Feature 007: Integrated four-component research dashboard:
 """
 
 import json
+from importlib import import_module
+
 import pytest
 from app import create_app
 from app.services.cognitive_offloading.model_service import (
@@ -58,6 +60,10 @@ from app.services.framework import (
     framework_status_service,
 )
 
+longitudinal_analysis_module = import_module(
+    "app.services.longitudinal.analysis_service"
+)
+
 
 @pytest.fixture
 def app():
@@ -65,6 +71,22 @@ def app():
     flask_app = create_app()
     flask_app.config.update({"TESTING": True})
     return flask_app
+
+
+@pytest.fixture(autouse=True)
+def isolate_longitudinal_processed_data(monkeypatch, tmp_path):
+    """Keep status tests independent from a user's ignored processed dataset."""
+    missing_data_file = tmp_path / "component3_weekly_features.csv"
+    monkeypatch.setattr(
+        longitudinal_analysis_module,
+        "DATA_FILE",
+        missing_data_file,
+    )
+    monkeypatch.setattr(
+        longitudinal_analysis_module.analysis_service,
+        "data_file",
+        missing_data_file,
+    )
 
 
 @pytest.fixture

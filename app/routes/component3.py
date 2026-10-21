@@ -137,6 +137,13 @@ def study_shift():
         analysis_service.get_weekly_shift()
     )
 
+@api_component3_bp.route("/data-coverage", methods=["GET"])
+def data_coverage():
+
+    return jsonify(
+        analysis_service.get_weekly_data_coverage()
+    )
+
 
 @api_component3_bp.route("/status", methods=["GET"])
 def status():

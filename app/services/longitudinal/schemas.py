@@ -45,6 +45,8 @@ LEARNING_ACTIVITIES: Set[str] = {
     "Reading / research",
     "Writing",
     "Revision / exam preparation",
+    "Presentation",
+    "The semester just started",
     "Other academic activity",
 }
 
@@ -55,6 +57,9 @@ PROMPT_PURPOSES: Set[str] = {
     "Assignment support",
     "Writing support",
     "Exam revision",
+    "Research/information seeking",
+    "Presentation preparation",
+    "No prompts this week",
     "Other academic purpose",
 }
 

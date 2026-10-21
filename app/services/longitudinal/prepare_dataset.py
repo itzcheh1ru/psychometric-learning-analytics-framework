@@ -9,6 +9,9 @@ PROCESSED_DIR = BASE_DIR / "data" / "processed"
 
 PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 
+CONSENT_COLUMN = "Do you agree to participate in this research study?"
+CONSENTED_VALUE = "Yes, I agree"
+
 
 COLUMN_MAP = {
     "Please enter the participant code provided to you.": "participant_reference",
@@ -48,10 +51,74 @@ COLUMN_MAP = {
 
 }
 
+LEARNING_ACTIVITY_MAP = {
+    "coding/programming": "Coding / debugging",
+    "assignment": "Assignment work",
+    "research": "Reading / research",
+    "report writing": "Writing",
+    "exam preparation": "Revision / exam preparation",
+}
+
+PROMPT_PURPOSE_MAP = {
+    "coding/programming": "Coding / debugging",
+    "debugging": "Coding / debugging",
+    "exam preparation": "Exam revision",
+    "writing improvement": "Writing support",
+    "caption writing": "Writing support",
+    "nothing": "No prompts this week",
+    "-": "No prompts this week",
+}
+
+
+def _normalize_category(value, mapping):
+    if pd.isna(value):
+        return pd.NA
+
+    normalized = str(value).strip()
+    if not normalized:
+        return pd.NA
+
+    return mapping.get(normalized.casefold(), normalized)
+
+
+def _normalize_multi_select(value, mapping):
+    if pd.isna(value):
+        return pd.NA
+
+    normalized_values = []
+    for item in str(value).split(";"):
+        normalized = _normalize_category(item, mapping)
+        if pd.notna(normalized) and normalized not in normalized_values:
+            normalized_values.append(normalized)
+
+    return ";".join(normalized_values) if normalized_values else pd.NA
+
 
 def clean_week_file(file_path, week_number):
 
     df = pd.read_excel(file_path)
+
+    if CONSENT_COLUMN not in df.columns:
+        raise ValueError(
+            f"Required consent column '{CONSENT_COLUMN}' is missing from "
+            f"{Path(file_path).name}; the export cannot be included safely."
+        )
+
+    consented = (
+        df[CONSENT_COLUMN]
+        .astype("string")
+        .str.strip()
+        .str.casefold()
+        .eq(CONSENTED_VALUE.casefold())
+        .fillna(False)
+    )
+    excluded_consent_count = int((~consented).sum())
+    if excluded_consent_count:
+        print(
+            f"Excluding {excluded_consent_count} non-consenting or "
+            f"unconfirmed row(s) from {Path(file_path).name}."
+        )
+    df = df.loc[consented].copy()
 
     # Rename only columns that exist
     rename_map = {
@@ -122,6 +189,15 @@ def clean_week_file(file_path, week_number):
         )
         df = df.loc[~duplicate_mask].copy()
 
+    df["learning_activity"] = df["learning_activity"].apply(
+        lambda value: _normalize_category(value, LEARNING_ACTIVITY_MAP)
+    )
+    df["prompt_purpose"] = df["prompt_purpose"].apply(
+        lambda value: _normalize_category(value, PROMPT_PURPOSE_MAP)
+    )
+    df["other_prompt_purposes"] = df["other_prompt_purposes"].apply(
+        lambda value: _normalize_multi_select(value, PROMPT_PURPOSE_MAP)
+    )
     df["study_methods"] = (
         df["study_methods"]
         .astype("string")

@@ -1668,7 +1668,7 @@
             if (status) {
 
                 status.textContent =
-                    "Shares are weighted by reported study hours. Sample sizes are shown in the chart tooltips.";
+                    "Lines are weighted by reported study hours. Tooltips also compare the participant-level median and show sample sizes.";
 
             }
 
@@ -1819,6 +1819,10 @@
                                         return [
                                             "Valid records: " + item.records,
                                             "Participants: " + item.participants,
+                                            "Median participant AI share: " +
+                                                Number(item.median_participant_ai_study_share).toFixed(1) + "%",
+                                            "Median participant independent share: " +
+                                                Number(item.median_participant_independent_study_share).toFixed(1) + "%",
                                             "Reported study hours: " +
                                                 Number(item.total_study_hours).toFixed(1)
                                         ];
@@ -2491,6 +2495,14 @@
                                         var item =
                                             data[items[0].dataIndex];
 
+                                        if (item.records === 0) {
+                                            return [
+                                                "No valid prompt-count responses",
+                                                "Records: 0",
+                                                "Participants: 0"
+                                            ];
+                                        }
+
                                         return [
                                             "Total prompts: " + item.total_prompts,
                                             "Records: " + item.records,
@@ -2671,7 +2683,7 @@
             if (status) {
 
                 status.textContent =
-                    "Showing week-to-week comparisons. The shift value is the average absolute percentage-point change across AI-assisted and independent study shares; sample sizes are shown in tooltips.";
+                    "Showing matched-participant comparisons with the previous available observation. Labels identify both weeks; sample sizes are shown in tooltips.";
 
             }
 
@@ -2681,8 +2693,8 @@
                     function (item) {
 
                         return (
-                            "Week " +
-                            item.study_week
+                            "Week " + item.study_week +
+                            " vs Week " + item.previous_study_week
                         );
 
                     }
@@ -2819,6 +2831,8 @@
                                             return [
                                                 "Comparisons: " + item.records,
                                                 "Participants: " + item.participants,
+                                                "Compared with previous available observation: Week " +
+                                                    item.previous_study_week,
                                                 "Median shift: " +
                                                     Number(item.median_shift).toFixed(1) +
                                                     " percentage points"
@@ -3302,6 +3316,105 @@
         }
     }
 
+    async function loadDataCoverage() {
+        var body = document.getElementById("dataCoverageBody");
+        var status = document.getElementById("dataCoverageStatus");
+        if (!body) {
+            return;
+        }
+
+        try {
+            var response = await fetch("/api/component3/data-coverage");
+            if (!response.ok) {
+                throw new Error("Data coverage API returned " + response.status);
+            }
+
+            var data = await response.json();
+            body.replaceChildren();
+            if (!Array.isArray(data) || data.length === 0) {
+                var emptyRow = document.createElement("tr");
+                var emptyCell = document.createElement("td");
+                emptyCell.colSpan = 5;
+                emptyCell.textContent = "Weekly coverage is not available yet.";
+                emptyRow.appendChild(emptyCell);
+                body.appendChild(emptyRow);
+                return;
+            }
+
+            data.forEach(function (item) {
+                var row = document.createElement("tr");
+                [
+                    {
+                        value: "Week " + item.study_week,
+                        className: "c3-coverage-week"
+                    },
+                    {
+                        value: item.measure,
+                        className: "c3-coverage-measure"
+                    },
+                    {
+                        value: item.usable_responses + " of " + item.weekly_records,
+                        className: "c3-coverage-number"
+                    },
+                    {
+                        value: String(item.not_available_records),
+                        className: "c3-coverage-number"
+                    }
+                ].forEach(function (cellData) {
+                    var cell = document.createElement("td");
+                    cell.className = cellData.className;
+                    cell.textContent = cellData.value;
+                    row.appendChild(cell);
+                });
+
+                var coverageCell = document.createElement("td");
+                coverageCell.className = "c3-coverage-value";
+                var coverage = Math.max(
+                    0,
+                    Math.min(100, Number(item.coverage_percent) || 0)
+                );
+                var coverageBar = document.createElement("span");
+                coverageBar.className = "c3-coverage-bar";
+                coverageBar.setAttribute("role", "progressbar");
+                coverageBar.setAttribute("aria-valuemin", "0");
+                coverageBar.setAttribute("aria-valuemax", "100");
+                coverageBar.setAttribute("aria-valuenow", coverage.toFixed(1));
+                coverageBar.setAttribute(
+                    "aria-label",
+                    "Data coverage " + coverage.toFixed(1) + "%"
+                );
+                var coverageFill = document.createElement("span");
+                coverageFill.className = "c3-coverage-bar__fill";
+                coverageFill.style.width = coverage + "%";
+                coverageBar.appendChild(coverageFill);
+                var coverageLabel = document.createElement("strong");
+                coverageLabel.textContent = coverage.toFixed(1) + "%";
+                coverageCell.appendChild(coverageBar);
+                coverageCell.appendChild(coverageLabel);
+                row.appendChild(coverageCell);
+                body.appendChild(row);
+            });
+
+            if (status) {
+                status.textContent =
+                    "Coverage is calculated from each week's imported records; unavailable answers are not treated as zero.";
+            }
+        } catch (error) {
+            body.replaceChildren();
+            var errorRow = document.createElement("tr");
+            var errorCell = document.createElement("td");
+            errorCell.colSpan = 5;
+            errorCell.textContent =
+                "Weekly coverage could not be loaded. Please refresh the page.";
+            errorRow.appendChild(errorCell);
+            body.appendChild(errorRow);
+            if (status) {
+                status.classList.add("is-error");
+            }
+            console.error("Component 3 data coverage error:", error);
+        }
+    }
+
 
     /* ============================================================
        PART 10 — PAGE INITIALIZATION
@@ -3333,6 +3446,8 @@
             loadPromptDetailChart();
 
             loadWorkloadComparisonCharts();
+
+            loadDataCoverage();
 
             renderUserDashboard();
 

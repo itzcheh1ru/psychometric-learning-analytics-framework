@@ -63,7 +63,7 @@
         </div>
     </div>
     <p class="c3-data-note">
-        Run the command from the repository root. Keep the original exports unchanged and use the same participant code in each week. The importer keeps the first row for a duplicate participant-week and excludes rows without a participant code; it reports both actions. Optional free-text prompt examples are not copied into the analytical dataset.
+        Run the command from the repository root. Keep the original exports unchanged and use the same participant code in each week. Only responses with confirmed consent are included; missing consent, missing participant codes, and duplicate participant-weeks are excluded and reported. Survey category labels are harmonised before analysis. Optional free-text prompt examples are not copied into the analytical dataset.
     </p>
 </section>
 
@@ -104,10 +104,10 @@
 
 <section class="c3-chart-section" aria-labelledby="studyShareHeading">
     <h2 id="studyShareHeading">AI-Assisted vs Independent Study Share</h2>
-    <p class="c3-chart-description">Weekly share of reported study hours completed with and without direct GenAI assistance. The percentages are weighted by reported hours, so records with more study time contribute proportionally more.</p>
+    <p class="c3-chart-description">Weekly share of reported study hours completed with and without direct GenAI assistance. The lines show shares weighted by reported hours; tooltips also show the median share across participants so the pooled result can be compared with a typical participant.</p>
     <div class="c3-chart-wrap"><canvas id="studyShareChart" aria-label="AI-assisted versus independent study share by week"></canvas></div>
     <div id="studyShareChartStatus" class="c3-chart-status" role="status">Loading study-share data&hellip;</div>
-    <p class="c3-data-note">Records with zero or missing total study hours are excluded from these shares. Each tooltip reports the valid record and participant counts.</p>
+    <p class="c3-data-note">Records with zero or missing total study hours are excluded. Tooltips report valid records, participants, and the participant-level median; each participant contributes once to that median.</p>
 </section>
 
 <section class="c3-chart-section" aria-labelledby="promptFrequencyHeading">
@@ -120,10 +120,10 @@
 
 <section class="c3-chart-section" aria-labelledby="studyShiftHeading">
     <h2 id="studyShiftHeading">Study Pattern Shift</h2>
-    <p class="c3-chart-description">Average change in study-hour allocation compared with each participant’s previous available study week.</p>
+    <p class="c3-chart-description">Average change in study-hour allocation compared with each participant’s previous available observation. Labels identify both weeks, including when an intervening week is missing.</p>
     <div class="c3-chart-wrap"><canvas id="studyShiftChart" aria-label="Study pattern shift by week"></canvas></div>
     <div id="studyShiftChartStatus" class="c3-chart-status" role="status">Study pattern shift is not yet available. At least two study weeks for the same participant are required.</div>
-    <p class="c3-data-note">Shift = the average of the absolute percentage-point changes in AI-assisted and independent study shares. One percentage point indicates a change in the share of reported study hours; this descriptive indicator is not a validated psychometric scale. Week 1 is a baseline and is not plotted as zero shift.</p>
+    <p class="c3-data-note">Shift = the average of the absolute percentage-point changes in AI-assisted and independent study shares. Tooltips show the number of matched participants and records. This is descriptive, not a validated psychometric scale. Week 1 is a baseline and is not plotted as zero shift.</p>
 </section>
 
 <section class="c3-chart-section" aria-labelledby="promptPurposeHeading">
@@ -171,6 +171,38 @@
     <h3 class="subsection-heading">Academic Prompt Count</h3>
     <div class="c3-chart-wrap"><canvas id="workloadPromptCountChart" aria-label="Average academic prompts by workload pressure and week"></canvas></div>
     <p id="workloadComparisonChartStatus" class="c3-chart-status" role="status">Loading workload comparison&hellip;</p>
+</section>
+
+<section class="c3-chart-section" aria-labelledby="dataCoverageHeading">
+    <h2 id="dataCoverageHeading">Weekly Data Coverage</h2>
+    <p class="c3-chart-description">
+        See how complete each week’s survey data is. Coverage is calculated as usable responses divided by all included records for that week.
+    </p>
+    <div class="c3-coverage-legend" aria-label="How to read the table">
+        <span><strong>Usable</strong> responses included in that measure</span>
+        <span><strong>Unavailable</strong> unanswered or unusable responses</span>
+        <span><strong>Coverage</strong> percentage of included records with usable data</span>
+    </div>
+    <div class="c3-coverage-table-wrap">
+        <table class="c3-coverage-table" aria-label="Weekly usable response coverage by measure">
+            <thead>
+                <tr>
+                    <th scope="col">Week</th>
+                    <th scope="col">Measure</th>
+                    <th scope="col">Usable responses</th>
+                    <th scope="col">Unavailable</th>
+                    <th scope="col">Coverage</th>
+                </tr>
+            </thead>
+            <tbody id="dataCoverageBody">
+                <tr><td colspan="5">Loading weekly coverage&hellip;</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <p id="dataCoverageStatus" class="c3-chart-status" role="status" aria-live="polite"></p>
+    <p class="c3-data-note">
+        “Unavailable” is not counted as zero. For study-share calculations, a record with zero total study hours is also unavailable because it cannot produce a percentage.
+    </p>
 </section>
 
 
