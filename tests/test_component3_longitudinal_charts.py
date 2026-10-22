@@ -144,6 +144,70 @@ def test_weekly_import_fails_closed_when_consent_question_is_missing(monkeypatch
         clean_week_file("week.xlsx", 1)
 
 
+def test_build_dataset_uses_week_one_consent_for_follow_up_exports(
+    monkeypatch,
+    tmp_path,
+):
+    from app.services.longitudinal import prepare_dataset
+
+    raw_dir = tmp_path / "raw"
+    processed_dir = tmp_path / "processed"
+    raw_dir.mkdir()
+    processed_dir.mkdir()
+    (raw_dir / "Week_01_REAL.xlsx").touch()
+    (raw_dir / "Week_02_REAL.xlsx").touch()
+    monkeypatch.setattr(prepare_dataset, "RAW_DIR", raw_dir)
+    monkeypatch.setattr(prepare_dataset, "PROCESSED_DIR", processed_dir)
+
+    week_one = pd.DataFrame(
+        [
+            {
+                prepare_dataset.CONSENT_COLUMN: "Yes, I agree",
+                "Please enter the participant code provided to you.": "P01",
+                "Approximately how many hours did you study with GenAI assistance this week?": 2,
+            },
+            {
+                prepare_dataset.CONSENT_COLUMN: "No, I do not agree",
+                "Please enter the participant code provided to you.": "P02",
+                "Approximately how many hours did you study with GenAI assistance this week?": 3,
+            },
+        ]
+    )
+    week_two = pd.DataFrame(
+        [
+            {
+                "Please enter the participant code provided to you.": "P01",
+                "Approximately how many hours did you study with GenAI assistance this week?": 4,
+            },
+            {
+                "Please enter the participant code provided to you.": "P02",
+                "Approximately how many hours did you study with GenAI assistance this week?": 5,
+            },
+            {
+                "Please enter the participant code provided to you.": "P03",
+                "Approximately how many hours did you study with GenAI assistance this week?": 6,
+            },
+        ]
+    )
+    exports = {
+        "Week_01_REAL.xlsx": week_one,
+        "Week_02_REAL.xlsx": week_two,
+    }
+    monkeypatch.setattr(
+        prepare_dataset.pd,
+        "read_excel",
+        lambda path: exports[path.name].copy(),
+    )
+
+    result = prepare_dataset.build_dataset()
+
+    assert result[["participant_reference", "study_week"]].to_dict("records") == [
+        {"participant_reference": "P01", "study_week": 1},
+        {"participant_reference": "P01", "study_week": 2},
+    ]
+    assert (processed_dir / "component3_weekly_clean.csv").exists()
+
+
 def test_prompt_frequency_reports_average_totals_and_sample_sizes(monkeypatch):
     service = service_with_data(
         monkeypatch,

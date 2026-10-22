@@ -114,6 +114,7 @@ def validate_weekly_record(data: Any) -> ValidationResult:
         sanitized["study_week"] = raw_week.strip()
 
     # 5. Validate AI-assisted study hours
+    # Exclude booleans explicitly because Python treats them as numbers.
     raw_ai_hours = data["ai_study_hours"]
     if isinstance(raw_ai_hours, bool) or not isinstance(raw_ai_hours, (int, float)):
         errors.append("AI-assisted study hours must be a valid number.")
@@ -186,6 +187,7 @@ def validate_weekly_record(data: Any) -> ValidationResult:
         ):
             errors.append("Study methods must be a non-empty list of accepted categories.")
         else:
+            # Remove duplicates while keeping the user's original order.
             sanitized["study_methods"] = list(dict.fromkeys(
                 method.strip() for method in raw_methods
             ))

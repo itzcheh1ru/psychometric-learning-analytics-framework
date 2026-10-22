@@ -94,31 +94,38 @@ def _normalize_multi_select(value, mapping):
     return ";".join(normalized_values) if normalized_values else pd.NA
 
 
-def clean_week_file(file_path, week_number):
+def clean_week_file(
+    file_path,
+    week_number,
+    consented_participant_references=None,
+):
 
     df = pd.read_excel(file_path)
+    has_consent_column = CONSENT_COLUMN in df.columns
 
-    if CONSENT_COLUMN not in df.columns:
+    if not has_consent_column and consented_participant_references is None:
         raise ValueError(
             f"Required consent column '{CONSENT_COLUMN}' is missing from "
-            f"{Path(file_path).name}; the export cannot be included safely."
+            f"{Path(file_path).name}, and no previously consented participant "
+            "references are available; the export cannot be included safely."
         )
 
-    consented = (
-        df[CONSENT_COLUMN]
-        .astype("string")
-        .str.strip()
-        .str.casefold()
-        .eq(CONSENTED_VALUE.casefold())
-        .fillna(False)
-    )
-    excluded_consent_count = int((~consented).sum())
-    if excluded_consent_count:
-        print(
-            f"Excluding {excluded_consent_count} non-consenting or "
-            f"unconfirmed row(s) from {Path(file_path).name}."
+    if has_consent_column:
+        consented = (
+            df[CONSENT_COLUMN]
+            .astype("string")
+            .str.strip()
+            .str.casefold()
+            .eq(CONSENTED_VALUE.casefold())
+            .fillna(False)
         )
-    df = df.loc[consented].copy()
+        excluded_consent_count = int((~consented).sum())
+        if excluded_consent_count:
+            print(
+                f"Excluding {excluded_consent_count} non-consenting or "
+                f"unconfirmed row(s) from {Path(file_path).name}."
+            )
+        df = df.loc[consented].copy()
 
     # Rename only columns that exist
     rename_map = {
@@ -176,6 +183,20 @@ def clean_week_file(file_path, week_number):
             f"from {Path(file_path).name}."
         )
         df = df[df["participant_reference"].notna()].copy()
+
+    if not has_consent_column:
+        previously_consented = {
+            str(reference).strip().upper()
+            for reference in consented_participant_references
+        }
+        eligible = df["participant_reference"].isin(previously_consented)
+        excluded_count = int((~eligible).sum())
+        if excluded_count:
+            print(
+                f"Excluding {excluded_count} row(s) from {Path(file_path).name} "
+                "without a matching previously consented participant code."
+            )
+        df = df.loc[eligible].copy()
 
     duplicate_mask = df.duplicated(
         subset=["participant_reference", "study_week"],
@@ -239,6 +260,7 @@ def clean_week_file(file_path, week_number):
 def build_dataset():
 
     frames = []
+    consented_participant_references = None
 
     for week in range(1, 7):
 
@@ -248,9 +270,20 @@ def build_dataset():
 
             print(f"Loading {file_path.name}")
 
-            week_df = clean_week_file(file_path, week)
+            week_df = clean_week_file(
+                file_path,
+                week,
+                consented_participant_references,
+            )
 
             frames.append(week_df)
+            references_in_week = set(
+                week_df["participant_reference"].dropna().astype(str)
+            )
+            if consented_participant_references is None:
+                consented_participant_references = references_in_week
+            else:
+                consented_participant_references.update(references_in_week)
 
     if not frames:
         raise FileNotFoundError("No weekly REAL Excel files found.")
