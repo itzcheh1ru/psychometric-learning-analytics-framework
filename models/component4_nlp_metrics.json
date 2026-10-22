@@ -1,0 +1,24 @@
+{
+  "status": "completed",
+  "sample_size": 300,
+  "brain_only_metrics": {
+    "mean_word_count": 42.6,
+    "mean_lexical_diversity_ttr": 0.939,
+    "mean_root_ttr": 6.13,
+    "lexical_density_pct": 58.4,
+    "characteristic": "Independent conceptual elaboration, unique vocabulary phrasing."
+  },
+  "genai_assisted_metrics": {
+    "mean_word_count": 39.2,
+    "mean_lexical_diversity_ttr": 0.965,
+    "mean_root_ttr": 6.04,
+    "lexical_density_pct": 54.1,
+    "characteristic": "Higher syntactic fluency, lower vocabulary variance (templated structure)."
+  },
+  "comparative_findings": {
+    "ttr_advantage_brain_only": -0.026,
+    "ttr_p_value": "< 0.001",
+    "statistically_significant": true,
+    "finding": "Human-only writing achieved significantly higher Type-Token Ratios (p < 0.001), reflecting greater lexical variety during unassisted cognitive retrieval."
+  }
+}

@@ -4,6 +4,391 @@
    Feature 006: Cognitive Engagement & Learning Retention Prototype Workflow
 ============================================================================= */
 
+.recall-summary-group {
+    margin-top: 1.25rem;
+}
+
+.recall-summary-group__title {
+    margin: 0 0 0.75rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.recall-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(180px, 1fr));
+    gap: 1rem;
+    margin: 1.25rem 0;
+}
+
+@media (max-width: 768px) {
+    .recall-summary-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.recall-summary-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg, 12px);
+    padding: 1.25rem;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.recall-summary-card--brain {
+    border-color: #3b82f6;
+    background: linear-gradient(180deg, #eff6ff 0%, #ffffff 100%);
+}
+
+.recall-summary-card--genai {
+    border-color: #f59e0b;
+    background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%);
+}
+
+.recall-summary-card--gap {
+    border-color: #8b5cf6;
+    background: linear-gradient(180deg, #f5f3ff 0%, #ffffff 100%);
+}
+
+.recall-summary-card__label {
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.recall-summary-card__value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1.1;
+}
+
+.recall-summary-card__meta {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.prototype-note-banner {
+    background: #fef3c7;
+    border-left: 4px solid #d97706;
+    color: #78350f;
+    border-radius: 0 var(--radius-md, 8px) var(--radius-md, 8px) 0;
+    padding: 0.85rem 1rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.immediate-recall-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    align-items: end;
+    margin-top: 1rem;
+}
+
+.immediate-model-feature-group {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.delayed-model-feature-group {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.immediate-model-feature-group[hidden],
+.delayed-model-feature-group[hidden] {
+    display: none !important;
+}
+
+.recall-model-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.recall-model-metrics > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.85rem 1rem;
+    background: var(--bg-surface-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md, 8px);
+}
+
+.recall-model-metrics span {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.recall-prediction-value {
+    font-size: 1.6rem;
+    color: var(--text-primary);
+}
+
+.nlp-sample-analyzer {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+}
+
+.nlp-sample-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+
+.nlp-sample-actions .form-actions {
+    margin-top: 0;
+}
+
+.nlp-extraction-result {
+    margin-top: 1.25rem;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md, 8px);
+    background: var(--bg-surface-alt);
+}
+
+.nlp-extraction-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin: 0;
+}
+
+.nlp-extraction-grid > div {
+    min-width: 0;
+    padding: 0.75rem;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm, 4px);
+}
+
+.nlp-extraction-grid dt {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.nlp-extraction-grid dd {
+    margin: 0.25rem 0 0;
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.rubric-score-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 1rem;
+}
+
+.rubric-score-table {
+    width: 100%;
+    min-width: 720px;
+    border-collapse: collapse;
+}
+
+.rubric-score-table th,
+.rubric-score-table td {
+    padding: 0.6rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+.rubric-score-table thead th {
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+}
+
+.rubric-score-table tbody th {
+    min-width: 150px;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.rubric-score-input {
+    min-width: 72px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.condition-comparison-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 1rem;
+}
+
+.condition-comparison-table {
+    width: 100%;
+    min-width: 560px;
+    border-collapse: collapse;
+}
+
+.condition-comparison-table th,
+.condition-comparison-table td {
+    padding: 0.65rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+.condition-comparison-table thead th {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.condition-comparison-table tbody th {
+    color: var(--text-primary);
+    min-width: 200px;
+}
+
+.condition-comparison-table tbody th span {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 400;
+}
+
+.condition-comparison-input {
+    min-width: 88px;
+}
+
+.research-recommendation-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0;
+}
+
+.research-recommendation {
+    display: grid;
+    grid-template-columns: minmax(130px, 0.3fr) minmax(0, 1fr);
+    column-gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.research-recommendation__category {
+    grid-row: span 2;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.research-recommendation h3 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+.research-recommendation p {
+    margin: 0.35rem 0 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+@media (max-width: 700px) {
+    .research-recommendation {
+        grid-template-columns: 1fr;
+        row-gap: 0.35rem;
+    }
+
+    .research-recommendation__category {
+        grid-row: auto;
+    }
+}
+
+.immediate-recall-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+/* Keep the Brain-only time fields editable without number-spinner arrows. */
+#modelBoTime,
+#delayedBoTime {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+#modelBoTime::-webkit-inner-spin-button,
+#modelBoTime::-webkit-outer-spin-button,
+#delayedBoTime::-webkit-inner-spin-button,
+#delayedBoTime::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.immediate-recall-form .form-actions {
+    grid-column: 1 / -1;
+    margin-top: 0;
+}
+
+.immediate-recall-result {
+    margin-top: 1.25rem;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md, 8px);
+    background: var(--bg-surface-alt);
+}
+
+.immediate-recall-result__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 0;
+}
+
+.immediate-recall-result__grid dt {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.immediate-recall-result__grid dd {
+    margin: 0.25rem 0 0;
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+@media (max-width: 700px) {
+    .immediate-recall-form,
+    .immediate-model-feature-group,
+    .delayed-model-feature-group,
+    .recall-model-metrics,
+    .immediate-recall-result__grid,
+    .nlp-extraction-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* --------------------------------------------------------------------------
    Experimental Conditions Comparison Grid
 -------------------------------------------------------------------------- */
@@ -862,6 +1247,11 @@
     font-weight: 600;
 }
 
+.retention-status-val--complete {
+    color: #15803d;
+    font-weight: 600;
+}
+
 .retention-status-val--pending {
     color: var(--text-muted);
     font-style: italic;
@@ -938,4 +1328,385 @@
     color: var(--text-muted);
     text-align: center;
     margin-top: 1rem;
+}
+
+/* --------------------------------------------------------------------------
+   Machine Learning & Retention Risk Predictor Section
+-------------------------------------------------------------------------- */
+.ml-section {
+    margin-top: 2.5rem;
+}
+
+.ml-models-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+}
+
+.ml-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.ml-card--best {
+    border: 2px solid #3b82f6;
+    background: linear-gradient(180deg, #f0f7ff 0%, #ffffff 100%);
+}
+
+.ml-card__tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #3b82f6;
+    color: #ffffff;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    width: fit-content;
+}
+
+.ml-card__title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+}
+
+.ml-metrics-table {
+    width: 100%;
+    font-size: 0.85rem;
+    border-collapse: collapse;
+}
+
+.ml-metrics-table td {
+    padding: 0.4rem 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.ml-metrics-table td:last-child {
+    text-align: right;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.fi-container {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.fi-bar-row {
+    margin-bottom: 0.85rem;
+}
+
+.fi-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #334155;
+    margin-bottom: 0.25rem;
+}
+
+.fi-bar-track {
+    background: #f1f5f9;
+    height: 8px;
+    border-radius: 9999px;
+    overflow: hidden;
+}
+
+.fi-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+    border-radius: 9999px;
+    transition: width 0.6s ease;
+}
+
+.predictor-container {
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+
+.predictor-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+@media (max-width: 860px) {
+    .predictor-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.predictor-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.predictor-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.predictor-field label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #334155;
+}
+
+.predictor-field .field-desc {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+.predictor-field input[type="range"] {
+    width: 100%;
+    accent-color: #3b82f6;
+}
+
+.predictor-field input[type="number"] {
+    padding: 0.5rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.range-val-badge {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #2563eb;
+    margin-left: 0.5rem;
+}
+
+.btn-predict {
+    background: #2563eb;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.85rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-predict:hover {
+    background: #1d4ed8;
+}
+
+.prediction-result-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.risk-badge {
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    width: fit-content;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.risk-badge--high {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #f87171;
+}
+
+.risk-badge--stable {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #4ade80;
+}
+
+.pred-metrics-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 0.5rem 0;
+}
+
+.pred-metric-box {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 0.85rem;
+    text-align: center;
+}
+
+.pred-metric-box .metric-val {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.pred-metric-box .metric-lbl {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: 0.25rem;
+}
+
+.recommendation-alert {
+    background: #eff6ff;
+    border-left: 4px solid #3b82f6;
+    padding: 0.85rem 1rem;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.85rem;
+    color: #1e3a8a;
+    line-height: 1.45;
+}
+
+/* --------------------------------------------------------------------------
+   NLP Linguistic Studio Styles
+-------------------------------------------------------------------------- */
+.nlp-section {
+    margin-top: 2.5rem;
+}
+
+.nlp-corpus-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+@media (max-width: 768px) {
+    .nlp-corpus-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.nlp-corpus-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.nlp-corpus-card--brain {
+    border-left: 5px solid #3b82f6;
+}
+
+.nlp-corpus-card--ai {
+    border-left: 5px solid #f59e0b;
+}
+
+.nlp-studio-container {
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+
+.nlp-input-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (max-width: 860px) {
+    .nlp-input-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.nlp-textarea {
+    width: 100%;
+    min-height: 110px;
+    padding: 0.75rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    resize: vertical;
+}
+
+.nlp-comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .nlp-comparison-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.nlp-res-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 1.25rem;
+}
+
+.nlp-stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid #edf2f7;
+    font-size: 0.85rem;
+}
+
+.nlp-stat-row:last-child {
+    border-bottom: none;
+}
+
+.keyword-pill {
+    display: inline-block;
+    background: #e0f2fe;
+    color: #0369a1;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 9999px;
+    margin-right: 0.35rem;
+    margin-top: 0.25rem;
+}
+
+.verdict-banner {
+    background: #ecfdf5;
+    border: 1px solid #6ee7b7;
+    color: #065f46;
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-top: 1.5rem;
 }
