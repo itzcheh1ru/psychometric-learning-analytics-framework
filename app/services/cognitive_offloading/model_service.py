@@ -1,125 +1,95 @@
 """
 app/services/cognitive_offloading/model_service.py
 
-Stub service for the future trained Cognitive Offloading Risk
-Prediction model integration.
+Service layer for Component 1:
+Explainable Cognitive Offloading Risk Prediction (Version 4).
 
-IMPORTANT:
-This service intentionally does NOT contain a trained model,
-fake predictions, or fabricated risk values.
+Connects the Flask application to the Calibrated Thresholded Ridge
+Regressor pipeline and LinearSHAP explainability engine.
 
-Prediction functionality will become available only after:
-  1. Research data collection is complete.
-  2. Survey constructs are validated.
-  3. The dataset is preprocessed and prepared.
-  4. The machine-learning model is trained and evaluated.
-  5. The model file is reviewed and approved for integration.
-
-Status: Prototype — model development pending.
+Status: Model Integrated — Version 4 Performance Experiments.
 """
 
 from __future__ import annotations
 
+import logging
+from typing import Any, Dict, Optional
 
-# --------------------------------------------------------------------------- #
-# Domain exception                                                             #
-# --------------------------------------------------------------------------- #
+logger = logging.getLogger("CognitiveOffloadingModelService")
+
 
 class ModelNotAvailableError(RuntimeError):
     """
-    Raised when prediction is requested before the model has been
-    trained and integrated.
+    Raised when prediction is requested but the model artifact could not be loaded.
     """
 
-
-# --------------------------------------------------------------------------- #
-# Model service stub                                                           #
-# --------------------------------------------------------------------------- #
 
 class CognitiveOffloadingModelService:
     """
-    Interface for the future trained Cognitive Offloading Risk
-    Prediction model.
-
-    All prediction methods raise ModelNotAvailableError until a
-    validated, trained model is integrated.  This prevents any
-    accidental fabrication of research results during the prototype
-    development stage.
+    Interface for the trained Cognitive Offloading Risk Prediction model (Version 4).
+    Uses the Calibrated Thresholded Ridge Regressor with exact LinearSHAP explanations.
     """
 
-    # Research/prototype status metadata ------------------------------------ #
     COMPONENT_NAME = "Explainable Cognitive Offloading Risk Prediction"
-    STAGE = "prototype_development"
-    DATA_COLLECTION_STATUS = "in_progress"
+    STAGE = "model_integrated"
+    DATA_COLLECTION_STATUS = "completed"
 
-    # ------------------------------------------------------------------ #
-    # Status query — safe to call at any stage                           #
-    # ------------------------------------------------------------------ #
+    def __init__(self) -> None:
+        self._predictor = None
+        self._load_predictor()
+
+    def _load_predictor(self) -> None:
+        try:
+            from app.services.cognitive_offloading.integration_service import (
+                get_predictor_v4,
+            )
+            self._predictor = get_predictor_v4()
+            logger.info("Component 1 Version 4 predictor successfully loaded.")
+        except Exception as e:
+            logger.warning("Component 1 model could not be loaded: %s", e)
+            self._predictor = None
 
     def is_model_available(self) -> bool:
-        """
-        Return False until a trained model is loaded.
-
-        Returns:
-            bool: Always False during prototype development.
-        """
-        return False
+        """Return True if the trained model artifact is loaded."""
+        return self._predictor is not None and getattr(self._predictor, "model", None) is not None
 
     def get_status(self) -> dict:
-        """
-        Return the current readiness status of the model service.
-
-        Returns:
-            dict: Status information suitable for JSON serialization.
-        """
+        """Return the current readiness status of the model service."""
+        available = self.is_model_available()
+        meta = getattr(self._predictor, "metadata", {}) if self._predictor else {}
         return {
-            "component":                self.COMPONENT_NAME,
-            "stage":                    self.STAGE,
-            "data_collection":          self.DATA_COLLECTION_STATUS,
-            "model_trained":            False,
-            "prediction_available":     False,
-            "explainability_available": False,
+            "component": self.COMPONENT_NAME,
+            "stage": self.STAGE if available else "prototype_development",
+            "data_collection": self.DATA_COLLECTION_STATUS if available else "in_progress",
+            "model_trained": available,
+            "prediction_available": available,
+            "explainability_available": available,
+            "champion_model": meta.get("champion_model", "Calibrated Thresholded Ridge Regressor (Ordinal)"),
+            "features_count": len(getattr(self._predictor, "feature_names", [])) if available else 0,
+            "version": "v4_performance_experiments",
         }
 
-    # ------------------------------------------------------------------ #
-    # Prediction — raises until model is trained                         #
-    # ------------------------------------------------------------------ #
-
-    def predict(self, features: dict) -> dict:
+    def predict(self, features: dict, top_factors_count: int = 5) -> dict:
         """
-        Placeholder for the future risk prediction call.
-
-        Args:
-            features: Preprocessed feature dictionary.
-
-        Raises:
-            ModelNotAvailableError: Always, until model is integrated.
+        Execute risk prediction using the Version 4 Ridge pipeline.
         """
-        raise ModelNotAvailableError(
-            "The Cognitive Offloading Risk Prediction model has not been "
-            "trained yet. Prediction will be enabled after research data "
-            "collection, validation, preprocessing, and model training "
-            "are completed."
-        )
+        if not self.is_model_available():
+            raise ModelNotAvailableError(
+                "The Cognitive Offloading Risk Prediction model is not currently available."
+            )
+        return self._predictor.predict(features, top_factors_count=top_factors_count)
 
-    def explain(self, features: dict) -> dict:
+    def explain(self, features: dict, top_factors_count: int = 5) -> dict:
         """
-        Placeholder for the future SHAP explanation call.
-
-        Args:
-            features: Preprocessed feature dictionary.
-
-        Raises:
-            ModelNotAvailableError: Always, until model is integrated.
+        Return the exact LinearSHAP explanation from the Version 4 pipeline.
         """
-        raise ModelNotAvailableError(
-            "SHAP explanation is not available. The prediction model has "
-            "not been trained yet."
-        )
+        res = self.predict(features, top_factors_count=top_factors_count)
+        return {
+            "status": res.get("status"),
+            "top_contributing_factors": res.get("top_contributing_factors", []),
+            "disclaimer": res.get("disclaimer"),
+        }
 
 
-# --------------------------------------------------------------------------- #
-# Module-level singleton (safe to import)                                      #
-# --------------------------------------------------------------------------- #
-
+# Module-level singleton
 model_service = CognitiveOffloadingModelService()

@@ -3,12 +3,15 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Psychometric Learning Analytics Framework – Research Prototype J26-DS-310, SLIIT" />
+    <meta name="description" content="Research prototype for the Psychometric Learning Analytics Framework investigating GenAI-assisted learning behaviour among undergraduate students." />
     <title>{% block title %}Psychometric Learning Analytics Framework{% endblock %} | J26-DS-310</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
     {% block extra_head %}{% endblock %}
 </head>
-<body class="app-body">
+<body class="app-body {% if request.args.get('presentation') == '1' %}presentation-mode app-body--presentation{% endif %}">
+
+    <!-- Skip-to-content navigation for keyboard accessibility -->
+    <a href="#mainContent" class="skip-link">Skip to main content</a>
 
     <!-- ================================================================
          Top Header

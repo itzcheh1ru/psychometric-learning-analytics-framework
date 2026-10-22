@@ -5,6 +5,7 @@
  *
  * Responsibilities:
  * - Fetches /api/framework/status and renders readiness badges.
+ * - Handles loading and failure states gracefully without blank areas.
  * - Does NOT combine component scores.
  * - Does NOT compute an overall risk level or framework-level prediction.
  * - Does NOT show fake analytical findings.
@@ -22,7 +23,7 @@
    * Only updates visual badge states; does not aggregate scores.
    */
   function loadFrameworkStatus() {
-    const container = document.getElementById("frameworkReadinessContainer");
+    var container = document.getElementById("frameworkReadinessContainer");
     if (!container) return;
 
     fetch("/api/framework/status")
@@ -34,8 +35,8 @@
         renderReadinessIndicators(data, container);
       })
       .catch(function (err) {
-        // Non-blocking: readiness state is already shown server-side.
-        console.warn("[framework.js] Could not load framework status:", err.message);
+        console.warn("[framework.js] Status API unavailable:", err.message);
+        handleStatusFailure(container);
       });
   }
 
@@ -53,8 +54,8 @@
       var el = root.querySelector('[data-component-id="' + comp.id + '"]');
       if (!el) return;
 
-      var analysisPill = el.querySelector(".js-analysis-pill");
       var prototypePill = el.querySelector(".js-prototype-pill");
+      var analysisPill = el.querySelector(".js-analysis-pill");
 
       if (prototypePill) {
         prototypePill.textContent = comp.prototype_ready ? "Ready" : "Pending";
@@ -68,6 +69,22 @@
         analysisPill.className =
           "readiness-pill " +
           (comp.analysis_ready ? "readiness-pill--ready" : "readiness-pill--pending");
+      }
+    });
+  }
+
+  /**
+   * Gracefully handle API failures so no empty blanks remain.
+   *
+   * @param {Element} root – Container element to update
+   */
+  function handleStatusFailure(root) {
+    var cards = root.querySelectorAll(".readiness-card");
+    cards.forEach(function (card) {
+      var analysisPill = card.querySelector(".js-analysis-pill");
+      if (analysisPill && (!analysisPill.textContent || analysisPill.textContent.trim() === "")) {
+        analysisPill.textContent = "Status temporarily unavailable";
+        analysisPill.className = "readiness-pill readiness-pill--pending";
       }
     });
   }

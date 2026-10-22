@@ -1,0 +1,4 @@
+Pipeline_Version,Champion_Model,Num_Features,CV_Macro_F1,Test_Accuracy,Test_Macro_F1,Test_ROC_AUC,Test_Log_Loss,Continuous_R2,Primary_Validation_Protocol
+Version 2 (Baseline Improvement),Calibrated Random Forest,73,0.5211,0.6,0.5978,0.7623,0.9069,0.4198,5-Fold CV on Train (N=300) + Fixed Test (N=75)
+Version 3 (Advanced Optimization),Calibrated Extra Trees,68,0.5449,0.5867,0.58,0.7741,0.8841,0.4322,5-Fold CV on Train (N=300) + Fixed Test (N=75)
+Version 4 (Research-Grade Ordinal),Calibrated Hybrid Ensemble,68,0.5678,0.5867,0.5977,0.7845,0.8866,0.4322,"5x5 Repeated Stratified CV (25 Folds, N=375)"
