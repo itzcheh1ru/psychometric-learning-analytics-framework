@@ -9,18 +9,21 @@ Endpoints:
   POST /api/component3/validate-weekly-record – Weekly record prototype validation (JSON)
 
 Status: Prototype – data collection in progress.
-        No empirical trend results or participant data persistence.
+        The validation API does not persist user-entered records; the page
+        stores validated prototype entries only in browser-local storage.
 """
 
 from flask import Blueprint, jsonify, render_template, request
 
 from app.services.longitudinal import (
-    ACADEMIC_PERIODS,
     ALLOWED_WEEKS,
     BEHAVIOURAL_INDICATORS,
     LEARNING_ACTIVITIES,
     LONGITUDINAL_SPECIFICATION,
     PROMPT_PURPOSES,
+    PRODUCTIVITY_RATINGS,
+    STUDY_METHODS,
+    WORKLOAD_PRESSURES,
     analysis_service,
     validate_weekly_record,
 )
@@ -43,9 +46,11 @@ def index():
     return render_template(
         "components/component3.html",
         allowed_weeks=sorted(list(ALLOWED_WEEKS)),
-        academic_periods=sorted(list(ACADEMIC_PERIODS)),
         learning_activities=sorted(list(LEARNING_ACTIVITIES)),
         prompt_purposes=sorted(list(PROMPT_PURPOSES)),
+        study_methods=sorted(list(STUDY_METHODS)),
+        productivity_ratings=PRODUCTIVITY_RATINGS,
+        workload_pressures=sorted(WORKLOAD_PRESSURES),
         indicators=BEHAVIOURAL_INDICATORS,
         specification=LONGITUDINAL_SPECIFICATION,
     )
@@ -54,6 +59,92 @@ def index():
 # =========================================================================== #
 # API Routes                                                                  #
 # =========================================================================== #
+
+@api_component3_bp.route("/summary", methods=["GET"])
+def summary():
+
+    return jsonify(
+        analysis_service.get_status()
+    )
+
+
+@api_component3_bp.route("/study-share", methods=["GET"])
+def study_share():
+
+    return jsonify(
+        analysis_service.get_weekly_study_share()
+    )
+
+
+@api_component3_bp.route("/study-hours", methods=["GET"])
+def study_hours():
+
+    return jsonify(
+        analysis_service.get_weekly_study_hours()
+    )
+
+
+@api_component3_bp.route("/prompt-frequency", methods=["GET"])
+def prompt_frequency():
+
+    return jsonify(
+        analysis_service.get_weekly_prompt_frequency()
+    )
+
+@api_component3_bp.route("/prompt-detail", methods=["GET"])
+def prompt_detail():
+
+    return jsonify(
+        analysis_service.get_weekly_prompt_detail()
+    )
+
+
+@api_component3_bp.route("/productivity", methods=["GET"])
+def productivity():
+
+    return jsonify(
+        analysis_service.get_weekly_productivity()
+    )
+
+
+@api_component3_bp.route("/study-methods", methods=["GET"])
+def study_methods():
+
+    return jsonify(
+        analysis_service.get_weekly_study_methods()
+    )
+
+
+@api_component3_bp.route("/workload-comparison", methods=["GET"])
+def workload_comparison():
+
+    return jsonify(
+        analysis_service.get_weekly_workload_comparison()
+    )
+
+
+@api_component3_bp.route("/prompt-purposes", methods=["GET"])
+def prompt_purposes():
+
+    return jsonify(
+        analysis_service.get_prompt_purposes()
+    )
+
+
+@api_component3_bp.route("/study-shift", methods=["GET"])
+def study_shift():
+
+    return jsonify(
+        analysis_service.get_weekly_shift()
+    )
+
+@api_component3_bp.route("/data-coverage", methods=["GET"])
+def data_coverage():
+
+    return jsonify(
+        analysis_service.get_weekly_data_coverage()
+    )
+
 
 @api_component3_bp.route("/status", methods=["GET"])
 def status():

@@ -48,26 +48,133 @@ block the others.
 
 ## Application Architecture
 
+The Flask application serves the web interface and component APIs. Each research
+component has its own service layer; the framework layer reports readiness without
+combining component results.
+
+<!-- mermaid-checked: no \n, no em-dash/en-dash, no {} in labels, subgraphs are id["label"], arrows are -->|"label"|, all subgraphs closed by end, ids unique -->
+```mermaid
+flowchart TD
+    subgraph ClientLayer["Client Layer"]
+        Browser["Web browser"]
+    end
+    subgraph PresentationLayer["Presentation Layer"]
+        FlaskApp["Flask 3.1 application"]
+        Templates["Jinja2 templates"]
+        Assets["Static CSS and JavaScript"]
+    end
+    subgraph ServiceLayer["Application Services"]
+        Routes["Blueprint routes"]
+        C1Service["Cognitive offloading service"]
+        C2Service["SEM status and results"]
+        C3Service["Longitudinal analytics"]
+        C4Service["Retention analysis"]
+        FrameworkService["Framework readiness service"]
+    end
+    subgraph DataLayer["Data Layer"]
+        C3Data[("Processed component 3 CSV")]
+        LocalStorage[("Browser local storage")]
+    end
+
+    Browser -->|"HTTP requests"| FlaskApp
+    FlaskApp -->|"registers"| Routes
+    Routes -->|"renders pages"| Templates
+    Templates -->|"page responses"| Browser
+    Browser -->|"loads"| Assets
+    Routes -->|"calls"| C1Service
+    Routes -->|"calls"| C2Service
+    Routes -->|"calls"| C3Service
+    Routes -->|"calls"| C4Service
+    Routes -->|"reads readiness"| FrameworkService
+    C3Service -->|"reads analysis data"| C3Data
+    Browser -->|"stores validated drafts"| LocalStorage
 ```
-app.py  (entry point)
-└── app/__init__.py  (application factory: create_app())
-    │
-    ├── app/routes/
-    │   ├── main.py          → /  and  /dashboard
-    │   ├── component1.py    → /component1/
-    │   ├── component2.py    → /component2/
-    │   ├── component3.py    → /component3/
-    │   └── component4.py    → /component4/
-    │
-    ├── app/services/
-    │   ├── cognitive_offloading/    (Component 1 – ML analysis)
-    │   ├── sem_analysis/            (Component 2 – SEM / R integration)
-    │   ├── longitudinal/            (Component 3 – Time-series analytics)
-    │   └── retention/               (Component 4 – NLP analysis)
-    │
-    ├── app/templates/               (Jinja2 templates)
-    └── app/static/                  (CSS, JS, images)
+
+### Technology Stack Summary
+
+| Layer | Technology | Version | Purpose |
+|-------|------------|---------|---------|
+| Runtime | Python | Not specified | Runs the Flask application and services |
+| Web framework | Flask | 3.1.0 | Application factory, routes, and JSON APIs |
+| Templates | Jinja2 | Flask dependency | Renders server-side HTML pages |
+| Longitudinal analysis | Pandas | Not specified | Reads and analyzes Component 3 CSV data |
+| Spreadsheet input | openpyxl | Not specified | Reads weekly Excel input files |
+| Front end | HTML, CSS, JavaScript | Not specified | Displays pages and provides browser interactions |
+
+### Data Storage & External Services
+
+The application has no database, cache, or external API integration. Component 3
+reads its processed CSV dataset from the local `data/processed/` directory, while
+validated Component 3 drafts are kept in browser local storage. R/lavaan analysis
+for Component 2 is performed outside the Flask runtime; only validated outputs
+are intended for later display.
+
+### Key Architectural Decisions
+
+- The four analytical components have separate routes and service packages.
+- The framework status service imports component services directly and reports
+  readiness only; it does not create a combined score or model.
+- Research submissions are not persisted by the validation APIs.
+
+### Component Relationships
+
+This diagram summarizes the main runtime calls between browser pages, route
+blueprints, component services, and the framework readiness service.
+
+<!-- mermaid-checked: no \n, no em-dash/en-dash, no {} in labels, subgraphs are id["label"], arrows are -->|"label"|, all subgraphs closed by end, ids unique -->
+```mermaid
+flowchart LR
+    subgraph ComponentPresentation["Presentation"]
+        CBrowser["Web browser"]
+        CTemplates["Jinja2 component pages"]
+        CAssets["Component JavaScript"]
+    end
+    subgraph ComponentRoutes["Route Blueprints"]
+        CUiRoutes["Page routes"]
+        CApiRoutes["JSON API routes"]
+    end
+    subgraph ComponentServices["Business Logic"]
+        CCognitive["Cognitive offloading"]
+        CSem["SEM status and results"]
+        CLongitudinal["Longitudinal analytics"]
+        CRetention["Retention analysis"]
+        CFramework["Framework status and registry"]
+    end
+    subgraph ComponentData["Data"]
+        CProcessed[("Component 3 processed CSV")]
+        CLocal[("Browser local storage")]
+    end
+
+    CBrowser -->|"requests pages"| CUiRoutes
+    CUiRoutes -->|"renders"| CTemplates
+    CTemplates -->|"returns HTML"| CBrowser
+    CBrowser -->|"calls JSON APIs"| CApiRoutes
+    CBrowser -->|"uses"| CAssets
+    CApiRoutes -->|"validates or queries"| CCognitive
+    CApiRoutes -->|"reads metadata"| CSem
+    CApiRoutes -->|"queries"| CLongitudinal
+    CApiRoutes -->|"validates or queries"| CRetention
+    CApiRoutes -->|"requests readiness"| CFramework
+    CFramework -->|"reads status"| CCognitive
+    CFramework -->|"reads status"| CSem
+    CFramework -->|"reads status"| CLongitudinal
+    CFramework -->|"reads status"| CRetention
+    CLongitudinal -->|"loads data"| CProcessed
+    CAssets -->|"keeps validated drafts"| CLocal
 ```
+
+### Component Inventory
+
+| Component | Layer | Type | Responsibility |
+|-----------|-------|------|----------------|
+| Flask blueprint routes | Presentation | Web and API routes | Render pages and expose component endpoints |
+| Cognitive offloading service | Business logic | Model service | Reports model readiness; prediction is not yet available |
+| SEM analysis service | Business logic | Status and result services | Reports analysis status and gates access to empirical results |
+| Longitudinal analytics service | Business logic | Analysis service | Reads processed weekly data and provides analysis summaries |
+| Retention analysis service | Business logic | Analysis service | Reports readiness and gates access to experimental results |
+| Framework status service | Integration | Readiness service | Reads component readiness without aggregating analytical results |
+| Component 3 processed CSV | Data | Local file | Supplies data to longitudinal analysis |
+| Browser local storage | Data | Client-side storage | Keeps validated Component 3 drafts in the browser |
 
 ---
 
@@ -217,10 +324,13 @@ Component 3 tracks study behaviour and academic prompt interactions across repea
 | `study_week` | Categorical ("Week 1" – "Week 6") | Observation week index |
 | `ai_study_hours` | Float ($0.0 \le h \le 168.0$) | Weekly study hours involving active Generative AI assistance |
 | `independent_study_hours` | Float ($0.0 \le h \le 168.0$) | Weekly study hours completed without direct AI assistance |
-| `academic_period` | Categorical (5 academic contexts) | Academic context (regular week, assignments, exams, projects) |
+| `workload_pressure` | Categorical (Low, Moderate, High) | Self-reported academic workload/deadline pressure |
 | `learning_activity` | Categorical (7 academic activities) | Dominant learning activity for the study week |
+| `study_methods` | Multi-select categories | Self-reported study methods; weekly category counts can overlap |
+| `perceived_productivity` | Five ordered self-report categories | Perceived weekly productivity, not objective performance |
 | `prompt_count` | Integer ($0 \le n \le 2000$) | Weekly count of academic GenAI prompts (no raw text stored) |
-| `prompt_purpose` | Categorical (7 academic purposes) | Primary academic purpose of student GenAI interactions |
+| `prompt_purpose` / `other_prompt_purposes` | Categorical, multi-select | Primary and additional academic prompt purposes |
+| `prompt_detail` | Integer rating (1–5) | Self-reported prompt detail/specificity; not a text-derived complexity score |
 
 ### Methodological Boundaries and Pipeline Architecture
 
@@ -229,45 +339,52 @@ A strict boundary exists between prototype data validation and empirical longitu
 ```
 ┌────────────────────────────────────────────────────────┐
 │           Weekly Diary Data Collection Layer           │
-│  - Anonymised weekly observation submission            │
-│  - Zero raw prompt text collection                     │
+│  - Repeated weekly exports, Weeks 1–6                   │
+│  - Consistent pseudonymous participant reference        │
 └───────────────────────────┬────────────────────────────┘
-                            │ Validation & Preprocessing
+                            │ Weekly Excel import and cleaning
                             ▼
 ┌────────────────────────────────────────────────────────┐
 │          Longitudinal Research Dataset Boundary        │
-│  - Multi-week participant consolidation (Weeks 1–6)    │
-│  - Baseline vs. subsequent week alignment              │
-│  - Missing-observation handling & screening            │
+│  - Consolidates every available weekly export          │
+│  - Includes only rows with confirmed research consent   │
+│  - Excludes rows without a participant reference       │
+│  - Keeps first duplicate participant-week row          │
+│  - Harmonises equivalent survey category labels        │
+│  - Does not copy optional free-text examples            │
 └───────────────────────────┬────────────────────────────┘
-                            │ Preprocessed time series
+                            │ Rebuilt clean and feature datasets
                             ▼
 ┌────────────────────────────────────────────────────────┐
 │           Behavioural Indicator Generation             │
-│  - AI Study Share = AI Hours / (AI + Independent Hours)│
-│  - Independent Study Share = Ind Hours / Total Hours   │
-│  - Prompt Frequency = Weekly Interaction Count         │
-│  - Study Pattern Shift Index across observation weeks  │
+│  - Weekly AI / independent study-hour shares            │
+│  - Prompt counts, purposes, study methods, productivity │
+│  - Self-reported prompt-detail rating (1–5)             │
+│  - Descriptive within-participant study-share change    │
 └───────────────────────────┬────────────────────────────┘
-                            │ Indicator matrices
+                            │ Weekly aggregate data
                             ▼
 ┌────────────────────────────────────────────────────────┐
-│             Trend & Prompt Analytics Engine            │
-│  - Time-series slope estimation & trajectory grouping  │
-│  - Academic-period comparative analysis (e.g. exams)   │
-│  - Prompt purpose distribution evolution               │
+│          Workload Comparison & Dashboard                │
+│  - AI hours and prompt counts by reported pressure      │
+│  - Repeated-week comparisons when a participant repeats│
+│  - Pooled and participant-median study-share summaries  │
+│  - Per-measure usable-response coverage by week          │
+│  - Labels non-consecutive observation comparisons       │
 └───────────────────────────┬────────────────────────────┘
-                            │ Validated findings
+                            │ Descriptive visualisations
                             ▼
 ┌────────────────────────────────────────────────────────┐
 │         Dashboard Presentation Layer (/component3/)    │
-│  - Interactive prototype record validation             │
-│  - Displays longitudinal trends only after dataset is   │
-│    fully assembled and validated                       │
+│  - Refreshes as each weekly file is added               │
+│  - Separates baseline summaries from repeat-week shifts │
+│  - Does not infer causation or validated psychometrics  │
 └────────────────────────────────────────────────────────┘
 ```
 
-> **Research Integrity Principle:** **Prototype validation does not equal longitudinal research analysis.** The `/api/component3/validate-weekly-record` endpoint validates the structural soundness of an individual record; it does not calculate longitudinal trends, infer behavioural shifts, or persist data. Trend analysis will only be executed once the complete 4–6 week empirical dataset has been validated.
+> **Research Integrity Principle:** The weekly-record form sends entries to the validation endpoint and stores valid entries only in browser-local storage for separate, participant-tabbed preview charts; the server does not persist them, and they are not merged with the imported weekly-export dataset. Clearing browser-entered data does not affect imported-data charts. Empirical dataset charts continue to use the weekly exports. The study-pattern shift is a descriptive average absolute percentage-point change in study shares, not a validated psychometric scale. Workload comparisons are descriptive associations, not a causal or composite deadline-spike score. Optional free-text prompt examples are not copied into the analytical dataset.
+
+Weekly imports require an explicit “Yes, I agree” response when the export contains the consent question. For follow-up exports without that question, participant codes must match a code confirmed in an earlier consent-bearing export; unmatched participants are excluded, and an export without either consent source fails closed. Activity and prompt-purpose responses are mapped to canonical dashboard categories without merging distinct presentation and “semester just started” activity responses. The weekly coverage table reports usable responses against all imported participant-week records; zero-total-hour rows are unavailable for study-share calculations rather than being treated as missing hours. Cohort study-share lines remain weighted by reported hours, with participant-level medians available in chart tooltips. Shift comparisons are labelled with the previous and current observed weeks so skipped collection weeks are visible.
 
 ---
 

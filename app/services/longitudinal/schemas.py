@@ -32,12 +32,10 @@ ALLOWED_WEEKS: Set[str] = {
     "Week 6",
 }
 
-ACADEMIC_PERIODS: Set[str] = {
-    "Regular study week",
-    "Assignment period",
-    "Examination preparation",
-    "Project / coursework period",
-    "Other academic period",
+WORKLOAD_PRESSURES: Set[str] = {
+    "Low",
+    "Moderate",
+    "High",
 }
 
 LEARNING_ACTIVITIES: Set[str] = {
@@ -47,6 +45,8 @@ LEARNING_ACTIVITIES: Set[str] = {
     "Reading / research",
     "Writing",
     "Revision / exam preparation",
+    "Presentation",
+    "The semester just started",
     "Other academic activity",
 }
 
@@ -57,8 +57,32 @@ PROMPT_PURPOSES: Set[str] = {
     "Assignment support",
     "Writing support",
     "Exam revision",
+    "Research/information seeking",
+    "Presentation preparation",
+    "No prompts this week",
     "Other academic purpose",
 }
+
+STUDY_METHODS: Set[str] = {
+    "AI-guided learning (asking GenAI to explain/teach concepts)",
+    "Deep research",
+    "Flashcards/active recall",
+    "Group discussion/peer study",
+    "Note-making/summarising",
+    "Practice problems/past papers",
+    "Reading textbooks/notes",
+    "Video creation",
+    "Watching video lectures/tutorials",
+    "Didn't use any yet",
+}
+
+PRODUCTIVITY_RATINGS: List[str] = [
+    "Very unproductive",
+    "Somewhat unproductive",
+    "Neutral",
+    "Somewhat productive",
+    "Very productive",
+]
 
 # --------------------------------------------------------------------------- #
 # Participant Reference Constraints                                           #
@@ -81,7 +105,20 @@ ACCEPTED_FIELDS: Set[str] = {
     "study_week",
     "ai_study_hours",
     "independent_study_hours",
-    "academic_period",
+    "learning_activity",
+    "prompt_count",
+    "prompt_purpose",
+    "study_methods",
+    "perceived_productivity",
+    "workload_pressure",
+    "prompt_detail",
+}
+
+REQUIRED_FIELDS: Set[str] = {
+    "participant_reference",
+    "study_week",
+    "ai_study_hours",
+    "independent_study_hours",
     "learning_activity",
     "prompt_count",
     "prompt_purpose",
@@ -101,13 +138,16 @@ LONGITUDINAL_SPECIFICATION: Dict[str, Any] = {
         "Independent Study Share",
         "Prompt Frequency",
         "Prompt Purpose",
+        "Study Method Distribution",
+        "Perceived Productivity",
+        "Self-Reported Prompt Detail",
         "Study Pattern Shift",
     ],
     "analysis_methods": [
-        "Longitudinal trend analysis",
-        "Percentage change analysis",
-        "Study pattern evolution",
-        "Prompt behaviour analysis",
+        "Weekly descriptive trend visualisation",
+        "Within-participant percentage-point change in study-share allocation",
+        "Weekly prompt-purpose, study-method, and productivity distributions",
+        "Descriptive comparison of AI use by self-reported workload pressure",
     ],
     "results_status": "pending",
 }
@@ -116,26 +156,46 @@ BEHAVIOURAL_INDICATORS: List[Dict[str, str]] = [
     {
         "name": "AI Study Share",
         "concept": "Proportion of total recorded study time involving GenAI-assisted study.",
-        "status": "Calculated after validated multi-week data collection",
+        "status": "Weekly descriptive measure; excludes records without valid positive study-hour totals",
     },
     {
         "name": "Independent Study Share",
         "concept": "Proportion of recorded study time completed independently without AI.",
-        "status": "Calculated after validated multi-week data collection",
+        "status": "Weekly descriptive measure",
     },
     {
         "name": "Prompt Frequency",
         "concept": "Number of academic GenAI prompts/interactions within a study period.",
-        "status": "Calculated after validated multi-week data collection",
+        "status": "Weekly average and total; sample size reported",
     },
     {
         "name": "Prompt Purpose",
         "concept": "Distribution of GenAI interactions across academic purposes.",
-        "status": "Calculated after validated multi-week data collection",
+        "status": "Weekly category counts; categories may overlap",
+    },
+    {
+        "name": "Study Method Distribution",
+        "concept": "Weekly distribution of self-reported study methods; multiple methods may be selected.",
+        "status": "Descriptive weekly comparison",
+    },
+    {
+        "name": "Perceived Productivity",
+        "concept": "Weekly self-reported perceived productivity category.",
+        "status": "Descriptive ordinal distribution; not an objective productivity measure",
+    },
+    {
+        "name": "Self-Reported Prompt Detail",
+        "concept": "Weekly 1–5 self-rating of prompt detail and specificity.",
+        "status": "Descriptive self-report; not an independently measured complexity score",
     },
     {
         "name": "Study Pattern Shift",
-        "concept": "A future longitudinal indicator describing changes in study behaviour across repeated weekly observations.",
-        "status": "Calculated after validated multi-week data collection",
+        "concept": "Average absolute percentage-point change in AI-assisted and independent study shares between a participant's current and previous available week.",
+        "status": "Descriptive indicator; not a validated psychometric scale",
+    },
+    {
+        "name": "Workload Comparison",
+        "concept": "Weekly average AI-assisted study hours and academic prompt counts grouped by self-reported workload/deadline pressure.",
+        "status": "Descriptive association; not a causal or composite spike score",
     },
 ]

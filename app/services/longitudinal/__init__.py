@@ -8,7 +8,7 @@ Exports:
 - LongitudinalAnalysisService, analysis_service
 - LongitudinalAnalysisNotAvailableError
 - validate_weekly_record
-- Schemas and metadata (ALLOWED_WEEKS, ACADEMIC_PERIODS, LEARNING_ACTIVITIES,
+- Schemas and metadata (ALLOWED_WEEKS, WORKLOAD_PRESSURES, LEARNING_ACTIVITIES,
   PROMPT_PURPOSES, LONGITUDINAL_SPECIFICATION, BEHAVIOURAL_INDICATORS)
 
 Status: Prototype – longitudinal data collection in progress.
@@ -16,12 +16,14 @@ Status: Prototype – longitudinal data collection in progress.
 """
 
 from app.services.longitudinal.schemas import (
-    ACADEMIC_PERIODS,
     ALLOWED_WEEKS,
     BEHAVIOURAL_INDICATORS,
     LEARNING_ACTIVITIES,
     LONGITUDINAL_SPECIFICATION,
     PROMPT_PURPOSES,
+    PRODUCTIVITY_RATINGS,
+    STUDY_METHODS,
+    WORKLOAD_PRESSURES,
 )
 from app.services.longitudinal.validation import (
     ValidationResult,
@@ -34,12 +36,14 @@ from app.services.longitudinal.analysis_service import (
 )
 
 __all__ = [
-    "ACADEMIC_PERIODS",
     "ALLOWED_WEEKS",
     "BEHAVIOURAL_INDICATORS",
     "LEARNING_ACTIVITIES",
     "LONGITUDINAL_SPECIFICATION",
     "PROMPT_PURPOSES",
+    "PRODUCTIVITY_RATINGS",
+    "STUDY_METHODS",
+    "WORKLOAD_PRESSURES",
     "ValidationResult",
     "validate_weekly_record",
     "LongitudinalAnalysisNotAvailableError",

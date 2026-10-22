@@ -19,7 +19,6 @@ Status: Prototype – data collection in progress.
 from typing import Any, Dict, List, Optional
 
 from app.services.longitudinal.schemas import (
-    ACADEMIC_PERIODS,
     ACCEPTED_FIELDS,
     ALLOWED_WEEKS,
     LEARNING_ACTIVITIES,
@@ -29,7 +28,11 @@ from app.services.longitudinal.schemas import (
     MIN_PROMPT_COUNT,
     MIN_STUDY_HOURS,
     PARTICIPANT_REFERENCE_PATTERN,
+    PRODUCTIVITY_RATINGS,
     PROMPT_PURPOSES,
+    REQUIRED_FIELDS,
+    STUDY_METHODS,
+    WORKLOAD_PRESSURES,
 )
 
 
@@ -75,7 +78,7 @@ def validate_weekly_record(data: Any) -> ValidationResult:
         )
 
     # 2. Check for missing required fields
-    for field in sorted(list(ACCEPTED_FIELDS)):
+    for field in sorted(list(REQUIRED_FIELDS)):
         if field not in data or data[field] is None or (isinstance(data[field], str) and data[field].strip() == ""):
             errors.append(f"Missing required field: '{field}'.")
 
@@ -111,6 +114,7 @@ def validate_weekly_record(data: Any) -> ValidationResult:
         sanitized["study_week"] = raw_week.strip()
 
     # 5. Validate AI-assisted study hours
+    # Exclude booleans explicitly because Python treats them as numbers.
     raw_ai_hours = data["ai_study_hours"]
     if isinstance(raw_ai_hours, bool) or not isinstance(raw_ai_hours, (int, float)):
         errors.append("AI-assisted study hours must be a valid number.")
@@ -140,16 +144,7 @@ def validate_weekly_record(data: Any) -> ValidationResult:
         else:
             sanitized["independent_study_hours"] = round(ind_hours, 2)
 
-    # 7. Validate Academic Period
-    raw_period = data["academic_period"]
-    if not isinstance(raw_period, str) or raw_period.strip() not in ACADEMIC_PERIODS:
-        errors.append(
-            f"Invalid academic period '{raw_period}'. Accepted categories: {sorted(list(ACADEMIC_PERIODS))}."
-        )
-    else:
-        sanitized["academic_period"] = raw_period.strip()
-
-    # 8. Validate Learning Activity
+    # 7. Validate Learning Activity
     raw_activity = data["learning_activity"]
     if not isinstance(raw_activity, str) or raw_activity.strip() not in LEARNING_ACTIVITIES:
         errors.append(
@@ -158,7 +153,7 @@ def validate_weekly_record(data: Any) -> ValidationResult:
     else:
         sanitized["learning_activity"] = raw_activity.strip()
 
-    # 9. Validate Prompt Count (must be non-negative integer, not boolean or float)
+    # 8. Validate Prompt Count (must be non-negative integer, not boolean or float)
     raw_prompts = data["prompt_count"]
     if isinstance(raw_prompts, bool) or not isinstance(raw_prompts, int):
         errors.append("Prompt count must be an integer count.")
@@ -170,7 +165,7 @@ def validate_weekly_record(data: Any) -> ValidationResult:
         else:
             sanitized["prompt_count"] = raw_prompts
 
-    # 10. Validate Prompt Purpose
+    # 9. Validate Prompt Purpose
     raw_purpose = data["prompt_purpose"]
     if not isinstance(raw_purpose, str) or raw_purpose.strip() not in PROMPT_PURPOSES:
         errors.append(
@@ -178,6 +173,56 @@ def validate_weekly_record(data: Any) -> ValidationResult:
         )
     else:
         sanitized["prompt_purpose"] = raw_purpose.strip()
+
+    if "study_methods" in data:
+        raw_methods = data["study_methods"]
+        if (
+            not isinstance(raw_methods, list)
+            or not raw_methods
+            or any(
+                not isinstance(method, str)
+                or method.strip() not in STUDY_METHODS
+                for method in raw_methods
+            )
+        ):
+            errors.append("Study methods must be a non-empty list of accepted categories.")
+        else:
+            # Remove duplicates while keeping the user's original order.
+            sanitized["study_methods"] = list(dict.fromkeys(
+                method.strip() for method in raw_methods
+            ))
+
+    if "perceived_productivity" in data:
+        raw_productivity = data["perceived_productivity"]
+        if (
+            not isinstance(raw_productivity, str)
+            or raw_productivity.strip() not in PRODUCTIVITY_RATINGS
+        ):
+            errors.append("Invalid perceived productivity rating.")
+        else:
+            sanitized["perceived_productivity"] = raw_productivity.strip()
+
+    if "workload_pressure" in data:
+        raw_pressure = data["workload_pressure"]
+        if (
+            not isinstance(raw_pressure, str)
+            or raw_pressure.strip() not in WORKLOAD_PRESSURES
+        ):
+            errors.append("Invalid workload pressure. Accepted values are Low, Moderate, or High.")
+        else:
+            sanitized["workload_pressure"] = raw_pressure.strip()
+
+    if "prompt_detail" in data:
+        raw_detail = data["prompt_detail"]
+        if (
+            isinstance(raw_detail, bool)
+            or not isinstance(raw_detail, int)
+            or raw_detail < 1
+            or raw_detail > 5
+        ):
+            errors.append("Prompt detail must be an integer rating from 1 to 5.")
+        else:
+            sanitized["prompt_detail"] = raw_detail
 
     if errors:
         return ValidationResult(is_valid=False, errors=errors)

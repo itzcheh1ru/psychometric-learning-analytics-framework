@@ -29,6 +29,8 @@ Feature 007: Integrated four-component research dashboard:
 """
 
 import json
+from importlib import import_module
+
 import pytest
 from app import create_app
 from app.services.cognitive_offloading.model_service import (
@@ -58,6 +60,10 @@ from app.services.framework import (
     framework_status_service,
 )
 
+longitudinal_analysis_module = import_module(
+    "app.services.longitudinal.analysis_service"
+)
+
 
 @pytest.fixture
 def app():
@@ -65,6 +71,22 @@ def app():
     flask_app = create_app()
     flask_app.config.update({"TESTING": True})
     return flask_app
+
+
+@pytest.fixture(autouse=True)
+def isolate_longitudinal_processed_data(monkeypatch, tmp_path):
+    """Keep status tests independent from a user's ignored processed dataset."""
+    missing_data_file = tmp_path / "component3_weekly_features.csv"
+    monkeypatch.setattr(
+        longitudinal_analysis_module,
+        "DATA_FILE",
+        missing_data_file,
+    )
+    monkeypatch.setattr(
+        longitudinal_analysis_module.analysis_service,
+        "data_file",
+        missing_data_file,
+    )
 
 
 @pytest.fixture
@@ -99,7 +121,6 @@ def valid_weekly_payload():
         "study_week": "Week 2",
         "ai_study_hours": 5.5,
         "independent_study_hours": 8.0,
-        "academic_period": "Regular study week",
         "learning_activity": "Concept learning",
         "prompt_count": 12,
         "prompt_purpose": "Concept explanation",
@@ -624,16 +645,19 @@ def test_component3_page_contains_title(client):
     assert b"Longitudinal AI-Assisted Study Pattern Analytics" in data
 
 
-def test_component3_page_contains_prototype_record(client):
-    """Component 3 page must contain 'Prototype record'."""
+def test_component3_page_contains_separate_user_charts_and_save_form(client):
+    """Component 3 separates browser-saved user charts from imported dataset charts."""
     data = client.get("/component3/").data
-    assert b"Prototype record" in data or b"prototype record" in data.lower()
+    assert b"Your Weekly Data Charts" in data
+    assert b"Clear my entered data" in data
+    assert b"saved only in this browser" in data
+    assert b"Save Weekly Record" in data
 
 
-def test_component3_page_contains_available_after_longitudinal_data_collection(client):
-    """Component 3 page must display 'Available after longitudinal data collection'."""
+def test_component3_page_explains_repeat_week_requirement(client):
+    """Component 3 explains that shift comparisons require repeat participant observations."""
     data = client.get("/component3/").data
-    assert b"Available after longitudinal data collection" in data
+    assert b"At least two study weeks for the same participant are required" in data
 
 
 # 2. Status API
@@ -793,9 +817,9 @@ def test_validate_weekly_record_negative_independent_hours_returns_400(client, v
     assert any("cannot be negative" in err for err in body["errors"])
 
 
-def test_validate_weekly_record_invalid_academic_period_returns_400(client, valid_weekly_payload):
-    """Invalid academic period returns HTTP 400."""
-    valid_weekly_payload["academic_period"] = "Summer vacation holiday"
+def test_validate_weekly_record_invalid_workload_pressure_returns_400(client, valid_weekly_payload):
+    """Invalid workload pressure returns HTTP 400."""
+    valid_weekly_payload["workload_pressure"] = "Extreme"
     response = client.post(
         "/api/component3/validate-weekly-record",
         data=json.dumps(valid_weekly_payload),
@@ -803,7 +827,7 @@ def test_validate_weekly_record_invalid_academic_period_returns_400(client, vali
     )
     assert response.status_code == 400
     body = response.get_json()
-    assert any("academic period" in err for err in body["errors"])
+    assert any("workload pressure" in err for err in body["errors"])
 
 
 def test_validate_weekly_record_invalid_learning_activity_returns_400(client, valid_weekly_payload):
@@ -1526,16 +1550,14 @@ def test_framework_apis_contain_no_fabricated_findings(client):
 
 
 # --------------------------------------------------------------------------- #
-# Test 28 – Dashboard page contains badges and integration principle          #
+# Test 28 – Dashboard page contains project identity and integration principle #
 # --------------------------------------------------------------------------- #
 
-def test_dashboard_page_contains_badges_and_integration_principle(client):
-    """GET /dashboard must contain J26-DS-310 badge, prototype badge, and integration principle."""
+def test_dashboard_page_contains_project_identity_and_integration_principle(client):
+    """GET /dashboard must contain the project ID and integration principle."""
     response = client.get("/dashboard")
     html = response.data.decode()
     assert "J26-DS-310" in html
-    assert "Research Prototype" in html
-    assert "Data Collection" in html
     assert "Complementary Evidence" in html
 
 
