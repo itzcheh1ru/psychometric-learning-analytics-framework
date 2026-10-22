@@ -175,8 +175,8 @@
         </div>
     </div>
 
-    <!-- Self-Reflection Form -->
-    <form id="reflectionAssessmentForm" class="reflection-form" novalidate aria-label="AI-assisted learning self-reflection form">
+    <!-- Self-Reflection Form (autocomplete="off" enforces unselected fresh state) -->
+    <form id="reflectionAssessmentForm" class="reflection-form" autocomplete="off" novalidate aria-label="AI-assisted learning self-reflection form">
 
         <!-- ────────────────────────────────────────────────────────
              SECTION 1: AI USAGE HABITS & ACADEMIC CONTEXT
@@ -190,9 +190,12 @@
 
             <!-- Q1: Academic Field / Discipline -->
             <div class="question-card" id="card_degree_field">
-                <label class="question-title" for="pred_degree_field">
-                    1. Academic Field / Discipline <span class="required-asterisk" aria-hidden="true">*</span>
-                </label>
+                <div class="question-card-header">
+                    <label class="question-title" for="pred_degree_field">
+                        1. Academic Field / Discipline
+                    </label>
+                    <span class="required-indicator">* Required</span>
+                </div>
                 <p class="question-desc">Select the broad academic discipline or faculty that best matches your degree programme.</p>
                 <select id="pred_degree_field" name="degree_field" class="form-select" required aria-required="true">
                     <option value="" selected disabled>— Select your academic field —</option>
@@ -208,9 +211,12 @@
             <!-- Q2 & Q3: Year and Age in two columns -->
             <div class="form-row-2col">
                 <div class="question-card" id="card_academic_year">
-                    <label class="question-title" for="pred_academic_year">
-                        2. Current Academic Year <span class="required-asterisk" aria-hidden="true">*</span>
-                    </label>
+                    <div class="question-card-header">
+                        <label class="question-title" for="pred_academic_year">
+                            2. Current Academic Year
+                        </label>
+                        <span class="required-indicator">* Required</span>
+                    </div>
                     <p class="question-desc">Select your current stage of university study.</p>
                     <select id="pred_academic_year" name="academic_year" class="form-select" required aria-required="true">
                         <option value="" selected disabled>— Select academic year —</option>
@@ -225,9 +231,12 @@
                 </div>
 
                 <div class="question-card" id="card_age_group">
-                    <label class="question-title" for="pred_age_group">
-                        3. Age Bracket <span class="required-asterisk" aria-hidden="true">*</span>
-                    </label>
+                    <div class="question-card-header">
+                        <label class="question-title" for="pred_age_group">
+                            3. Age Bracket
+                        </label>
+                        <span class="required-indicator">* Required</span>
+                    </div>
                     <p class="question-desc">Select your age group.</p>
                     <select id="pred_age_group" name="age_group" class="form-select" required aria-required="true">
                         <option value="" selected disabled>— Select age bracket —</option>
@@ -242,9 +251,12 @@
 
             <!-- Q4: Usage Frequency -->
             <div class="question-card" id="card_ai_usage_freq">
-                <span class="question-title">
-                    4. How often do you typically use Generative AI tools for your academic studies? <span class="required-asterisk" aria-hidden="true">*</span>
-                </span>
+                <div class="question-card-header">
+                    <span class="question-title">
+                        4. How often do you typically use Generative AI tools for your academic studies?
+                    </span>
+                    <span class="required-indicator">* Required</span>
+                </div>
                 <p class="question-desc">Consider your typical interaction during an active teaching semester.</p>
                 <div class="radio-card-group" role="radiogroup" aria-label="AI usage frequency">
                     <label class="radio-card-label">
@@ -281,9 +293,12 @@
 
             <!-- Q5: Weekly Hours -->
             <div class="question-card" id="card_ai_time_per_week">
-                <label class="question-title" for="pred_ai_time_per_week">
-                    5. Approximately how much time do you spend using AI tools per week? <span class="required-asterisk" aria-hidden="true">*</span>
-                </label>
+                <div class="question-card-header">
+                    <label class="question-title" for="pred_ai_time_per_week">
+                        5. Approximately how much time do you spend using AI tools per week?
+                    </label>
+                    <span class="required-indicator">* Required</span>
+                </div>
                 <p class="question-desc">Estimate your total cumulative study time with AI tools each week.</p>
                 <select id="pred_ai_time_per_week" name="ai_time_per_week" class="form-select" required aria-required="true">
                     <option value="" selected disabled>— Select weekly time —</option>
@@ -298,9 +313,12 @@
 
             <!-- Q6: AI Tools Multi-Select -->
             <div class="question-card" id="card_tools_used">
-                <span class="question-title">
-                    6. Which Generative AI tools do you actively use? <span class="required-asterisk" aria-hidden="true">*</span>
-                </span>
+                <div class="question-card-header">
+                    <span class="question-title">
+                        6. Which Generative AI tools do you actively use?
+                    </span>
+                    <span class="required-indicator">* Required</span>
+                </div>
                 <p class="question-desc">Select all tools you actively utilize for coursework. At least one selection is required.</p>
                 <div class="checkbox-chip-grid" role="group" aria-label="Generative AI tools used">
                     <label class="checkbox-chip">
@@ -347,9 +365,12 @@
 
             <!-- Q20: Task Delegation Frequency -->
             <div class="question-card" id="card_Q20">
-                <span class="question-title">
-                    1. How often do you ask Generative AI to solve or complete entire coursework tasks for you? <span class="required-asterisk" aria-hidden="true">*</span>
-                </span>
+                <div class="question-card-header">
+                    <span class="question-title">
+                        1. How often do you ask Generative AI to solve or complete entire coursework tasks for you?
+                    </span>
+                    <span class="required-indicator">* Required</span>
+                </div>
                 <p class="question-desc">Delegating complete tasks can shift analytical synthesis away from personal cognitive effort.</p>
                 <div class="likert-radio-bar" role="radiogroup" aria-label="Task delegation frequency">
                     <label class="likert-option">
@@ -383,9 +404,12 @@
 
             <!-- Q1: Direct Use / Copying Frequency -->
             <div class="question-card" id="card_Q1">
-                <span class="question-title">
-                    2. How often do you directly use or submit AI-generated answers with minimal or no editing? <span class="required-asterisk" aria-hidden="true">*</span>
-                </span>
+                <div class="question-card-header">
+                    <span class="question-title">
+                        2. How often do you directly use or submit AI-generated answers with minimal or no editing?
+                    </span>
+                    <span class="required-indicator">* Required</span>
+                </div>
                 <p class="question-desc">Direct copying without substantial personal synthesis can bypass individual comprehension.</p>
                 <div class="likert-radio-bar" role="radiogroup" aria-label="Direct use frequency">
                     <label class="likert-option">
@@ -419,9 +443,12 @@
 
             <!-- Q22: Cognitive Effort Reviewing Answers -->
             <div class="question-card" id="card_Q22">
-                <span class="question-title">
-                    3. How much cognitive effort do you invest in analyzing, verifying, and improving AI answers? <span class="required-asterisk" aria-hidden="true">*</span>
-                </span>
+                <div class="question-card-header">
+                    <span class="question-title">
+                        3. How much cognitive effort do you invest in analyzing, verifying, and improving AI answers?
+                    </span>
+                    <span class="required-indicator">* Required</span>
+                </div>
                 <p class="question-desc">Active cognitive evaluation keeps your problem-solving skills engaged during AI interactions.</p>
                 <div class="likert-radio-bar" role="radiogroup" aria-label="Effort on AI answers">
                     <label class="likert-option">
@@ -455,9 +482,12 @@
 
             <!-- Delegated Task Types (Optional Multi-Select) -->
             <div class="question-card" id="card_tasks_delegated">
-                <span class="question-title">
-                    4. Which kinds of coursework tasks do you ask AI to assist with? <span class="optional-badge">(Optional)</span>
-                </span>
+                <div class="question-card-header">
+                    <span class="question-title">
+                        4. Which kinds of coursework tasks do you ask AI to assist with?
+                    </span>
+                    <span class="optional-indicator">Optional</span>
+                </div>
                 <p class="question-desc">Select any specific task types to further inform your self-reflection profile.</p>
                 <div class="checkbox-chip-grid" role="group" aria-label="Delegated task types">
                     <label class="checkbox-chip">
@@ -506,9 +536,12 @@
 
             <!-- Q2: External Source Verification -->
             <div class="question-card" id="card_Q2">
-                <span class="question-title">
-                    1. External Source Verification <span class="required-asterisk" aria-hidden="true">*</span>
-                </span>
+                <div class="question-card-header">
+                    <span class="question-title">
+                        1. External Source Verification
+                    </span>
+                    <span class="required-indicator">* Required</span>
+                </div>
                 <p class="question-desc">I actively verify facts and claims made by AI against external textbooks, lecture slides, or peer-reviewed papers.</p>
                 <div class="likert-radio-bar" role="radiogroup" aria-label="External source verification">
                     <label class="likert-option"><input type="radio" name="Q2_verify_info" value="1" /><span class="likert-box">1</span><span class="likert-label">Strongly Disagree</span></label>
@@ -522,9 +555,12 @@
 
             <!-- Q3: Coursework Comparison -->
             <div class="question-card" id="card_Q3">
-                <span class="question-title">
-                    2. Coursework Comparison <span class="required-asterisk" aria-hidden="true">*</span>
-                </span>
+                <div class="question-card-header">
+                    <span class="question-title">
+                        2. Coursework Comparison
+                    </span>
+                    <span class="required-indicator">* Required</span>
+                </div>
                 <p class="question-desc">I cross-reference AI-generated solutions with my official course syllabus and lecture materials.</p>
                 <div class="likert-radio-bar" role="radiogroup" aria-label="Coursework comparison">
                     <label class="likert-option"><input type="radio" name="Q3_compare_sources" value="1" /><span class="likert-box">1</span><span class="likert-label">Strongly Disagree</span></label>
@@ -538,9 +574,12 @@
 
             <!-- Q4: Accuracy Checking -->
             <div class="question-card" id="card_Q4">
-                <span class="question-title">
-                    3. Accuracy Checking <span class="required-asterisk" aria-hidden="true">*</span>
-                </span>
+                <div class="question-card-header">
+                    <span class="question-title">
+                        3. Accuracy Checking
+                    </span>
+                    <span class="required-indicator">* Required</span>
+                </div>
                 <p class="question-desc">I actively check whether AI formulas, calculations, or code outputs are factually correct.</p>
                 <div class="likert-radio-bar" role="radiogroup" aria-label="Accuracy checking">
                     <label class="likert-option"><input type="radio" name="Q4_check_accuracy" value="1" /><span class="likert-box">1</span><span class="likert-label">Strongly Disagree</span></label>
@@ -554,9 +593,12 @@
 
             <!-- Q5: Understanding the Reasoning -->
             <div class="question-card" id="card_Q5">
-                <span class="question-title">
-                    4. Understanding the Reasoning <span class="required-asterisk" aria-hidden="true">*</span>
-                </span>
+                <div class="question-card-header">
+                    <span class="question-title">
+                        4. Understanding the Reasoning
+                    </span>
+                    <span class="required-indicator">* Required</span>
+                </div>
                 <p class="question-desc">Before applying an AI solution, I ensure I personally understand the underlying principles and derivation steps.</p>
                 <div class="likert-radio-bar" role="radiogroup" aria-label="Understanding the reasoning">
                     <label class="likert-option"><input type="radio" name="Q5_understand_reasoning" value="1" /><span class="likert-box">1</span><span class="likert-label">Strongly Disagree</span></label>
@@ -570,9 +612,12 @@
 
             <!-- Q6: Content Personalization -->
             <div class="question-card" id="card_Q6">
-                <span class="question-title">
-                    5. Content Personalization &amp; Synthesis <span class="required-asterisk" aria-hidden="true">*</span>
-                </span>
+                <div class="question-card-header">
+                    <span class="question-title">
+                        5. Content Personalization &amp; Synthesis
+                    </span>
+                    <span class="required-indicator">* Required</span>
+                </div>
                 <p class="question-desc">I adapt, synthesize, and rewrite AI outputs into my own academic voice and unique perspective.</p>
                 <div class="likert-radio-bar" role="radiogroup" aria-label="Content personalization">
                     <label class="likert-option"><input type="radio" name="Q6_modify_content" value="1" /><span class="likert-box">1</span><span class="likert-label">Strongly Disagree</span></label>
@@ -603,9 +648,12 @@
 
             <!-- Q7: Independent Problem-Solving First -->
             <div class="question-card" id="card_Q7">
-                <span class="question-title">
-                    1. Independent Problem-Solving First <span class="required-asterisk" aria-hidden="true">*</span>
-                </span>
+                <div class="question-card-header">
+                    <span class="question-title">
+                        1. Independent Problem-Solving First
+                    </span>
+                    <span class="required-indicator">* Required</span>
+                </div>
                 <p class="question-desc">I always attempt to solve coursework questions or draft solutions on my own before consulting an AI tool.</p>
                 <div class="likert-radio-bar" role="radiogroup" aria-label="Independent problem solving first">
                     <label class="likert-option"><input type="radio" name="Q7_attempt_independently" value="1" /><span class="likert-box">1</span><span class="likert-label">Strongly Disagree</span></label>
@@ -619,9 +667,12 @@
 
             <!-- Q8: Confidence Without AI -->
             <div class="question-card" id="card_Q8">
-                <span class="question-title">
-                    2. Confidence in Completing Work Without AI <span class="required-asterisk" aria-hidden="true">*</span>
-                </span>
+                <div class="question-card-header">
+                    <span class="question-title">
+                        2. Confidence in Completing Work Without AI
+                    </span>
+                    <span class="required-indicator">* Required</span>
+                </div>
                 <p class="question-desc">If AI tools became entirely unavailable, I feel confident I could complete my assignments successfully.</p>
                 <div class="likert-radio-bar" role="radiogroup" aria-label="Confidence without AI">
                     <label class="likert-option"><input type="radio" name="Q8_complete_without_ai" value="1" /><span class="likert-box">1</span><span class="likert-label">Strongly Disagree</span></label>
@@ -635,9 +686,12 @@
 
             <!-- Q9: Assistant vs. Replacement Mindset -->
             <div class="question-card" id="card_Q9">
-                <span class="question-title">
-                    3. Assistant vs. Replacement Mindset <span class="required-asterisk" aria-hidden="true">*</span>
-                </span>
+                <div class="question-card-header">
+                    <span class="question-title">
+                        3. Assistant vs. Replacement Mindset
+                    </span>
+                    <span class="required-indicator">* Required</span>
+                </div>
                 <p class="question-desc">I view Generative AI strictly as an auxiliary assistant, never as a replacement for my own critical thinking.</p>
                 <div class="likert-radio-bar" role="radiogroup" aria-label="Assistant vs replacement mindset">
                     <label class="likert-option"><input type="radio" name="Q9_learning_assistant" value="1" /><span class="likert-box">1</span><span class="likert-label">Strongly Disagree</span></label>
@@ -651,9 +705,12 @@
 
             <!-- Q30: Belief in AI Accuracy -->
             <div class="question-card" id="card_Q30">
-                <span class="question-title">
-                    4. Belief in AI Accuracy <span class="required-asterisk" aria-hidden="true">*</span>
-                </span>
+                <div class="question-card-header">
+                    <span class="question-title">
+                        4. Belief in AI Accuracy
+                    </span>
+                    <span class="required-indicator">* Required</span>
+                </div>
                 <p class="question-desc">I generally assume that facts and answers generated by Generative AI are accurate and trustworthy.</p>
                 <div class="likert-radio-bar" role="radiogroup" aria-label="Belief in AI accuracy">
                     <label class="likert-option"><input type="radio" name="Q30_trust_accuracy" value="1" /><span class="likert-box">1</span><span class="likert-label">Strongly Disagree</span></label>
@@ -667,9 +724,12 @@
 
             <!-- Q33: Trust in AI Guidance -->
             <div class="question-card" id="card_Q33">
-                <span class="question-title">
-                    5. Trust in AI Guidance <span class="required-asterisk" aria-hidden="true">*</span>
-                </span>
+                <div class="question-card-header">
+                    <span class="question-title">
+                        5. Trust in AI Guidance
+                    </span>
+                    <span class="required-indicator">* Required</span>
+                </div>
                 <p class="question-desc">I trust that Generative AI provides the most appropriate academic guidance for my coursework.</p>
                 <div class="likert-radio-bar" role="radiogroup" aria-label="Trust in AI guidance">
                     <label class="likert-option"><input type="radio" name="Q33_trust_appropriate_support" value="1" /><span class="likert-box">1</span><span class="likert-label">Strongly Disagree</span></label>

@@ -469,8 +469,51 @@
     /* ==================================================================
        6. Form State & Profile Management
     ================================================================== */
+    function syncSelectionClasses() {
+        if (!assessmentForm) return;
+
+        // Likert options
+        var likertOptions = assessmentForm.querySelectorAll(".likert-option");
+        likertOptions.forEach(function (opt) {
+            var radio = opt.querySelector('input[type="radio"]');
+            if (radio && radio.checked) {
+                opt.classList.add("likert-option--selected");
+            } else {
+                opt.classList.remove("likert-option--selected");
+            }
+        });
+
+        // Radio card labels
+        var radioCards = assessmentForm.querySelectorAll(".radio-card-label");
+        radioCards.forEach(function (card) {
+            var radio = card.querySelector('input[type="radio"]');
+            if (radio && radio.checked) {
+                card.classList.add("radio-card-label--selected");
+            } else {
+                card.classList.remove("radio-card-label--selected");
+            }
+        });
+
+        // Checkbox cards
+        var checkboxCards = assessmentForm.querySelectorAll(".checkbox-card-label");
+        checkboxCards.forEach(function (card) {
+            var cb = card.querySelector('input[type="checkbox"]');
+            if (cb && cb.checked) {
+                card.classList.add("checkbox-card-label--selected");
+            } else {
+                card.classList.remove("checkbox-card-label--selected");
+            }
+        });
+    }
+
     function clearAssessmentForm() {
         if (!assessmentForm) return;
+
+        try {
+            assessmentForm.reset();
+        } catch (e) {
+            // Ignore if reset fails
+        }
 
         // Reset selects
         var selects = assessmentForm.querySelectorAll("select");
@@ -505,6 +548,7 @@
             reflectionResultSec.setAttribute("hidden", "");
         }
 
+        syncSelectionClasses();
         showStep(1);
     }
 
@@ -569,6 +613,7 @@
             });
         }
 
+        syncSelectionClasses();
         showStep(1);
     }
 
@@ -888,7 +933,27 @@
         });
     }
 
+    // Listen for form input changes to update selected styling and clear inline errors dynamically
+    if (assessmentForm) {
+        assessmentForm.addEventListener("change", function (e) {
+            syncSelectionClasses();
+            var target = e.target;
+            if (target) {
+                var card = target.closest(".question-card");
+                if (card && card.classList.contains("question-card--error")) {
+                    card.classList.remove("question-card--error");
+                    var errEl = card.querySelector(".field-error-msg");
+                    if (errEl) {
+                        errEl.textContent = "";
+                        errEl.setAttribute("hidden", "");
+                    }
+                }
+            }
+        });
+    }
+
     // Initialize to Step 1 on page load (form begins blank with no preselected answers)
+    clearAssessmentForm();
     showStep(1);
 
 }());
