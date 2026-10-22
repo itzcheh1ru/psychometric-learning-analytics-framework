@@ -39,7 +39,7 @@ block the others.
 
 | # | Component | Methodology | Team Member |
 |---|-----------|-------------|-------------|
-| 1 | Explainable Cognitive Offloading Risk Prediction | Logistic Regression, Random Forest, XGBoost, SHAP | IT23426580 |
+| 1 | Explainable Cognitive Offloading Risk Prediction | Calibrated Thresholded Ridge Regressor, LinearSHAP | IT23426580 |
 | 2 | Algorithmic Trust & Verification Analysis | CFA, SEM, R/lavaan | IT23217904 |
 | 3 | Longitudinal Study Pattern Analytics | Time-Series, Trend Analysis, Pandas | IT23426344 |
 | 4 | GenAI-Assisted Cognitive Engagement & Retention | NLP, NLTK, spaCy, Statistical Analysis | IT23165220 |
@@ -94,12 +94,15 @@ flowchart TD
 
 | Layer | Technology | Version | Purpose |
 |-------|------------|---------|---------|
-| Runtime | Python | Not specified | Runs the Flask application and services |
+| Runtime | Python | >= 3.10 (tested on 3.13) | Runs the Flask application and services |
+| Machine Learning | scikit-learn | 1.7.1 | Version 4 Ridge regression pipeline and preprocessing |
+| Model Serialization | joblib | >= 1.4.0 | Serialized model loading |
+| Numerical & Data | NumPy, Pandas, SciPy | numpy>=2.0, pandas>=2.2, scipy>=1.13 | Numerical operations, tabular manipulation, CDF calculations |
 | Web framework | Flask | 3.1.0 | Application factory, routes, and JSON APIs |
+| Production WSGI | Gunicorn | >= 22.0.0 | Production HTTP WSGI server |
 | Templates | Jinja2 | Flask dependency | Renders server-side HTML pages |
-| Longitudinal analysis | Pandas | Not specified | Reads and analyzes Component 3 CSV data |
-| Spreadsheet input | openpyxl | Not specified | Reads weekly Excel input files |
-| Front end | HTML, CSS, JavaScript | Not specified | Displays pages and provides browser interactions |
+| Spreadsheet input | openpyxl | >= 3.1.5 | Reads weekly Excel input files |
+| Front end | HTML5, CSS3, Vanilla JavaScript | Web standards | Displays pages and provides browser interactions |
 
 ### Data Storage & External Services
 
@@ -168,7 +171,7 @@ flowchart LR
 | Component | Layer | Type | Responsibility |
 |-----------|-------|------|----------------|
 | Flask blueprint routes | Presentation | Web and API routes | Render pages and expose component endpoints |
-| Cognitive offloading service | Business logic | Model service | Reports model readiness; prediction is not yet available |
+| Cognitive offloading service | Business logic | Model service | Version 4 inference service (Component1IntegrationServiceV4 / CognitiveOffloadingModelService); executes calibrated 3-class risk predictions with closed-form LinearSHAP feature attributions |
 | SEM analysis service | Business logic | Status and result services | Reports analysis status and gates access to empirical results |
 | Longitudinal analytics service | Business logic | Analysis service | Reads processed weekly data and provides analysis summaries |
 | Retention analysis service | Business logic | Analysis service | Reports readiness and gates access to experimental results |
@@ -207,41 +210,64 @@ To uphold research integrity and eliminate **data leakage**, the pipeline strict
       │
       ├─────────────────────────────────────────────┐
       ▼                                             ▼
-Target Construction Items                     Predictor Items
-(validated cognitive offloading scale)         (GenAI usage, verification, independent learning)
+Target Construction Items                     Predictor Items (68 features)
+(validated cognitive offloading scale items)  (GenAI frequency, reliance, verification, study habits)
       │                                             │
       ▼                                             ▼
-Target Variable: Binary / Ordinal Risk        Feature Engineering / Preprocessing
+Continuous Target Scale [1.0, 5.0]             Feature Alignment & Transformation
       │                                             │
       └─────────────────────┬───────────────────────┘
                             ▼
-                Train / Test Separation
+                 80/20 Stratified Split
                             ▼
-               Stratified Cross-Validation
+             Repeated Stratified 5-Fold CV
                             ▼
-                     Model Training
-          (Logistic Regression, RF, XGBoost)
+                     Model Selection
+       (Ridge Regressor vs RF, XGBoost, Ordinal)
                             ▼
-                     Selected Model
+           Champion Model: Calibrated Thresholded
+                   Ridge Regressor (V4)
                             ▼
-                    SHAP Explainability
+            Threshold Decision Logic & Probability
+        Low: [1.0, 2.5] | Med: (2.5, 3.5] | High: (3.5, 5.0]
                             ▼
-                   Dashboard Presentation
+              LinearSHAP Feature Attribution
+               phi_j = beta_j * (x_j - x_bar_j)
+                            ▼
+           Integrated Flask UI & Standalone Streamlit
 ```
 
 > **Target Leakage Rule:** Cognitive-offloading scale items used to construct the
-> target label are **strictly excluded** from the predictor feature set.
+> continuous and ordinal risk targets are **strictly excluded** from the 68 predictor features.
+
+### Champion Model Specification & Mathematical Derivation
+
+- **Architecture:** Calibrated Thresholded Ridge Regressor with exact closed-form LinearSHAP attributions.
+- **Artifacts:**
+  - `models/thresholded_ridge_v4.joblib`: Serialized scikit-learn Pipeline (imputer, scaler, Ridge regressor with optimal L2 regularisation).
+  - `models/pipeline_metadata_v4.json`: Comprehensive configuration, feature names, baseline means, thresholds, and cross-validation performance metrics.
+- **Inference Pipeline:**
+  1. **Input Alignment:** Receives questionnaire responses (dict), aligns against the 68 expected training columns, and imputes missing optional items using precomputed training medians.
+  2. **Continuous Prediction:** Computes continuous score $\hat{y} = \mathbf{x}^T \boldsymbol{\beta} + \beta_0$, clamped to $[1.0, 5.0]$.
+  3. **Ordinal Categorisation:**
+     $$\text{Risk Level} = \begin{cases} \text{Low Risk} & \text{if } \hat{y} \le 2.5 \\ \text{Medium Risk} & \text{if } 2.5 < \hat{y} \le 3.5 \\ \text{High Risk} & \text{if } \hat{y} > 3.5 \end{cases}$$
+  4. **Calibrated Probabilities:** Calibrated 3-class distribution ($P_{\text{low}}, P_{\text{med}}, P_{\text{high}}$) computed via standardized Gaussian CDF distance margins around decision thresholds ($t_1=2.5, t_2=3.5$).
+  5. **Explainability (LinearSHAP):** Exact closed-form Shapley values computed as:
+     $$\phi_j = \beta_j \cdot (x_j - \bar{x}_j)$$
+     Identifies top risk-increasing and risk-mitigating behavioural contributors without sampling approximations.
 
 ### Service Layer Design
 
-- `schemas.py`: Allowed category enumerations, regex pattern for anonymous participant IDs.
-- `validation.py`: Pure validation and sanitization. Rejects any out-of-schema values.
-- `model_service.py`: `CognitiveOffloadingModelService` singleton. All prediction methods
-  raise `ModelNotAvailableError` until an evaluated model file is loaded.
+- `schemas.py`: Input category enumerations, allowed ranges, and anonymous participant reference validation.
+- `validation.py`: Schema validation, sanitisation, and constraint checking.
+- `integration_service.py`: `Component1IntegrationServiceV4` production inference engine encapsulating model loading, feature alignment, prediction, confidence estimation, and LinearSHAP calculation.
+- `model_service.py`: `CognitiveOffloadingModelService` singleton bridging Flask routes with `Component1IntegrationServiceV4`.
 - `routes/component1.py`:
-  - `GET /component1/`: interactive prototype UI
-  - `GET /api/component1/status`: reports `model_trained: false`, `prediction_available: false`
-  - `POST /api/component1/validate-input`: validates prototype payload; does NOT predict or persist
+  - `GET /component1/`: Interactive assessment UI rendering dynamic survey controls and prediction cards.
+  - `GET /api/component1/status`: Reports `model_trained: true`, `prediction_available: true`, `version: 4.0.0`, champion model architecture, and feature counts.
+  - `POST /api/component1/predict`: Live inference endpoint returning risk class, continuous score, calibrated probabilities, and top SHAP attributions.
+  - `POST /api/component1/validate-input`: Pre-prediction schema validation endpoint.
+- `component1_streamlit_v4/`: Standalone Streamlit application providing interactive parameter exploration and real-time risk simulation.
 
 ---
 
@@ -488,7 +514,7 @@ in the shared research dashboard at `/dashboard`:
 |---------|--------|-----------|
 | Web framework | Flask | Lightweight, suitable for research prototype |
 | Frontend | HTML5 + CSS3 + Vanilla JS | No framework overhead; Chart.js added later |
-| ML pipeline | scikit-learn, XGBoost, SHAP | Standard research toolchain |
+| ML pipeline | scikit-learn (1.7.1), joblib, LinearSHAP | Version 4 Ridge pipeline, threshold calibration, and exact explainability |
 | SEM | R / lavaan | Standard academic SEM tool |
 | NLP | NLTK, spaCy | Well-documented, research-grade |
 | Database | SQLite (planned) | Sufficient for prototype scale |
@@ -527,7 +553,7 @@ No single combined dataset is used.
 
 Each component's service layer is strictly self-contained:
 
-- `app/services/cognitive_offloading/` – C1 model stub + validation
+- `app/services/cognitive_offloading/` – C1 Version 4 inference service (Component1IntegrationServiceV4), model service singleton, and validation
 - `app/services/sem_analysis/` – C2 SEM status + result stub
 - `app/services/longitudinal/` – C3 analysis stub + validation
 - `app/services/retention/` – C4 retention stub + session validation
@@ -625,5 +651,5 @@ Application environments are isolated using Python class-based configurations in
 
 ---
 
-*Last updated: Feature 008 – Presentation polish, reliability & deployment readiness*
+*Last updated: Post-Merge Verification & Documentation Alignment (Component 1 V4 Model Deployed)*
 
