@@ -297,32 +297,32 @@ def test_component1_status_api_returns_200(client):
     assert response.status_code == 200
 
 
-def test_component1_status_api_reports_model_not_trained(client):
-    """Status API must report model_trained = False."""
+def test_component1_status_api_reports_model_trained(client):
+    """Status API must report model_trained = True when Version 4 model is integrated."""
     response = client.get("/api/component1/status")
     body = response.get_json()
-    assert body["model_trained"] is False
+    assert body["model_trained"] is True
 
 
-def test_component1_status_api_reports_prediction_unavailable(client):
-    """Status API must report prediction_available = False."""
+def test_component1_status_api_reports_prediction_available(client):
+    """Status API must report prediction_available = True when Version 4 model is integrated."""
     response = client.get("/api/component1/status")
     body = response.get_json()
-    assert body["prediction_available"] is False
+    assert body["prediction_available"] is True
 
 
-def test_component1_status_api_reports_explainability_unavailable(client):
-    """Status API must report explainability_available = False."""
+def test_component1_status_api_reports_explainability_available(client):
+    """Status API must report explainability_available = True when Version 4 model is integrated."""
     response = client.get("/api/component1/status")
     body = response.get_json()
-    assert body["explainability_available"] is False
+    assert body["explainability_available"] is True
 
 
-def test_component1_status_api_reports_data_collection_in_progress(client):
-    """Status API must report data_collection = 'in_progress'."""
+def test_component1_status_api_reports_stage_model_integrated(client):
+    """Status API must report stage = 'model_integrated'."""
     response = client.get("/api/component1/status")
     body = response.get_json()
-    assert body["data_collection"] == "in_progress"
+    assert body["stage"] == "model_integrated"
 
 
 # 3. Input Validation API
@@ -336,7 +336,7 @@ def test_validate_input_with_valid_payload_returns_200(client, valid_payload):
     assert response.status_code == 200
     body = response.get_json()
     assert body["status"] == "valid"
-    assert body["model_ready"] is False
+    assert body["model_ready"] is True
 
 
 def test_validate_input_response_does_not_contain_prediction_probability(client, valid_payload):
@@ -441,25 +441,27 @@ def test_validate_input_optional_year_can_be_omitted(client, valid_payload):
 
 # 4. Model Service Unit Tests
 def test_model_service_predict_raises_model_not_available_error():
-    """model_service.predict() must raise ModelNotAvailableError during prototype stage."""
+    """model_service.predict() must raise ModelNotAvailableError when predictor is unavailable."""
     svc = CognitiveOffloadingModelService()
+    svc._predictor = None
     with pytest.raises(ModelNotAvailableError) as exc_info:
         svc.predict({"sample": "feature"})
-    assert "has not been trained yet" in str(exc_info.value)
+    assert "not currently available" in str(exc_info.value)
 
 
 def test_model_service_explain_raises_model_not_available_error():
-    """model_service.explain() must raise ModelNotAvailableError during prototype stage."""
+    """model_service.explain() must raise ModelNotAvailableError when predictor is unavailable."""
     svc = CognitiveOffloadingModelService()
+    svc._predictor = None
     with pytest.raises(ModelNotAvailableError) as exc_info:
         svc.explain({"sample": "feature"})
-    assert "SHAP explanation is not available" in str(exc_info.value)
+    assert "not currently available" in str(exc_info.value)
 
 
-def test_model_service_is_model_available_returns_false():
-    """model_service.is_model_available() must return False during prototype stage."""
+def test_model_service_is_model_available_returns_true():
+    """model_service.is_model_available() must return True when Version 4 model is integrated."""
     svc = CognitiveOffloadingModelService()
-    assert svc.is_model_available() is False
+    assert svc.is_model_available() is True
 
 
 # =========================================================================== #
@@ -1378,17 +1380,20 @@ def test_framework_status_api_all_prototypes_ready(client):
 
 
 # --------------------------------------------------------------------------- #
-# Test 17 – each component has analysis_ready = False                        #
+# Test 17 – Component 1 is ready, colleagues' components (c2, c3, c4) = False #
 # --------------------------------------------------------------------------- #
 
 def test_framework_status_api_all_analysis_not_ready(client):
-    """GET /api/framework/status – all components must have analysis_ready=False."""
+    """GET /api/framework/status – c1 is ready, while colleagues' components remain False."""
     response = client.get("/api/framework/status")
     data = response.get_json()
     for comp in data["components"]:
-        assert comp["analysis_ready"] is False, (
-            f"analysis_ready should be False for {comp.get('id')}"
-        )
+        if comp["id"] == "c1":
+            assert comp["analysis_ready"] is True
+        else:
+            assert comp["analysis_ready"] is False, (
+                f"analysis_ready should be False for colleague component {comp.get('id')}"
+            )
 
 
 # --------------------------------------------------------------------------- #

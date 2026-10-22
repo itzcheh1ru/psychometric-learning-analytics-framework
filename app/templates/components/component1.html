@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Cognitive Offloading Risk Prediction — Component 1{% endblock %}
+{% block title %}AI-Assisted Learning Self-Reflection — Component 1{% endblock %}
 
 {% block extra_head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/component1.css') }}" />
@@ -9,7 +9,7 @@
 {% block content %}
 
 <!-- ================================================================
-     A. Component Header
+     A. Component Header & Breadcrumb
 ================================================================ -->
 <div class="page-heading">
     <nav class="breadcrumb" aria-label="Breadcrumb">
@@ -22,570 +22,888 @@
     </div>
     <h1 class="page-heading__title">Explainable Cognitive Offloading Risk Prediction</h1>
     <p class="page-heading__desc">
-        Interactive prototype for preparing behavioural inputs for the future
-        explainable machine-learning prediction pipeline.
+        Student-friendly psychometric self-reflection interface powered by an explainable Version 4 machine-learning pipeline.
     </p>
     <div class="page-heading__status">
-        <span class="status-badge status-badge--preparation">
+        <span class="status-badge status-badge--active">
             <span class="status-badge__dot" aria-hidden="true"></span>
-            Prototype &mdash; Model Development Pending
+            Calibrated Model Integrated (Version 4 Active)
         </span>
     </div>
 </div>
 
-<!-- Research stage notice -->
-<div class="info-banner info-banner--prototype" role="status">
-    <svg class="info-banner__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-    </svg>
-    <div>
-        <strong>Research stage notice:</strong> Research data collection is currently in progress.
-        This prototype demonstrates the <em>planned</em> analytical workflow only and does
-        not generate research predictions.
-    </div>
-</div>
-
-
 <!-- ================================================================
-     B. Research Workflow Visual
+     B. Welcome Hero Section & Information Cards
 ================================================================ -->
-<section class="content-section" aria-labelledby="workflowHeading">
-    <h2 class="section-heading" id="workflowHeading">Research Workflow</h2>
-    <p class="section-subheading">Planned prediction pipeline for the final research module.</p>
+<section class="hero-container" aria-labelledby="selfReflectionHeading">
+    <div class="hero-header">
+        <h2 id="selfReflectionHeading" class="hero-title">🎓 AI-Assisted Learning Self-Reflection</h2>
+        <p class="hero-subtitle">
+            Understand your generative AI study habits, maintain your cognitive autonomy, and build deeper problem-solving skills.
+        </p>
+        <p class="hero-lead">
+            Generative AI tools like ChatGPT, Gemini, and Copilot can be powerful study companions.
+            However, research shows that relying on AI to perform analytical thinking for you—a process known as
+            <strong>cognitive offloading</strong>—can inadvertently bypass the productive mental effort needed for long-term learning.
+        </p>
+    </div>
 
-    <div class="workflow-diagram" role="img" aria-label="Prediction workflow: Behavioural Inputs → Input Validation → Data Preprocessing → Trained ML Model → Risk Probability → SHAP Explanation → Dashboard Output">
-        <div class="workflow-steps">
-
-            <div class="workflow-step workflow-step--ready">
-                <div class="workflow-step__icon" aria-hidden="true">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                </div>
-                <div class="workflow-step__label">Behavioural Inputs</div>
-                <div class="workflow-step__status">Prototype Ready</div>
-            </div>
-
-            <div class="workflow-arrow" aria-hidden="true">&#x25BC;</div>
-
-            <div class="workflow-step workflow-step--ready">
-                <div class="workflow-step__icon" aria-hidden="true">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                </div>
-                <div class="workflow-step__label">Input Validation</div>
-                <div class="workflow-step__status">Prototype Ready</div>
-            </div>
-
-            <div class="workflow-arrow" aria-hidden="true">&#x25BC;</div>
-
-            <div class="workflow-step workflow-step--ready">
-                <div class="workflow-step__icon" aria-hidden="true">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                </div>
-                <div class="workflow-step__label">Data Preprocessing</div>
-                <div class="workflow-step__status">Prototype Interface</div>
-            </div>
-
-            <div class="workflow-arrow" aria-hidden="true">&#x25BC;</div>
-
-            <div class="workflow-step workflow-step--pending">
-                <div class="workflow-step__icon" aria-hidden="true">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                </div>
-                <div class="workflow-step__label">Trained ML Model</div>
-                <div class="workflow-step__status">Pending Research Data</div>
-            </div>
-
-            <div class="workflow-arrow workflow-arrow--pending" aria-hidden="true">&#x25BC;</div>
-
-            <div class="workflow-step workflow-step--pending">
-                <div class="workflow-step__icon" aria-hidden="true">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                </div>
-                <div class="workflow-step__label">Risk Probability</div>
-                <div class="workflow-step__status">Pending Model Training</div>
-            </div>
-
-            <div class="workflow-arrow workflow-arrow--pending" aria-hidden="true">&#x25BC;</div>
-
-            <div class="workflow-step workflow-step--pending">
-                <div class="workflow-step__icon" aria-hidden="true">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-                </div>
-                <div class="workflow-step__label">SHAP Explanation</div>
-                <div class="workflow-step__status">Pending Model Training</div>
-            </div>
-
-            <div class="workflow-arrow workflow-arrow--pending" aria-hidden="true">&#x25BC;</div>
-
-            <div class="workflow-step workflow-step--pending">
-                <div class="workflow-step__icon" aria-hidden="true">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-                </div>
-                <div class="workflow-step__label">Dashboard Output</div>
-                <div class="workflow-step__status">Pending Research Data</div>
-            </div>
-
+    <!-- 3 Core Information Cards -->
+    <div class="info-card-grid">
+        <div class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">⏱️</div>
+            <h3 class="feature-card__title">Quick &amp; Simple</h3>
+            <p class="feature-card__desc">
+                Takes approximately <strong>3 minutes</strong> to complete across 4 structured, reflective sections.
+            </p>
         </div>
+
+        <div class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">🔒</div>
+            <h3 class="feature-card__title">Anonymous &amp; Safe</h3>
+            <p class="feature-card__desc">
+                No names, emails, or student IDs are collected. Your answers are processed in memory for immediate personal feedback.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">💡</div>
+            <h3 class="feature-card__title">Actionable Insights</h3>
+            <p class="feature-card__desc">
+                Receive transparent LinearSHAP feedback on which specific habits support your independence and ideas to strengthen your critical thinking.
+            </p>
+        </div>
+    </div>
+
+    <!-- Quick Action / Demonstration Preset Selector -->
+    <div class="demo-profile-banner">
+        <div class="demo-profile-content">
+            <span class="demo-profile-badge">🧪 Demonstration Mode</span>
+            <span class="demo-profile-text">
+                Want to see how the model behaves across different profiles? Select an optional synthetic test profile:
+            </span>
+        </div>
+        <div class="demo-profile-buttons">
+            <button type="button" class="btn btn--outline btn--sm" id="btnPresetLow">
+                Low Risk Profile (Autonomous)
+            </button>
+            <button type="button" class="btn btn--outline btn--sm" id="btnPresetMed">
+                Moderate Profile (Balanced)
+            </button>
+            <button type="button" class="btn btn--outline btn--sm" id="btnPresetHigh">
+                High Risk Profile (Delegated)
+            </button>
+            <button type="button" class="btn btn--ghost btn--sm" id="btnClearProfile">
+                Reset to Blank
+            </button>
+        </div>
+        <p class="demo-profile-note">
+            <em>Notice:</em> Demonstration presets load synthetic in-memory profiles for evaluation only. No data is persisted to research databases.
+        </p>
     </div>
 </section>
 
-
 <!-- ================================================================
-     C. Behavioural Input Form (Prototype)
+     C. Questionnaire Flow with Multi-Step Wizard
 ================================================================ -->
-<section class="content-section" aria-labelledby="formHeading">
-    <h2 class="section-heading" id="formHeading">Behavioural Input Prototype</h2>
-    <p class="section-subheading">
-        Enter prototype predictor values to test the input validation pipeline.
-        Only anonymised participant references are accepted. No personally
-        identifying information should be entered.
-    </p>
-
-    <div class="proto-notice" role="note">
-        <strong>Prototype form:</strong> This form validates input structure only.
-        No risk prediction is performed and no submission is stored.
+<section class="content-section" aria-labelledby="assessmentSectionHeading">
+    <div class="section-header-row">
+        <div>
+            <h2 class="section-heading" id="assessmentSectionHeading">Interactive Self-Reflection Questionnaire</h2>
+            <p class="section-subheading">
+                Reflect on your current university study routines. All required questions must be explicitly selected.
+            </p>
+        </div>
+        <div class="step-progress-wrapper" role="navigation" aria-label="Assessment sections">
+            <button type="button" class="step-pill step-active" data-step="1" id="stepPill1">
+                <span class="step-num">1</span> Usage Habits
+            </button>
+            <button type="button" class="step-pill step-pending" data-step="2" id="stepPill2">
+                <span class="step-num">2</span> Task Delegation
+            </button>
+            <button type="button" class="step-pill step-pending" data-step="3" id="stepPill3">
+                <span class="step-num">3</span> Critical Thinking
+            </button>
+            <button type="button" class="step-pill step-pending" data-step="4" id="stepPill4">
+                <span class="step-num">4</span> Autonomy &amp; Trust
+            </button>
+        </div>
     </div>
 
-    <form
-        id="component1Form"
-        class="predictor-form"
-        novalidate
-        aria-label="Behavioural predictor prototype input form"
-    >
+    <!-- Validation Error Alert Banner -->
+    <div id="sectionValidationError" class="validation-alert" hidden role="alert" aria-live="assertive">
+        <svg class="validation-alert__icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <div>
+            <h4 class="validation-alert__title">Please complete the required question(s) before proceeding:</h4>
+            <ul id="sectionValidationErrorList" class="validation-alert__list"></ul>
+        </div>
+    </div>
 
-        <!-- ── Participant Reference ── -->
-        <fieldset class="form-fieldset">
-            <legend class="form-fieldset__legend">Participant Reference</legend>
-            <div class="form-group">
-                <label class="form-label" for="participant_reference">
-                    Participant Reference ID
-                    <span class="form-label__required" aria-hidden="true">*</span>
+    <!-- Self-Reflection Form -->
+    <form id="reflectionAssessmentForm" class="reflection-form" novalidate aria-label="AI-assisted learning self-reflection form">
+
+        <!-- ────────────────────────────────────────────────────────
+             SECTION 1: AI USAGE HABITS & ACADEMIC CONTEXT
+        ──────────────────────────────────────────────────────── -->
+        <div class="form-step" id="formStep1" data-step="1">
+            <div class="step-heading">
+                <h3 class="step-title">Section 1 of 4: AI Usage Habits &amp; Academic Context</h3>
+                <p class="step-desc">Tell us a little about your university studies and how often you interact with Generative AI tools.</p>
+            </div>
+
+            <!-- Q1: Academic Field / Discipline -->
+            <div class="question-card" id="card_degree_field">
+                <label class="question-title" for="pred_degree_field">
+                    1. Academic Field / Discipline <span class="required-asterisk" aria-hidden="true">*</span>
                 </label>
-                <input
-                    type="text"
-                    id="participant_reference"
-                    name="participant_reference"
-                    class="form-input"
-                    placeholder="e.g. P0001"
-                    maxlength="20"
-                    autocomplete="off"
-                    required
-                    aria-required="true"
-                    aria-describedby="ref_help ref_error"
-                />
-                <p class="form-help" id="ref_help">
-                    Use an anonymised research participant identifier only.
-                    Letters, digits and hyphens are accepted (max 20 characters).
-                    Do not enter student registration numbers, names or email addresses.
-                </p>
-                <p class="form-error" id="ref_error" aria-live="polite" hidden></p>
+                <p class="question-desc">Select the broad academic discipline or faculty that best matches your degree programme.</p>
+                <select id="pred_degree_field" name="degree_field" class="form-select" required aria-required="true">
+                    <option value="" selected disabled>— Select your academic field —</option>
+                    <option value="Computing_IT">Computer Science / IT / Software Engineering</option>
+                    <option value="Engineering">Engineering &amp; Architecture</option>
+                    <option value="Business_Economics">Business / Economics / Management</option>
+                    <option value="Natural_Applied_Sciences">Natural &amp; Applied Sciences</option>
+                    <option value="Humanities_Health_Other">Humanities / Social Sciences / Health / Law</option>
+                </select>
+                <p class="field-error-msg" id="err_degree_field" hidden></p>
             </div>
-        </fieldset>
 
-        <!-- ── GenAI Usage Behaviour ── -->
-        <fieldset class="form-fieldset">
-            <legend class="form-fieldset__legend">GenAI Usage Behaviour</legend>
+            <!-- Q2 & Q3: Year and Age in two columns -->
+            <div class="form-row-2col">
+                <div class="question-card" id="card_academic_year">
+                    <label class="question-title" for="pred_academic_year">
+                        2. Current Academic Year <span class="required-asterisk" aria-hidden="true">*</span>
+                    </label>
+                    <p class="question-desc">Select your current stage of university study.</p>
+                    <select id="pred_academic_year" name="academic_year" class="form-select" required aria-required="true">
+                        <option value="" selected disabled>— Select academic year —</option>
+                        <option value="1">1st Year (Freshman)</option>
+                        <option value="2">2nd Year (Sophomore)</option>
+                        <option value="3">3rd Year (Junior)</option>
+                        <option value="4">4th Year (Senior)</option>
+                        <option value="5">5th Year</option>
+                        <option value="6">Postgraduate</option>
+                    </select>
+                    <p class="field-error-msg" id="err_academic_year" hidden></p>
+                </div>
 
-            <div class="form-group">
-                <label class="form-label" for="genai_usage_frequency">
-                    GenAI Usage Frequency
-                    <span class="form-label__required" aria-hidden="true">*</span>
+                <div class="question-card" id="card_age_group">
+                    <label class="question-title" for="pred_age_group">
+                        3. Age Bracket <span class="required-asterisk" aria-hidden="true">*</span>
+                    </label>
+                    <p class="question-desc">Select your age group.</p>
+                    <select id="pred_age_group" name="age_group" class="form-select" required aria-required="true">
+                        <option value="" selected disabled>— Select age bracket —</option>
+                        <option value="1">18–20 years</option>
+                        <option value="2">21–23 years</option>
+                        <option value="3">24–26 years</option>
+                        <option value="4">27 or above</option>
+                    </select>
+                    <p class="field-error-msg" id="err_age_group" hidden></p>
+                </div>
+            </div>
+
+            <!-- Q4: Usage Frequency -->
+            <div class="question-card" id="card_ai_usage_freq">
+                <span class="question-title">
+                    4. How often do you typically use Generative AI tools for your academic studies? <span class="required-asterisk" aria-hidden="true">*</span>
+                </span>
+                <p class="question-desc">Consider your typical interaction during an active teaching semester.</p>
+                <div class="radio-card-group" role="radiogroup" aria-label="AI usage frequency">
+                    <label class="radio-card-label">
+                        <input type="radio" name="ai_usage_freq" value="1" />
+                        <span class="radio-card-content">
+                            <strong>1 — Rarely</strong>
+                            <small>Less than once a week</small>
+                        </span>
+                    </label>
+                    <label class="radio-card-label">
+                        <input type="radio" name="ai_usage_freq" value="2" />
+                        <span class="radio-card-content">
+                            <strong>2 — Sometimes</strong>
+                            <small>1 to 3 times per week</small>
+                        </span>
+                    </label>
+                    <label class="radio-card-label">
+                        <input type="radio" name="ai_usage_freq" value="3" />
+                        <span class="radio-card-content">
+                            <strong>3 — Frequently</strong>
+                            <small>4 to 6 times per week</small>
+                        </span>
+                    </label>
+                    <label class="radio-card-label">
+                        <input type="radio" name="ai_usage_freq" value="4" />
+                        <span class="radio-card-content">
+                            <strong>4 — Daily</strong>
+                            <small>Every day for study tasks</small>
+                        </span>
+                    </label>
+                </div>
+                <p class="field-error-msg" id="err_ai_usage_freq" hidden></p>
+            </div>
+
+            <!-- Q5: Weekly Hours -->
+            <div class="question-card" id="card_ai_time_per_week">
+                <label class="question-title" for="pred_ai_time_per_week">
+                    5. Approximately how much time do you spend using AI tools per week? <span class="required-asterisk" aria-hidden="true">*</span>
                 </label>
-                <select
-                    id="genai_usage_frequency"
-                    name="genai_usage_frequency"
-                    class="form-select"
-                    required
-                    aria-required="true"
-                    aria-describedby="freq_error"
-                >
-                    <option value="">— Select —</option>
-                    {% for opt in schema.genai_usage_frequency %}
-                    <option value="{{ opt }}">{{ opt }}</option>
-                    {% endfor %}
+                <p class="question-desc">Estimate your total cumulative study time with AI tools each week.</p>
+                <select id="pred_ai_time_per_week" name="ai_time_per_week" class="form-select" required aria-required="true">
+                    <option value="" selected disabled>— Select weekly time —</option>
+                    <option value="1">Less than 1 hour per week</option>
+                    <option value="2">1 to 3 hours per week</option>
+                    <option value="3">4 to 6 hours per week</option>
+                    <option value="4">7 to 10 hours per week</option>
+                    <option value="5">More than 10 hours per week</option>
                 </select>
-                <p class="form-error" id="freq_error" aria-live="polite" hidden></p>
+                <p class="field-error-msg" id="err_ai_time_per_week" hidden></p>
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="weekly_genai_usage">
-                    Weekly GenAI Usage
-                    <span class="form-label__required" aria-hidden="true">*</span>
-                </label>
-                <select
-                    id="weekly_genai_usage"
-                    name="weekly_genai_usage"
-                    class="form-select"
-                    required
-                    aria-required="true"
-                    aria-describedby="weekly_error"
-                >
-                    <option value="">— Select —</option>
-                    {% for opt in schema.weekly_genai_usage %}
-                    <option value="{{ opt }}">{{ opt }}</option>
-                    {% endfor %}
-                </select>
-                <p class="form-error" id="weekly_error" aria-live="polite" hidden></p>
+            <!-- Q6: AI Tools Multi-Select -->
+            <div class="question-card" id="card_tools_used">
+                <span class="question-title">
+                    6. Which Generative AI tools do you actively use? <span class="required-asterisk" aria-hidden="true">*</span>
+                </span>
+                <p class="question-desc">Select all that apply. At least one tool is required to reflect on AI usage habits.</p>
+                <div class="checkbox-chip-grid" role="group" aria-label="Generative AI tools used">
+                    <label class="checkbox-chip">
+                        <input type="checkbox" name="tools_used" value="ChatGPT" />
+                        <span>ChatGPT (OpenAI)</span>
+                    </label>
+                    <label class="checkbox-chip">
+                        <input type="checkbox" name="tools_used" value="Google Gemini" />
+                        <span>Google Gemini</span>
+                    </label>
+                    <label class="checkbox-chip">
+                        <input type="checkbox" name="tools_used" value="Microsoft Copilot" />
+                        <span>Microsoft Copilot</span>
+                    </label>
+                    <label class="checkbox-chip">
+                        <input type="checkbox" name="tools_used" value="Claude" />
+                        <span>Claude (Anthropic)</span>
+                    </label>
+                    <label class="checkbox-chip">
+                        <input type="checkbox" name="tools_used" value="Perplexity AI" />
+                        <span>Perplexity AI</span>
+                    </label>
+                </div>
+                <p class="field-error-msg" id="err_tools_used" hidden></p>
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="academic_purpose">
-                    Main Academic Purpose of GenAI Use
-                    <span class="form-label__required" aria-hidden="true">*</span>
-                </label>
-                <select
-                    id="academic_purpose"
-                    name="academic_purpose"
-                    class="form-select"
-                    required
-                    aria-required="true"
-                    aria-describedby="purpose_error"
-                >
-                    <option value="">— Select —</option>
-                    {% for opt in schema.academic_purpose %}
-                    <option value="{{ opt }}">{{ opt }}</option>
-                    {% endfor %}
-                </select>
-                <p class="form-error" id="purpose_error" aria-live="polite" hidden></p>
+            <!-- Step 1 Navigation -->
+            <div class="wizard-nav-row wizard-nav-row--right">
+                <button type="button" class="btn btn--primary" id="btnNextStep1">
+                    Next: Task Delegation &amp; Content Use &rarr;
+                </button>
             </div>
-        </fieldset>
+        </div>
 
-        <!-- ── Verification Practices ── -->
-        <fieldset class="form-fieldset">
-            <legend class="form-fieldset__legend">Verification Practices</legend>
-            <div class="form-group">
-                <label class="form-label" for="verification_frequency">
-                    Verification Frequency
-                    <span class="form-label__required" aria-hidden="true">*</span>
-                </label>
-                <select
-                    id="verification_frequency"
-                    name="verification_frequency"
-                    class="form-select"
-                    required
-                    aria-required="true"
-                    aria-describedby="verif_help verif_error"
-                >
-                    <option value="">— Select —</option>
-                    {% for opt in schema.verification_frequency %}
-                    <option value="{{ opt }}">{{ opt }}</option>
-                    {% endfor %}
-                </select>
-                <p class="form-help" id="verif_help">
-                    Represents how consistently a learner checks or verifies
-                    AI-generated academic information before relying on it.
-                    Note: This single field is a prototype representation only
-                    and does not replace the validated research verification scale.
-                </p>
-                <p class="form-error" id="verif_error" aria-live="polite" hidden></p>
+        <!-- ────────────────────────────────────────────────────────
+             SECTION 2: ACADEMIC TASK DELEGATION & CONTENT USE
+        ──────────────────────────────────────────────────────── -->
+        <div class="form-step" id="formStep2" data-step="2" hidden>
+            <div class="step-heading">
+                <h3 class="step-title">Section 2 of 4: Academic Task Delegation &amp; Content Use</h3>
+                <p class="step-desc">Investigate how tasks are shared between you and AI tools during assignments and coursework.</p>
             </div>
-        </fieldset>
 
-        <!-- ── Independent Learning ── -->
-        <fieldset class="form-fieldset">
-            <legend class="form-fieldset__legend">Independent Learning Behaviour</legend>
-            <div class="form-group">
-                <label class="form-label" for="independent_learning">
-                    Independent Learning Engagement
-                    <span class="form-label__required" aria-hidden="true">*</span>
-                </label>
-                <select
-                    id="independent_learning"
-                    name="independent_learning"
-                    class="form-select"
-                    required
-                    aria-required="true"
-                    aria-describedby="indep_help indep_error"
-                >
-                    <option value="">— Select —</option>
-                    {% for opt in schema.independent_learning %}
-                    <option value="{{ opt }}">{{ opt }}</option>
-                    {% endfor %}
-                </select>
-                <p class="form-help" id="indep_help">
-                    Prototype representation of independent-learning behaviour.
-                    Final model features will be derived from validated research variables.
-                </p>
-                <p class="form-error" id="indep_error" aria-live="polite" hidden></p>
+            <!-- Q20: Task Delegation Frequency -->
+            <div class="question-card" id="card_Q20">
+                <span class="question-title">
+                    1. How often do you ask Generative AI to solve or complete entire coursework tasks for you? <span class="required-asterisk" aria-hidden="true">*</span>
+                </span>
+                <p class="question-desc">Delegating entire tasks shifts active reasoning from you to the software.</p>
+                <div class="likert-radio-bar" role="radiogroup" aria-label="Task delegation frequency">
+                    <label class="likert-option">
+                        <input type="radio" name="Q20_task_delegation_freq" value="1" />
+                        <span class="likert-box">1</span>
+                        <span class="likert-label">Never</span>
+                    </label>
+                    <label class="likert-option">
+                        <input type="radio" name="Q20_task_delegation_freq" value="2" />
+                        <span class="likert-box">2</span>
+                        <span class="likert-label">Rarely</span>
+                    </label>
+                    <label class="likert-option">
+                        <input type="radio" name="Q20_task_delegation_freq" value="3" />
+                        <span class="likert-box">3</span>
+                        <span class="likert-label">Sometimes</span>
+                    </label>
+                    <label class="likert-option">
+                        <input type="radio" name="Q20_task_delegation_freq" value="4" />
+                        <span class="likert-box">4</span>
+                        <span class="likert-label">Often</span>
+                    </label>
+                    <label class="likert-option">
+                        <input type="radio" name="Q20_task_delegation_freq" value="5" />
+                        <span class="likert-box">5</span>
+                        <span class="likert-label">Very Often</span>
+                    </label>
+                </div>
+                <p class="field-error-msg" id="err_Q20" hidden></p>
             </div>
-        </fieldset>
 
-        <!-- ── Academic Context (Optional) ── -->
-        <fieldset class="form-fieldset">
-            <legend class="form-fieldset__legend">Academic Context <span class="form-fieldset__optional">(Optional)</span></legend>
-            <div class="form-group">
-                <label class="form-label" for="academic_year">Academic Year</label>
-                <select
-                    id="academic_year"
-                    name="academic_year"
-                    class="form-select"
-                    aria-describedby="year_error"
-                >
-                    <option value="">— Not specified —</option>
-                    {% for opt in schema.academic_year %}
-                    <option value="{{ opt }}">{{ opt }}</option>
-                    {% endfor %}
-                </select>
-                <p class="form-error" id="year_error" aria-live="polite" hidden></p>
+            <!-- Q1: Direct Use / Copying Frequency -->
+            <div class="question-card" id="card_Q1">
+                <span class="question-title">
+                    2. How often do you directly use or submit AI-generated answers with minimal or no editing? <span class="required-asterisk" aria-hidden="true">*</span>
+                </span>
+                <p class="question-desc">Direct copying without transformation bypasses personal understanding and synthesis.</p>
+                <div class="likert-radio-bar" role="radiogroup" aria-label="Direct use frequency">
+                    <label class="likert-option">
+                        <input type="radio" name="Q1_direct_use_freq" value="1" />
+                        <span class="likert-box">1</span>
+                        <span class="likert-label">Never (Always rewrite)</span>
+                    </label>
+                    <label class="likert-option">
+                        <input type="radio" name="Q1_direct_use_freq" value="2" />
+                        <span class="likert-box">2</span>
+                        <span class="likert-label">Rarely (Heavy rewrite)</span>
+                    </label>
+                    <label class="likert-option">
+                        <input type="radio" name="Q1_direct_use_freq" value="3" />
+                        <span class="likert-box">3</span>
+                        <span class="likert-label">Sometimes (Combine)</span>
+                    </label>
+                    <label class="likert-option">
+                        <input type="radio" name="Q1_direct_use_freq" value="4" />
+                        <span class="likert-box">4</span>
+                        <span class="likert-label">Often (Minor edits)</span>
+                    </label>
+                    <label class="likert-option">
+                        <input type="radio" name="Q1_direct_use_freq" value="5" />
+                        <span class="likert-box">5</span>
+                        <span class="likert-label">Always (Copy &amp; submit)</span>
+                    </label>
+                </div>
+                <p class="field-error-msg" id="err_Q1" hidden></p>
             </div>
-        </fieldset>
 
-        <!-- Submit -->
-        <div class="form-actions">
-            <button type="submit" class="btn btn--primary" id="submitBtn">
-                Validate Prototype Input
-            </button>
-            <button type="button" class="btn btn--outline" id="resetBtn">
-                Reset Form
-            </button>
+            <!-- Q22: Cognitive Effort Reviewing Answers -->
+            <div class="question-card" id="card_Q22">
+                <span class="question-title">
+                    3. How much cognitive effort do you invest in analyzing, verifying, and improving AI answers? <span class="required-asterisk" aria-hidden="true">*</span>
+                </span>
+                <p class="question-desc">Active critique keeps your critical reasoning engaged during study sessions.</p>
+                <div class="likert-radio-bar" role="radiogroup" aria-label="Effort on AI answers">
+                    <label class="likert-option">
+                        <input type="radio" name="Q22_effort_on_ai_answers" value="1" />
+                        <span class="likert-box">1</span>
+                        <span class="likert-label">No effort (Accept as-is)</span>
+                    </label>
+                    <label class="likert-option">
+                        <input type="radio" name="Q22_effort_on_ai_answers" value="2" />
+                        <span class="likert-box">2</span>
+                        <span class="likert-label">Little effort (Quick skim)</span>
+                    </label>
+                    <label class="likert-option">
+                        <input type="radio" name="Q22_effort_on_ai_answers" value="3" />
+                        <span class="likert-box">3</span>
+                        <span class="likert-label">Moderate effort (Check points)</span>
+                    </label>
+                    <label class="likert-option">
+                        <input type="radio" name="Q22_effort_on_ai_answers" value="4" />
+                        <span class="likert-box">4</span>
+                        <span class="likert-label">High effort (Thorough check)</span>
+                    </label>
+                    <label class="likert-option">
+                        <input type="radio" name="Q22_effort_on_ai_answers" value="5" />
+                        <span class="likert-box">5</span>
+                        <span class="likert-label">Very high (Rigorously audit)</span>
+                    </label>
+                </div>
+                <p class="field-error-msg" id="err_Q22" hidden></p>
+            </div>
+
+            <!-- Delegated Task Types (Optional Multi-Select) -->
+            <div class="question-card" id="card_tasks_delegated">
+                <span class="question-title">
+                    4. Which kinds of coursework tasks do you ask AI to assist with? <span class="optional-badge">(Optional)</span>
+                </span>
+                <p class="question-desc">Select all that apply to refine your reflection profile.</p>
+                <div class="checkbox-chip-grid" role="group" aria-label="Delegated task types">
+                    <label class="checkbox-chip">
+                        <input type="checkbox" name="tasks_delegated" value="Writing assignments or essays" />
+                        <span>Writing essays / assignments</span>
+                    </label>
+                    <label class="checkbox-chip">
+                        <input type="checkbox" name="tasks_delegated" value="Explaining difficult concepts" />
+                        <span>Explaining difficult concepts</span>
+                    </label>
+                    <label class="checkbox-chip">
+                        <input type="checkbox" name="tasks_delegated" value="Summarising reading materials" />
+                        <span>Summarising reading materials</span>
+                    </label>
+                    <label class="checkbox-chip">
+                        <input type="checkbox" name="tasks_delegated" value="Creating presentation slides" />
+                        <span>Creating presentations</span>
+                    </label>
+                    <label class="checkbox-chip">
+                        <input type="checkbox" name="tasks_delegated" value="Programming and coding solutions" />
+                        <span>Programming &amp; code</span>
+                    </label>
+                    <label class="checkbox-chip">
+                        <input type="checkbox" name="tasks_delegated" value="Mathematical and calculation problems" />
+                        <span>Mathematical calculations</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Step 2 Navigation -->
+            <div class="wizard-nav-row">
+                <button type="button" class="btn btn--outline" id="btnPrevStep2">&larr; Back to Section 1</button>
+                <button type="button" class="btn btn--primary" id="btnNextStep2">Next: Critical Thinking &rarr;</button>
+            </div>
+        </div>
+
+        <!-- ────────────────────────────────────────────────────────
+             SECTION 3: VERIFICATION & CRITICAL THINKING
+        ──────────────────────────────────────────────────────── -->
+        <div class="form-step" id="formStep3" data-step="3" hidden>
+            <div class="step-heading">
+                <h3 class="step-title">Section 3 of 4: Verification &amp; Critical Thinking</h3>
+                <p class="step-desc">Active verification is the strongest protection against unintentional cognitive offloading.</p>
+            </div>
+
+            <!-- Q2: External Source Verification -->
+            <div class="question-card" id="card_Q2">
+                <span class="question-title">
+                    1. External Source Verification <span class="required-asterisk" aria-hidden="true">*</span>
+                </span>
+                <p class="question-desc">I actively verify facts and claims made by AI against external textbooks, lecture slides, or papers.</p>
+                <div class="likert-radio-bar" role="radiogroup" aria-label="External source verification">
+                    <label class="likert-option"><input type="radio" name="Q2_verify_info" value="1" /><span class="likert-box">1</span><span class="likert-label">Strongly Disagree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q2_verify_info" value="2" /><span class="likert-box">2</span><span class="likert-label">Disagree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q2_verify_info" value="3" /><span class="likert-box">3</span><span class="likert-label">Neutral</span></label>
+                    <label class="likert-option"><input type="radio" name="Q2_verify_info" value="4" /><span class="likert-box">4</span><span class="likert-label">Agree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q2_verify_info" value="5" /><span class="likert-box">5</span><span class="likert-label">Strongly Agree</span></label>
+                </div>
+                <p class="field-error-msg" id="err_Q2" hidden></p>
+            </div>
+
+            <!-- Q3: Coursework Comparison -->
+            <div class="question-card" id="card_Q3">
+                <span class="question-title">
+                    2. Coursework Comparison <span class="required-asterisk" aria-hidden="true">*</span>
+                </span>
+                <p class="question-desc">I cross-reference AI-generated solutions with my official course syllabus and lecture materials.</p>
+                <div class="likert-radio-bar" role="radiogroup" aria-label="Coursework comparison">
+                    <label class="likert-option"><input type="radio" name="Q3_compare_sources" value="1" /><span class="likert-box">1</span><span class="likert-label">Strongly Disagree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q3_compare_sources" value="2" /><span class="likert-box">2</span><span class="likert-label">Disagree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q3_compare_sources" value="3" /><span class="likert-box">3</span><span class="likert-label">Neutral</span></label>
+                    <label class="likert-option"><input type="radio" name="Q3_compare_sources" value="4" /><span class="likert-box">4</span><span class="likert-label">Agree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q3_compare_sources" value="5" /><span class="likert-box">5</span><span class="likert-label">Strongly Agree</span></label>
+                </div>
+                <p class="field-error-msg" id="err_Q3" hidden></p>
+            </div>
+
+            <!-- Q4: Accuracy Checking -->
+            <div class="question-card" id="card_Q4">
+                <span class="question-title">
+                    3. Accuracy Checking <span class="required-asterisk" aria-hidden="true">*</span>
+                </span>
+                <p class="question-desc">I actively check whether AI formulas, calculations, or code outputs are factually correct.</p>
+                <div class="likert-radio-bar" role="radiogroup" aria-label="Accuracy checking">
+                    <label class="likert-option"><input type="radio" name="Q4_check_accuracy" value="1" /><span class="likert-box">1</span><span class="likert-label">Strongly Disagree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q4_check_accuracy" value="2" /><span class="likert-box">2</span><span class="likert-label">Disagree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q4_check_accuracy" value="3" /><span class="likert-box">3</span><span class="likert-label">Neutral</span></label>
+                    <label class="likert-option"><input type="radio" name="Q4_check_accuracy" value="4" /><span class="likert-box">4</span><span class="likert-label">Agree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q4_check_accuracy" value="5" /><span class="likert-box">5</span><span class="likert-label">Strongly Agree</span></label>
+                </div>
+                <p class="field-error-msg" id="err_Q4" hidden></p>
+            </div>
+
+            <!-- Q5: Understanding the Reasoning -->
+            <div class="question-card" id="card_Q5">
+                <span class="question-title">
+                    4. Understanding the Reasoning <span class="required-asterisk" aria-hidden="true">*</span>
+                </span>
+                <p class="question-desc">Before using an AI output, I make sure I personally understand the underlying logic and steps.</p>
+                <div class="likert-radio-bar" role="radiogroup" aria-label="Understanding the reasoning">
+                    <label class="likert-option"><input type="radio" name="Q5_understand_reasoning" value="1" /><span class="likert-box">1</span><span class="likert-label">Strongly Disagree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q5_understand_reasoning" value="2" /><span class="likert-box">2</span><span class="likert-label">Disagree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q5_understand_reasoning" value="3" /><span class="likert-box">3</span><span class="likert-label">Neutral</span></label>
+                    <label class="likert-option"><input type="radio" name="Q5_understand_reasoning" value="4" /><span class="likert-box">4</span><span class="likert-label">Agree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q5_understand_reasoning" value="5" /><span class="likert-box">5</span><span class="likert-label">Strongly Agree</span></label>
+                </div>
+                <p class="field-error-msg" id="err_Q5" hidden></p>
+            </div>
+
+            <!-- Q6: Content Personalization -->
+            <div class="question-card" id="card_Q6">
+                <span class="question-title">
+                    5. Content Personalization &amp; Synthesis <span class="required-asterisk" aria-hidden="true">*</span>
+                </span>
+                <p class="question-desc">I adapt and rewrite AI outputs into my own academic voice and perspective.</p>
+                <div class="likert-radio-bar" role="radiogroup" aria-label="Content personalization">
+                    <label class="likert-option"><input type="radio" name="Q6_modify_content" value="1" /><span class="likert-box">1</span><span class="likert-label">Strongly Disagree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q6_modify_content" value="2" /><span class="likert-box">2</span><span class="likert-label">Disagree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q6_modify_content" value="3" /><span class="likert-box">3</span><span class="likert-label">Neutral</span></label>
+                    <label class="likert-option"><input type="radio" name="Q6_modify_content" value="4" /><span class="likert-box">4</span><span class="likert-label">Agree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q6_modify_content" value="5" /><span class="likert-box">5</span><span class="likert-label">Strongly Agree</span></label>
+                </div>
+                <p class="field-error-msg" id="err_Q6" hidden></p>
+            </div>
+
+            <!-- Step 3 Navigation -->
+            <div class="wizard-nav-row">
+                <button type="button" class="btn btn--outline" id="btnPrevStep3">&larr; Back to Section 2</button>
+                <button type="button" class="btn btn--primary" id="btnNextStep3">Next: Independent Learning &rarr;</button>
+            </div>
+        </div>
+
+        <!-- ────────────────────────────────────────────────────────
+             SECTION 4: INDEPENDENT LEARNING & TRUST IN AI
+        ──────────────────────────────────────────────────────── -->
+        <div class="form-step" id="formStep4" data-step="4" hidden>
+            <div class="step-heading">
+                <h3 class="step-title">Section 4 of 4: Independent Learning &amp; Trust in AI</h3>
+                <p class="step-desc">Examine your confidence in working independently and how much you trust AI outputs.</p>
+            </div>
+
+            <!-- Q7: Independent Problem-Solving First -->
+            <div class="question-card" id="card_Q7">
+                <span class="question-title">
+                    1. Independent Problem-Solving First <span class="required-asterisk" aria-hidden="true">*</span>
+                </span>
+                <p class="question-desc">I always attempt to solve coursework questions or draft ideas on my own before opening an AI tool.</p>
+                <div class="likert-radio-bar" role="radiogroup" aria-label="Independent problem solving first">
+                    <label class="likert-option"><input type="radio" name="Q7_attempt_independently" value="1" /><span class="likert-box">1</span><span class="likert-label">Strongly Disagree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q7_attempt_independently" value="2" /><span class="likert-box">2</span><span class="likert-label">Disagree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q7_attempt_independently" value="3" /><span class="likert-box">3</span><span class="likert-label">Neutral</span></label>
+                    <label class="likert-option"><input type="radio" name="Q7_attempt_independently" value="4" /><span class="likert-box">4</span><span class="likert-label">Agree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q7_attempt_independently" value="5" /><span class="likert-box">5</span><span class="likert-label">Strongly Agree</span></label>
+                </div>
+                <p class="field-error-msg" id="err_Q7" hidden></p>
+            </div>
+
+            <!-- Q8: Confidence Without AI -->
+            <div class="question-card" id="card_Q8">
+                <span class="question-title">
+                    2. Confidence in Completing Work Without AI <span class="required-asterisk" aria-hidden="true">*</span>
+                </span>
+                <p class="question-desc">If AI tools were completely unavailable tomorrow, I am confident I could complete all my assignments successfully.</p>
+                <div class="likert-radio-bar" role="radiogroup" aria-label="Confidence without AI">
+                    <label class="likert-option"><input type="radio" name="Q8_complete_without_ai" value="1" /><span class="likert-box">1</span><span class="likert-label">Strongly Disagree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q8_complete_without_ai" value="2" /><span class="likert-box">2</span><span class="likert-label">Disagree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q8_complete_without_ai" value="3" /><span class="likert-box">3</span><span class="likert-label">Neutral</span></label>
+                    <label class="likert-option"><input type="radio" name="Q8_complete_without_ai" value="4" /><span class="likert-box">4</span><span class="likert-label">Agree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q8_complete_without_ai" value="5" /><span class="likert-box">5</span><span class="likert-label">Strongly Agree</span></label>
+                </div>
+                <p class="field-error-msg" id="err_Q8" hidden></p>
+            </div>
+
+            <!-- Q9: Assistant vs. Replacement Mindset -->
+            <div class="question-card" id="card_Q9">
+                <span class="question-title">
+                    3. Assistant vs. Replacement Mindset <span class="required-asterisk" aria-hidden="true">*</span>
+                </span>
+                <p class="question-desc">I view generative AI strictly as an auxiliary assistant, never as a replacement for my own critical thinking.</p>
+                <div class="likert-radio-bar" role="radiogroup" aria-label="Assistant vs replacement mindset">
+                    <label class="likert-option"><input type="radio" name="Q9_learning_assistant" value="1" /><span class="likert-box">1</span><span class="likert-label">Strongly Disagree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q9_learning_assistant" value="2" /><span class="likert-box">2</span><span class="likert-label">Disagree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q9_learning_assistant" value="3" /><span class="likert-box">3</span><span class="likert-label">Neutral</span></label>
+                    <label class="likert-option"><input type="radio" name="Q9_learning_assistant" value="4" /><span class="likert-box">4</span><span class="likert-label">Agree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q9_learning_assistant" value="5" /><span class="likert-box">5</span><span class="likert-label">Strongly Agree</span></label>
+                </div>
+                <p class="field-error-msg" id="err_Q9" hidden></p>
+            </div>
+
+            <!-- Q30: Belief in AI Accuracy -->
+            <div class="question-card" id="card_Q30">
+                <span class="question-title">
+                    4. Belief in AI Accuracy <span class="required-asterisk" aria-hidden="true">*</span>
+                </span>
+                <p class="question-desc">I generally assume that information generated by generative AI is accurate and trustworthy.</p>
+                <div class="likert-radio-bar" role="radiogroup" aria-label="Belief in AI accuracy">
+                    <label class="likert-option"><input type="radio" name="Q30_trust_accuracy" value="1" /><span class="likert-box">1</span><span class="likert-label">Strongly Disagree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q30_trust_accuracy" value="2" /><span class="likert-box">2</span><span class="likert-label">Disagree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q30_trust_accuracy" value="3" /><span class="likert-box">3</span><span class="likert-label">Neutral</span></label>
+                    <label class="likert-option"><input type="radio" name="Q30_trust_accuracy" value="4" /><span class="likert-box">4</span><span class="likert-label">Agree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q30_trust_accuracy" value="5" /><span class="likert-box">5</span><span class="likert-label">Strongly Agree</span></label>
+                </div>
+                <p class="field-error-msg" id="err_Q30" hidden></p>
+            </div>
+
+            <!-- Q33: Trust in AI Guidance -->
+            <div class="question-card" id="card_Q33">
+                <span class="question-title">
+                    5. Trust in AI Guidance <span class="required-asterisk" aria-hidden="true">*</span>
+                </span>
+                <p class="question-desc">I trust that generative AI gives me the most appropriate academic guidance for my coursework.</p>
+                <div class="likert-radio-bar" role="radiogroup" aria-label="Trust in AI guidance">
+                    <label class="likert-option"><input type="radio" name="Q33_trust_appropriate_support" value="1" /><span class="likert-box">1</span><span class="likert-label">Strongly Disagree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q33_trust_appropriate_support" value="2" /><span class="likert-box">2</span><span class="likert-label">Disagree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q33_trust_appropriate_support" value="3" /><span class="likert-box">3</span><span class="likert-label">Neutral</span></label>
+                    <label class="likert-option"><input type="radio" name="Q33_trust_appropriate_support" value="4" /><span class="likert-box">4</span><span class="likert-label">Agree</span></label>
+                    <label class="likert-option"><input type="radio" name="Q33_trust_appropriate_support" value="5" /><span class="likert-box">5</span><span class="likert-label">Strongly Agree</span></label>
+                </div>
+                <p class="field-error-msg" id="err_Q33" hidden></p>
+            </div>
+
+            <!-- Step 4 Navigation & Action Buttons -->
+            <div class="wizard-nav-row">
+                <button type="button" class="btn btn--outline" id="btnPrevStep4">&larr; Back to Section 3</button>
+                <div class="action-btn-group">
+                    <button type="button" class="btn btn--outline" id="btnResetAssessment">Reset Assessment</button>
+                    <button type="button" class="btn btn--primary btn--lg" id="btnCalculatePrediction">
+                        Calculate Prediction &amp; SHAP Explanations
+                    </button>
+                </div>
+            </div>
         </div>
 
     </form>
 </section>
 
-
 <!-- ================================================================
-     D. Validation Result & Preprocessing Preview
-     (hidden initially, shown by JS after submission)
+     D. Live Prediction & Explainable LinearSHAP Results Panel
 ================================================================ -->
-<section
-    class="content-section"
-    id="validationResultSection"
-    aria-labelledby="validationResultHeading"
-    aria-live="polite"
-    hidden
->
-    <h2 class="section-heading" id="validationResultHeading">Input Validation Result</h2>
-
-    <!-- Success state -->
-    <div id="validationSuccess" hidden>
-        <div class="validation-success-banner" role="status">
-            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Prototype input validated successfully.
-        </div>
-
-        <!-- Input summary table -->
-        <h3 class="subsection-heading">Prototype Input Summary</h3>
-        <div class="summary-table-wrap">
-            <table class="summary-table" aria-label="Submitted predictor values">
-                <tbody id="summaryTableBody"></tbody>
-            </table>
-        </div>
-
-        <!-- Validation checks -->
-        <h3 class="subsection-heading">Input Validation</h3>
-        <ul class="check-list" aria-label="Validation checks passed">
-            <li class="check-list__item check-list__item--pass">
-                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                Required fields complete
-            </li>
-            <li class="check-list__item check-list__item--pass">
-                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                Accepted category values
-            </li>
-            <li class="check-list__item check-list__item--pass">
-                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                Anonymous participant reference format
-            </li>
-        </ul>
-
-        <!-- Model Status -->
-        <h3 class="subsection-heading">Model Status</h3>
-        <div class="model-status-card">
-            <div class="model-status-row">
-                <span class="model-status-label">Training status</span>
-                <span class="model-status-value model-status-value--unavailable">Not trained</span>
+<section id="reflectionResultSection" class="content-section" hidden aria-labelledby="resultsHeading">
+    <div id="predictionResultCard" class="result-hero-card">
+        <div class="result-hero-header">
+            <div>
+                <span class="result-badge-label">Personal Reflection Result</span>
+                <div id="riskCategoryBadge" class="risk-badge">Computing...</div>
             </div>
-            <div class="model-status-row">
-                <span class="model-status-label">Prediction</span>
-                <span class="model-status-value model-status-value--unavailable">Unavailable</span>
-            </div>
-            <div class="model-status-row">
-                <span class="model-status-label">SHAP explanation</span>
-                <span class="model-status-value model-status-value--unavailable">Unavailable</span>
+            <div class="score-stat-box">
+                <span class="score-stat-label">Latent Score (1.000–5.000)</span>
+                <span id="continuousScoreVal" class="score-stat-number">—</span>
             </div>
         </div>
 
-        <div class="info-banner info-banner--prototype" role="note" style="margin: 0 0 0 0;">
-            <svg class="info-banner__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <p id="riskInterpretationSummary" class="result-interpretation-lead"></p>
+
+        <!-- Category Probability Likelihood Meter -->
+        <div class="prob-section">
+            <h4 class="prob-heading">📊 Model-Estimated Category Likelihoods</h4>
+            <p class="prob-desc">
+                Derived from the continuous predictive density via normal cumulative distribution calibration ($\sigma = 0.585$).
+                Probabilities reflect the estimated distribution of peer students reporting similar habits.
+            </p>
+            <div class="prob-grid">
+                <div class="prob-card">
+                    <div class="prob-card-header">
+                        <span class="prob-tier-title">Low Offloading</span>
+                        <span id="probValLow" class="prob-tier-pct">0.0%</span>
+                    </div>
+                    <div class="prob-meter-track">
+                        <div id="probBarLow" class="prob-meter-fill prob-meter-fill--low" style="width: 0%;"></div>
+                    </div>
+                    <small class="prob-tier-sub">Threshold: &le; 2.667</small>
+                </div>
+
+                <div class="prob-card">
+                    <div class="prob-card-header">
+                        <span class="prob-tier-title">Moderate Offloading</span>
+                        <span id="probValMed" class="prob-tier-pct">0.0%</span>
+                    </div>
+                    <div class="prob-meter-track">
+                        <div id="probBarMed" class="prob-meter-fill prob-meter-fill--med" style="width: 0%;"></div>
+                    </div>
+                    <small class="prob-tier-sub">Threshold: 2.668–3.500</small>
+                </div>
+
+                <div class="prob-card">
+                    <div class="prob-card-header">
+                        <span class="prob-tier-title">High Offloading</span>
+                        <span id="probValHigh" class="prob-tier-pct">0.0%</span>
+                    </div>
+                    <div class="prob-meter-track">
+                        <div id="probBarHigh" class="prob-meter-fill prob-meter-fill--high" style="width: 0%;"></div>
+                    </div>
+                    <small class="prob-tier-sub">Threshold: &gt; 3.500</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2-Column SHAP Factor Breakdown -->
+        <div class="shap-section">
+            <h4 class="shap-heading">🔍 What Influenced Your Reflection? (Key Habits)</h4>
+            <p class="shap-desc">
+                Our explainable model uses exact LinearSHAP ($\phi_j = \beta_j \times (x_j - \bar{x}_j)$) to calculate the precise mathematical contribution of each study habit toward protecting or elevating your predicted cognitive offloading score.
+            </p>
+
+            <div class="shap-columns-grid">
+                <!-- Mitigating column -->
+                <div class="shap-col">
+                    <h5 class="shap-col-header shap-col-header--mitigate">
+                        🛡️ Habits Protecting Your Independent Learning
+                    </h5>
+                    <div id="mitigatingFactorsContainer" class="factor-badge-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Elevating column -->
+                <div class="shap-col">
+                    <h5 class="shap-col-header shap-col-header--elevate">
+                        ⚠️ Habits Contributing to Higher Offloading
+                    </h5>
+                    <div id="elevatingFactorsContainer" class="factor-badge-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actionable Ideas for Learning -->
+        <div class="recommendations-section">
+            <h4 class="recommendations-heading">💡 Actionable Ideas for Your Studies</h4>
+            <div id="actionableIdeasGrid" class="recommendations-grid">
+                <!-- Populated dynamically based on category -->
+            </div>
+        </div>
+
+        <!-- Mandatory Research Disclaimer Notice -->
+        <div class="research-disclaimer-box" role="note">
+            <svg class="research-disclaimer-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
             </svg>
             <div>
-                The submitted data is structurally valid for the prototype workflow.
-                Risk prediction will be enabled only after the research dataset has
-                been validated and the final machine-learning model has been trained
-                and evaluated.
-            </div>
-        </div>
-    </div>
-
-    <!-- Error state -->
-    <div id="validationError" hidden>
-        <div class="validation-error-banner" role="alert">
-            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-            Input validation failed. Please correct the errors below.
-        </div>
-        <ul class="error-list" id="errorList" aria-live="assertive"></ul>
-    </div>
-</section>
-
-
-<!-- ================================================================
-     E. Planned Analytical Outputs
-     (visually disabled — model not yet trained)
-================================================================ -->
-<section class="content-section" aria-labelledby="outputsHeading">
-    <h2 class="section-heading" id="outputsHeading">Planned Analytical Outputs</h2>
-    <p class="section-subheading">
-        These outputs will be generated once the trained model is integrated.
-    </p>
-
-    <div class="card-grid card-grid--3">
-
-        <div class="output-card output-card--disabled" aria-label="Cognitive Offloading Risk Probability — not yet available">
-            <div class="output-card__title">Cognitive Offloading Risk Probability</div>
-            <div class="output-card__unavailable">
-                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                Available after model training
-            </div>
-        </div>
-
-        <div class="output-card output-card--disabled" aria-label="Risk Classification — not yet available">
-            <div class="output-card__title">Risk Classification</div>
-            <div class="output-card__unavailable">
-                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                Available after model training
-            </div>
-        </div>
-
-        <div class="output-card output-card--disabled" aria-label="Top Behavioural Factors — not yet available">
-            <div class="output-card__title">Top Behavioural Factors</div>
-            <div class="output-card__unavailable">
-                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                Available after model training
-            </div>
-        </div>
-
-        <div class="output-card output-card--disabled" aria-label="SHAP Explanation — not yet available">
-            <div class="output-card__title">SHAP Explanation</div>
-            <div class="output-card__unavailable">
-                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                Available after model training
-            </div>
-        </div>
-
-        <div class="output-card output-card--disabled" aria-label="Model Confidence and Calibration — not yet available">
-            <div class="output-card__title">Model Confidence &amp; Calibration</div>
-            <div class="output-card__unavailable">
-                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                Available after model training
+                <strong>RESEARCH DISCLAIMER:</strong> This risk prediction is generated by an academic machine learning model (Component 1, J26-DS-310) for exploratory educational self-reflection only. It does not constitute a psychological assessment, cognitive diagnosis, or academic penalty.
             </div>
         </div>
 
     </div>
 </section>
 
-
 <!-- ================================================================
-     G. Data Leakage Protection Panel
+     E. Target Leakage Protection Panel (Academic Rigour)
 ================================================================ -->
 <section class="content-section" aria-labelledby="leakageHeading">
     <h2 class="section-heading" id="leakageHeading">Target Leakage Protection</h2>
     <p class="section-subheading">
-        The cognitive-offloading measurement items used to construct the prediction
-        target are intentionally excluded from model predictors. Only non-target
-        behavioural variables such as GenAI usage, verification practices and
-        independent-learning strategies will be used for prediction.
+        Methodological guarantee: Target construction items are strictly separated from prediction model features.
     </p>
 
     <div class="leakage-diagram" role="img" aria-label="Target leakage protection: Target construction using Cognitive Offloading Scale is separated from Predictor inputs used in the machine learning model">
-        <div class="leakage-side leakage-side--target">
-            <div class="leakage-side__header">TARGET CONSTRUCTION</div>
-            <div class="leakage-item leakage-item--target">Cognitive Offloading Scale</div>
-            <div class="leakage-arrow" aria-hidden="true">&#x25BC;</div>
-            <div class="leakage-item leakage-item--output">Cognitive Offloading Outcome</div>
-            <div class="leakage-not-equal" aria-label="Not equal to, not used as model input">TARGET ITEMS &ne; MODEL INPUT FEATURES</div>
-        </div>
+        <div class="leakage-grid">
+            <div class="leakage-side leakage-side--predictors">
+                <div class="leakage-side__header">PREDICTORS (68 Features)</div>
+                <div class="leakage-item leakage-item--predictor">GenAI Usage Behaviour &amp; Intensity</div>
+                <div class="leakage-item leakage-item--predictor">Critical Verification Practices (Q2–Q6)</div>
+                <div class="leakage-item leakage-item--predictor">Cognitive Autonomy &amp; Problem Solving (Q7–Q9)</div>
+                <div class="likert-item leakage-item--predictor">AI Trust, TAM &amp; Academic Discipline</div>
+            </div>
 
-        <div class="leakage-separator" aria-hidden="true">
-            <span>SEPARATE<br/>FROM</span>
-        </div>
+            <div class="leakage-divider" aria-hidden="true">
+                <span class="leakage-divider__symbol">&#x2260;</span>
+                <span class="leakage-divider__text">Strict Boundary</span>
+            </div>
 
-        <div class="leakage-side leakage-side--predictors">
-            <div class="leakage-side__header">PREDICTORS</div>
-            <div class="leakage-item leakage-item--predictor">GenAI Usage Behaviour</div>
-            <div class="leakage-item leakage-item--predictor">Verification Practices</div>
-            <div class="leakage-item leakage-item--predictor">Independent Learning</div>
-            <div class="leakage-item leakage-item--predictor">Academic Context</div>
-            <div class="leakage-arrow" aria-hidden="true">&#x25BC;</div>
-            <div class="leakage-item leakage-item--model">Machine Learning Model</div>
+            <div class="leakage-side leakage-side--target">
+                <div class="leakage-side__header">TARGET ITEMS (Excluded from Model)</div>
+                <div class="leakage-item leakage-item--target">CO_1: Rely on AI without thinking through solution</div>
+                <div class="leakage-item leakage-item--target">CO_2: Use AI when could solve independently</div>
+                <div class="leakage-item leakage-item--target">CO_3: Allow AI to bypass critical analysis</div>
+                <div class="leakage-item leakage-item--target">CO_4: Delegate cognitive synthesis to tools</div>
+                <div class="leakage-item leakage-item--target">CO_5: Habitual cognitive offloading scale</div>
+            </div>
         </div>
     </div>
 </section>
-
 
 <!-- ================================================================
-     H. Future Model Architecture Panel
+     F. Developer Prototype Validator (Collapsible Legacy Section)
 ================================================================ -->
-<section class="content-section" aria-labelledby="archHeading">
-    <h2 class="section-heading" id="archHeading">Future Model Integration Architecture</h2>
-    <p class="section-subheading">
-        Planned analytical pipeline — implementation begins after validated research
-        data becomes available.
-    </p>
+<details class="content-section legacy-validator-details">
+    <summary class="legacy-summary">
+        🔧 Developer Tools: Prototype Schema Validator (Legacy Verification)
+    </summary>
+    <div class="legacy-validator-body">
+        <p class="form-help">
+            Available after model training and prototype verification.
+            This auxiliary panel validates the structural integrity of API payloads and does not generate research predictions or persist participant records.
+        </p>
 
-    <div class="model-arch-diagram" role="img" aria-label="Future model architecture: Validated Dataset → Preprocessing → Train/Test Split → Stratified Cross Validation → Three models (Logistic Regression, Random Forest, XGBoost) → Model Evaluation → Selected Model → SHAP → Dashboard">
-        <div class="model-arch-steps">
-
-            <div class="model-arch-step">
-                <div class="model-arch-step__label">Validated Survey Dataset</div>
+        <form id="component1Form" class="predictor-form" novalidate aria-label="Legacy prototype validation form">
+            <div class="form-group">
+                <label class="form-label" for="participant_reference">Participant Reference ID (Anonymised)</label>
+                <input type="text" id="participant_reference" name="participant_reference" class="form-input" placeholder="e.g. P0001" />
             </div>
-            <div class="model-arch-arrow" aria-hidden="true">&#x25BC;</div>
-
-            <div class="model-arch-step">
-                <div class="model-arch-step__label">Training-only Preprocessing</div>
+            <div class="form-group">
+                <label class="form-label" for="genai_usage_frequency">GenAI Usage Frequency</label>
+                <select id="genai_usage_frequency" name="genai_usage_frequency" class="form-select">
+                    <option value="">— Select —</option>
+                    {% for opt in schema.genai_usage_frequency %}
+                    <option value="{{ opt }}">{{ opt }}</option>
+                    {% endfor %}
+                </select>
             </div>
-            <div class="model-arch-arrow" aria-hidden="true">&#x25BC;</div>
-
-            <div class="model-arch-step">
-                <div class="model-arch-step__label">Train / Test Separation</div>
+            <div class="form-group">
+                <label class="form-label" for="weekly_genai_usage">Weekly GenAI Usage</label>
+                <select id="weekly_genai_usage" name="weekly_genai_usage" class="form-select">
+                    <option value="">— Select —</option>
+                    {% for opt in schema.weekly_genai_usage %}
+                    <option value="{{ opt }}">{{ opt }}</option>
+                    {% endfor %}
+                </select>
             </div>
-            <div class="model-arch-arrow" aria-hidden="true">&#x25BC;</div>
-
-            <div class="model-arch-step">
-                <div class="model-arch-step__label">Stratified Cross Validation</div>
+            <div class="form-group">
+                <label class="form-label" for="academic_purpose">Main Academic Purpose</label>
+                <select id="academic_purpose" name="academic_purpose" class="form-select">
+                    <option value="">— Select —</option>
+                    {% for opt in schema.academic_purpose %}
+                    <option value="{{ opt }}">{{ opt }}</option>
+                    {% endfor %}
+                </select>
             </div>
-            <div class="model-arch-arrow" aria-hidden="true">&#x25BC;</div>
-
-            <div class="model-arch-models">
-                <div class="model-arch-model">Logistic Regression</div>
-                <div class="model-arch-model">Random Forest</div>
-                <div class="model-arch-model">XGBoost</div>
+            <div class="form-group">
+                <label class="form-label" for="verification_frequency">Verification Frequency</label>
+                <select id="verification_frequency" name="verification_frequency" class="form-select">
+                    <option value="">— Select —</option>
+                    {% for opt in schema.verification_frequency %}
+                    <option value="{{ opt }}">{{ opt }}</option>
+                    {% endfor %}
+                </select>
             </div>
-            <div class="model-arch-arrow" aria-hidden="true">&#x25BC;</div>
-
-            <div class="model-arch-step">
-                <div class="model-arch-step__label">Model Evaluation</div>
-                <div class="model-arch-step__sub">Accuracy · F1 · ROC-AUC · Calibration</div>
+            <div class="form-group">
+                <label class="form-label" for="independent_learning">Independent Learning</label>
+                <select id="independent_learning" name="independent_learning" class="form-select">
+                    <option value="">— Select —</option>
+                    {% for opt in schema.independent_learning %}
+                    <option value="{{ opt }}">{{ opt }}</option>
+                    {% endfor %}
+                </select>
             </div>
-            <div class="model-arch-arrow" aria-hidden="true">&#x25BC;</div>
-
-            <div class="model-arch-step model-arch-step--highlight">
-                <div class="model-arch-step__label">Selected Model</div>
+            <div class="form-group">
+                <label class="form-label" for="legacy_academic_year">Academic Year</label>
+                <select id="legacy_academic_year" name="academic_year" class="form-select">
+                    <option value="">— Select —</option>
+                    {% for opt in schema.academic_year %}
+                    <option value="{{ opt }}">{{ opt }}</option>
+                    {% endfor %}
+                </select>
             </div>
-            <div class="model-arch-arrow" aria-hidden="true">&#x25BC;</div>
-
-            <div class="model-arch-step">
-                <div class="model-arch-step__label">SHAP Explainability</div>
+            <div class="btn-group">
+                <button type="submit" class="btn btn--outline" id="submitBtn">
+                    Validate Prototype Input
+                </button>
+                <button type="button" class="btn btn--ghost" id="resetBtn">
+                    Reset
+                </button>
             </div>
-            <div class="model-arch-arrow" aria-hidden="true">&#x25BC;</div>
+        </form>
 
-            <div class="model-arch-step model-arch-step--dashboard">
-                <div class="model-arch-step__label">Research Analytics Dashboard</div>
+        <div id="validationResultSection" class="validation-result-panel" hidden>
+            <div id="validationSuccess" class="alert alert--success" hidden>
+                <strong>Valid Submission:</strong> Prototype input validated successfully.
+                <table class="summary-table" style="margin-top: 0.5rem;">
+                    <tbody id="summaryTableBody"></tbody>
+                </table>
             </div>
-
+            <div id="validationError" class="alert alert--danger" hidden>
+                <strong>Validation Failed:</strong>
+                <ul id="errorList"></ul>
+            </div>
         </div>
     </div>
-</section>
+</details>
 
 {% endblock %}
 
