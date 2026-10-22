@@ -5,12 +5,14 @@
  *
  * Responsibilities:
  *   - Multi-step questionnaire wizard navigation (Steps 1–4)
+ *   - Step progress tracker and visual progress bar
  *   - Rigorous client-side section validation with clear warning banners
- *   - Quick demonstration profile presets (Low, Medium, High risk)
- *   - Interactive prediction & exact LinearSHAP attribution via /api/component1/predict
- *   - Two-column SHAP factor rendering (Mitigating vs Elevating)
+ *   - Guaranteed unselected initial state (no default preselection)
+ *   - Demonstration presets (Low, Medium, High risk) as explicit optional tools
+ *   - Interactive prediction & exact LinearSHAP attribution via POST /api/component1/predict
+ *   - Latent score spectrum visualizer & category likelihood meters
+ *   - Two-column LinearSHAP factor rendering (Mitigating vs Elevating)
  *   - Actionable study recommendations based on predicted risk tier
- *   - Backward-compatible prototype validator form handling
  */
 
 "use strict";
@@ -20,8 +22,7 @@
     /* ==================================================================
        1. Endpoints & Constants
     ================================================================== */
-    var PREDICT_URL  = "/api/component1/predict";
-    var VALIDATE_URL = "/api/component1/validate-input";
+    var PREDICT_URL = "/api/component1/predict";
 
     // Required questions per wizard section
     var SECTION_REQUIREMENTS = {
@@ -129,54 +130,55 @@
         }
     };
 
-    // Actionable learning ideas by risk category
+    // Actionable Study Recommendations per Predicted Risk Tier
     var ACTIONABLE_IDEAS = {
         low: [
             {
-                title: "Maintain Your 15-Minute Rule",
-                text: "Continue attempting assignments and problem sets independently first before consulting AI for hints or clarifications."
+                title: "Maintain First-Principles Problem Solving",
+                text: "Continue attempting coursework challenges independently before consulting AI. This productive struggle builds durable synaptic connections and exam readiness."
             },
             {
-                title: "Teach the AI (Socratic Dialogue)",
-                text: "Prompt AI with: 'Here is my proposed solution and reasoning. Critique it and identify any logical gaps or edge cases.'"
+                title: "Use AI as a Socratic Dialogue Partner",
+                text: "Prompt the AI to critique your own written logic or challenge your assumptions rather than asking it to generate answers directly."
             },
             {
-                title: "Deepen Socratic Inquiry",
-                text: "Ask AI for competing theoretical frameworks or alternative counterarguments to challenge and deepen your existing understanding."
+                title: "Audit Algorithmic Claims",
+                text: "Keep verifying citations and numerical proofs against peer-reviewed literature and course texts to prevent hallucination acceptance."
             }
         ],
         medium: [
             {
-                title: "The Draft-First Habit",
-                text: "Spend at least 15 to 20 minutes drafting an outline, pseudocode, or initial paragraph before opening an AI tool."
+                title: "Establish a 15-Minute Independence Window",
+                text: "Spend at least 15 minutes drafting your outline, code architecture, or conceptual proof on paper before opening ChatGPT or Copilot."
             },
             {
-                title: "Dual-Source Rule",
-                text: "Whenever an AI tool provides an explanation, formula, or code snippet, cross-check it against your lecture slides or recommended textbook."
+                title: "Transform Every AI Output in Your Own Words",
+                text: "Never copy and paste generated text directly. Read, close the window, and re-synthesize the explanation in your personal academic voice."
             },
             {
-                title: "Rewrite in Your Own Words",
-                text: "Avoid copying sentences directly. Summarize the AI explanation in your own handwriting or notes to trigger active memory encoding."
+                title: "Cross-Reference With Course Slides",
+                text: "Ensure the concepts and notation suggested by AI align strictly with the methodology taught by your lecturer."
             }
         ],
         high: [
             {
-                title: "Step Away from Full-Task Delegation",
-                text: "Break coursework assignments into smaller chunks and only use AI for conceptual clarification on specific obstacles, never for the final answer."
+                title: "Reclaim Cognitive Agency on Core Tasks",
+                text: "Identify assignments where AI was delegated the entire task (e.g. coding or essay drafting) and commit to solving the core reasoning steps yourself."
             },
             {
-                title: "Active Verification Routine",
-                text: "Assume every AI output contains subtle factual errors or hallucinations until explicitly verified against official coursework notes."
+                title: "Implement Systematic Fact-Checking",
+                text: "Assume every AI fact or equation is unverified until corroborated by an authoritative textbook, syllabus document, or academic paper."
             },
             {
-                title: "Simulate Exam Conditions",
-                text: "Practice solving past exam questions completely disconnected from AI tools to build problem-solving confidence and mental endurance."
+                title: "Conduct Weekly 'Offline' Practice Tests",
+                text: "Test your ability to solve typical exam problems under timed conditions without access to any generative AI assistant."
             }
         ]
     };
 
+    // Risk Category Interpretation Summaries
     var RISK_INTERPRETATION = {
-        low: "Your responses show strong academic autonomy. You actively verify information, attempt coursework on your own first, and view AI as a supportive study companion rather than a substitute for your own critical thinking. Keep up this disciplined approach!",
+        low: "Your self-reflection reflects strong cognitive autonomy. You actively verify facts, attempt problem-solving on your own before turning to AI, and utilize Generative AI strictly as an auxiliary sounding board. This approach maximizes both your efficiency and deep conceptual learning.",
         medium: "You use Generative AI productively in many areas, but there are signs that certain tasks (such as writing, coding, or problem-solving) are occasionally delegated without full independent struggle or rigorous source checking. Small adjustments can significantly reinforce your long-term learning.",
         high: "Your responses suggest a strong pattern of delegating core academic reasoning directly to AI tools. While AI provides rapid solutions, bypassing early problem-solving struggle and fact-checking can weaken your independent analytical mastery and exam readiness over time."
     };
@@ -188,6 +190,7 @@
     var sectionErrorBanner      = document.getElementById("sectionValidationError");
     var sectionErrorList        = document.getElementById("sectionValidationErrorList");
 
+    var c1ProgressBarFill       = document.getElementById("c1ProgressBarFill");
     var stepPill1               = document.getElementById("stepPill1");
     var stepPill2               = document.getElementById("stepPill2");
     var stepPill3               = document.getElementById("stepPill3");
@@ -218,6 +221,7 @@
     var predictionResultCard    = document.getElementById("predictionResultCard");
     var riskCategoryBadge       = document.getElementById("riskCategoryBadge");
     var continuousScoreVal      = document.getElementById("continuousScoreVal");
+    var scoreSpectrumMarker     = document.getElementById("scoreSpectrumMarker");
     var riskInterpretationSummary = document.getElementById("riskInterpretationSummary");
 
     var probBarLow              = document.getElementById("probBarLow");
@@ -231,16 +235,6 @@
     var elevatingContainer      = document.getElementById("elevatingFactorsContainer");
     var actionableIdeasGrid     = document.getElementById("actionableIdeasGrid");
 
-    // Legacy Prototype Elements (for backward-compatibility)
-    var legacyForm              = document.getElementById("component1Form");
-    var legacySubmitBtn         = document.getElementById("submitBtn");
-    var legacyResetBtn          = document.getElementById("resetBtn");
-    var legacyResultSection     = document.getElementById("validationResultSection");
-    var legacySuccessDiv        = document.getElementById("validationSuccess");
-    var legacyErrorDiv          = document.getElementById("validationError");
-    var legacyErrorList         = document.getElementById("errorList");
-    var legacySummaryTbody      = document.getElementById("summaryTableBody");
-
     var currentStep = 1;
 
     /* ==================================================================
@@ -249,7 +243,7 @@
     function showStep(stepNumber) {
         currentStep = stepNumber;
 
-        // Toggle steps
+        // Toggle step containers
         var steps = [formStep1, formStep2, formStep3, formStep4];
         var pills = [stepPill1, stepPill2, stepPill3, stepPill4];
 
@@ -277,12 +271,17 @@
             }
         });
 
-        // Hide validation banner on normal step transition
+        // Update progress bar
+        if (c1ProgressBarFill) {
+            c1ProgressBarFill.style.width = (stepNumber * 25) + "%";
+        }
+
+        // Hide validation banner on step transition
         hideSectionValidationBanner();
 
-        // Scroll step heading into view smoothly
+        // Scroll step heading into view smoothly on manual user navigation
         var curStepEl = steps[stepNumber - 1];
-        if (curStepEl) {
+        if (curStepEl && stepNumber > 1) {
             curStepEl.scrollIntoView({ behavior: "smooth", block: "start" });
         }
     }
@@ -349,7 +348,7 @@
                 var checked = document.querySelector('input[name="' + req.name + '"]:checked');
                 if (!checked) {
                     missing.push(req);
-                    showCardError(req.cardId, req.errId, "Please select an answer on the 1–5 scale.");
+                    showCardError(req.cardId, req.errId, "Please select an answer on the provided scale.");
                 }
             } else if (req.type === "checkbox") {
                 var checkedBoxes = document.querySelectorAll('input[name="' + req.name + '"]:checked');
@@ -461,20 +460,62 @@
         var q33 = getSelectedRadioValue("Q33_trust_appropriate_support");
         if (q33 !== null) payload.Q33_trust_appropriate_support = q33;
 
-        // Request 8 top contributing factors for rich 2-column breakdown
-        payload.top_factors_count = 8;
-
-        return payload;
+        return {
+            user_inputs: payload,
+            top_factors_count: 5
+        };
     }
 
     /* ==================================================================
-       6. Populate / Reset Form Profile Presets
+       6. Form State & Profile Management
     ================================================================== */
+    function syncSelectionClasses() {
+        if (!assessmentForm) return;
+
+        // Likert options
+        var likertOptions = assessmentForm.querySelectorAll(".likert-option");
+        likertOptions.forEach(function (opt) {
+            var radio = opt.querySelector('input[type="radio"]');
+            if (radio && radio.checked) {
+                opt.classList.add("likert-option--selected");
+            } else {
+                opt.classList.remove("likert-option--selected");
+            }
+        });
+
+        // Radio card labels
+        var radioCards = assessmentForm.querySelectorAll(".radio-card-label");
+        radioCards.forEach(function (card) {
+            var radio = card.querySelector('input[type="radio"]');
+            if (radio && radio.checked) {
+                card.classList.add("radio-card-label--selected");
+            } else {
+                card.classList.remove("radio-card-label--selected");
+            }
+        });
+
+        // Checkbox cards
+        var checkboxCards = assessmentForm.querySelectorAll(".checkbox-card-label");
+        checkboxCards.forEach(function (card) {
+            var cb = card.querySelector('input[type="checkbox"]');
+            if (cb && cb.checked) {
+                card.classList.add("checkbox-card-label--selected");
+            } else {
+                card.classList.remove("checkbox-card-label--selected");
+            }
+        });
+    }
+
     function clearAssessmentForm() {
         if (!assessmentForm) return;
-        assessmentForm.reset();
 
-        // Clear all select elements to unselected empty value
+        try {
+            assessmentForm.reset();
+        } catch (e) {
+            // Ignore if reset fails
+        }
+
+        // Reset selects
         var selects = assessmentForm.querySelectorAll("select");
         selects.forEach(function (s) {
             s.selectedIndex = 0;
@@ -507,6 +548,7 @@
             reflectionResultSec.setAttribute("hidden", "");
         }
 
+        syncSelectionClasses();
         showStep(1);
     }
 
@@ -549,33 +591,34 @@
             "Q33_trust_appropriate_support"
         ];
 
-        radioKeys.forEach(function (key) {
-            if (profileData[key] !== undefined) {
-                var radio = document.querySelector('input[name="' + key + '"][value="' + profileData[key] + '"]');
+        radioKeys.forEach(function (name) {
+            if (profileData[name] !== undefined) {
+                var radio = document.querySelector('input[name="' + name + '"][value="' + profileData[name] + '"]');
                 if (radio) radio.checked = true;
             }
         });
 
         // Populate checkboxes
         if (Array.isArray(profileData.tools_used)) {
-            profileData.tools_used.forEach(function (val) {
-                var cb = document.querySelector('input[name="tools_used"][value="' + val + '"]');
-                if (cb) cb.checked = true;
-            });
-        }
-        if (Array.isArray(profileData.tasks_delegated)) {
-            profileData.tasks_delegated.forEach(function (val) {
-                var cb = document.querySelector('input[name="tasks_delegated"][value="' + val + '"]');
+            profileData.tools_used.forEach(function (toolVal) {
+                var cb = document.querySelector('input[name="tools_used"][value="' + toolVal + '"]');
                 if (cb) cb.checked = true;
             });
         }
 
-        // Show step 1 for review, don't auto-calculate
+        if (Array.isArray(profileData.tasks_delegated)) {
+            profileData.tasks_delegated.forEach(function (taskVal) {
+                var cb = document.querySelector('input[name="tasks_delegated"][value="' + taskVal + '"]');
+                if (cb) cb.checked = true;
+            });
+        }
+
+        syncSelectionClasses();
         showStep(1);
     }
 
     /* ==================================================================
-       7. Render Predictions & SHAP Attributions
+       7. Prediction & LinearSHAP Rendering
     ================================================================== */
     function renderActionableIdeas(category) {
         if (!actionableIdeasGrid) return;
@@ -707,9 +750,16 @@
             }
         }
 
-        // Continuous Score
+        // Continuous Latent Score
         if (continuousScoreVal && data.continuous_risk_score !== null && data.continuous_risk_score !== undefined) {
-            continuousScoreVal.textContent = parseFloat(data.continuous_risk_score).toFixed(3) + " / 5.0";
+            var sc = parseFloat(data.continuous_risk_score);
+            continuousScoreVal.textContent = sc.toFixed(3);
+
+            // Update spectrum marker (Scale: 1.0 to 5.0)
+            if (scoreSpectrumMarker) {
+                var spectrumPct = Math.max(0, Math.min(100, ((sc - 1.0) / 4.0) * 100));
+                scoreSpectrumMarker.style.left = spectrumPct.toFixed(1) + "%";
+            }
         }
 
         // Interpretation Summary
@@ -717,7 +767,7 @@
             riskInterpretationSummary.textContent = RISK_INTERPRETATION[catKey];
         }
 
-        // Probabilities
+        // Calibrated Probabilities
         if (data.probabilities) {
             var pLow  = Math.max(0, Math.min(100, (data.probabilities.low * 100) || 0));
             var pMed  = Math.max(0, Math.min(100, (data.probabilities.medium * 100) || 0));
@@ -733,14 +783,14 @@
             if (probValHigh) probValHigh.textContent = pHigh.toFixed(1) + "%";
         }
 
-        // SHAP Factors
+        // LinearSHAP Factors
         var factors = data.top_contributing_factors || [];
         renderShapFactors(factors);
 
         // Actionable Recommendations
         renderActionableIdeas(catKey);
 
-        // Scroll to results
+        // Smooth scroll to results
         reflectionResultSec.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
@@ -790,7 +840,7 @@
         });
     }
 
-    // Step Pills clickable
+    // Step pill header buttons (with forward validation)
     [
         { pill: stepPill1, step: 1 },
         { pill: stepPill2, step: 2 },
@@ -799,7 +849,6 @@
     ].forEach(function (item) {
         if (item.pill) {
             item.pill.addEventListener("click", function () {
-                // If navigating forward, validate up to target step
                 if (item.step > currentStep) {
                     for (var s = currentStep; s < item.step; s++) {
                         if (!validateSection(s)) return;
@@ -847,7 +896,7 @@
             })
             .finally(function () {
                 btnCalculatePrediction.disabled = false;
-                btnCalculatePrediction.textContent = "Calculate Prediction & SHAP Explanations";
+                btnCalculatePrediction.textContent = "Submit Assessment & Calculate Prediction";
             });
         });
     }
@@ -865,7 +914,7 @@
         });
     }
 
-    // Preset Buttons
+    // Preset Profile Buttons
     if (btnPresetLow) {
         btnPresetLow.addEventListener("click", function () {
             applyPresetProfile(PRESETS.low);
@@ -884,160 +933,27 @@
         });
     }
 
-    /* ==================================================================
-       9. Legacy Prototype Validator Support (Backwards Compatibility)
-    ================================================================== */
-    var REQUIRED_PROTOTYPE_FIELDS = [
-        { id: "participant_reference", label: "Participant Reference ID" },
-        { id: "genai_usage_frequency", label: "GenAI Usage Frequency" },
-        { id: "weekly_genai_usage",    label: "Weekly GenAI Usage" },
-        { id: "academic_purpose",      label: "Main Academic Purpose" },
-        { id: "verification_frequency",label: "Verification Frequency" },
-        { id: "independent_learning",  label: "Independent Learning Engagement" }
-    ];
-
-    var PROTOTYPE_FIELD_LABELS = {
-        participant_reference:  "Participant Reference ID",
-        genai_usage_frequency:  "GenAI Usage Frequency",
-        weekly_genai_usage:     "Weekly GenAI Usage",
-        academic_purpose:       "Main Academic Purpose",
-        verification_frequency: "Verification Frequency",
-        independent_learning:   "Independent Learning Engagement",
-        academic_year:          "Academic Year"
-    };
-
-    function buildLegacyPayload() {
-        var payload = {};
-        var ids = [
-            "participant_reference",
-            "genai_usage_frequency",
-            "weekly_genai_usage",
-            "academic_purpose",
-            "verification_frequency",
-            "independent_learning"
-        ];
-        ids.forEach(function (id) {
-            var el = document.getElementById(id);
-            if (el && el.value.trim()) {
-                payload[id] = el.value.trim();
-            }
-        });
-        var yrEl = document.getElementById("legacy_academic_year");
-        if (yrEl && yrEl.value.trim()) {
-            payload.academic_year = yrEl.value.trim();
-        }
-        return payload;
-    }
-
-    function populateLegacySummary(validatedInput) {
-        if (!legacySummaryTbody) return;
-        legacySummaryTbody.innerHTML = "";
-
-        Object.keys(PROTOTYPE_FIELD_LABELS).forEach(function (key) {
-            if (validatedInput[key]) {
-                var tr = document.createElement("tr");
-                var th = document.createElement("td");
-                th.textContent = PROTOTYPE_FIELD_LABELS[key];
-                var td = document.createElement("td");
-                td.textContent = validatedInput[key];
-                tr.appendChild(th);
-                tr.appendChild(td);
-                legacySummaryTbody.appendChild(tr);
-            }
-        });
-    }
-
-    if (legacyForm && legacySubmitBtn) {
-        legacyForm.addEventListener("submit", function (e) {
-            e.preventDefault();
-
-            var errors = [];
-            REQUIRED_PROTOTYPE_FIELDS.forEach(function (f) {
-                var el = document.getElementById(f.id);
-                if (!el || !el.value.trim()) {
-                    errors.push(f.label + " is required.");
-                    if (el) el.classList.add("input--error");
-                } else {
-                    if (el) el.classList.remove("input--error");
-                }
-            });
-
-            if (errors.length > 0) {
-                if (legacyResultSection) legacyResultSection.removeAttribute("hidden");
-                if (legacyErrorDiv) legacyErrorDiv.removeAttribute("hidden");
-                if (legacySuccessDiv) legacySuccessDiv.setAttribute("hidden", "");
-                if (legacyErrorList) {
-                    legacyErrorList.innerHTML = "";
-                    errors.forEach(function (msg) {
-                        var li = document.createElement("li");
-                        li.textContent = msg;
-                        legacyErrorList.appendChild(li);
-                    });
-                }
-                return;
-            }
-
-            var payload = buildLegacyPayload();
-            legacySubmitBtn.disabled = true;
-            legacySubmitBtn.textContent = "Validating…";
-
-            fetch(VALIDATE_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            })
-            .then(function (res) {
-                return res.json().then(function (data) {
-                    return { ok: res.ok, data: data };
-                });
-            })
-            .then(function (result) {
-                if (legacyResultSection) legacyResultSection.removeAttribute("hidden");
-                if (result.ok) {
-                    if (legacySuccessDiv) legacySuccessDiv.removeAttribute("hidden");
-                    if (legacyErrorDiv) legacyErrorDiv.setAttribute("hidden", "");
-                    if (result.data && result.data.validated_input) {
-                        populateLegacySummary(result.data.validated_input);
-                    }
-                } else {
-                    if (legacyErrorDiv) legacyErrorDiv.removeAttribute("hidden");
-                    if (legacySuccessDiv) legacySuccessDiv.setAttribute("hidden", "");
-                    if (legacyErrorList) {
-                        legacyErrorList.innerHTML = "";
-                        var serverErrors = (result.data && result.data.errors) ? result.data.errors : ["Validation failed."];
-                        serverErrors.forEach(function (msg) {
-                            var li = document.createElement("li");
-                            li.textContent = msg;
-                            legacyErrorList.appendChild(li);
-                        });
+    // Listen for form input changes to update selected styling and clear inline errors dynamically
+    if (assessmentForm) {
+        assessmentForm.addEventListener("change", function (e) {
+            syncSelectionClasses();
+            var target = e.target;
+            if (target) {
+                var card = target.closest(".question-card");
+                if (card && card.classList.contains("question-card--error")) {
+                    card.classList.remove("question-card--error");
+                    var errEl = card.querySelector(".field-error-msg");
+                    if (errEl) {
+                        errEl.textContent = "";
+                        errEl.setAttribute("hidden", "");
                     }
                 }
-            })
-            .catch(function () {
-                if (legacyResultSection) legacyResultSection.removeAttribute("hidden");
-                if (legacyErrorDiv) legacyErrorDiv.removeAttribute("hidden");
-                if (legacySuccessDiv) legacySuccessDiv.setAttribute("hidden", "");
-                if (legacyErrorList) {
-                    legacyErrorList.innerHTML = "<li>Could not reach validation service.</li>";
-                }
-            })
-            .finally(function () {
-                legacySubmitBtn.disabled = false;
-                legacySubmitBtn.textContent = "Validate Prototype Input";
-            });
+            }
         });
     }
 
-    if (legacyResetBtn && legacyForm) {
-        legacyResetBtn.addEventListener("click", function () {
-            legacyForm.reset();
-            if (legacyResultSection) legacyResultSection.setAttribute("hidden", "");
-            if (legacySuccessDiv) legacySuccessDiv.setAttribute("hidden", "");
-            if (legacyErrorDiv) legacyErrorDiv.setAttribute("hidden", "");
-        });
-    }
-
-    // Initialize to Step 1 on page load
+    // Initialize to Step 1 on page load (form begins blank with no preselected answers)
+    clearAssessmentForm();
     showStep(1);
 
 }());

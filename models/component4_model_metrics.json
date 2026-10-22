@@ -1,0 +1,128 @@
+{
+  "component": "Component 4 \u2013 Cognitive Retention & NLP Analytics",
+  "sample_size": 300,
+  "test_sample_size": 61,
+  "classification_results": {
+    "Random Forest": {
+      "accuracy": 0.4918,
+      "precision": 0.5161,
+      "recall": 0.5,
+      "f1_score": 0.5079,
+      "roc_auc": 0.4898,
+      "confusion_matrix": [
+        [
+          14,
+          15
+        ],
+        [
+          16,
+          16
+        ]
+      ]
+    },
+    "Logistic Regression": {
+      "accuracy": 0.4098,
+      "precision": 0.45,
+      "recall": 0.5625,
+      "f1_score": 0.5,
+      "roc_auc": 0.5032,
+      "confusion_matrix": [
+        [
+          7,
+          22
+        ],
+        [
+          14,
+          18
+        ]
+      ]
+    },
+    "Decision Tree": {
+      "accuracy": 0.541,
+      "precision": 0.5455,
+      "recall": 0.75,
+      "f1_score": 0.6316
+    }
+  },
+  "regression_results": {
+    "Random Forest Regressor": {
+      "r2_score": -0.0445,
+      "mae": 7.4843,
+      "rmse": 9.8759
+    }
+  },
+  "feature_importances": {
+    "bo_immediate_mcq": 0.1135,
+    "ga_learning_time_sec": 0.1106,
+    "ga_immediate_mcq": 0.1056,
+    "bo_lexical_diversity_ttr": 0.0936,
+    "bo_learning_time_sec": 0.0867,
+    "ga_word_count": 0.0667,
+    "ga_lexical_diversity_ttr": 0.0637,
+    "ga_prompt_count": 0.0588,
+    "ga_mental_effort": 0.0488,
+    "perceived_ai_dependency_score": 0.0458,
+    "cognitive_ownership_score": 0.0388,
+    "explanation_autonomy_score": 0.0378,
+    "ga_explanation_ease": 0.0369,
+    "ga_ai_usefulness": 0.0349,
+    "ga_confidence": 0.0319,
+    "bo_mental_effort": 0.0259
+  },
+  "scaler": {
+    "features": [
+      "ga_learning_time_sec",
+      "ga_immediate_mcq",
+      "ga_prompt_count",
+      "ga_confidence",
+      "ga_ai_usefulness",
+      "ga_mental_effort",
+      "ga_explanation_ease",
+      "ga_word_count",
+      "ga_lexical_diversity_ttr",
+      "cognitive_ownership_score",
+      "explanation_autonomy_score",
+      "perceived_ai_dependency_score",
+      "bo_learning_time_sec",
+      "bo_immediate_mcq",
+      "bo_mental_effort",
+      "bo_lexical_diversity_ttr"
+    ],
+    "means": [
+      169.5213,
+      8.6807,
+      3.2,
+      4.2833,
+      4.39,
+      2.3967,
+      4.0067,
+      39.2233,
+      0.9653,
+      4.0867,
+      3.7333,
+      3.54,
+      225.8897,
+      8.0777,
+      3.88,
+      0.9392
+    ],
+    "stds": [
+      28.7102,
+      0.8955,
+      1.243,
+      0.6515,
+      0.6103,
+      0.7265,
+      0.6842,
+      1.4284,
+      0.0225,
+      0.74,
+      0.8151,
+      0.9512,
+      31.8652,
+      1.1452,
+      0.7577,
+      0.0205
+    ]
+  }
+}

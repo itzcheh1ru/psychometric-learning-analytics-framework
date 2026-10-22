@@ -17,15 +17,18 @@ Validates:
 Status: Prototype – experimental data collection in progress.
 """
 
+import math
 from typing import Any, Dict, List, Optional
 
 from app.services.retention.schemas import (
     ACCEPTED_SESSION_FIELDS,
     CONDITION_ORDERS,
+    CONDITION_COMPARISON_MEASURES,
     EXPERIMENTAL_CONDITIONS,
     MAX_REF_LENGTH,
     MIN_REF_LENGTH,
     PARTICIPANT_REFERENCE_PATTERN,
+    RUBRIC_CRITERIA,
     SESSION_STAGES,
     TASK_REFERENCE_PATTERN,
 )
@@ -167,4 +170,208 @@ def validate_experimental_session(data: Any) -> ValidationResult:
     if errors:
         return ValidationResult(is_valid=False, errors=errors)
 
+    return ValidationResult(is_valid=True, sanitized=sanitized)
+
+
+def validate_immediate_recall_counts(data: Any) -> ValidationResult:
+    """Validate paired, manually scored immediate-recall item counts for a preview."""
+    if not isinstance(data, dict):
+        return ValidationResult(
+            is_valid=False,
+            errors=["Request body must be a valid JSON object."],
+        )
+
+    fields = ("brain_only_count", "genai_assisted_count")
+    errors: List[str] = []
+    sanitized: Dict[str, int] = {}
+
+    unknown_fields = set(data) - set(fields)
+    if unknown_fields:
+        errors.append(f"Unknown fields are not permitted: {sorted(unknown_fields)}.")
+
+    for field in fields:
+        raw_value = data.get(field)
+        if raw_value is None or (isinstance(raw_value, str) and not raw_value.strip()):
+            errors.append(f"{field} is required.")
+            continue
+        if isinstance(raw_value, bool):
+            errors.append(f"{field} must be a whole-number count of 0 or more.")
+            continue
+        try:
+            value = float(raw_value)
+        except (TypeError, ValueError):
+            errors.append(f"{field} must be a whole-number count of 0 or more.")
+            continue
+        if not math.isfinite(value) or value < 0 or not value.is_integer():
+            errors.append(f"{field} must be a whole-number count of 0 or more.")
+            continue
+        sanitized[field] = int(value)
+
+    if errors:
+        return ValidationResult(is_valid=False, errors=errors)
+    return ValidationResult(is_valid=True, sanitized=sanitized)
+
+
+def validate_ownership_effort_ratings(data: Any) -> ValidationResult:
+    """Validate paired ownership and cognitive-effort Likert ratings (1-5)."""
+    if not isinstance(data, dict):
+        return ValidationResult(
+            is_valid=False,
+            errors=["Request body must be a valid JSON object."],
+        )
+
+    fields = (
+        "brain_only_ownership",
+        "genai_assisted_ownership",
+        "brain_only_effort",
+        "genai_assisted_effort",
+    )
+    errors: List[str] = []
+    sanitized: Dict[str, int] = {}
+
+    unknown_fields = set(data) - set(fields)
+    if unknown_fields:
+        errors.append(f"Unknown fields are not permitted: {sorted(unknown_fields)}.")
+
+    for field in fields:
+        raw_value = data.get(field)
+        if raw_value is None or (isinstance(raw_value, str) and not raw_value.strip()):
+            errors.append(f"{field} is required.")
+            continue
+        if isinstance(raw_value, bool):
+            errors.append(f"{field} must be a whole-number rating from 1 to 5.")
+            continue
+        try:
+            value = float(raw_value)
+        except (TypeError, ValueError):
+            errors.append(f"{field} must be a whole-number rating from 1 to 5.")
+            continue
+        if not math.isfinite(value) or not value.is_integer() or not 1 <= value <= 5:
+            errors.append(f"{field} must be a whole-number rating from 1 to 5.")
+            continue
+        sanitized[field] = int(value)
+
+    if errors:
+        return ValidationResult(is_valid=False, errors=errors)
+    return ValidationResult(is_valid=True, sanitized=sanitized)
+
+
+def validate_rubric_ratings(data: Any) -> ValidationResult:
+    """Validate paired two-rater rubric ratings for an in-memory prototype preview."""
+    if not isinstance(data, dict) or not isinstance(data.get("ratings"), dict):
+        return ValidationResult(
+            is_valid=False,
+            errors=["Request body must include a rubric ratings object."],
+        )
+
+    criteria = {criterion["key"] for criterion in RUBRIC_CRITERIA}
+    raters = ("rater_1", "rater_2")
+    conditions = ("brain_only", "genai_assisted")
+    errors: List[str] = []
+    sanitized: Dict[str, Any] = {}
+
+    unknown_criteria = set(data["ratings"]) - criteria
+    if unknown_criteria:
+        errors.append(f"Unknown rubric criteria: {sorted(unknown_criteria)}.")
+
+    for criterion in criteria:
+        criterion_values = data["ratings"].get(criterion)
+        if not isinstance(criterion_values, dict):
+            errors.append(f"Ratings are required for {criterion}.")
+            continue
+
+        unknown_conditions = set(criterion_values) - set(conditions)
+        if unknown_conditions:
+            errors.append(f"Unknown conditions for {criterion}: {sorted(unknown_conditions)}.")
+
+        sanitized[criterion] = {}
+        for condition in conditions:
+            condition_values = criterion_values.get(condition)
+            if not isinstance(condition_values, dict):
+                errors.append(f"Both rater scores are required for {criterion}, {condition}.")
+                continue
+
+            unknown_raters = set(condition_values) - set(raters)
+            if unknown_raters:
+                errors.append(f"Unknown raters for {criterion}, {condition}: {sorted(unknown_raters)}.")
+
+            sanitized[criterion][condition] = {}
+            for rater in raters:
+                raw_value = condition_values.get(rater)
+                field = f"{criterion} {condition} {rater}"
+                if raw_value is None or (isinstance(raw_value, str) and not raw_value.strip()):
+                    errors.append(f"A score is required for {field}.")
+                    continue
+                if isinstance(raw_value, bool):
+                    errors.append(f"{field} must be a whole-number rating from 1 to 5.")
+                    continue
+                try:
+                    value = float(raw_value)
+                except (TypeError, ValueError):
+                    errors.append(f"{field} must be a whole-number rating from 1 to 5.")
+                    continue
+                if not math.isfinite(value) or not value.is_integer() or not 1 <= value <= 5:
+                    errors.append(f"{field} must be a whole-number rating from 1 to 5.")
+                    continue
+                sanitized[criterion][condition][rater] = int(value)
+
+    if errors:
+        return ValidationResult(is_valid=False, errors=errors)
+    return ValidationResult(is_valid=True, sanitized=sanitized)
+
+
+def validate_condition_comparison(data: Any) -> ValidationResult:
+    """Validate paired condition-level outcome values for a preview only."""
+    if not isinstance(data, dict):
+        return ValidationResult(
+            is_valid=False,
+            errors=["Request body must be a valid JSON object."],
+        )
+
+    conditions = ("brain_only", "genai_assisted")
+    measures = {measure["key"]: measure for measure in CONDITION_COMPARISON_MEASURES}
+    errors: List[str] = []
+    sanitized: Dict[str, Dict[str, float]] = {condition: {} for condition in conditions}
+
+    unknown_conditions = set(data) - set(conditions)
+    if unknown_conditions:
+        errors.append(f"Unknown conditions: {sorted(unknown_conditions)}.")
+
+    for condition in conditions:
+        condition_data = data.get(condition)
+        if not isinstance(condition_data, dict):
+            errors.append(f"Values are required for {condition}.")
+            continue
+
+        unknown_measures = set(condition_data) - set(measures)
+        if unknown_measures:
+            errors.append(f"Unknown measures for {condition}: {sorted(unknown_measures)}.")
+
+        for key, measure in measures.items():
+            raw_value = condition_data.get(key)
+            field = f"{condition} {measure['label']}"
+            if raw_value is None or (isinstance(raw_value, str) and not raw_value.strip()):
+                errors.append(f"A value is required for {field}.")
+                continue
+            if isinstance(raw_value, bool):
+                errors.append(f"{field} must be numeric.")
+                continue
+            try:
+                value = float(raw_value)
+            except (TypeError, ValueError):
+                errors.append(f"{field} must be numeric.")
+                continue
+            if not math.isfinite(value):
+                errors.append(f"{field} must be a finite number.")
+                continue
+            if measure["kind"] == "count" and (value < 0 or not value.is_integer()):
+                errors.append(f"{field} must be a whole-number count of 0 or more.")
+                continue
+            if measure["kind"] == "rating" and not 1 <= value <= 5:
+                errors.append(f"{field} must be between 1 and 5.")
+                continue
+            sanitized[condition][key] = int(value) if measure["kind"] == "count" else round(value, 2)
+
+    if errors:
+        return ValidationResult(is_valid=False, errors=errors)
     return ValidationResult(is_valid=True, sanitized=sanitized)

@@ -92,33 +92,48 @@ NLP_FEATURES: List[Dict[str, str]] = [
     {
         "name": "Word Count",
         "description": "Total writing volume and output length.",
-        "status": "Available after experimental text analysis",
+        "status": "Prototype calculation available",
     },
     {
         "name": "Lexical Diversity",
-        "description": "Vocabulary richness, unique lemma ratios, and Type-Token Ratio (TTR).",
-        "status": "Available after experimental text analysis",
+        "description": "Unique-token ratio (TTR), root TTR, and words used once; lemmatization is not included.",
+        "status": "Prototype calculation available",
     },
     {
         "name": "Readability Scores",
-        "description": "Flesch Reading Ease and Flesch-Kincaid Grade Level.",
-        "status": "Available after experimental text analysis",
+        "description": "Approximate Coleman-Liau readability index from text length and sentence count.",
+        "status": "Prototype approximation available",
     },
     {
         "name": "Sentence Complexity",
-        "description": "Syntactic depth, mean sentence length, and clause structure using spaCy.",
-        "status": "Available after experimental text analysis",
+        "description": "Sentence count and mean sentence length; syntactic parsing and clause analysis are not included.",
+        "status": "Basic prototype metrics available",
     },
     {
         "name": "Repetition",
-        "description": "N-gram redundancy and repetition indices across writing samples.",
-        "status": "Available after experimental text analysis",
+        "description": "Words used once are counted; n-gram redundancy analysis is not included.",
+        "status": "Partial prototype metric available",
     },
     {
         "name": "Semantic Similarity",
         "description": "Cosine similarity against task reference materials using sentence embeddings.",
-        "status": "Available after experimental text analysis",
+        "status": "Not implemented; requires reference text and embeddings",
     },
+]
+
+RUBRIC_CRITERIA: List[Dict[str, str]] = [
+    {"key": "content_accuracy", "name": "Content accuracy"},
+    {"key": "task_relevance", "name": "Task relevance"},
+    {"key": "reasoning_support", "name": "Reasoning and support"},
+    {"key": "clarity_organization", "name": "Clarity and organization"},
+]
+
+CONDITION_COMPARISON_MEASURES: List[Dict[str, str]] = [
+    {"key": "immediate_recall_count", "label": "Immediate recall", "unit": "items", "kind": "count"},
+    {"key": "delayed_recall_count", "label": "Delayed recall", "unit": "items", "kind": "count"},
+    {"key": "ownership_rating", "label": "Ownership", "unit": "mean rating (1–5)", "kind": "rating"},
+    {"key": "cognitive_effort_rating", "label": "Cognitive effort", "unit": "mean rating (1–5)", "kind": "rating"},
+    {"key": "human_rubric_mean", "label": "Human rubric", "unit": "mean rating (1–5)", "kind": "rating"},
 ]
 
 # --------------------------------------------------------------------------- #

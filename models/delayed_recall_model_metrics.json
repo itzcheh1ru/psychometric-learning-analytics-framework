@@ -1,0 +1,18 @@
+{
+  "genai": {
+    "model": "genai_delayed_recall_regressor",
+    "sample_size": 300,
+    "test_sample_size": 60,
+    "mae": 0.705,
+    "rmse": 0.8858,
+    "r2": 0.141
+  },
+  "brain": {
+    "model": "brain_delayed_recall_regressor",
+    "sample_size": 300,
+    "test_sample_size": 60,
+    "mae": 0.5735,
+    "rmse": 0.717,
+    "r2": 0.6976
+  }
+}

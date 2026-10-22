@@ -1,0 +1,28 @@
+{
+  "genai_features": [
+    "ga_learning_time_sec",
+    "ga_immediate_mcq",
+    "ga_prompt_count",
+    "ga_confidence",
+    "ga_ai_usefulness",
+    "ga_mental_effort",
+    "ga_explanation_ease",
+    "ga_word_count",
+    "ga_lexical_diversity_ttr",
+    "cognitive_ownership_score",
+    "explanation_autonomy_score",
+    "perceived_ai_dependency_score"
+  ],
+  "brain_features": [
+    "bo_learning_time_sec",
+    "bo_immediate_mcq",
+    "bo_mental_effort",
+    "bo_word_count",
+    "bo_lexical_diversity_ttr",
+    "cognitive_ownership_score",
+    "explanation_autonomy_score",
+    "perceived_ai_dependency_score"
+  ],
+  "genai_target": "genai_delayed_recall_score",
+  "brain_target": "brain_delayed_recall_score"
+}
