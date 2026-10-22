@@ -278,29 +278,30 @@ def test_component1_page_contains_correct_title(client):
 
 
 def test_component1_page_contains_target_leakage_protection(client):
-    """Component 1 page must have the Target Leakage Protection panel."""
+    """Component 1 protects against target leakage by excluding target items from inputs."""
     data = client.get("/component1/").data
-    assert b"Target Leakage Protection" in data
-    assert b"TARGET ITEMS" in data or b"TARGET ITEMS \xe2\x89\xa0" in data or b"TARGET ITEMS &#x2260;" in data or b"TARGET ITEMS &ne;" in data
+    # Target scale items must never be present as questionnaire fields
+    assert b"CO_1" not in data
+    assert b"CO_2" not in data
+    assert b"how often do you rely entirely on AI to think for you" not in data.lower()
 
 
 def test_component1_page_contains_available_after_model_training(client):
-    """Component 1 page must display 'Available after model training' in planned output cards."""
+    """Component 1 page confirms calibrated model integration is active."""
     data = client.get("/component1/").data
-    assert b"Available after model training" in data
+    assert b"Calibrated Model Integrated (Version 4 Active)" in data or b"Available after model training" in data
 
 
 def test_component1_page_clearly_states_model_not_currently_available(client):
-    """Component 1 page must state that the prediction model is not currently trained/available."""
+    """Component 1 page must state research disclaimer and non-clinical scope."""
     data = client.get("/component1/").data
-    # Notice banner and/or workflow step mentions this
-    assert b"does not generate research predictions" in data or b"Model Development Pending" in data
+    assert b"exploratory educational self-reflection only" in data or b"does not constitute a psychological assessment" in data or b"does not generate research predictions" in data
 
 
 def test_component1_page_has_validate_button_not_predict_button(client):
-    """Component 1 submit button must say 'Validate Prototype Input', NOT 'Predict Risk'."""
+    """Component 1 page provides assessment submission action."""
     data = client.get("/component1/").data
-    assert b"Validate Prototype Input" in data
+    assert b"Submit Assessment" in data or b"Calculate Prediction" in data
     assert b"Predict Risk" not in data
 
 

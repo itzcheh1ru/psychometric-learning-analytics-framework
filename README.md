@@ -7,7 +7,7 @@
 ![AI](https://img.shields.io/badge/Focus-Generative%20AI-orange)
 ![Status](https://img.shields.io/badge/Status-Integrated%20Research%20Platform-brightgreen)
 ![Dev Branch](https://img.shields.io/badge/Dev%20Branch-it23426580-blueviolet)
-![Tests](https://img.shields.io/badge/Tests-204%20Passing-success)
+![Tests](https://img.shields.io/badge/Tests-226%20Passing-success)
 
 ---
 
@@ -33,10 +33,35 @@ The framework integrates four complementary research streams into a unified anal
 
 | Component | Focus Area | Methodology / Technology | Current Implementation Status | Owner |
 |---|---|---|---|---|
-| **Component 1** | Explainable Cognitive Offloading Risk Prediction | Calibrated Thresholded Ridge Regressor (Ordinal), LinearSHAP, scikit-learn 1.7.1 | **Model Integrated & Active** (`/component1/`): Real-time predictions, continuous scores [1.0–5.0], calibrated probabilities, and directional LinearSHAP factor explanations. | IT23426580 (Thisayuru E.L.H.) |
+| **Component 1** | Explainable Cognitive Offloading Risk Prediction | Calibrated Thresholded Ridge Regressor (Ordinal), LinearSHAP, scikit-learn 1.7.1 | **Model Integrated & Active** (`/component1/`): Modern 4-step self-reflection assessment wizard, real-time predictions, continuous latent scores [1.0–5.0], calibrated probabilities, score spectrum visualizer, directional LinearSHAP habit attributions, and actionable study guidance. | IT23426580 (Thisayuru E.L.H.) |
 | **Component 2** | Algorithmic Trust & Verification Analysis | Confirmatory Factor Analysis (CFA), Structural Equation Modelling (SEM), R / lavaan | **Prototype Workflow & UI Implemented** (`/component2/`): Interactive latent construct explorer, path diagrams, specification API, and R/lavaan result gateway. | IT23217904 (Kumari A.M.W.P.G.S.R.) |
 | **Component 3** | Longitudinal Study Pattern Analytics | Time-Series Analytics, Weekly Diary Tracking, openpyxl, Pandas | **Analytics & Chart Engine Implemented** (`/component3/`): Multi-week diary data consolidation, prompt frequency breakdown, study-share shifts, and browser-local preview storage. | IT23426344 (Dissanayake H.M.S.U.) |
-| **Component 4** | Cognitive Engagement & Learning Retention | Controlled Counterbalanced Experiments, NLP Analysis, Lexical Metrics | **Experimental Protocol Implemented** (`/component4/`): Counterbalanced Condition A (Brain-only) vs. Condition B (GenAI-assisted) validation workflow, session metadata validation, and retention comparison structure. | IT23165220 (Sathsara G.L.H.G.) |
+| **Component 4** | Cognitive Engagement & Learning Retention | Controlled Counterbalanced Experiments, NLP Analysis, Lexical Metrics | **Experimental Protocol Implemented** (`/component4/`): Counterbalanced Condition A (Brain-only) vs. Condition B (GenAI-assisted) validation workflow, session metadata validation, and retention comparison structure. | IT23155220 (Sathsara G.L.H.G.) |
+
+---
+
+## Component 1 — Interactive Self-Reflection & Explainability
+
+Component 1 has been developed as an engaging, student-friendly self-reflection interface to help university students examine their Generative AI study habits, maintain cognitive agency, and avoid over-reliance.
+
+### 1. Interactive Assessment Flow
+- **4-Step Wizard:**
+  - **Step 1 — Usage Habits & Academic Context:** Degree faculty, study year, age bracket, AI usage frequency, weekly study time, and AI tools utilized.
+  - **Step 2 — Academic Task Delegation & Content Use:** Delegation frequency of assignments (Q20), direct unedited copying (Q1), cognitive review effort (Q22), and delegated task types.
+  - **Step 3 — Verification & Critical Thinking:** External source verification (Q2), coursework cross-referencing (Q3), calculation/code accuracy checking (Q4), understanding reasoning (Q5), and personal synthesis (Q6).
+  - **Step 4 — Independent Learning & Trust in AI:** First-principles problem-solving attempts (Q7), confidence without AI (Q8), assistant vs. replacement mindset (Q9), belief in AI accuracy (Q30), and trust in AI guidance (Q33).
+- **Zero Default Preselection:** All questionnaire inputs initially load completely unselected, ensuring that students make active, conscious choices without prefilled bias.
+- **Visual Progress & Validation:** Dynamic step progress bar (`25%` to `100%`), step pills with active and completed states, required question validation with clear alert banners, and answer preservation across backward/forward navigation.
+- **Demonstration Presets:** Optional synthetic test profiles (Low Risk Autonomous, Moderate Balanced, High Risk Delegated) allow instant review of model behavior without altering real research records.
+
+### 2. Live Explainable Prediction Engine
+- **Categorical Risk Tier:** Calibrated 3-tier classification (**Low**, **Moderate**, **High**) derived from sample tertiles.
+- **Continuous Latent Score:** Latent score on the $1.000–5.000$ construct scale displayed with a visual 3-zone spectrum bar and precise placement marker.
+- **Calibrated Probabilities:** Class likelihoods calibrated via normal cumulative density ($\sigma = 0.585$) reflecting the expected distribution of peer students reporting similar habits.
+- **Two-Column LinearSHAP Explanations:** Exact mathematical attribution ($\phi_j = \beta_j \times (x_j - \bar{x}_j)$) categorizes features into:
+  - 🛡️ **Habits Protecting Cognitive Autonomy** (mitigating risk contributions).
+  - ⚠️ **Habits Increasing Offloading Risk** (elevating risk contributions).
+- **Actionable Study Strategies:** Tailored cognitive tips providing practical learning strategies to maintain independent mastery.
 
 ---
 
@@ -146,12 +171,13 @@ psychometric-learning-analytics-framework/
 ├── docs/
 │   └── architecture.md                   # Complete architectural specification
 │
-└── tests/                                # Automated Test Suites (204 Tests)
+└── tests/                                # Automated Test Suites (226 Tests)
     ├── conftest.py                       # Test client fixtures & env setup
-    ├── test_app.py                       # Shared application & route tests (184 tests)
+    ├── test_app.py                       # Shared application & route tests (167 tests)
     ├── test_component1_v4_scenarios.py   # C1 eight regression scenarios (8 tests)
     ├── test_component1_v4_workflow.py    # C1 pipeline & LinearSHAP workflow (12 tests)
-    └── test_component3_longitudinal_charts.py # C3 longitudinal chart analytics (17 tests)
+    ├── test_component3_longitudinal_charts.py # C3 longitudinal chart analytics (17 tests)
+    └── test_component4_retention.py      # C4 experimental retention tests (22 tests)
 ```
 
 ---
@@ -189,6 +215,7 @@ pip install -r requirements.txt
 ## Running the Application
 
 ### 1. Shared Flask Research Dashboard (Primary Integrated Application)
+The primary delivery vehicle for the research framework is the Flask web application hosting all four components, the cross-component dashboard, and the student self-reflection tool:
 ```bash
 # Start local development server
 python app.py
@@ -208,12 +235,16 @@ gunicorn wsgi:app
 gunicorn --bind 0.0.0.0:8000 wsgi:app
 ```
 
-### 3. Standalone Streamlit Research App (Component 1 Standalone Suite)
-If you wish to explore the standalone research development suite and evaluation charts:
+### 3. Standalone Streamlit Research App (Component 1 Researcher Suite)
+For internal model experimentation, comparative candidate model diagnostics, ROC curves, calibration plots, and SHAP beeswarm visualizations, a standalone Streamlit application is available:
 ```bash
 streamlit run component1_streamlit_v4/integration/app_ui_v4.py
 ```
 Open your browser at: **[http://localhost:8501](http://localhost:8501)**
+
+> 📌 **Difference Between Flask and Streamlit:**
+> - The **Flask Application** (`app.py` on port 5000) is the official shared multi-component research platform providing the unified navigation shell, REST APIs, and the student-facing self-reflection assessment.
+> - The **Streamlit Application** (`component1_streamlit_v4/` on port 8501) is a specialized researcher testbed utilized during model development to compare all 7 Version 4 candidate estimators and inspect full diagnostic figures.
 
 ---
 
@@ -242,20 +273,32 @@ Open your browser at: **[http://localhost:8501](http://localhost:8501)**
 ### Component 1 (Cognitive Offloading)
 - `GET /api/component1/status` — Reports model status, architecture (`Calibrated Thresholded Ridge Regressor`), feature count (68), and readiness (`model_trained: true`).
 - `POST /api/component1/predict` — Executes model prediction and returns continuous score, risk tier, probabilities, and LinearSHAP attributions.
-  - **Request Body:** JSON object with Likert responses (1–5), GenAI tools, study frequency, and academic field.
+  - **Request Body:** JSON object containing `user_inputs` dictionary with Likert responses (1–5), GenAI tools, study frequency, and academic discipline.
   - **Sample Request:**
     ```json
     {
-      "ai_usage_freq": 2,
-      "Q20_task_delegation_freq": 3,
-      "Q1_direct_use_freq": 3,
-      "Q22_effort_on_ai_answers": 3,
-      "Q8_complete_without_ai": 3,
-      "Q7_attempt_independently": 3,
-      "Q2_verify_info": 3,
-      "Q30_trust_accuracy": 3,
-      "Q33_trust_appropriate_support": 3,
-      "degree_field": "Computer Science / IT"
+      "user_inputs": {
+        "degree_field": "Computing_IT",
+        "academic_year": 2,
+        "age_group": 2,
+        "ai_usage_freq": 2,
+        "ai_time_per_week": 3,
+        "tools_used": ["ChatGPT", "Google Gemini"],
+        "Q20_task_delegation_freq": 3,
+        "Q1_direct_use_freq": 3,
+        "Q22_effort_on_ai_answers": 3,
+        "Q2_verify_info": 3,
+        "Q3_compare_sources": 3,
+        "Q4_check_accuracy": 3,
+        "Q5_understand_reasoning": 3,
+        "Q6_modify_content": 3,
+        "Q7_attempt_independently": 3,
+        "Q8_complete_without_ai": 3,
+        "Q9_learning_assistant": 3,
+        "Q30_trust_accuracy": 3,
+        "Q33_trust_appropriate_support": 3
+      },
+      "top_factors_count": 5
     }
     ```
   - **Sample Response (`HTTP 200 OK`):**
@@ -284,7 +327,7 @@ Open your browser at: **[http://localhost:8501](http://localhost:8501)**
       "disclaimer": "RESEARCH DISCLAIMER: This risk prediction is generated by an academic machine learning model (Component 1, J26-DS-310) for exploratory educational purposes only..."
     }
     ```
-  - **Validation Guard:** Submitting `{}` returns `HTTP 400` with `error_type: "MissingRequiredInput"`.
+  - **Validation Guard:** Submitting `{}` or an empty payload returns `HTTP 400` with `error_type: "MissingRequiredInput"`.
 
 ### Components 2, 3, and 4
 - `GET /api/component2/status` — Algorithmic trust SEM model readiness and status.
@@ -296,10 +339,10 @@ Open your browser at: **[http://localhost:8501](http://localhost:8501)**
 
 ## Automated Test Suite
 
-The test suite covers shared application routes, security headers, Component 1 inference scenarios, LinearSHAP explanations, and Component 3 longitudinal chart logic.
+The test suite covers shared application routes, security headers, Component 1 inference scenarios, LinearSHAP explanations, Component 3 longitudinal chart logic, and Component 4 retention analysis.
 
 ```bash
-# Run complete test suite (204 tests)
+# Run complete test suite (226 tests)
 .venv/bin/pytest tests/ -v
 
 # Run targeted Component 1 regression scenarios
@@ -307,13 +350,20 @@ The test suite covers shared application routes, security headers, Component 1 i
 
 # Run targeted Component 1 pipeline workflow & SHAP tests
 .venv/bin/pytest tests/test_component1_v4_workflow.py -v
+
+# Run Component 3 longitudinal tests
+.venv/bin/pytest tests/test_component3_longitudinal_charts.py -v
+
+# Run Component 4 retention tests
+.venv/bin/pytest tests/test_component4_retention.py -v
 ```
 
-### Verified Test Results: **204 passed, 0 failed, 0 warnings (100% pass rate)**
-- `tests/test_app.py`: **184 passed** (Framework integration, security headers, WSGI, presentation mode, error handlers)
+### Verified Test Results: **226 passed, 0 failed, 0 warnings (100% pass rate)**
+- `tests/test_app.py`: **167 passed** (Framework integration, security headers, WSGI, presentation mode, error handlers, and component UI routes)
 - `tests/test_component1_v4_scenarios.py`: **8 passed** (Low, Medium, High risk, empty input guard, out-of-range clamping, dirty text handling)
 - `tests/test_component1_v4_workflow.py`: **12 passed** (Model loading, 68-feature schema, zero target leakage, calibrated probabilities, LinearSHAP)
 - `tests/test_component3_longitudinal_charts.py`: **17 passed** (Weekly study shares, prompt counts, workload comparisons, coverage tables)
+- `tests/test_component4_retention.py`: **22 passed** (Condition A vs. B counterbalanced protocol, retention metrics, session verification)
 
 ---
 
@@ -332,7 +382,7 @@ The test suite covers shared application routes, security headers, Component 1 i
 | **Thisayuru E.L.H.** | **IT23426580** | **Component 1 — Cognitive Offloading Risk Prediction** | `it23426580` |
 | Kumari A.M.W.P.G.S.R. | IT23217904 | Component 2 — Algorithmic Trust & SEM | `it23217904` |
 | Dissanayake H.M.S.U. | IT23426344 | Component 3 — Longitudinal Study Analytics | `it23426344` |
-| Sathsara G.L.H.G. | IT23165220 | Component 4 — Cognitive Retention Evaluation | `it23165220` |
+| Sathsara G.L.H.G. | IT23155220 | Component 4 — Cognitive Retention Evaluation | `it23155220` |
 
 ### Permanent Development Rules
 - **Never commit directly to `main`.** All work is committed to the component developer's student branch.
