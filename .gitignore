@@ -49,6 +49,8 @@ data/processed/*
 # ---------- ML Models (large binary artefacts) ----------
 models/*.pkl
 models/*.joblib
+!models/thresholded_ridge_v4.joblib
+!models/continuous_regressor_v4.joblib
 models/*.h5
 models/*.pt
 models/*.onnx

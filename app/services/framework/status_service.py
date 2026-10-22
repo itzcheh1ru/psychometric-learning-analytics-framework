@@ -76,7 +76,7 @@ class FrameworkStatusService:
                     "title": "Explainable Cognitive Offloading Risk Prediction",
                     "prototype_ready": True,
                     "analysis_ready": c1_ready,
-                    "stage": "prototype_development",
+                    "stage": "model_integrated" if c1_ready else "prototype_development",
                 },
                 {
                     "id": "c2",
