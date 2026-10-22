@@ -1,0 +1,24 @@
+================================================================================
+COMPONENT 1: ADVANCED PREPROCESSING & FEATURE PIPELINE (Version 4)
+Explainable Cognitive Offloading Risk Model — Research Project J26-DS-310
+================================================================================
+
+[Step 1] Loaded raw survey export: 378 rows × 55 columns
+
+[Step 2] Consent screening: 3 non-consenting removed -> 375 retained.
+
+[Step 3] Cognitive Offloading Construct Formulation (Section E):
+         - Q10_rely_memory: 'I rely on Generative AI to remember information that I could...'
+         - Q11_avoid_mental_effort: 'I use GenAI to avoid spending too much mental effort on diff...'
+         - Q12_accept_without_understanding: 'I sometimes accept AI-generated solutions without fully unde...'
+         - Q13_less_problem_solving: 'I feel less need to develop my own problem-solving strategie...'
+         - Q14_depend_on_ai: 'I depend on GenAI for tasks that I previously performed usin...'
+         - Q15_reduces_thinking: 'Using GenAI reduces the amount of independent thinking requi...'
+         Cronbach's Alpha: 0.8649
+         Composite co_score: Mean = 3.0582, Std = 0.8194
+         Tertile Risk Categories: Low=136, Med=129, High=110
+
+[Step 4] Excluded 16 columns (admin, target construct, and Section G dependence battery).
+
+[Step 5] Preprocessing complete. Cleaned shape: 375 rows × 70 columns
+         Exported to: /Users/hirushathisayuruellawala/Downloads/PP1 Documents/Model Training/v4_performance_experiments/data/cleaned_dataset_v4.csv
