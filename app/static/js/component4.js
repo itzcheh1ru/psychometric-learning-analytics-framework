@@ -103,7 +103,6 @@
 
                     document.getElementById("predictedImmediateRecall").textContent =
                         response.body.predicted_immediate_recall + " / 10 correct MCQs";
-                    document.getElementById("immediateRecallPredictionNote").textContent = response.body.note;
                     if (predictorResult) predictorResult.hidden = false;
                 })
                 .catch(function () {
@@ -169,7 +168,6 @@
 
                     document.getElementById("predictedDelayedRecall").textContent =
                         response.body.predicted_delayed_recall + " / 10 correct MCQs";
-                    document.getElementById("delayedRecallPredictionNote").textContent = response.body.note;
                     if (delayedPredictorResult) delayedPredictorResult.hidden = false;
                 })
                 .catch(function () {
