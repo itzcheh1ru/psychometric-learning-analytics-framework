@@ -102,192 +102,6 @@
     </div>
 </section>
 
-<!-- ================================================================
-     E. Session Record Prototype (Form)
-================================================================ -->
-<section class="content-section" aria-labelledby="formHeading4">
-    <div class="content-section__header">
-        <h2 class="section-heading" id="formHeading4">Experimental Session Record Prototype</h2>
-        <p class="section-subheading">
-            Validate experimental session parameters and counterbalancing metadata. Actual essay text and recall answers are not collected or stored in this prototype.
-        </p>
-    </div>
-
-    <div class="proto-notice" role="note">
-        <strong>Privacy rule:</strong> Enter anonymised research identifiers only. Do not submit student names, emails, registration numbers, or full essay text.
-    </div>
-
-    <form
-        id="sessionRecordForm"
-        class="session-form"
-        novalidate
-        aria-label="Experimental session prototype record form"
-    >
-
-        <fieldset class="form-fieldset">
-            <legend class="form-fieldset__legend">Experimental Session Metadata</legend>
-
-            <div class="form-row-2">
-                <!-- Participant Reference -->
-                <div class="form-group">
-                    <label class="form-label" for="participant_reference">
-                        Participant Reference ID
-                        <span class="form-label__required" aria-hidden="true">*</span>
-                    </label>
-                    <input
-                        type="text"
-                        id="participant_reference"
-                        name="participant_reference"
-                        class="form-input"
-                        placeholder="e.g. P0001"
-                        maxlength="20"
-                        autocomplete="off"
-                        required
-                        aria-required="true"
-                        aria-describedby="ref_help ref_error"
-                    />
-                    <p class="form-help" id="ref_help">
-                        Use an anonymised research participant identifier only.
-                    </p>
-                    <p class="form-error" id="ref_error" aria-live="polite" hidden></p>
-                </div>
-
-                <!-- Experimental Condition -->
-                <div class="form-group">
-                    <label class="form-label" for="experimental_condition">
-                        Experimental Condition
-                        <span class="form-label__required" aria-hidden="true">*</span>
-                    </label>
-                    <select
-                        id="experimental_condition"
-                        name="experimental_condition"
-                        class="form-select"
-                        required
-                        aria-required="true"
-                        aria-describedby="cond_error"
-                    >
-                        <option value="">— Select Condition —</option>
-                        {% for c in conditions %}
-                        <option value="{{ c }}">{{ c }}</option>
-                        {% endfor %}
-                    </select>
-                    <p class="form-error" id="cond_error" aria-live="polite" hidden></p>
-                </div>
-            </div>
-
-            <div class="form-row-2">
-                <!-- Condition Order -->
-                <div class="form-group">
-                    <label class="form-label" for="condition_order">
-                        Condition Order
-                        <span class="form-label__required" aria-hidden="true">*</span>
-                    </label>
-                    <select
-                        id="condition_order"
-                        name="condition_order"
-                        class="form-select"
-                        required
-                        aria-required="true"
-                        aria-describedby="order_help order_error"
-                    >
-                        <option value="">— Select Order —</option>
-                        {% for o in condition_orders %}
-                        <option value="{{ o }}">{{ o }}</option>
-                        {% endfor %}
-                    </select>
-                    <p class="form-help" id="order_help">
-                        Represents counterbalanced condition order for the experimental protocol.
-                    </p>
-                    <p class="form-error" id="order_error" aria-live="polite" hidden></p>
-                </div>
-
-                <!-- Session Stage -->
-                <div class="form-group">
-                    <label class="form-label" for="session_stage">
-                        Session Stage
-                        <span class="form-label__required" aria-hidden="true">*</span>
-                    </label>
-                    <select
-                        id="session_stage"
-                        name="session_stage"
-                        class="form-select"
-                        required
-                        aria-required="true"
-                        aria-describedby="stage_error"
-                    >
-                        <option value="">— Select Stage —</option>
-                        {% for s in session_stages %}
-                        <option value="{{ s }}">{{ s }}</option>
-                        {% endfor %}
-                    </select>
-                    <p class="form-error" id="stage_error" aria-live="polite" hidden></p>
-                </div>
-            </div>
-
-            <div class="form-row-2">
-                <!-- Task Reference -->
-                <div class="form-group">
-                    <label class="form-label" for="task_reference">
-                        Task Reference Code
-                        <span class="form-label__required" aria-hidden="true">*</span>
-                    </label>
-                    <input
-                        type="text"
-                        id="task_reference"
-                        name="task_reference"
-                        class="form-input"
-                        placeholder="e.g. TASK01"
-                        maxlength="20"
-                        autocomplete="off"
-                        required
-                        aria-required="true"
-                        aria-describedby="task_help task_error"
-                    />
-                    <p class="form-help" id="task_help">
-                        Use an anonymised task code rather than entering the full writing response or topic text.
-                    </p>
-                    <p class="form-error" id="task_error" aria-live="polite" hidden></p>
-                </div>
-
-                <!-- Consent Status Checkbox -->
-                <div class="form-group form-group--checkbox">
-                    <div class="checkbox-control">
-                        <input
-                            type="checkbox"
-                            id="consent_confirmed"
-                            name="consent_confirmed"
-                            class="form-checkbox"
-                            required
-                            aria-required="true"
-                            aria-describedby="consent_help consent_error"
-                        />
-                        <label class="form-label form-label--checkbox" for="consent_confirmed">
-                            Research consent confirmed according to the study protocol.
-                            <span class="form-label__required" aria-hidden="true">*</span>
-                        </label>
-                    </div>
-                    <p class="form-help" id="consent_help">
-                        Ethical requirement: confirmation that participant consent is documented.
-                    </p>
-                    <p class="form-error" id="consent_error" aria-live="polite" hidden></p>
-                </div>
-            </div>
-
-        </fieldset>
-
-        <!-- Actions -->
-        <div class="form-actions">
-            <button type="submit" class="btn btn--primary" id="validateSessionBtn">
-                Validate Experimental Session
-            </button>
-            <button type="button" class="btn btn--outline" id="resetSessionBtn">
-                Reset Form
-            </button>
-        </div>
-
-    </form>
-</section>
-
 <!-- Prototype recall summary -->
 <section class="content-section" aria-labelledby="recallHeading4">
     <div class="content-section__header">
@@ -302,17 +116,17 @@
         <div class="recall-summary-grid">
             <div class="recall-summary-card recall-summary-card--brain">
                 <div class="recall-summary-card__label">Brain-only average</div>
-                <div class="recall-summary-card__value">{{ ('%.2f'|format(recall_summary.brain_immediate_avg)) if recall_summary.brain_immediate_avg is not none else '—' }} items</div>
-                <div class="recall-summary-card__meta">Average recalled items in prototype data</div>
+                <div class="recall-summary-card__value">{{ ('%.2f'|format(recall_summary.brain_immediate_avg)) if recall_summary.brain_immediate_avg is not none else '—' }}</div>
+                <div class="recall-summary-card__meta">Average recall in prototype data</div>
             </div>
             <div class="recall-summary-card recall-summary-card--genai">
                 <div class="recall-summary-card__label">GenAI-assisted average</div>
-                <div class="recall-summary-card__value">{{ ('%.2f'|format(recall_summary.genai_immediate_avg)) if recall_summary.genai_immediate_avg is not none else '—' }} items</div>
-                <div class="recall-summary-card__meta">Average recalled items in prototype data</div>
+                <div class="recall-summary-card__value">{{ ('%.2f'|format(recall_summary.genai_immediate_avg)) if recall_summary.genai_immediate_avg is not none else '—' }}</div>
+                <div class="recall-summary-card__meta">Average recall in prototype data</div>
             </div>
             <div class="recall-summary-card recall-summary-card--gap">
                 <div class="recall-summary-card__label">Difference (GenAI minus brain-only)</div>
-                <div class="recall-summary-card__value">{{ ('%.2f'|format(recall_summary.immediate_difference)) if recall_summary.immediate_difference is not none else '—' }} items</div>
+                <div class="recall-summary-card__value">{{ ('%.2f'|format(recall_summary.immediate_difference)) if recall_summary.immediate_difference is not none else '—' }}</div>
                 <div class="recall-summary-card__meta">Immediate recall</div>
             </div>
         </div>
@@ -323,17 +137,17 @@
         <div class="recall-summary-grid">
             <div class="recall-summary-card recall-summary-card--brain">
                 <div class="recall-summary-card__label">Brain-only average</div>
-                <div class="recall-summary-card__value">{{ ('%.2f'|format(recall_summary.brain_delayed_avg)) if recall_summary.brain_delayed_avg is not none else '—' }} items</div>
-                <div class="recall-summary-card__meta">Average recalled items in prototype data</div>
+                <div class="recall-summary-card__value">{{ ('%.2f'|format(recall_summary.brain_delayed_avg)) if recall_summary.brain_delayed_avg is not none else '—' }}</div>
+                <div class="recall-summary-card__meta">Average recall in prototype data</div>
             </div>
             <div class="recall-summary-card recall-summary-card--genai">
                 <div class="recall-summary-card__label">GenAI-assisted average</div>
-                <div class="recall-summary-card__value">{{ ('%.2f'|format(recall_summary.genai_delayed_avg)) if recall_summary.genai_delayed_avg is not none else '—' }} items</div>
-                <div class="recall-summary-card__meta">Average recalled items in prototype data</div>
+                <div class="recall-summary-card__value">{{ ('%.2f'|format(recall_summary.genai_delayed_avg)) if recall_summary.genai_delayed_avg is not none else '—' }}</div>
+                <div class="recall-summary-card__meta">Average recall in prototype data</div>
             </div>
             <div class="recall-summary-card recall-summary-card--gap">
                 <div class="recall-summary-card__label">Delayed recall difference</div>
-                <div class="recall-summary-card__value">{{ ('%.2f'|format(recall_summary.delayed_difference|abs)) if recall_summary.delayed_difference is not none else '—' }} items</div>
+                <div class="recall-summary-card__value">{{ ('%.2f'|format(recall_summary.delayed_difference|abs)) if recall_summary.delayed_difference is not none else '—' }}</div>
                 <div class="recall-summary-card__meta">Absolute difference between condition averages</div>
             </div>
         </div>
@@ -434,7 +248,7 @@
 
         <div class="immediate-recall-field">
             <label class="form-label" for="immediateModelTtr">Writing lexical diversity (TTR, 0–1)</label>
-            <select class="form-select" id="immediateModelTtr" required><option value="0.40">0.40</option><option value="0.45">0.45</option><option value="0.50">0.50</option><option value="0.55">0.55</option><option value="0.60">0.60</option><option value="0.65" selected>0.65</option><option value="0.70">0.70</option><option value="0.72">0.72</option><option value="0.75">0.75</option><option value="0.80">0.80</option><option value="0.85">0.85</option><option value="0.90">0.90</option></select>
+            <input class="form-input" type="number" id="immediateModelTtr" min="0" max="1" step="0.01" value="0.65" inputmode="decimal" required>
         </div>
 
         <div class="form-actions">
@@ -495,7 +309,7 @@
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="delayedBoTtr">Brain-only lexical diversity (TTR, 0–1)</label>
-                <select class="form-select" id="delayedBoTtr" data-feature="bo_lexical_diversity_ttr" required><option value="0.40">0.40</option><option value="0.45">0.45</option><option value="0.50">0.50</option><option value="0.55">0.55</option><option value="0.60">0.60</option><option value="0.65">0.65</option><option value="0.70">0.70</option><option value="0.72" selected>0.72</option><option value="0.75">0.75</option><option value="0.80">0.80</option><option value="0.85">0.85</option><option value="0.90">0.90</option></select>
+                <input class="form-input" type="number" id="delayedBoTtr" data-feature="bo_lexical_diversity_ttr" min="0" max="1" step="0.01" value="0.72" inputmode="decimal" required>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="delayedBoOwnership">Cognitive ownership (1–5)</label>
@@ -546,7 +360,7 @@
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="delayedGaTtr">GenAI lexical diversity (TTR, 0–1)</label>
-                <select class="form-select" id="delayedGaTtr" data-feature="ga_lexical_diversity_ttr" required><option value="0.40">0.40</option><option value="0.45">0.45</option><option value="0.50">0.50</option><option value="0.55">0.55</option><option value="0.60">0.60</option><option value="0.65" selected>0.65</option><option value="0.70">0.70</option><option value="0.72">0.72</option><option value="0.75">0.75</option><option value="0.80">0.80</option><option value="0.85">0.85</option><option value="0.90">0.90</option></select>
+                <input class="form-input" type="number" id="delayedGaTtr" data-feature="ga_lexical_diversity_ttr" min="0" max="1" step="0.01" value="0.65" inputmode="decimal" required>
             </div>
             <div class="immediate-recall-field">
                 <label class="form-label" for="delayedGaOwnership">Cognitive ownership (1–5)</label>
@@ -1119,7 +933,7 @@
         </div>
         <div class="retention-status-row">
             <span class="retention-status-label">Validated Research Results</span>
-            <span class="retention-status-val retention-status-val--pending">Pending real participant data</span>
+            <span class="retention-status-val retention-status-val--active">In Progress</span>
         </div>
     </div>
 </section>
@@ -1427,53 +1241,6 @@
 <!-- ================================================================
      M. Future Analysis Pipeline
 ================================================================ -->
-<section class="content-section" aria-labelledby="pipelineHeading4">
-    <div class="content-section__header">
-        <h2 class="section-heading" id="pipelineHeading4">Future Analytical Pipeline</h2>
-        <p class="section-subheading">
-            Architecture of the experimental evaluation pipeline from participant sessions to dashboard presentation.
-        </p>
-    </div>
-
-    <div class="pipeline-diagram" role="img" aria-label="Future experimental analytical pipeline: Controlled Experimental Sessions to Anonymised Writing and Learning Measures to Data Cleaning and Validation to Multi-branch evaluation to Condition-Level Paired Comparison to Effect Sizes and Confidence Intervals to Inter-Rater Evaluation to Validated Experimental Evidence to Research Analytics Dashboard">
-        <div class="pipeline-steps">
-            <div class="pipeline-step pipeline-step--exp">Controlled Experimental Sessions</div>
-            <div class="pipeline-arrow" aria-hidden="true">&#x25BC;</div>
-
-            <div class="pipeline-step pipeline-step--data">Anonymised Writing + Learning Measures</div>
-            <div class="pipeline-arrow" aria-hidden="true">&#x25BC;</div>
-
-            <div class="pipeline-step pipeline-step--clean">Data Cleaning &amp; Validation</div>
-            <div class="pipeline-arrow" aria-hidden="true">&#x25BC;</div>
-
-            <div class="pipeline-box-multibranch">
-                <div class="pipeline-substep">NLP Feature Extraction</div>
-                <div class="pipeline-substep">Human Rubric Evaluation</div>
-                <div class="pipeline-substep">Recall / Ownership Measures</div>
-            </div>
-            <div class="pipeline-arrow" aria-hidden="true">&#x25BC;</div>
-
-            <div class="pipeline-step pipeline-step--ana">Condition-Level / Paired Comparison</div>
-            <div class="pipeline-arrow" aria-hidden="true">&#x25BC;</div>
-
-            <div class="pipeline-step pipeline-step--ana">Effect Sizes + Confidence Intervals</div>
-            <div class="pipeline-arrow" aria-hidden="true">&#x25BC;</div>
-
-            <div class="pipeline-step pipeline-step--clean">Inter-Rater Evaluation</div>
-            <div class="pipeline-arrow" aria-hidden="true">&#x25BC;</div>
-
-            <div class="pipeline-step pipeline-step--evol">Validated Experimental Evidence</div>
-            <div class="pipeline-arrow" aria-hidden="true">&#x25BC;</div>
-
-            <div class="pipeline-step pipeline-step--dash">Research Analytics Dashboard</div>
-        </div>
-    </div>
-
-    <p class="pipeline-note">
-        <strong>Implementation Note:</strong> Final analysis will be performed only on validated experimental data collected according to the approved research protocol.
-    </p>
-</section>
-
 {% endblock %}
 
 {% block extra_scripts %}

@@ -346,6 +346,39 @@
     margin: 0;
 }
 
+#immediateModelTtr {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+#delayedBoTtr {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+#delayedGaTtr {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+#immediateModelTtr::-webkit-inner-spin-button,
+#immediateModelTtr::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#delayedBoTtr::-webkit-inner-spin-button,
+#delayedBoTtr::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#delayedGaTtr::-webkit-inner-spin-button,
+#delayedGaTtr::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 .immediate-recall-form .form-actions {
     grid-column: 1 / -1;
     margin-top: 0;
