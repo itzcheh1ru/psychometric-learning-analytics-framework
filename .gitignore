@@ -57,6 +57,9 @@ models/*.onnx
 
 # ---------- OS / System ----------
 .DS_Store
+.DS_Store?
+._*
+**/.DS_Store
 Thumbs.db
 desktop.ini
 
