@@ -1,0 +1,959 @@
+{% extends "base.html" %}
+
+{% block title %}Personalized Student Assessment — Component 2{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/component2.css') }}" />
+<style>
+/* Assessment-specific custom styles */
+.assessment-nav-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1.5rem 0 1rem;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 0.5rem;
+}
+.assessment-nav-tab {
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--text-secondary);
+    background: #f1f5f9;
+    transition: all 0.2s;
+}
+.assessment-nav-tab:hover {
+    background: #e2e8f0;
+    color: var(--text-primary);
+}
+.assessment-nav-tab--active {
+    background: #2563eb;
+    color: #ffffff !important;
+}
+.stepper-header {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-xs);
+}
+.stepper-progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+.stepper-progress-fill {
+    height: 100%;
+    background: #2563eb;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+.stepper-indicators {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+.step-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+.step-item--active {
+    color: #2563eb;
+}
+.step-item--done {
+    color: #16a34a;
+}
+.step-num-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    color: #475569;
+    font-size: 0.75rem;
+}
+.step-item--active .step-num-badge {
+    background: #2563eb;
+    color: #fff;
+}
+.step-item--done .step-num-badge {
+    background: #16a34a;
+    color: #fff;
+}
+.construct-intro-box {
+    background: #eff6ff;
+    border-left: 4px solid #2563eb;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+}
+.construct-intro-box h3 {
+    margin: 0 0 0.35rem;
+    font-size: 1rem;
+    color: #1e3a8a;
+}
+.construct-intro-box p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #1e40af;
+    line-height: 1.5;
+}
+.question-item-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+    box-shadow: var(--shadow-xs);
+    transition: border-color 0.2s;
+}
+.question-item-card:hover {
+    border-color: #93c5fd;
+}
+.question-item-card--answered {
+    border-left: 4px solid #16a34a;
+}
+.question-item-card--unanswered {
+    border-left: 4px solid #cbd5e1;
+}
+.question-item-card--error {
+    border-left: 4px solid #dc2626 !important;
+    background: #fff5f5;
+}
+.question-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+.question-badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    background: #e0e7ff;
+    color: #3730a3;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: var(--radius-sm);
+}
+.dimension-badge {
+    font-size: 0.72rem;
+    color: #64748b;
+    font-style: italic;
+}
+.question-text {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 1rem;
+    line-height: 1.5;
+}
+.likert-options-group {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+}
+@media (max-width: 768px) {
+    .likert-options-group {
+        grid-template-columns: 1fr;
+    }
+}
+.likert-option-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.65rem 0.4rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: #f8fafc;
+    cursor: pointer;
+    font-size: 0.75rem;
+    text-align: center;
+    transition: all 0.15s ease;
+    user-select: none;
+}
+.likert-option-label:hover {
+    background: #eff6ff;
+    border-color: #93c5fd;
+}
+.likert-option-label input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+.likert-option-label--selected {
+    background: #2563eb !important;
+    border-color: #1d4ed8 !important;
+    color: #ffffff !important;
+    font-weight: 700;
+}
+.likert-option-val {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.15rem;
+}
+.nav-buttons-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+.btn-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.4rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+}
+.btn-nav--prev {
+    background: #e2e8f0;
+    color: #334155;
+}
+.btn-nav--prev:hover {
+    background: #cbd5e1;
+}
+.btn-nav--next {
+    background: #2563eb;
+    color: #fff;
+}
+.btn-nav--next:hover {
+    background: #1d4ed8;
+}
+.btn-nav--submit {
+    background: #16a34a;
+    color: #fff;
+}
+.btn-nav--submit:hover {
+    background: #15803d;
+}
+/* Assessment Results Styles */
+.results-hero-banner {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+    color: #fff;
+    border-radius: var(--radius-md);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-sm);
+}
+.results-hero-banner h2 {
+    color: #fff;
+    margin: 0 0 0.5rem;
+    font-size: 1.5rem;
+}
+.results-hero-banner p {
+    color: #dbeafe;
+    margin: 0 0 1rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+.results-meta-tags {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.results-meta-tag {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 0.35rem 0.8rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
+}
+.scores-grid-5 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+.student-score-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    box-shadow: var(--shadow-xs);
+    display: flex;
+    flex-direction: column;
+}
+.student-score-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+.student-score-val {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1e293b;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+.student-score-max {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #64748b;
+}
+.student-percentile-wrap {
+    margin: 0.75rem 0;
+}
+.percentile-bar-bg {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 0.25rem;
+}
+.percentile-bar-fill {
+    height: 100%;
+    background: #2563eb;
+    border-radius: 4px;
+}
+.benchmarks-table-mini {
+    width: 100%;
+    font-size: 0.72rem;
+    border-collapse: collapse;
+    margin-top: auto;
+    padding-top: 0.5rem;
+}
+.benchmarks-table-mini td {
+    padding: 0.2rem 0;
+    color: #64748b;
+}
+.benchmarks-table-mini td:last-child {
+    text-align: right;
+    font-weight: 600;
+    color: #334155;
+    font-family: var(--font-mono);
+}
+.quartile-badge {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    margin-top: 0.5rem;
+}
+.quartile-badge--upper { background: #dcfce7; color: #15803d; }
+.quartile-badge--iqr { background: #e0f2fe; color: #0369a1; }
+.quartile-badge--lower { background: #fee2e2; color: #b91c1c; }
+
+.charts-dual-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+@media (max-width: 900px) {
+    .charts-dual-grid {
+        grid-template-columns: 1fr;
+    }
+}
+.chart-box {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    box-shadow: var(--shadow-xs);
+}
+.chart-box__title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem;
+    color: #1e293b;
+}
+.chart-box__desc {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin: 0 0 1rem;
+}
+.profile-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-xs);
+}
+.profile-quadrant-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: #dbeafe;
+    color: #1e40af;
+    font-weight: 800;
+    font-size: 0.82rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 0.5rem;
+}
+.profile-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 0 0 0.35rem;
+}
+.profile-tagline {
+    font-size: 0.92rem;
+    color: #64748b;
+    font-weight: 600;
+    margin: 0 0 1rem;
+}
+.profile-narrative {
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: #334155;
+    margin-bottom: 1.25rem;
+}
+.sem-insight-box {
+    background: #f8fafc;
+    border-left: 4px solid #64748b;
+    padding: 1rem 1.25rem;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    margin: 1rem 0;
+    font-size: 0.88rem;
+    color: #334155;
+    line-height: 1.55;
+}
+.sem-insight-box strong {
+    color: #0f172a;
+}
+.context-cards-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1.25rem;
+}
+@media (max-width: 768px) {
+    .context-cards-row {
+        grid-template-columns: 1fr;
+    }
+}
+.context-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+}
+.context-card h4 {
+    margin: 0 0 0.4rem;
+    font-size: 0.9rem;
+    color: #1e293b;
+}
+.context-card p {
+    margin: 0;
+    font-size: 0.82rem;
+    color: #475569;
+    line-height: 1.5;
+}
+.recommendation-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+    box-shadow: var(--shadow-xs);
+    border-left: 5px solid #2563eb;
+}
+.recommendation-card--high {
+    border-left-color: #dc2626;
+}
+.recommendation-card--medium {
+    border-left-color: #f59e0b;
+}
+.recommendation-card--guidance {
+    border-left-color: #10b981;
+}
+.rec-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+.rec-priority-badge {
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+.rec-priority-badge--high { background: #fee2e2; color: #b91c1c; }
+.rec-priority-badge--medium { background: #fef3c7; color: #b45309; }
+.rec-priority-badge--guidance { background: #d1fae5; color: #047857; }
+.rec-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+}
+.rec-trace-box {
+    background: #f1f5f9;
+    border: 1px dashed #cbd5e1;
+    border-radius: var(--radius-sm);
+    padding: 0.65rem 0.9rem;
+    font-size: 0.8rem;
+    color: #334155;
+    margin: 0.75rem 0;
+}
+.rec-rationale {
+    font-size: 0.86rem;
+    color: #475569;
+    line-height: 1.55;
+    margin-bottom: 0.85rem;
+}
+.rec-actions-list {
+    margin: 0.5rem 0;
+    padding-left: 1.25rem;
+    font-size: 0.84rem;
+    color: #1e293b;
+    line-height: 1.6;
+}
+.rec-caveat {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-style: italic;
+    margin-top: 0.75rem;
+}
+.export-panel-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+@media print {
+    .app-sidebar, .page-heading__tag, .assessment-nav-tabs, .export-panel-card, #assessmentFormContainer {
+        display: none !important;
+    }
+    .results-hero-banner {
+        background: #fff !important;
+        color: #000 !important;
+        border: 1px solid #000 !important;
+    }
+    .results-hero-banner h2, .results-hero-banner p {
+        color: #000 !important;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ================================================================
+     1. Header & Navigation Tabs
+================================================================ -->
+<div class="page-heading">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="{{ url_for('main.dashboard') }}" class="breadcrumb__link">Overview</a>
+        <span class="breadcrumb__sep" aria-hidden="true">&rsaquo;</span>
+        <a href="{{ url_for('component2.index') }}" class="breadcrumb__link">Component 2</a>
+        <span class="breadcrumb__sep" aria-hidden="true">&rsaquo;</span>
+        <span class="breadcrumb__current" aria-current="page">Student Assessment</span>
+    </nav>
+    <div class="page-heading__tag">
+        <span class="comp-label comp-label--c2">Component 02</span>
+    </div>
+    <h1 class="page-heading__title">Personalized AI Trust &amp; Verification Assessment</h1>
+    <p class="page-heading__desc">
+        Complete the validated 26-item psychometric questionnaire to evaluate your individual Algorithmic Trust, Verification Behaviour, AI Dependence, Perceived Usefulness, and Learning Confidence relative to our empirical undergraduate student cohort (N=375).
+    </p>
+</div>
+
+<!-- Switcher Tabs between Researcher SEM Dashboard, Student Assessment, and Verification Task -->
+<div class="assessment-nav-tabs" role="tablist">
+    <a href="{{ url_for('component2.index') }}" class="assessment-nav-tab">
+        <svg style="vertical-align:middle;margin-right:4px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+        </svg>
+        Researcher &amp; SEM Dashboard
+    </a>
+    <a href="{{ url_for('component2.student_assessment') }}" class="assessment-nav-tab assessment-nav-tab--active" aria-current="page">
+        <svg style="vertical-align:middle;margin-right:4px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+        </svg>
+        Student Questionnaire (Self-Report)
+    </a>
+    <a href="{{ url_for('component2.verification_task') }}" class="assessment-nav-tab">
+        <svg style="vertical-align:middle;margin-right:4px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+        </svg>
+        Practical AI Verification Assessment
+    </a>
+</div>
+
+<!-- ================================================================
+     2. Pre-Assessment Introduction & Privacy Notice
+================================================================ -->
+<div id="introNoticeCard" class="card" style="margin-bottom: 2rem;">
+    <div class="card__header" style="background:#f8fafc; border-bottom: 1px solid var(--border); padding: 1rem 1.25rem;">
+        <h2 style="font-size: 1.05rem; margin:0; color:#1e293b;">
+            <svg style="vertical-align:middle; margin-right:6px;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+            About This Psychometric Self-Assessment
+        </h2>
+    </div>
+    <div class="card__body" style="padding: 1.25rem;">
+        <p style="font-size: 0.9rem; color: #334155; line-height: 1.6; margin-top: 0;">
+            This diagnostic tool is part of our research study on Generative AI usage in undergraduate higher education.
+            It presents <strong>26 validated empirical survey items</strong> across five core behavioural dimensions. Upon completion, you will receive:
+        </p>
+        <ul style="font-size: 0.88rem; color: #475569; line-height: 1.6; margin-bottom: 1.25rem;">
+            <li><strong>Continuous Construct Scores (1.00&ndash;5.00):</strong> Evaluated via unweighted indicator means and factor-score sensitivity checks.</li>
+            <li><strong>Norm-Referenced Cohort Comparisons:</strong> Your percentile rank and quartile position relative to <strong>375 undergraduate students</strong>.</li>
+            <li><strong>Explainable Behavioural Profile:</strong> An evidence-based interpretation grounded in our Confirmatory Factor Analysis and Structural Equation Modelling findings.</li>
+            <li><strong>Traceable Recommendations:</strong> Concrete, actionable study strategies directly linked to your specific questionnaire ratings.</li>
+        </ul>
+
+        <div style="background: #f1f5f9; border-radius: var(--radius-sm); padding: 0.9rem 1.2rem; font-size: 0.82rem; color: #475569; margin-bottom: 1.25rem;">
+            <strong>Privacy &amp; In-Memory Analytics:</strong> This assessment runs in-memory. Your individual responses and scores are evaluated directly in this browser session and are <em>never stored in a permanent database</em> or linked to your personal student identity without explicit research consent.
+        </div>
+
+        <button type="button" id="btnStartAssessment" class="btn btn--primary" style="padding: 0.75rem 1.75rem; font-size: 0.95rem;">
+            Start Assessment &rarr;
+        </button>
+    </div>
+</div>
+
+<!-- ================================================================
+     3. Questionnaire Container (Multi-step 26-item form)
+================================================================ -->
+<div id="assessmentFormContainer" style="display: none;">
+
+    <!-- Stepper & Progress Tracker -->
+    <div class="stepper-header">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span style="font-size: 0.85rem; font-weight: 700; color: #1e293b;" id="stepTitleLabel">
+                Step 1 of 5: Algorithmic Trust (AT)
+            </span>
+            <span style="font-size: 0.82rem; font-weight: 600; color: #64748b;" id="progressCountLabel">
+                0 of 26 items answered (0%)
+            </span>
+        </div>
+        <div class="stepper-progress-bar">
+            <div class="stepper-progress-fill" id="stepperProgressFill"></div>
+        </div>
+        <div class="stepper-indicators">
+            <div class="step-item step-item--active" id="stepIndicator1">
+                <span class="step-num-badge">1</span> Algorithmic Trust (6)
+            </div>
+            <div class="step-item" id="stepIndicator2">
+                <span class="step-num-badge">2</span> Verification Behaviour (5)
+            </div>
+            <div class="step-item" id="stepIndicator3">
+                <span class="step-num-badge">3</span> Perceived Usefulness (5)
+            </div>
+            <div class="step-item" id="stepIndicator4">
+                <span class="step-num-badge">4</span> AI Dependence (5)
+            </div>
+            <div class="step-item" id="stepIndicator5">
+                <span class="step-num-badge">5</span> Learning Confidence (5)
+            </div>
+        </div>
+    </div>
+
+    <!-- Student identifier / Label (Optional) -->
+    <div style="background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.75rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+        <label for="studentIdentifierInput" style="font-size: 0.85rem; font-weight: 600; color: #334155;">
+            Student Name or Reference ID (Optional):
+        </label>
+        <input type="text" id="studentIdentifierInput" class="form-control" placeholder="e.g. Student 2026 or Anonymous" style="max-width: 280px; padding: 0.4rem 0.75rem; font-size: 0.85rem; border: 1px solid var(--border); border-radius: 4px;" value="Anonymous Student" />
+        <span style="font-size: 0.78rem; color: #64748b;">(Used solely for labeling your exported assessment report)</span>
+    </div>
+
+    <!-- Form Section -->
+    <form id="studentSurveyForm" novalidate>
+
+        <!-- STEP 1: Algorithmic Trust (AT1 to AT6) -->
+        <div class="step-content-pane" id="stepPane1">
+            <div class="construct-intro-box">
+                <h3>Construct 1: Algorithmic Trust (AT)</h3>
+                <p>
+                    Evaluates your subjective confidence in the dependability, accuracy, and reliability of Generative AI tools (e.g. ChatGPT, Gemini, Claude) for academic coursework.
+                </p>
+            </div>
+            {% for item in grouped_items['AT']['items'] %}
+            <div class="question-item-card question-item-card--unanswered" id="card_{{ item.code }}" data-item="{{ item.code }}">
+                <div class="question-meta">
+                    <span class="question-badge">{{ item.code }}</span>
+                    <span class="dimension-badge">{{ item.dimension }}</span>
+                </div>
+                <div class="question-text">{{ item.text }}</div>
+                <div class="likert-options-group">
+                    {% for val, lbl in [(1, 'Strongly Disagree'), (2, 'Disagree'), (3, 'Neutral'), (4, 'Agree'), (5, 'Strongly Agree')] %}
+                    <label class="likert-option-label" data-item="{{ item.code }}" data-value="{{ val }}">
+                        <input type="radio" name="{{ item.code }}" value="{{ val }}" />
+                        <span class="likert-option-val">{{ val }}</span>
+                        <span>{{ lbl }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- STEP 2: Verification Behaviour (VB1 to VB5) -->
+        <div class="step-content-pane" id="stepPane2" style="display: none;">
+            <div class="construct-intro-box" style="border-left-color: #059669; background: #ecfdf5;">
+                <h3 style="color: #065f46;">Construct 2: Verification Behaviour (VB)</h3>
+                <p style="color: #047857;">
+                    Measures your active habits of fact-checking, source triangulation, logic inspection, and comparing AI responses against textbooks, slides, and peer-reviewed sources.
+                </p>
+            </div>
+            {% for item in grouped_items['VB']['items'] %}
+            <div class="question-item-card question-item-card--unanswered" id="card_{{ item.code }}" data-item="{{ item.code }}">
+                <div class="question-meta">
+                    <span class="question-badge" style="background:#d1fae5; color:#065f46;">{{ item.code }}</span>
+                    <span class="dimension-badge">{{ item.dimension }}</span>
+                </div>
+                <div class="question-text">{{ item.text }}</div>
+                <div class="likert-options-group">
+                    {% for val, lbl in [(1, 'Strongly Disagree'), (2, 'Disagree'), (3, 'Neutral'), (4, 'Agree'), (5, 'Strongly Agree')] %}
+                    <label class="likert-option-label" data-item="{{ item.code }}" data-value="{{ val }}">
+                        <input type="radio" name="{{ item.code }}" value="{{ val }}" />
+                        <span class="likert-option-val">{{ val }}</span>
+                        <span>{{ lbl }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- STEP 3: Perceived Usefulness (PU1 to PU5) -->
+        <div class="step-content-pane" id="stepPane3" style="display: none;">
+            <div class="construct-intro-box" style="border-left-color: #d97706; background: #fffbeb;">
+                <h3 style="color: #92400e;">Construct 3: Perceived Usefulness (PU)</h3>
+                <p style="color: #b45309;">
+                    Assesses how effectively Generative AI enhances your academic study efficiency, concept clarity, brainstorming, and coursework preparation.
+                </p>
+            </div>
+            {% for item in grouped_items['PU']['items'] %}
+            <div class="question-item-card question-item-card--unanswered" id="card_{{ item.code }}" data-item="{{ item.code }}">
+                <div class="question-meta">
+                    <span class="question-badge" style="background:#fef3c7; color:#92400e;">{{ item.code }}</span>
+                    <span class="dimension-badge">{{ item.dimension }}</span>
+                </div>
+                <div class="question-text">{{ item.text }}</div>
+                <div class="likert-options-group">
+                    {% for val, lbl in [(1, 'Strongly Disagree'), (2, 'Disagree'), (3, 'Neutral'), (4, 'Agree'), (5, 'Strongly Agree')] %}
+                    <label class="likert-option-label" data-item="{{ item.code }}" data-value="{{ val }}">
+                        <input type="radio" name="{{ item.code }}" value="{{ val }}" />
+                        <span class="likert-option-val">{{ val }}</span>
+                        <span>{{ lbl }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- STEP 4: AI Dependence (AD1 to AD5) -->
+        <div class="step-content-pane" id="stepPane4" style="display: none;">
+            <div class="construct-intro-box" style="border-left-color: #dc2626; background: #fef2f2;">
+                <h3 style="color: #991b1b;">Construct 4: AI Dependence (AD)</h3>
+                <p style="color: #b91c1c;">
+                    Examines cognitive reliance on GenAI tools when encountering academic difficulties, task offloading, and perceived challenges when working unassisted.
+                </p>
+            </div>
+            {% for item in grouped_items['AD']['items'] %}
+            <div class="question-item-card question-item-card--unanswered" id="card_{{ item.code }}" data-item="{{ item.code }}">
+                <div class="question-meta">
+                    <span class="question-badge" style="background:#fee2e2; color:#991b1b;">{{ item.code }}</span>
+                    <span class="dimension-badge">{{ item.dimension }}</span>
+                </div>
+                <div class="question-text">{{ item.text }}</div>
+                <div class="likert-options-group">
+                    {% for val, lbl in [(1, 'Strongly Disagree'), (2, 'Disagree'), (3, 'Neutral'), (4, 'Agree'), (5, 'Strongly Agree')] %}
+                    <label class="likert-option-label" data-item="{{ item.code }}" data-value="{{ val }}">
+                        <input type="radio" name="{{ item.code }}" value="{{ val }}" />
+                        <span class="likert-option-val">{{ val }}</span>
+                        <span>{{ lbl }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- STEP 5: Learning Confidence (LC1 to LC5) -->
+        <div class="step-content-pane" id="stepPane5" style="display: none;">
+            <div class="construct-intro-box" style="border-left-color: #7c3aed; background: #f5f3ff;">
+                <h3 style="color: #5b21b6;">Construct 5: Learning Confidence (LC)</h3>
+                <p style="color: #6d28d9;">
+                    Evaluates your personal academic self-efficacy, independent mastery, conceptual retention, and confidence in tackling complex subject matter.
+                </p>
+            </div>
+            {% for item in grouped_items['LC']['items'] %}
+            <div class="question-item-card question-item-card--unanswered" id="card_{{ item.code }}" data-item="{{ item.code }}">
+                <div class="question-meta">
+                    <span class="question-badge" style="background:#ede9fe; color:#5b21b6;">{{ item.code }}</span>
+                    <span class="dimension-badge">{{ item.dimension }}</span>
+                </div>
+                <div class="question-text">{{ item.text }}</div>
+                <div class="likert-options-group">
+                    {% for val, lbl in [(1, 'Strongly Disagree'), (2, 'Disagree'), (3, 'Neutral'), (4, 'Agree'), (5, 'Strongly Agree')] %}
+                    <label class="likert-option-label" data-item="{{ item.code }}" data-value="{{ val }}">
+                        <input type="radio" name="{{ item.code }}" value="{{ val }}" />
+                        <span class="likert-option-val">{{ val }}</span>
+                        <span>{{ lbl }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Form Validation Error Banner -->
+        <div id="stepErrorBanner" style="display: none; background: #fee2e2; border-left: 4px solid #dc2626; color: #991b1b; padding: 0.85rem 1.25rem; border-radius: var(--radius-sm); margin-top: 1.5rem; font-size: 0.88rem;">
+            Please answer all questions in this section before continuing.
+        </div>
+
+        <!-- Stepper Navigation Buttons -->
+        <div class="nav-buttons-container">
+            <button type="button" id="btnPrevStep" class="btn-nav btn-nav--prev" style="display: none;">
+                &larr; Previous Step
+            </button>
+            <div style="flex: 1;"></div>
+            <button type="button" id="btnNextStep" class="btn-nav btn-nav--next">
+                Next Step &rarr;
+            </button>
+            <button type="button" id="btnSubmitAssessment" class="btn-nav btn-nav--submit" style="display: none;">
+                Submit &amp; View My Assessment &rarr;
+            </button>
+        </div>
+
+    </form>
+</div>
+
+<!-- ================================================================
+     4. Personalized Results Dashboard (Hidden until submitted)
+================================================================ -->
+<div id="assessmentResultsContainer" style="display: none;">
+
+    <!-- Results Hero Banner -->
+    <div class="results-hero-banner">
+        <h2>Personalized Behavioural Assessment Results</h2>
+        <p>
+            Your responses have been processed against our empirical Confirmatory Factor Analysis (CFA) measurement model and Structural Equation Model (SEM). Below is your individual psychometric profile, norm-referenced cohort comparisons, and traceable educational recommendations.
+        </p>
+        <div class="results-meta-tags">
+            <span class="results-meta-tag" id="resStudentTag">Student: Anonymous</span>
+            <span class="results-meta-tag" id="resTimestampTag">Completed: Just now</span>
+            <span class="results-meta-tag">Reference Cohort: N=375 Undergraduates</span>
+            <span class="results-meta-tag">Scoring: Unweighted Mean &plusmn; Factor Sensitivity</span>
+        </div>
+    </div>
+
+    <!-- Quick Actions Bar -->
+    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2rem;">
+        <button type="button" id="btnExportCsv" class="btn btn--primary btn--sm">
+            <svg style="vertical-align:middle;margin-right:4px;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Download CSV Report (.csv)
+        </button>
+        <button type="button" id="btnExportJson" class="btn btn--outline btn--sm">
+            <svg style="vertical-align:middle;margin-right:4px;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Download JSON Package (.json)
+        </button>
+        <button type="button" id="btnPrintReport" class="btn btn--outline btn--sm">
+            <svg style="vertical-align:middle;margin-right:4px;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>
+            </svg>
+            Print / Save as PDF
+        </button>
+        <a href="{{ url_for('component2.verification_task') }}" class="btn btn--primary btn--sm" style="background: #16a34a; border-color: #15803d; font-weight: 600;">
+            Proceed to Practical Verification Assessment &rarr;
+        </a>
+        <button type="button" id="btnRetakeAssessment" class="btn btn--secondary btn--sm" style="margin-left: auto;">
+            &circlearrowleft; Retake Assessment
+        </button>
+    </div>
+
+    <!-- Section 1: Five Construct Scores Cards -->
+    <h3 style="font-size: 1.15rem; color: #1e293b; margin: 0 0 1rem;">
+        1. Personal Construct Scores &amp; Cohort Norms (N=375)
+    </h3>
+    <div class="scores-grid-5" id="constructScoresGrid">
+        <!-- Rendered dynamically via JS -->
+    </div>
+
+    <!-- Section 2: Dual Visualizations Grid -->
+    <h3 style="font-size: 1.15rem; color: #1e293b; margin: 1.5rem 0 1rem;">
+        2. Visual Profile Comparisons
+    </h3>
+    <div class="charts-dual-grid">
+        <div class="chart-box">
+            <h4 class="chart-box__title">Construct Profile vs. Cohort Median (Radar)</h4>
+            <p class="chart-box__desc">Visualizes your individual score across all five constructs compared to the empirical undergraduate median polygon.</p>
+            <div id="studentRadarPlot" style="min-height: 380px;"></div>
+        </div>
+        <div class="chart-box">
+            <h4 class="chart-box__title">Trust vs. Verification Quadrant Position</h4>
+            <p class="chart-box__desc">Scatter matrix of Algorithmic Trust (X) vs. Verification Behaviour (Y), divided at cohort medians (3.33 and 3.80).</p>
+            <div id="studentQuadrantPlot" style="min-height: 380px;"></div>
+        </div>
+    </div>
+
+    <!-- Section 3: Explainable Behavioural Profile -->
+    <h3 style="font-size: 1.15rem; color: #1e293b; margin: 1.5rem 0 1rem;">
+        3. Explainable Behavioural Interpretation
+    </h3>
+    <div class="profile-card" id="behaviouralProfileCard">
+        <!-- Rendered dynamically via JS -->
+    </div>
+
+    <!-- Section 4: Traceable Personalized Recommendations -->
+    <h3 style="font-size: 1.15rem; color: #1e293b; margin: 1.5rem 0 1rem;">
+        4. Evidence-Traced Educational Recommendations
+    </h3>
+    <p style="font-size: 0.88rem; color: #64748b; margin-top: -0.5rem; margin-bottom: 1.25rem;">
+        Each recommendation is algorithmically triggered by your specific survey responses and theoretical SEM relationships.
+    </p>
+    <div id="recommendationsContainer">
+        <!-- Rendered dynamically via JS -->
+    </div>
+
+    <!-- Section 5: Scientific Disclaimers & Limitations -->
+    <div class="card" style="margin-top: 2rem; background: #f8fafc; border: 1px solid #e2e8f0;">
+        <div class="card__body" style="padding: 1.25rem; font-size: 0.82rem; color: #64748b; line-height: 1.6;">
+            <strong>Scientific &amp; Methodological Disclaimers:</strong>
+            <ul style="margin: 0.5rem 0 0; padding-left: 1.25rem;">
+                <li><strong>Self-Report Epistemology:</strong> Responses represent your self-reported perceptions and study habits on a 5-point Likert scale, not direct instrumented telemetry or objective task performance.</li>
+                <li><strong>Continuous Dimensions:</strong> Behavioural profiles and quadrant boundaries (AT median = 3.33, VB median = 3.80) are descriptive conventions derived from our empirical sample (N=375). They do not represent clinical cutoffs or diagnostic risk classifications.</li>
+                <li><strong>Structural Associations:</strong> SEM path estimates demonstrate cross-sectional covariance relationships across the student cohort and do not establish deterministic causal effects for an individual learner.</li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<!-- Plotly.js for interactive radar & scatter charts -->
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<script src="{{ url_for('static', filename='js/component2_assessment.js') }}"></script>
+{% endblock %}

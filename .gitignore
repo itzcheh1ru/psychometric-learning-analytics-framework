@@ -39,6 +39,7 @@ flask_session/
 # ---------- Research Data (never commit real participant data) ----------
 data/raw/*
 data/processed/*
+data/processed/verification_evaluations/
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 

@@ -124,8 +124,14 @@ risk based on GenAI usage behaviour, verification practices, and learning strate
 Models the psychological relationships between algorithmic trust, perceived
 usefulness, verification behaviour, AI dependence, and learning confidence.
 
-**Methods:** Confirmatory Factor Analysis (CFA), Structural Equation Modelling (SEM), R / lavaan  
+**Methods:** Confirmatory Factor Analysis (CFA), Structural Equation Modelling (SEM), semopy, SciPy, statsmodels, Plotly  
 **Owner:** IT23217904 (Kumari A.M.W.P.G.S.R.)
+
+#### Capabilities
+- **Likert-Scale Ingestion & Screening**: CSV and Excel (.xlsx) parsing, range checks (1-5), missing-value analysis, and automated reverse coding (AD4 -> AD4_R).
+- **Measurement Model (CFA)**: Standardized factor loadings, communalities, Cronbach's Alpha, Composite Reliability (CR), Average Variance Extracted (AVE), Fornell-Larcker, and HTMT discriminant validity.
+- **Structural Model (SEM)**: Direct and indirect pathways, non-parametric bootstrap mediation intervals (95% bias-corrected), R-squared variance explained, and model fit indices (Chi2/df, CFI, TLI, RMSEA, SRMR).
+- **Interactive Visualizations & Export**: Dynamic Plotly diagrams, APA 7th edition narrative generation, and CSV/JSON export.
 
 ---
 
@@ -294,6 +300,26 @@ gunicorn --bind 0.0.0.0:8000 wsgi:app
 ```bash
 curl http://127.0.0.1:5000/health
 # Response: {"application":"Psychometric Learning Analytics Framework","project_id":"J26-DS-310","status":"ok"}
+```
+
+### Component 2: Personalized Student Assessment System
+```bash
+# Student Self-Assessment Interface:
+http://127.0.0.1:5000/component2/assessment
+
+# Researcher & SEM Dashboard:
+http://127.0.0.1:5000/component2/
+
+# Questionnaire API:
+GET /api/component2/questionnaire
+
+# Assessment Evaluation API:
+POST /api/component2/assess
+Payload: {"responses": {"AT1": 4, "AT2": 4, ... (all 26 items)}, "student_id": "Optional"}
+
+# Assessment Report Export API:
+POST /api/component2/student-report
+Payload: {"format": "csv"|"json", "scoring_result": {...}, "profile_result": {...}, "recommendations": [...]}
 ```
 
 

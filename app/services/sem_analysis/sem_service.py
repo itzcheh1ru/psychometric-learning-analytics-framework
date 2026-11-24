@@ -110,17 +110,20 @@ def run_bootstrap_mediation(
 def run_sem_analysis(df: pd.DataFrame, n_bootstraps: int = 500) -> Dict[str, Any]:
     """
     Run full Structural Equation Modeling (SEM) estimation and mediation analysis.
+    Supports both 26-item empirical survey indicators and 19-item synthetic/legacy indicators.
     """
     construct_items_map = {}
     for c in CONSTRUCTS:
         c_code = c["code"]
-        raw_items = c["items"]
+        candidate_items = c.get("items", []) + c.get("legacy_items", [])
         active_items = []
-        for it in raw_items:
+        for it in candidate_items:
             if it == "AD4" and "AD4_R" in df.columns:
-                active_items.append("AD4_R")
+                if "AD4_R" not in active_items:
+                    active_items.append("AD4_R")
             elif it in df.columns:
-                active_items.append(it)
+                if it not in active_items:
+                    active_items.append(it)
         construct_items_map[c_code] = active_items
 
     sem_syntax_lines = []

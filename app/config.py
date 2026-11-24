@@ -12,6 +12,9 @@ class Config:
     """Base configuration with safe development defaults."""
 
     SECRET_KEY = os.environ.get("SECRET_KEY", "dev-fallback-key-j26-ds-310")
+    MAX_CONTENT_LENGTH = 10 * 1024 * 1024  # 10 MB maximum upload
+    ALLOWED_DATASET_EXTENSIONS = {".csv", ".xlsx"}
+
     TESTING = False
     DEBUG = False
     JSON_SORT_KEYS = False

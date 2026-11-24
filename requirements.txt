@@ -1,3 +1,9 @@
 Flask==3.1.0
 python-dotenv==1.0.1
 gunicorn==26.2.0
+pandas==3.0.6
+openpyxl==3.1.5
+scipy>=1.15.0
+statsmodels>=0.14.0
+semopy>=2.3.11
+plotly>=6.0.0

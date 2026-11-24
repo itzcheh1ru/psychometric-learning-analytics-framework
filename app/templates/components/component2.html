@@ -32,6 +32,28 @@
     </div>
 </div>
 
+<!-- Navigation Switcher between Researcher Dashboard, Student Assessment, and Verification Task -->
+<div style="display: flex; gap: 0.75rem; margin: 1.5rem 0 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.75rem; flex-wrap: wrap;" role="tablist">
+    <a href="{{ url_for('component2.index') }}" class="btn btn--primary btn--sm" style="font-weight: 600;">
+        <svg style="vertical-align:middle;margin-right:4px;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+        </svg>
+        Researcher &amp; SEM Dashboard
+    </a>
+    <a href="{{ url_for('component2.student_assessment') }}" class="btn btn--outline btn--sm" style="font-weight: 600;">
+        <svg style="vertical-align:middle;margin-right:4px;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+        </svg>
+        Student Questionnaire (Self-Report)
+    </a>
+    <a href="{{ url_for('component2.verification_task') }}" class="btn btn--outline btn--sm" style="font-weight: 600;">
+        <svg style="vertical-align:middle;margin-right:4px;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+        </svg>
+        Practical AI Verification Assessment &rarr;
+    </a>
+</div>
+
 
 
 <!-- ================================================================
@@ -86,9 +108,9 @@
             <h3 class="action-card__title">Psychometric Model Parameters</h3>
             <ul class="meta-list">
                 <li><span class="meta-label">Latent Constructs:</span> <span class="meta-val">5 (AT, PU, VB, AD, LC)</span></li>
-                <li><span class="meta-label">Total Survey Items:</span> <span class="meta-val">19 Indicators</span></li>
+                <li><span class="meta-label">Total Survey Items:</span> <span class="meta-val">{{ items|length if items else 26 }} Indicators</span></li>
                 <li><span class="meta-label">Response Scale:</span> <span class="meta-val">5-point Likert (1=Strongly Disagree, 5=Strongly Agree)</span></li>
-                <li><span class="meta-label">Reverse-coded Item:</span> <span class="meta-val">AD4 &rarr; AD4_R = 6 &minus; AD4 (Autonomy item)</span></li>
+                <li><span class="meta-label">Reverse-coded Item:</span> <span class="meta-val">Standard Polarity in Empirical Survey (AD4 retained positive)</span></li>
                 <li><span class="meta-label">Mediator:</span> <span class="meta-val">Verification Behaviour (VB)</span></li>
                 <li><span class="meta-label">Estimation Engine:</span> <span class="meta-val">semopy Covariance Modeling (lavaan-compatible)</span></li>
             </ul>
@@ -134,7 +156,7 @@
     <!-- Survey Instrument Detail Accordion -->
     <details class="instrument-details">
         <summary class="instrument-details__summary">
-            View Complete Survey Questionnaire Items &amp; Variable Mappings (19 Items)
+            View Complete Survey Questionnaire Items &amp; Variable Mappings ({{ items|length if items else 26 }} Items)
         </summary>
         <div class="instrument-details__content">
             <div class="table-responsive">
@@ -149,7 +171,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for code, item in items.items() %}
+                        {% for code, item in (items or {}).items() %}
                         <tr>
                             <td><code>{{ code }}</code></td>
                             <td><strong>{{ item.construct }}</strong></td>
@@ -186,7 +208,21 @@
         <p class="empty-state__body">
             Confirmatory Factor Analysis (CFA) and Structural Equation Modelling (SEM) results will become available after survey data collection, measurement model validation, and statistical estimation are completed.
         </p>
-        <p class="empty-state__hint">
+        <div class="empty-state__tag" style="margin: 0.75rem 0;">
+            <span class="status-badge status-badge--pending">
+                <span class="status-badge__dot" aria-hidden="true"></span>
+                Pending SEM estimation
+            </span>
+        </div>
+        <div class="planned-model-notice" style="margin-top: 1.25rem; text-align: left; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem 1.25rem;">
+            <h4 style="font-size: 0.85rem; font-weight: 600; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.5rem;">
+                PLANNED RELATIONSHIPS TO BE TESTED
+            </h4>
+            <p style="font-size: 0.9rem; margin: 0; color: var(--text-secondary);">
+                Theoretical structural pathways specify Algorithmic Trust (AT) and Perceived Usefulness (PU) as antecedents, Verification Behaviour (VB) as a mediating mechanism, and AI Dependence (AD) and Learning Confidence (LC) as educational outcomes.
+            </p>
+        </div>
+        <p class="empty-state__hint" style="margin-top: 1rem;">
             To view the interactive estimation pipeline, upload a survey dataset above or click <strong>Load Demonstration Dataset </strong>.
         </p>
     </div>

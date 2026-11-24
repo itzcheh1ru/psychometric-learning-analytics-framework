@@ -306,3 +306,167 @@ def generate_effects_comparison_chart(sem_results: Dict[str, Any]) -> Dict[str, 
     )
 
     return json.loads(fig.to_json())
+
+
+def generate_student_radar_chart(construct_scores: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Generate an interactive Plotly Radar (Spider) chart comparing the student's
+    individual construct scores against the empirical cohort median (N=375).
+    """
+    categories = [
+        "Algorithmic Trust<br>(AT)",
+        "Verification Behaviour<br>(VB)",
+        "Perceived Usefulness<br>(PU)",
+        "AI Dependence<br>(AD)",
+        "Learning Confidence<br>(LC)",
+    ]
+
+    # Close the radar loop by repeating the first category
+    categories_closed = categories + [categories[0]]
+
+    codes = ["AT", "VB", "PU", "AD", "LC"]
+    student_vals = [construct_scores.get(c, {}).get("mean_score", 3.0) for c in codes]
+    student_vals_closed = student_vals + [student_vals[0]]
+
+    cohort_medians = [construct_scores.get(c, {}).get("cohort_median", 3.0) for c in codes]
+    cohort_medians_closed = cohort_medians + [cohort_medians[0]]
+
+    fig = go.Figure()
+
+    # Cohort Median Reference polygon
+    fig.add_trace(go.Scatterpolar(
+        r=cohort_medians_closed,
+        theta=categories_closed,
+        name="Cohort Median (N=375)",
+        line=dict(color="#64748b", dash="dash", width=2),
+        fill="toself",
+        fillcolor="rgba(100, 116, 139, 0.12)",
+        hoverinfo="text",
+        hovertext=[f"Cohort Median: {v:.2f}/5.0" for v in cohort_medians_closed],
+    ))
+
+    # Student Score polygon
+    fig.add_trace(go.Scatterpolar(
+        r=student_vals_closed,
+        theta=categories_closed,
+        name="Your Assessment Score",
+        line=dict(color="#2563eb", width=3),
+        fill="toself",
+        fillcolor="rgba(37, 99, 235, 0.22)",
+        marker=dict(size=7, color="#1d4ed8"),
+        hoverinfo="text",
+        hovertext=[f"Your Score: {v:.2f}/5.0" for v in student_vals_closed],
+    ))
+
+    fig.update_layout(
+        polar=dict(
+            radialaxis=dict(
+                visible=True,
+                range=[1.0, 5.0],
+                tickvals=[1.0, 2.0, 3.0, 4.0, 5.0],
+                ticktext=["1 (SD)", "2 (D)", "3 (N)", "4 (A)", "5 (SA)"],
+                gridcolor="#e2e8f0",
+                linecolor="#cbd5e1",
+                angle=90,
+            ),
+            angularaxis=dict(
+                gridcolor="#e2e8f0",
+                linecolor="#cbd5e1",
+            ),
+        ),
+        title=dict(
+            text="<b>Personal Psychometric Construct Profile vs. Cohort Median</b>",
+            font=dict(size=14, color="#1e293b"),
+        ),
+        legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5),
+        margin=dict(l=60, r=60, t=50, b=60),
+        height=400,
+        paper_bgcolor="rgba(0,0,0,0)",
+    )
+
+    return json.loads(fig.to_json())
+
+
+def generate_student_quadrant_chart(
+    at_score: float, vb_score: float, ad_score: float = 3.0
+) -> Dict[str, Any]:
+    """
+    Generate an interactive 4-quadrant Plotly scatter plot showing Algorithmic Trust (X)
+    versus Verification Behaviour (Y), with reference medians and the student's position.
+    """
+    at_median = 3.33
+    vb_median = 3.80
+
+    fig = go.Figure()
+
+    # Reference median dividing lines
+    fig.add_shape(
+        type="line", x0=at_median, x1=at_median, y0=1.0, y1=5.0,
+        line=dict(color="#94a3b8", width=1.5, dash="dash"),
+    )
+    fig.add_shape(
+        type="line", x0=1.0, x1=5.0, y0=vb_median, y1=vb_median,
+        line=dict(color="#94a3b8", width=1.5, dash="dash"),
+    )
+
+    # Quadrant background region labels
+    quadrant_annotations = [
+        dict(x=4.15, y=4.55, text="<b>Q1: Calibrated Discerning</b><br><span style='font-size:10px;color:#64748b'>High Trust, High Verification</span>", showarrow=False, font=dict(size=11, color="#15803d")),
+        dict(x=4.15, y=1.45, text="<b>Q2: Vulnerable Over-Truster</b><br><span style='font-size:10px;color:#64748b'>High Trust, Low Verification</span>", showarrow=False, font=dict(size=11, color="#b91c1c")),
+        dict(x=2.15, y=4.55, text="<b>Q3: Vigilant Skeptical</b><br><span style='font-size:10px;color:#64748b'>Low Trust, High Verification</span>", showarrow=False, font=dict(size=11, color="#0369a1")),
+        dict(x=2.15, y=1.45, text="<b>Q4: Disengaged Under-Utilizer</b><br><span style='font-size:10px;color:#64748b'>Low Trust, Low Verification</span>", showarrow=False, font=dict(size=11, color="#6b7280")),
+    ]
+
+    for ann in quadrant_annotations:
+        fig.add_annotation(**ann)
+
+    # Student marker
+    fig.add_trace(go.Scatter(
+        x=[at_score],
+        y=[vb_score],
+        mode="markers+text",
+        name="Your Position",
+        text=["<b>YOU</b>"],
+        textposition="top center",
+        marker=dict(
+            size=18,
+            color="#2563eb",
+            symbol="diamond",
+            line=dict(width=3, color="#ffffff"),
+            opacity=1.0,
+        ),
+        hoverinfo="text",
+        hovertext=[
+            f"<b>Your Assessment Position</b><br>"
+            f"Algorithmic Trust: {at_score:.2f} (Median: {at_median})<br>"
+            f"Verification Behaviour: {vb_score:.2f} (Median: {vb_median})<br>"
+            f"AI Dependence: {ad_score:.2f}"
+        ],
+    ))
+
+    fig.update_layout(
+        title=dict(
+            text="<b>Trust vs. Verification Behavioural Profile Matrix</b>",
+            font=dict(size=14, color="#1e293b"),
+        ),
+        xaxis=dict(
+            title="Algorithmic Trust (AT) [1.0 = Low, 5.0 = High]",
+            range=[1.0, 5.0],
+            gridcolor="#f1f5f9",
+            zeroline=False,
+        ),
+        yaxis=dict(
+            title="Verification Behaviour (VB) [1.0 = Low, 5.0 = High]",
+            range=[1.0, 5.0],
+            gridcolor="#f1f5f9",
+            zeroline=False,
+        ),
+        margin=dict(l=60, r=40, t=50, b=50),
+        height=400,
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="#fafafa",
+        showlegend=False,
+    )
+
+    return json.loads(fig.to_json())
+

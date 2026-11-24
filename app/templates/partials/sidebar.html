@@ -61,8 +61,8 @@
             <li>
                 <a
                     href="{{ url_for('component2.index') }}"
-                    class="sidebar-link {% if request.endpoint == 'component2.index' %}sidebar-link--active{% endif %}"
-                    aria-current="{% if request.endpoint == 'component2.index' %}page{% endif %}"
+                    class="sidebar-link {% if request.endpoint in ['component2.index', 'component2.student_assessment'] %}sidebar-link--active{% endif %}"
+                    aria-current="{% if request.endpoint in ['component2.index', 'component2.student_assessment'] %}page{% endif %}"
                 >
                     <span class="sidebar-comp-num" aria-hidden="true">02</span>
                     <span class="sidebar-link-text">

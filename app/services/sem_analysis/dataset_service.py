@@ -1,9 +1,9 @@
 """
 app/services/sem_analysis/dataset_service.py
 
-Data management, questionnaire column mapping, Likert validation,
-reverse-coding, missing-value analysis, and descriptive statistics
-for Component 2: Algorithmic Trust & Verification Analysis (CFA & SEM).
+Data management, questionnaire column mapping, Likert scale cleaning & validation,
+informed consent filtering, reverse-coding management, missing-value analysis,
+and descriptive statistics for Component 2: Algorithmic Trust & Verification Analysis (CFA & SEM).
 """
 
 from pathlib import Path
@@ -14,7 +14,12 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-from app.services.sem_analysis.schemas import SURVEY_ITEMS, CONSTRUCTS
+from app.services.sem_analysis.schemas import (
+    CONSTRUCTS,
+    SURVEY_ITEMS,
+    SURVEY_ITEMS_EMPIRICAL_26,
+    SURVEY_ITEMS_LEGACY_19,
+)
 
 ALLOWED_EXTENSIONS = {".csv", ".xlsx"}
 
@@ -33,38 +38,178 @@ SENSITIVE_COLUMNS = {
     "last modified time",
 }
 
-EXPECTED_ITEM_CODES = list(SURVEY_ITEMS.keys())
+LIKERT_VALUE_MAP: Dict[str, int] = {
+    "strongly disagree": 1,
+    "strongly disagree ": 1,
+    "disagree": 2,
+    "neutral": 3,
+    "neither agree nor disagree": 3,
+    "agree": 4,
+    "strongly agree": 5,
+}
+
+# Key distinctive phrases for mapping full question wording from survey exports
+DISTINCTIVE_QUESTION_PHRASES: Dict[str, List[str]] = {
+    # Algorithmic Trust (AT) - 6 items
+    "AT1": ["reliable information", "academic learning activities"],
+    "AT2": ["consistent responses", "learning tasks"],
+    "AT3": ["generally accurate", "academic purposes"],
+    "AT4": ["explanations or solutions", "academic problems"],
+    "AT5": ["more when they provide clear explanations", "clear explanations for their answers"],
+    "AT6": ["appropriate support", "trusted to provide appropriate support"],
+    # Verification Behaviour (VB) - 5 items
+    "VB1": ["verify information provided", "before using it in academic work"],
+    "VB2": ["compare generative ai-generated", "textbooks, lecture materials", "reliable sources"],
+    "VB3": ["check whether generative ai responses are accurate", "accurate before accepting"],
+    "VB4": ["understand the reasoning behind", "copying the output"],
+    "VB5": ["modify or correct", "after reviewing its accuracy"],
+    # Perceived Usefulness (PU) - 5 items
+    "PU1": ["improves my understanding", "academic concepts and learning"],
+    "PU2": ["complete academic tasks more effectively"],
+    "PU3": ["increase my productivity", "studying or preparing"],
+    "PU4": ["useful for achieving my academic learning goals"],
+    "PU5": ["learn difficult topics by providing explanations"],
+    # AI Dependence (AD) - 5 items
+    "AD1": ["rely on generative ai tools when i face difficulties"],
+    "AD2": ["frequently depend on generative ai-generated answers"],
+    "AD3": ["instead of solving some academic problems independently", "use generative ai assistance instead"],
+    "AD4": ["important part of my learning process"],
+    "AD5": ["difficult to complete some academic tasks without assistance"],
+    # Learning Confidence (LC) - 5 items
+    "LC1": ["feel more capable of learning new academic concepts"],
+    "LC2": ["feel more confident when solving academic problems"],
+    "LC3": ["feel more capable of completing academic tasks after receiving support"],
+    "LC4": ["feel more confident in my ability to complete academic tasks after using"],
+    "LC5": ["approach challenging academic tasks with greater confidence"],
+    # Legacy items (autonomy wording for AD4)
+    "AD4_LEGACY": ["independently analyze and solve", "without using generative ai"],
+}
 
 
-def detect_column_mapping(columns: List[str], custom_mapping: Optional[Dict[str, str]] = None) -> Tuple[Dict[str, str], List[str]]:
+LEGACY_19_ITEM_CODES = [
+    "T1", "T2", "T3", "T4",
+    "PU1", "PU2", "PU3", "PU4",
+    "V1", "V2", "V3",
+    "AD1", "AD2", "AD3", "AD4",
+    "LC1", "LC2", "LC3", "LC4",
+]
+
+EMPIRICAL_26_ITEM_CODES = list(SURVEY_ITEMS_EMPIRICAL_26.keys())
+
+
+def clean_likert_cell(val: Any) -> float:
     """
-    Map survey columns to the 19 expected research items (T1-T4, PU1-PU4, V1-V3, AD1-AD4, LC1-LC4).
-    Supports exact matching, prefix/suffix matching, fuzzy wording matching, and custom mappings.
+    Convert a raw Likert cell value (numeric or text string) into a numeric float.
+    Normalizes non-breaking spaces, case, and standard Likert descriptors.
+    Returns float(val) for numbers (even out-of-bounds numbers so range validation detects them).
+    Returns np.nan if unparseable text or missing.
+    """
+    if pd.isna(val):
+        return np.nan
+
+    # If already a number, return float (preserve out-of-range values like 7 so range check catches it)
+    if isinstance(val, (int, float, np.integer, np.floating)):
+        try:
+            return float(val)
+        except (ValueError, TypeError):
+            return np.nan
+
+    # String cleaning & normalization
+    s = str(val).replace("\xa0", " ").strip().lower()
+
+    if s in LIKERT_VALUE_MAP:
+        return float(LIKERT_VALUE_MAP[s])
+
+    # Try numeric string (e.g. "4", "7", "5.0")
+    try:
+        return float(s)
+    except (ValueError, TypeError):
+        pass
+
+    return np.nan
+
+
+def filter_informed_consent(df: pd.DataFrame) -> Tuple[pd.DataFrame, int]:
+    """
+    Identify informed consent column and filter out participant records that declined consent.
+    Returns (filtered_df, excluded_count).
+    """
+    consent_col = None
+    for col in df.columns:
+        norm = str(col).replace("\xa0", " ").strip().lower()
+        if any(term in norm for term in ["consent", "voluntary", "participation", "participat", "agree to participate"]):
+            consent_col = col
+            break
+
+    # If not found by keyword, check column index 4 if available
+    if consent_col is None and len(df.columns) > 4:
+        sample_val = str(df.iloc[0, 4]).replace("\xa0", " ").strip().lower()
+        if "agree" in sample_val or "participat" in sample_val:
+            consent_col = df.columns[4]
+
+    if consent_col is None:
+        return df.copy(), 0
+
+    # Filter for positive consent
+    consent_series = df[consent_col].astype(str).str.replace("\xa0", " ").str.strip().str.lower()
+    is_consented = consent_series == "i agree to participate"
+    filtered_df = df[is_consented].copy()
+    excluded_count = int(len(df) - len(filtered_df))
+
+    return filtered_df, excluded_count
+
+
+def detect_column_mapping(
+    columns: List[str], custom_mapping: Optional[Dict[str, str]] = None
+) -> Tuple[Dict[str, str], List[str]]:
+    """
+    Map survey columns to psychometric item codes.
+    Supports:
+    - 26-item empirical instrument (AT1-AT6, VB1-VB5, PU1-PU5, AD1-AD5, LC1-LC5)
+    - 19-item synthetic/legacy instrument (T1-T4, PU1-PU4, V1-V3, AD1-AD4, LC1-LC4)
+    - Full questionnaire text wording matching
+    - Explicit custom mappings
     """
     mapping: Dict[str, str] = {}
-    normalized_cols = {str(c).strip(): str(c).strip().lower() for c in columns}
+    normalized_cols = {str(c).strip(): str(c).replace("\xa0", " ").strip().lower() for c in columns}
     custom_mapping = custom_mapping or {}
 
     # 1. Apply explicit custom mapping first
     for item_code, col_name in custom_mapping.items():
-        if item_code in EXPECTED_ITEM_CODES and col_name in columns:
+        if col_name in columns:
             mapping[item_code] = col_name
 
-    # 2. Match remaining item codes
-    for item_code, item_meta in SURVEY_ITEMS.items():
+    # Determine whether the dataset is using empirical 26-item or legacy 19-item naming
+    # Check unique schema markers
+    has_legacy_unique = any(
+        norm_col in ["t1", "t2", "t3", "t4", "v1", "v2", "v3"]
+        for norm_col in normalized_cols.values()
+    )
+    has_empirical_unique = any(
+        norm_col in ["at1", "at2", "at3", "at4", "at5", "at6", "vb1", "vb2", "vb3", "vb4", "vb5", "pu5", "ad5", "lc5"]
+        for norm_col in normalized_cols.values()
+    )
+
+    preferred_item_codes = (
+        LEGACY_19_ITEM_CODES if (has_legacy_unique and not has_empirical_unique)
+        else EMPIRICAL_26_ITEM_CODES
+    )
+
+    # 2. Match exact codes
+    for item_code in preferred_item_codes + list(SURVEY_ITEMS.keys()):
         if item_code in mapping:
             continue
 
         item_code_lower = item_code.lower()
         matched_col = None
 
-        # Check for exact code match (case-insensitive)
+        # Exact code match
         for orig_col, norm_col in normalized_cols.items():
             if norm_col == item_code_lower:
                 matched_col = orig_col
                 break
 
-        # Check for code with delimiter (e.g., "at_t1", "t1_trust", "pu_pu1")
+        # Delimited code match (e.g., "at_at1", "vb_1", "pu-1")
         if not matched_col:
             for orig_col, norm_col in normalized_cols.items():
                 parts = [p.strip() for p in norm_col.replace("-", "_").replace(".", "_").split("_")]
@@ -72,33 +217,39 @@ def detect_column_mapping(columns: List[str], custom_mapping: Optional[Dict[str,
                     matched_col = orig_col
                     break
 
-        # Check for wording keywords match
-        if not matched_col:
-            # Check key phrases in questionnaire wording
-            wording_words = [w.lower() for w in item_meta["wording"].split() if len(w) > 4]
-            best_score = 0
-            best_col = None
-            for orig_col, norm_col in normalized_cols.items():
-                if norm_col in SENSITIVE_COLUMNS:
-                    continue
-                score = sum(1 for w in wording_words if w in norm_col)
-                if score >= 3 and score > best_score:
-                    best_score = score
-                    best_col = orig_col
-            if best_col and best_col not in mapping.values():
-                matched_col = best_col
-
         if matched_col and matched_col not in mapping.values():
             mapping[item_code] = matched_col
 
-    unmapped = [code for code in EXPECTED_ITEM_CODES if code not in mapping]
+    # 3. Match by question wording key phrases (for raw survey export headers)
+    for item_code, phrases in DISTINCTIVE_QUESTION_PHRASES.items():
+        target_code = "AD4" if item_code == "AD4_LEGACY" else item_code
+        if target_code in mapping:
+            continue
+
+        best_score = 0
+        best_col = None
+
+        for orig_col, norm_col in normalized_cols.items():
+            if norm_col in SENSITIVE_COLUMNS or orig_col in mapping.values():
+                continue
+
+            score = sum(1 for phrase in phrases if phrase in norm_col)
+            if score > 0 and score > best_score:
+                best_score = score
+                best_col = orig_col
+
+        if best_col and best_col not in mapping.values():
+            mapping[target_code] = best_col
+
+    expected_set = preferred_item_codes
+    unmapped = [code for code in expected_set if code not in mapping]
     return mapping, unmapped
 
 
 def compute_descriptive_stats(df: pd.DataFrame, items: List[str]) -> Dict[str, Any]:
     """
     Compute rigorous descriptive statistics and univariate normality indices:
-    Mean, SD, Median, Min, Max, Skewness, Kurtosis, and Missing count.
+    Mean, SD, Median, Min, Max, Skewness, Kurtosis, and Valid N.
     """
     stats_dict: Dict[str, Any] = {}
 
@@ -128,11 +279,15 @@ def compute_descriptive_stats(df: pd.DataFrame, items: List[str]) -> Dict[str, A
             "n": int(len(series)),
         }
 
-    # Also compute construct-level composite statistics
+    # Construct-level composite statistics
     construct_stats: Dict[str, Any] = {}
     for c in CONSTRUCTS:
         c_code = c["code"]
-        c_items = [it for it in c["items"] if it in df.columns or (it == "AD4" and "AD4_R" in df.columns)]
+        c_items = [it for it in c["items"] if it in df.columns]
+        # Also check legacy items if empirical items not found
+        if not c_items and "legacy_items" in c:
+            c_items = [it for it in c["legacy_items"] if it in df.columns or (it == "AD4" and "AD4_R" in df.columns)]
+
         actual_cols = ["AD4_R" if it == "AD4" and "AD4_R" in df.columns else it for it in c_items]
 
         if actual_cols:
@@ -163,20 +318,12 @@ def validate_and_prepare_dataset(
     handle_missing: str = "listwise",
 ) -> Dict[str, Any]:
     """
-    Read, validate, screen, map, and prepare a research dataset for CFA & SEM.
-
-    Args:
-        file_storage_or_df: Flask FileStorage, file path, bytes, or pandas DataFrame.
-        custom_mapping: Optional user-provided column to item dictionary.
-        handle_missing: 'listwise' (drop rows with missing items) or 'mean_impute'.
-
-    Returns:
-        Structured dictionary containing validation status, mapping, descriptives,
-        and cleaned data ready for statistical estimation.
+    Read, clean, screen for consent, map columns, clean Likert responses,
+    validate ranges, and prepare an empirical or demo research dataset for CFA & SEM.
     """
     filename = "dataset.csv"
     if isinstance(file_storage_or_df, pd.DataFrame):
-        df = file_storage_or_df.copy()
+        raw_df = file_storage_or_df.copy()
     else:
         if not file_storage_or_df or not getattr(file_storage_or_df, "filename", None):
             raise ValueError("Please select a dataset file.")
@@ -189,49 +336,45 @@ def validate_and_prepare_dataset(
 
         try:
             if extension == ".csv":
-                df = pd.read_csv(file_storage_or_df, nrows=10001)
+                raw_df = pd.read_csv(file_storage_or_df, nrows=10001)
             else:
-                df = pd.read_excel(file_storage_or_df, nrows=10001, engine="openpyxl")
+                raw_df = pd.read_excel(file_storage_or_df, nrows=10001, engine="openpyxl")
         except Exception as exc:
             raise ValueError(f"The file could not be read: {str(exc)}") from exc
 
-    if len(df) == 0:
+    if len(raw_df) == 0:
         raise ValueError("The uploaded dataset is empty.")
 
-    if len(df) > 10000:
+    if len(raw_df) > 10000:
         raise ValueError("The dataset exceeds the 10,000-row limit.")
 
-    if len(df.columns) == 0:
+    if len(raw_df.columns) == 0:
         raise ValueError("No columns were found in the dataset.")
 
-    # Check for empty or duplicate column names
-    normalized_columns = [str(col).strip().lower() for col in df.columns]
-    if any(not col for col in normalized_columns):
-        raise ValueError("The dataset contains an empty column name.")
-
-    if len(normalized_columns) != len(set(normalized_columns)):
-        raise ValueError("Duplicate column names were found in the dataset. Please remove duplicate headers.")
-
-    # Privacy check: identify sensitive participant fields
+    # 1. Privacy screening & sensitive fields detection
     sensitive_columns_found = [
-        str(col) for col in df.columns if str(col).strip().lower() in SENSITIVE_COLUMNS
+        str(col) for col in raw_df.columns
+        if str(col).replace("\xa0", " ").strip().lower() in SENSITIVE_COLUMNS
     ]
 
-    # Map survey columns to psychometric items
-    mapping, unmapped = detect_column_mapping(list(df.columns), custom_mapping)
+    # 2. Informed consent screening
+    consented_df, excluded_consent_rows = filter_informed_consent(raw_df)
+
+    # 3. Detect column mapping to psychometric items
+    mapping, unmapped = detect_column_mapping(list(consented_df.columns), custom_mapping)
 
     if len(mapping) == 0:
         raise ValueError(
-            "None of the required questionnaire items (T1-T4, PU1-PU4, V1-V3, AD1-AD4, LC1-LC4) "
-            "could be mapped automatically. Please ensure column headers match item codes."
+            "None of the required questionnaire items could be mapped automatically. "
+            "Please ensure column headers match research item codes or questionnaire wording."
         )
 
-    # Extract mapped item dataframe
+    # 4. Extract mapped columns and apply Likert text-to-numeric cleaning
     mapped_df = pd.DataFrame()
     for item_code, orig_col in mapping.items():
-        mapped_df[item_code] = pd.to_numeric(df[orig_col], errors="coerce")
+        mapped_df[item_code] = consented_df[orig_col].apply(clean_likert_cell)
 
-    # Likert scale validation (1-5 range check)
+    # 5. Validate Likert scale boundaries (1 to 5)
     out_of_bounds_items = {}
     for col in mapped_df.columns:
         valid_vals = mapped_df[col].dropna()
@@ -247,7 +390,7 @@ def validate_and_prepare_dataset(
             f"Found out-of-range values in: {details}"
         )
 
-    # Missing value handling
+    # 6. Missing value screening & handling
     initial_rows = len(mapped_df)
     total_missing_cells = int(mapped_df.isna().sum().sum())
     missing_per_item = {col: int(mapped_df[col].isna().sum()) for col in mapped_df.columns}
@@ -257,7 +400,7 @@ def validate_and_prepare_dataset(
         for col in cleaned_df.columns:
             cleaned_df[col] = cleaned_df[col].fillna(cleaned_df[col].mean())
     else:
-        # Default: listwise deletion for complete cases analysis
+        # Default: listwise deletion for complete cases
         cleaned_df = cleaned_df.dropna()
 
     valid_rows = len(cleaned_df)
@@ -268,16 +411,17 @@ def validate_and_prepare_dataset(
             f"A minimum of 30 complete responses is required to compute psychometric statistics."
         )
 
-    # Reverse coding for AD4 (Autonomy item in AI Dependence scale)
-    # AD4: "I can independently analyze and solve coursework problems without using Generative AI."
-    # Reverse coded: AD4_R = 6 - AD4
+    # 7. Reverse-coding management
+    # Scientific Rule: Only reverse-code if evidence from wording/scale supports it.
+    # In the empirical 26-item survey, all AD items are standard polarity.
+    # Reverse coding is ONLY applied for legacy 19-item synthetic datasets where AD4 is the autonomy item.
+    is_legacy_19 = any(k in mapping for k in ["T1", "V1"])
     reverse_coded_applied = False
-    if "AD4" in cleaned_df.columns:
+    if is_legacy_19 and "AD4" in cleaned_df.columns:
         cleaned_df["AD4_R"] = 6.0 - cleaned_df["AD4"]
         reverse_coded_applied = True
 
-    # Sample size assessment for SEM
-    # Rule of thumb: at least 10 observations per indicator (19 * 10 = 190) or N >= 100
+    # 8. Sample size assessment for SEM
     if valid_rows < 100:
         sample_assessment = {
             "status": "marginal",
@@ -297,7 +441,7 @@ def validate_and_prepare_dataset(
             "adequate": True,
         }
 
-    # Compute descriptive statistics
+    # 9. Compute descriptive statistics
     items_to_describe = [c for c in cleaned_df.columns if c != "AD4_R"]
     if "AD4_R" in cleaned_df.columns:
         items_to_describe.append("AD4_R")
@@ -308,23 +452,28 @@ def validate_and_prepare_dataset(
         "filename": filename,
         "rows": initial_rows,
         "valid_rows": valid_rows,
-        "columns": int(len(df.columns)),
+        "excluded_consent_rows": excluded_consent_rows,
+        "columns": int(len(raw_df.columns)),
         "missing_values": total_missing_cells,
         "missing_per_item": missing_per_item,
-        "duplicate_rows": int(df.duplicated().sum()),
+        "duplicate_rows": int(raw_df.duplicated().sum()),
         "sensitive_columns_detected": len(sensitive_columns_found),
         "sensitive_column_names": sensitive_columns_found,
         "mapping": mapping,
         "unmapped_items": unmapped,
         "all_items_mapped": len(unmapped) == 0,
         "reverse_coded_applied": reverse_coded_applied,
-        "reverse_coded_formula": "AD4_R = 6 - AD4 (Autonomy item converted to Dependence polarity)",
+        "reverse_coded_formula": (
+            "AD4_R = 6 - AD4 (Legacy Autonomy item converted to Dependence polarity)"
+            if reverse_coded_applied else "None (All empirical items standard polarity)"
+        ),
         "sample_size_assessment": sample_assessment,
         "descriptive_statistics": descriptives,
         "cleaned_data": cleaned_df,
         "message": (
             f"Dataset validated successfully with {valid_rows} complete cases. "
-            f"Mapped {len(mapping)}/19 psychometric items. "
+            f"Mapped {len(mapping)} psychometric items. "
+            f"{f'Filtered {excluded_consent_rows} non-consenting records. ' if excluded_consent_rows > 0 else ''}"
             f"{'Reverse coding applied to AD4.' if reverse_coded_applied else ''}"
         ),
     }
@@ -335,7 +484,6 @@ def validate_dataset(file_storage):
     Backwards-compatible wrapper matching the previous simple validation interface.
     """
     result = validate_and_prepare_dataset(file_storage)
-    # Return minimal summary expected by existing tests
     return {
         "success": True,
         "filename": result["filename"],
