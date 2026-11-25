@@ -27,6 +27,7 @@ Features:
 
 import json
 import logging
+import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -61,13 +62,30 @@ PROBABILITY_EXPLANATION = (
 )
 
 
+CANONICAL_FACULTY_VALUES = {
+    "computing_it": "Computing_IT",
+    "engineering": "Engineering",
+    "business_economics": "Business_Economics",
+    "natural_applied_sciences": "Natural_Applied_Sciences",
+    "humanities_health_other": "Humanities_Health_Other",
+}
+
+
 def classify_meta_faculty(val: Any) -> str:
     if pd.isna(val) or not str(val).strip():
         return "Humanities_Health_Other"
     v = str(val).lower().strip()
-    if any(k in v for k in ["software", "se", "computer", "cs", "it", "information", "computing", "data science", "cyber", "bis", "cis"]):
+    if v in CANONICAL_FACULTY_VALUES:
+        return CANONICAL_FACULTY_VALUES[v]
+    if (
+        any(k in v for k in ["software", "computer", "information", "computing", "data science", "cyber"])
+        or re.search(r"(?:^|[^a-z])(se|cs|it|bis|cis)(?:[^a-z]|$)", v)
+    ):
         return "Computing_IT"
-    if any(k in v for k in ["engineering", "eng", "mechanical", "civil", "architecture"]):
+    if (
+        any(k in v for k in ["engineering", "mechanical", "civil", "architecture"])
+        or re.search(r"(?:^|[^a-z])eng(?:[^a-z]|$)", v)
+    ):
         return "Engineering"
     if any(k in v for k in ["business", "management", "accounting", "finance", "economics", "commerce", "logistics"]):
         return "Business_Economics"

@@ -11,7 +11,7 @@ Endpoints:
 Status: Model Integrated — Version 4 Performance Experiments.
 """
 
-from flask import Blueprint, render_template, request, jsonify
+from flask import Blueprint, current_app, jsonify, render_template, request
 
 from app.services.cognitive_offloading import (
     model_service,
@@ -84,11 +84,11 @@ def validate_input():
     """
     data = request.get_json(silent=True)
 
-    if data is None:
+    if not isinstance(data, dict):
         return jsonify({
             "status": "error",
-            "message": "Request body must be valid JSON.",
-            "errors": ["No JSON body received."],
+            "message": "Request body must be a valid JSON object.",
+            "errors": ["Request body must be a JSON object."],
         }), 400
 
     result = validate_prototype_input(data)
@@ -125,30 +125,60 @@ def predict():
     """
     data = request.get_json(silent=True)
 
-    if data is None:
+    if not isinstance(data, dict):
         return jsonify({
             "status": "validation_error",
             "error_type": "MissingRequiredInput",
-            "message": "Validation Error: Request body must be valid JSON.",
+            "message": "Validation Error: Request body must be a valid JSON object.",
             "predicted_category": None,
             "continuous_risk_score": None,
             "confidence": None,
             "probabilities": None,
             "top_contributing_factors": [],
-            "warnings": ["No JSON body received."],
+            "warnings": ["Request body must be a valid JSON object."],
             "warnings_count": 1,
         }), 400
 
     try:
-        top_factors = data.get("top_factors_count", 5)
+        raw_top_factors = data.get("top_factors_count", 5)
+        if isinstance(raw_top_factors, bool) or not isinstance(raw_top_factors, int):
+            return jsonify({
+                "status": "validation_error",
+                "error_type": "InvalidParameter",
+                "message": "Validation Error: top_factors_count must be an integer between 1 and 68.",
+                "predicted_category": None,
+                "continuous_risk_score": None,
+                "confidence": None,
+                "probabilities": None,
+                "top_contributing_factors": [],
+                "warnings": ["Invalid top_factors_count parameter."],
+                "warnings_count": 1,
+            }), 400
+        top_factors = max(1, min(68, raw_top_factors))
+
         # Support both direct flat payload or {"user_inputs": {...}} wrapper
         inputs = data.get("user_inputs", data)
+        if not isinstance(inputs, dict):
+            return jsonify({
+                "status": "validation_error",
+                "error_type": "MissingRequiredInput",
+                "message": "Validation Error: user_inputs must be a JSON object.",
+                "predicted_category": None,
+                "continuous_risk_score": None,
+                "confidence": None,
+                "probabilities": None,
+                "top_contributing_factors": [],
+                "warnings": ["user_inputs must be a JSON object."],
+                "warnings_count": 1,
+            }), 400
+
         result = model_service.predict(inputs, top_factors_count=top_factors)
 
         status_code = 400 if result.get("status") == "validation_error" else 200
         return jsonify(result), status_code
-    except Exception as e:
+    except Exception:
+        current_app.logger.exception("Component 1 inference execution failed")
         return jsonify({
             "status": "error",
-            "message": f"Inference execution error: {str(e)}",
+            "message": "An internal inference error occurred.",
         }), 500
