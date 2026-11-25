@@ -7,7 +7,7 @@
 ![AI](https://img.shields.io/badge/Focus-Generative%20AI-orange)
 ![Status](https://img.shields.io/badge/Status-Integrated%20Research%20Platform-brightgreen)
 ![Dev Branch](https://img.shields.io/badge/Dev%20Branch-it23426580-blueviolet)
-![Tests](https://img.shields.io/badge/Tests-248%20Passing-success)
+![Tests](https://img.shields.io/badge/Tests-251%20Passing-success)
 
 ---
 
@@ -33,7 +33,7 @@ The framework integrates four complementary research streams into a unified anal
 
 | Component | Focus Area | Methodology / Technology | Current Implementation Status | Owner |
 |---|---|---|---|---|
-| **Component 1** | Explainable Cognitive Offloading Risk Prediction | Calibrated Thresholded Ridge Regressor (Ordinal), LinearSHAP, scikit-learn 1.7.1 | **Model Integrated & Active** (`/component1/`): Modern 4-step self-reflection assessment wizard, real-time predictions, continuous latent scores [1.0–5.0], calibrated probabilities, score spectrum visualizer, directional LinearSHAP habit attributions, and actionable study guidance. | IT23426580 (Thisayuru E.L.H.) |
+| **Component 1** | Explainable Cognitive Offloading Risk Prediction | Calibrated Thresholded Ridge Regressor (Ordinal), LinearSHAP, scikit-learn 1.7.1 | **Preliminary Working Model Active** (`/component1/`): Deployed Version 4 ($N=375$) active during ongoing final data collection; 4-step self-reflection wizard, latent scores [1.0–5.0], probabilities, score spectrum, LinearSHAP attributions, and study tips. | IT23426580 (Thisayuru E.L.H.) |
 | **Component 2** | Algorithmic Trust & Verification Analysis | Confirmatory Factor Analysis (CFA), Structural Equation Modelling (SEM), R / lavaan | **Prototype Workflow & UI Implemented** (`/component2/`): Interactive latent construct explorer, path diagrams, specification API, and R/lavaan result gateway. | IT23217904 (Kumari A.M.W.P.G.S.R.) |
 | **Component 3** | Longitudinal Study Pattern Analytics | Time-Series Analytics, Weekly Diary Tracking, openpyxl, Pandas | **Analytics & Chart Engine Implemented** (`/component3/`): Multi-week diary data consolidation, prompt frequency breakdown, study-share shifts, and browser-local preview storage. | IT23426344 (Dissanayake H.M.S.U.) |
 | **Component 4** | Cognitive Engagement & Learning Retention | Controlled Counterbalanced Experiments, NLP Analysis, Lexical Metrics | **Experimental Protocol Implemented** (`/component4/`): Counterbalanced Condition A (Brain-only) vs. Condition B (GenAI-assisted) validation workflow, session metadata validation, and retention comparison structure. | IT23155220 (Sathsara G.L.H.G.) |
@@ -65,18 +65,20 @@ Component 1 has been developed as an engaging, student-friendly self-reflection 
 
 ---
 
-## Component 1 — Version 4 Model Architecture & Performance
+## Component 1 — Preliminary Version 4 Model Architecture & Benchmarks
 
-### Champion Architecture
+> ⏳ **Research Stage Notice:** Undergraduate survey collection is **ongoing**. The deployed Version 4 model ($N = 375$) is a **preliminary working model** kept active while data collection continues; its metrics below are historical preliminary results, not the final research accuracy. Once collection concludes, final training and safe artifact swap will run via [`run_final_training_pipeline.py`](component1_streamlit_v4/scripts/run_final_training_pipeline.py) (see [`PP2_SECURITY_PRIVACY_AND_VIVA_GUIDE.md`](component1_streamlit_v4/progress_evaluation/PP2_SECURITY_PRIVACY_AND_VIVA_GUIDE.md)).
+
+### Champion Architecture (Preliminary Version 4)
 - **Model:** Calibrated Thresholded Ridge Regressor (Ordinal, $\alpha = 30.0$)
-- **Deployment Artifacts:**
+- **Deployment Artifacts (Config-Overridable via `COMPONENT1_*_PATH`):**
   - Primary Model: [`models/thresholded_ridge_v4.joblib`](models/thresholded_ridge_v4.joblib)
   - Continuous Regressor: [`models/continuous_regressor_v4.joblib`](models/continuous_regressor_v4.joblib)
   - Metadata & Medians: [`models/pipeline_metadata_v4.json`](models/pipeline_metadata_v4.json)
 - **Feature Space:** Exactly **68** deployed predictor features (`17` directly collected numeric items + `22` purely UI-engineered features + `27` fixed training-median features + `2` partially imputed hybrid engineered features).
 - **Zero Target Leakage:** All 6 Section E cognitive offloading construct items (`Q10–Q15`), target variables `co_score` / `co_risk`, Section G AI dependence items (`Q34–Q38`), survey identifiers, and personal information are strictly excluded from the predictor space.
 
-### Empirical Validation Performance
+### Preliminary Empirical Validation Performance ($N = 375$ Cohort)
 - **Blind Training-Only Cross-Validation (Primary Selection Protocol — $N=300$, 5×5 Repeated Stratified CV):**
   - **Deployed 68-Feature Model:** CV Accuracy **$53.93\% \pm 6.11\%$**, CV Macro-F1 **$0.5419 \pm 0.0610$**, Medium-Risk Recall **$58.58\%$**, CV ROC-AUC **$0.7315$**, CV Log-Loss **$0.9600$**
   - **Compact 51-Feature Ablation Reference:** CV Accuracy **$54.67\% \pm 6.02\%$**, CV Macro-F1 **$0.5495 \pm 0.0619$**, Medium-Risk Recall **$59.78\%$**, CV ROC-AUC **$0.7355$**, CV Log-Loss **$0.9376$**
@@ -174,12 +176,12 @@ psychometric-learning-analytics-framework/
 ├── docs/
 │   └── architecture.md                   # Complete architectural specification
 │
-└── tests/                                # Automated Test Suites (248 Tests)
+└── tests/                                # Automated Test Suites (251 Tests)
     ├── conftest.py                       # Test client fixtures & env setup
     ├── test_app.py                       # Shared application & route tests (167 tests)
     ├── test_component1_v4_scenarios.py   # C1 eight regression scenarios (8 tests)
     ├── test_component1_v4_workflow.py    # C1 pipeline & LinearSHAP workflow (12 tests)
-    ├── test_component1_validation_and_security.py # C1 faculty mapping, security & cohort evaluator (22 tests)
+    ├── test_component1_validation_and_security.py # C1 faculty mapping, replacement/rollback, pipeline, security & cohort evaluator (25 tests)
     ├── test_component3_longitudinal_charts.py # C3 longitudinal chart analytics (17 tests)
     └── test_component4_retention.py      # C4 experimental retention tests (22 tests)
 ```
@@ -348,7 +350,7 @@ Open your browser at: **[http://localhost:8501](http://localhost:8501)**
 The test suite covers shared application routes, security headers, Component 1 inference scenarios, LinearSHAP explanations, Component 3 longitudinal chart logic, and Component 4 retention analysis.
 
 ```bash
-# Run complete test suite (248 tests)
+# Run complete test suite (251 tests)
 .venv/bin/python -m pytest tests/ -v
 
 # Run targeted Component 1 regression, security & cohort validation suites
@@ -361,11 +363,11 @@ The test suite covers shared application routes, security headers, Component 1 i
 .venv/bin/python -m pytest tests/test_component4_retention.py -v
 ```
 
-### Verified Test Results: **248 passed, 0 failed (100% pass rate)**
+### Verified Test Results: **251 passed, 0 failed (100% pass rate)**
 - `tests/test_app.py`: **167 passed** (Framework integration, security headers, WSGI, presentation mode, error handlers, and component UI routes)
 - `tests/test_component1_v4_scenarios.py`: **8 passed** (Low, Medium, High risk, empty input guard, out-of-range clamping, dirty text handling)
 - `tests/test_component1_v4_workflow.py`: **12 passed** (Model loading, 68-feature schema, zero target leakage, calibrated probabilities, LinearSHAP)
-- `tests/test_component1_validation_and_security.py`: **22 passed** (Faculty slug mapping, exact 68-feature partition, API validation & 500 sanitization, cohort evaluator safeguards)
+- `tests/test_component1_validation_and_security.py`: **25 passed** (Faculty slug mapping, 68-feature partition, API validation & 503/500 safety, model replacement/rollback, future training workflow, cohort evaluator safeguards)
 - `tests/test_component3_longitudinal_charts.py`: **17 passed** (Weekly study shares, prompt counts, workload comparisons, coverage tables)
 - `tests/test_component4_retention.py`: **22 passed** (Condition A vs. B counterbalanced protocol, retention metrics, session verification)
 

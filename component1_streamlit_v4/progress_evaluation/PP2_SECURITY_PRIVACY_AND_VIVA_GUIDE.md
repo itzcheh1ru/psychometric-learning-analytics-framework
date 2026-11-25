@@ -1,16 +1,23 @@
-# Component 1: Reproducibility, Deployment Plan, Security & PP2 Demonstration Guide
+# Component 1: Reproducibility, Future Model Replacement & PP2 Guide
 
 **Project:** Psychometric Learning Analytics Framework (`J26-DS-310`)  
 **Component:** Component 1 – Explainable Cognitive Offloading Risk Prediction (`IT23426580`)  
-**Production Model Artifacts:** [`models/thresholded_ridge_v4.joblib`](../../models/thresholded_ridge_v4.joblib), [`models/continuous_regressor_v4.joblib`](../../models/continuous_regressor_v4.joblib), [`models/pipeline_metadata_v4.json`](../../models/pipeline_metadata_v4.json)  
+**Current Active Preliminary Model (`v4_performance_experiments`):** [`models/thresholded_ridge_v4.joblib`](../../models/thresholded_ridge_v4.joblib), [`models/continuous_regressor_v4.joblib`](../../models/continuous_regressor_v4.joblib), [`models/pipeline_metadata_v4.json`](../../models/pipeline_metadata_v4.json)  
+
+> **Research Stage Notice:** Ongoing undergraduate survey collection is still in progress. The deployed **Version 4** model ($N = 375$) is a **preliminary working model**; all Version 4 metrics below represent **historical preliminary benchmarks**, not final research accuracy.
+
+### Project Status Overview (Task 7)
+- **Completed:** Preliminary Version 4 model development & audit, finalized 4-step Flask assessment UI (`component1.html`), model & LinearSHAP integration, API/JS/input-mapping hardening, fresh-clone checks, independent cohort template/evaluator preparation, and automated test coverage.
+- **Ongoing:** Real undergraduate survey data collection (kept completely decoupled from the stateless reflection tool).
+- **Pending Until Data Collection Completes:** Final expanded dataset preparation, final model training & selection via `run_final_training_pipeline.py`, untouched holdout & 20-UI final evaluation, safe promotion into production, independent cohort testing, and student UAT.
 
 ---
 
-## 1. Authoritative Evaluation Metrics & Provenance Audit (Task 1)
+## 1. Preliminary Version 4 Evaluation Metrics & Provenance Audit
 
-All reported evaluation numbers across scripts, metadata, and README drafts were recalculated directly from saved model weights and historical dataset outputs ($N = 375$, `random_state = 42` split into $N = 300$ training / $N = 75$ exposed holdout).
+All Version 4 numbers below were recalculated directly from saved Version 4 weights and the historical dataset ($N = 375$, `random_state = 42` split into $N = 300$ train / $N = 75$ exposed holdout).
 
-### 1.1 Single Authoritative Performance Table (No Mixed Experiments)
+### 1.1 Preliminary Authoritative Metrics Table (Version 4 Working Model)
 
 | Experiment / Evaluation Context | Sample / Folds | Features | Accuracy | Macro-F1 | Med Recall | High Recall | ROC-AUC (OvR) | Log-Loss | Exact Source / Script |
 |---|---|---:|:---:|:---:|:---:|:---:|:---:|:---:|---|
@@ -38,8 +45,8 @@ All reported evaluation numbers across scripts, metadata, and README drafts were
 Verified via `git clone --branch it23426580 . /tmp/c1_fresh_clone_check`:
 - **Component 1 Model Artifacts Tracked on GitHub:** `.gitignore` force-includes `!models/thresholded_ridge_v4.joblib`, `!models/continuous_regressor_v4.joblib`, plus `models/pipeline_metadata_v4.json` and `component1_streamlit_v4/models/*`. All **13 Flask GET routes returned `HTTP 200`** and **all `242` automated tests passed (`3.82s`)** in the isolated clean clone. *(Note: Fresh PyPI installation in the sandbox was offline-blocked by network policy, so site-packages from `.venv` were reused to test the clean clone; full online install requires `pip install -r requirements.txt pytest`.)*
 - **Untracked Local Files Missing From GitHub (Expected & Reported):**
-  - Raw/cleaned Component 1 dataset (`cleaned_dataset_v4.csv`) stays intentionally external for participant privacy; only needed if re-running `train_model_v4.py` or `analyze_ui_historical_errors.py --dataset-path <path>`.
-  - Teammate Component 4 `models/*.pkl` files are ignored via `.gitignore` (`models/*.pkl`), so they are present locally only and not tracked on GitHub. Component 4 routes/tests in clean clone still pass.
+  - Raw/cleaned Component 1 dataset (`cleaned_dataset_v4.csv`) stays intentionally external for participant privacy; only needed when running historical audits or final model training.
+  - **Component 4 Action Note (Reported for Teammate Owner):** `.gitignore` excludes `models/*.pkl`, so Component 4's local `.pkl` artifacts exist only in the local workspace and are absent from fresh GitHub clones (shared routes/existing tests still pass cleanly without modifying Component 4).
 - **Component 2 R / `lavaan` Runtime Dependency:** **Not required** to install or run the Flask app (`docs/architecture.md:337` confirms Flask serves static specifications/results only and never invokes R at runtime).
 - **Hardcoded Path Scan:** Zero `/Users/` or `C:\` paths exist in `app/`, `tests/`, `README.md`, `docs/`, or active validation scripts (`evaluate_independent_cohort.py`, `analyze_ui_historical_errors.py`). Legacy `/Users/...` strings exist only inside preserved historical PP1 Markdown/log archives under `component1_streamlit_v4/`.
 
@@ -93,16 +100,59 @@ Verified via `git clone --branch it23426580 . /tmp/c1_fresh_clone_check`:
 6. **Data Preprocessing:** Strict removal of admin fields (Cols 0–4), Section E targets (`Q10–Q15`, Cronbach's $\alpha = 0.8649$), and Section G dependence items (`Q34–Q38` incl. leaked `Q37`). All subscales/interactions computed strictly row-by-row.
 7. **Model Selection:** Selected via blind 5×5 Repeated Stratified CV strictly within `X_train` ($N=300$) prioritizing Macro-F1 (`0.5495` compact / `0.5419` full), Medium recall, lowest log-loss (`0.9376`/`0.9600`), and exact explainability.
 8. **68-Feature Model & 20-Input UI Rationale:** Full dataset contains 68 predictors; collecting all ~45 raw items creates student fatigue, so the UI asks 20 targeted questions (`17` direct + `22` engineered = `39` observed + `27` fixed medians + `2` partially imputed hybrids), reaching **90.67%** class agreement and exact **57.33%** holdout accuracy parity.
-9. **Live Demo — Low-Risk Sample:** Engineering Yr 4 preset -> **Low Risk** (`1.561 / 5.0`, probabilities: Low `97.6%`, Med `2.4%`, High `0.02%`; protective drivers: low passive adoption `-0.3064`, rare task delegation `-0.2680`, high confidence without AI `-0.1903`).
+9. **Live Demo — Low-Risk Sample:** Natural & Applied Sciences Yr 3 preset -> **Low Risk** (`1.701 / 5.0`, probabilities: Low `95.8%`, Med `4.1%`, High `0.06%`; protective drivers: low passive adoption `-0.3064`, rare task delegation `-0.2680`, high confidence without AI `-0.1903`).
 10. **Live Demo — Medium-Risk Sample:** Computing_IT Yr 2 preset -> **Medium Risk** (`2.976 / 5.0`, probabilities: Low `29.0%`, Med `53.6%`, High `17.4%`; mixed drivers: passive adoption `+0.0810`, low autonomy `+0.0775` vs. moderate usage `-0.0645`).
 11. **Live Demo — High-Risk Sample:** Business_Economics Yr 1 preset -> **High Risk** (displayed clamped **`5.000 / 5.0`**, raw **`5.255`**, High prob `99.92%`; risk drivers: passive adoption `+0.8558`, low confidence without AI `+0.3453`, delegation intensity `+0.2394`).
 12. **SHAP Explanation:** Two clear student columns (*Habits Protecting Cognitive Autonomy* vs. *Habits Increasing Offloading Risk*), faithful to exact Ridge weights (`0.00e+00` additive reconstruction error; `0/375` spurious imputed top-5 attributions).
 13. **Verified Metrics Summary:** Blind `N=300` CV `53.93%` (`0.5419` F1, Full-68) / `54.67%` (`0.5495` F1, Compact-51); continuous signal $R^2 = 0.4459$ ($f^2 = 0.8048$); exposed `N=75` holdout `57.33%` acc (`50.00%` High recall, `80.77%` UI Med recall).
 14. **Current Limitations (Honest Disclosure):** Modest `~54–57%` discrete accuracy due to `62.5%` boundary crowding near `2.667`/`3.500` cutoffs without circular leakage; single-institution baseline ($N=375$); empirical tertile bounds require normative validation; `N=75` holdout was historically exposed; imputation shrinks extreme UI cases inward (`-0.0808` High).
-15. **Completed vs. Planned Work:** **Completed:** leakage-free V4 model, web assessment & SHAP UI, `N=75` UI error audit & faculty parsing fix, `evaluate_independent_cohort.py`, blank CSV template, UAT checklist, fresh-clone & security audits. **Planned (Next Phase):** collecting `N=120–150` external undergraduate cohort responses + running pilot UAT (`N=5–10`) with supervisor approval.
+15. **Completed vs. Ongoing vs. Planned Work:** **Completed:** preliminary V4 model, finalized 4-step web assessment & SHAP UI, `N=75` UI error audit & reliability hardening, `evaluate_independent_cohort.py`, blank CSV template, parameterized `run_final_training_pipeline.py`, UAT manual, and clean-clone/security checks. **Ongoing:** real undergraduate data collection. **Pending After Data Collection:** final dataset preparation, training & selection, untouched evaluation, safe model replacement, independent validation (`N=120–150`), and UAT (`N=5–10`).
 
 ### 4.2 Rapid Panel Q&A Cheat Sheet
-- **Why only ~57% accuracy instead of 85–90%?** Because target (`Q10–Q15`) and Section G (`Q34–Q38`) self-report items were strictly removed to prevent circular leakage; predicting a psychological construct solely from behavioral habits yields $R^2 = 0.446$ (large effect size $f^2 = 0.805$) while adjacent tertile boundary noise caps nominal 3-class accuracy near 57%.
+- **Why only ~57% accuracy instead of 85–90%?** On the preliminary $N=375$ cohort, target (`Q10–Q15`) and Section G (`Q34–Q38`) self-report items were strictly removed to prevent circular leakage; predicting a psychological construct solely from behavioral habits yielded $R^2 = 0.446$ (large effect size $f^2 = 0.805$), while adjacent tertile boundary noise capped nominal 3-class accuracy near 57%. Final performance will be re-evaluated once expanded data collection concludes.
 - **Why did earlier validation report 54.67% UI accuracy while latest shows 57.33%?** Our error audit exposed a 2-letter substring bug in `classify_meta_faculty()` (`"cs"` in `Business_Economics`, `"it"` in `Humanities_Health_Other`); fixing string parsing without altering model weights recovered 2 borderline High-Risk students (`54.67% -> 57.33%`, High recall `40.91% -> 50.00%`).
-- **How do you ensure independent validation stays leakage-free?** `evaluate_independent_cohort.py` parses only the 20 UI predictor keys into the model, validates reference `Q10–Q15` strictly post-prediction, and fails closed on PII, duplicate `study_id`s, or forbidden target/dependence columns.
-- **Can someone clone and run Component 1 on another computer without raw student data?** Yes—`thresholded_ridge_v4.joblib` and `pipeline_metadata_v4.json` (which stores reference medians/means) are tracked in Git; clean clone boots all 13 endpoints (`HTTP 200`) and passes all `242+` tests without any CSV dataset.
+- **How do you ensure future training and independent validation remain leakage-free?** Both `run_final_training_pipeline.py` and `evaluate_independent_cohort.py` split train vs. untouched evaluation data BEFORE fitting medians/means/scaling/calibration, isolate `Q10–Q15` and Section G items completely, and fail closed on PII or leakage columns.
+- **Can someone clone and run Component 1 on another computer without raw student data?** Yes—`thresholded_ridge_v4.joblib` and `pipeline_metadata_v4.json` (which stores reference medians/means) are tracked in Git; a clean clone boots all 13 endpoints (`HTTP 200`) and passes all automated tests without any CSV dataset.
+
+---
+
+## 5. Future Model Replacement & Post-Collection Training Guide (Tasks 2, 3 & 8)
+
+### 5.1 Architecture Supporting Safe Model Replacement & Instant V4 Rollback
+Production inference loads ONLY from configured paths inside [`app/services/cognitive_offloading/integration_service.py`](../../app/services/cognitive_offloading/integration_service.py) without requiring edits to templates, JS, or routes—provided the trained model preserves the canonical 68-feature contract (`feature_names`, `target_mapping`, `reference_medians`, `reference_means`, `tertile_thresholds`, `residual_std`, `pipeline_version`, `data_collection_status`).
+- **Default Production Artifact Files:**
+  - `models/thresholded_ridge_v4.joblib`
+  - `models/continuous_regressor_v4.joblib`
+  - `models/pipeline_metadata_v4.json`
+- **Config-Driven Staging & Zero-Code Rollback:** Set environment variables `COMPONENT1_MODEL_PATH`, `COMPONENT1_CONTINUOUS_MODEL_PATH`, and `COMPONENT1_METADATA_PATH` to test candidate artifacts (or immediately roll back to preserved `v4` files in `models/` or `component1_streamlit_v4/models/`). Unsetting those variables restores the default files cleanly. `/api/component1/status` dynamically reads `pipeline_version` and `data_collection_status` directly from active metadata.
+
+### 5.2 Exact Procedure After Final Data Collection Concludes *(Do Not Execute Until Ready)*
+
+1. **Place Final Survey Dataset Outside Git (Ignored Location):**
+   - Save the final survey export (`.xlsx` with >=55 survey columns matching `preprocess_v4.py`, OR pre-cleaned 68-feature + `co_score` `.csv`) inside ignored [`data/raw/`](../../data/raw/) (e.g., `data/raw/final_survey_export.xlsx`). **Never commit raw/cleaned survey datasets.**
+2. **Run Parameterized Final Training & Candidate Export (Preserves V4 Untouched):**
+   ```bash
+   .venv/bin/python component1_streamlit_v4/scripts/run_final_training_pipeline.py \
+     --input data/raw/final_survey_export.xlsx \
+     --output-dir component1_streamlit_v4/artifacts_candidate/final_v5 \
+     --version-tag final_v5 \
+     --test-size 0.20 \
+     --thresholds-mode preserve-v4
+   ```
+   *(If recalculating cohort tertiles with supervisor approval, pass `--thresholds-mode training-tertiles`; cutoffs will derive strictly from `co_train` alone and document shifts vs. `2.667`/`3.500`.)*
+   - **Generated Outputs (`artifacts_candidate/final_v5/`):** `thresholded_ridge_final_v5.joblib`, `continuous_regressor_final_v5.joblib`, `pipeline_metadata_final_v5.json`, and `training_summary_final_v5.json` (including train-only CV benchmark, untouched full holdout metrics, 20-input UI holdout metrics, and side-by-side comparison against V4 baseline).
+3. **Evaluate Candidate UI Generalization & Independent Sample:**
+   ```bash
+   .venv/bin/python component1_streamlit_v4/scripts/analyze_ui_historical_errors.py \
+     --dataset-path data/raw/final_cleaned_dataset.csv
+   ```
+   *(Once separate anonymized validation data is collected, score it via `evaluate_independent_cohort.py --input data/raw/independent_cohort_anonymized.csv`.)*
+4. **Stage-Test Candidate Artifacts & Promote Safely (Keeping V4 Backup):**
+   - Test live Flask behavior before copying files by setting env vars:
+     ```bash
+     COMPONENT1_MODEL_PATH=component1_streamlit_v4/artifacts_candidate/final_v5/thresholded_ridge_final_v5.joblib \
+     COMPONENT1_CONTINUOUS_MODEL_PATH=component1_streamlit_v4/artifacts_candidate/final_v5/continuous_regressor_final_v5.joblib \
+     COMPONENT1_METADATA_PATH=component1_streamlit_v4/artifacts_candidate/final_v5/pipeline_metadata_final_v5.json \
+     .venv/bin/python -m pytest tests/test_component1_v4_scenarios.py tests/test_component1_v4_workflow.py tests/test_component1_validation_and_security.py -v
+     ```
+   - Retain `models/*_v4.*` archived safely (or under env-controlled rollback), update the active model files/env config (`models/` + `.gitignore` allowlist + note exact version in [`app/templates/components/component1.html`](../../app/templates/components/component1.html) if needed cleanly), verify `GET /api/component1/status` shows the new `version`, run full `.venv/bin/python -m pytest tests/ -v`, then commit ONLY verified code/model/doc updates to branch `it23426580` (`git push origin it23426580`).
