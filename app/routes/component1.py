@@ -17,6 +17,7 @@ from app.services.cognitive_offloading import (
     model_service,
     validate_prototype_input,
 )
+from app.services.cognitive_offloading.model_service import ModelNotAvailableError
 from app.services.cognitive_offloading.schemas import (
     GENAI_USAGE_FREQUENCY,
     WEEKLY_GENAI_USAGE,
@@ -171,11 +172,30 @@ def predict():
                 "warnings": ["user_inputs must be a JSON object."],
                 "warnings_count": 1,
             }), 400
+        if len(data) > 250 or len(inputs) > 250:
+            return jsonify({
+                "status": "validation_error",
+                "error_type": "PayloadTooLarge",
+                "message": "Validation Error: Request contains too many input keys.",
+                "predicted_category": None,
+                "continuous_risk_score": None,
+                "confidence": None,
+                "probabilities": None,
+                "top_contributing_factors": [],
+                "warnings": ["Request exceeded maximum key limit."],
+                "warnings_count": 1,
+            }), 400
 
         result = model_service.predict(inputs, top_factors_count=top_factors)
 
         status_code = 400 if result.get("status") == "validation_error" else 200
         return jsonify(result), status_code
+    except ModelNotAvailableError:
+        return jsonify({
+            "status": "error",
+            "error_type": "ModelNotAvailable",
+            "message": "Component 1 prediction model artifacts are currently unavailable.",
+        }), 503
     except Exception:
         current_app.logger.exception("Component 1 inference execution failed")
         return jsonify({

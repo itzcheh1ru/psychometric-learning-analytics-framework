@@ -27,6 +27,7 @@ Features:
 
 import json
 import logging
+import os
 import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
@@ -42,6 +43,16 @@ logger = logging.getLogger("Component1IntegrationServiceV4")
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent.parent.parent
 MODELS_DIR = REPO_ROOT / "models"
+
+
+def _resolve_configured_path(env_var: str, default_path: Path) -> Path:
+    """Resolve an optional override path relative to REPO_ROOT for model replacement or rollback."""
+    raw = os.environ.get(env_var, "").strip()
+    if not raw:
+        return default_path
+    candidate = Path(raw)
+    return candidate if candidate.is_absolute() else (REPO_ROOT / candidate)
+
 
 CHAMPION_MODEL_FILE = MODELS_DIR / "thresholded_ridge_v4.joblib"
 CONTINUOUS_REG_FILE = MODELS_DIR / "continuous_regressor_v4.joblib"
@@ -226,23 +237,54 @@ FEATURE_PLAIN_EXPLANATIONS = {
 
 
 class Component1IntegrationServiceV4:
-    """Singleton service for model inference and explainability."""
+    """Singleton service for model inference, schema validation, and explainability."""
 
     _instance = None
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
-            cls._instance = super(Component1IntegrationServiceV4, cls).__new__(cls)
-            cls._instance._initialize()
+            inst = super(Component1IntegrationServiceV4, cls).__new__(cls)
+            inst._initialize()
+            cls._instance = inst
         return cls._instance
+
+    @classmethod
+    def from_paths(
+        cls,
+        model_file: Path,
+        meta_file: Path,
+        continuous_file: Optional[Path] = None,
+        data_file: Optional[Path] = DATASET_REF_FILE,
+    ) -> "Component1IntegrationServiceV4":
+        """Instantiate an isolated service instance from custom paths (useful for testing & validation)."""
+        inst = super(Component1IntegrationServiceV4, cls).__new__(cls)
+        inst._initialize(
+            model_file=model_file,
+            continuous_file=continuous_file,
+            meta_file=meta_file,
+            data_file=data_file,
+        )
+        return inst
 
     def _initialize(
         self,
-        model_file=CHAMPION_MODEL_FILE,
-        continuous_file=CONTINUOUS_REG_FILE,
-        meta_file=METADATA_FILE,
-        data_file=DATASET_REF_FILE
+        model_file: Optional[Path] = None,
+        continuous_file: Optional[Path] = None,
+        meta_file: Optional[Path] = None,
+        data_file: Optional[Path] = DATASET_REF_FILE,
     ):
+        model_file = Path(model_file) if model_file is not None else _resolve_configured_path(
+            "COMPONENT1_MODEL_PATH", CHAMPION_MODEL_FILE
+        )
+        continuous_file = (
+            Path(continuous_file)
+            if continuous_file is not None
+            else _resolve_configured_path("COMPONENT1_CONTINUOUS_MODEL_PATH", CONTINUOUS_REG_FILE)
+        )
+        meta_file = Path(meta_file) if meta_file is not None else _resolve_configured_path(
+            "COMPONENT1_METADATA_PATH", METADATA_FILE
+        )
+
         if not model_file.exists():
             raise FileNotFoundError(f"Champion model not found at {model_file}")
         if not meta_file.exists():
@@ -252,29 +294,62 @@ class Component1IntegrationServiceV4:
         if isinstance(loaded, dict):
             self.model_dict = loaded
             self.model = loaded.get("estimator")
-            self.cut1 = loaded.get("cut1", 2.667)
-            self.cut2 = loaded.get("cut2", 3.500)
-            self.residual_std = loaded.get("residual_std", 0.585)
+            self.cut1 = float(loaded.get("cut1", 2.667))
+            self.cut2 = float(loaded.get("cut2", 3.500))
+            self.residual_std = float(loaded.get("residual_std", 0.585))
         else:
             self.model_dict = None
             self.model = loaded
-            self.cut1 = getattr(loaded, "cut1", 2.667)
-            self.cut2 = getattr(loaded, "cut2", 3.500)
-            self.residual_std = getattr(loaded, "residual_std", 0.585)
+            self.cut1 = float(getattr(loaded, "cut1", 2.667))
+            self.cut2 = float(getattr(loaded, "cut2", 3.500))
+            self.residual_std = float(getattr(loaded, "residual_std", 0.585))
 
-        self.continuous_reg = joblib.load(continuous_file) if continuous_file.exists() else None
+        if self.model is None or not hasattr(self.model, "predict"):
+            raise ValueError(f"Loaded model artifact at {model_file} lacks a valid predictor.")
+        if not (np.isfinite(self.cut1) and np.isfinite(self.cut2) and self.cut1 < self.cut2):
+            raise ValueError(f"Invalid decision cutoffs: cut1={self.cut1}, cut2={self.cut2}.")
+        if not (np.isfinite(self.residual_std) and self.residual_std > 0.0):
+            raise ValueError(f"Invalid positive residual_std required for calibration: {self.residual_std}.")
+
+        self.continuous_reg = (
+            joblib.load(continuous_file)
+            if continuous_file is not None and Path(continuous_file).exists()
+            else None
+        )
 
         with open(meta_file, "r", encoding="utf-8") as f:
             self.metadata = json.load(f)
 
-        self.feature_names = self.metadata["feature_names"]
-        self.target_mapping = self.metadata["target_mapping"]
+        if not isinstance(self.metadata, dict):
+            raise ValueError("Model metadata JSON must be an object.")
+        feature_names = self.metadata.get("feature_names")
+        if (
+            not isinstance(feature_names, list)
+            or len(feature_names) == 0
+            or not all(isinstance(name, str) and name.strip() for name in feature_names)
+            or len(set(feature_names)) != len(feature_names)
+        ):
+            raise ValueError("Model metadata must specify a non-empty list of unique feature_names.")
+
+        target_mapping = self.metadata.get("target_mapping")
+        if not isinstance(target_mapping, dict) or not {0, 1, 2}.issubset(set(target_mapping.values())):
+            raise ValueError("Model metadata must contain valid target_mapping covering classes 0, 1, 2.")
+
+        self.feature_names = feature_names
+        self.target_mapping = target_mapping
         self.inv_target_mapping = {v: k for k, v in self.target_mapping.items()}
 
         # Load reference medians and background means from metadata if available (clean & secure)
         if "reference_medians" in self.metadata and "reference_means" in self.metadata:
-            self.default_features = self.metadata["reference_medians"]
-            self.background_means = self.metadata["reference_means"]
+            ref_meds = self.metadata["reference_medians"]
+            ref_means = self.metadata["reference_means"]
+            if not isinstance(ref_meds, dict) or not isinstance(ref_means, dict):
+                raise ValueError("Metadata reference_medians and reference_means must be dictionaries.")
+            missing_refs = [f for f in self.feature_names if f not in ref_meds or f not in ref_means]
+            if missing_refs:
+                raise ValueError(f"Metadata reference values missing features: {missing_refs[:5]}")
+            self.default_features = ref_meds
+            self.background_means = ref_means
         elif data_file and Path(data_file).exists():
             df_ref = pd.read_csv(data_file)
             self.default_features = df_ref[self.feature_names].median().to_dict()
@@ -296,6 +371,18 @@ class Component1IntegrationServiceV4:
         else:
             self.coefficients = None
             self.intercept = 0.0
+
+        if self.coefficients is not None and len(np.ravel(self.coefficients)) != len(self.feature_names):
+            raise ValueError(
+                f"Coefficient dimension ({len(np.ravel(self.coefficients))}) does not match "
+                f"metadata feature_names count ({len(self.feature_names)})."
+            )
+
+        self.active_paths = {
+            "model_file": str(model_file),
+            "meta_file": str(meta_file),
+            "continuous_file": str(continuous_file) if continuous_file else None,
+        }
 
         logger.info(f"Loaded Version 4 Model: {self.metadata.get('champion_model', 'Thresholded Ridge')} with {len(self.feature_names)} features.")
 

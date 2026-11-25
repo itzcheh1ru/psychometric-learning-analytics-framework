@@ -1123,40 +1123,78 @@
         var payload = buildAssessmentPayload();
         isSubmitting = true;
 
+        var controller = typeof AbortController === "function" ? new AbortController() : null;
+        var timeoutId = controller
+            ? setTimeout(function () {
+                controller.abort();
+            }, 15000)
+            : null;
+
         if (btnCalculatePrediction) {
             btnCalculatePrediction.disabled = true;
+            btnCalculatePrediction.setAttribute("aria-busy", "true");
             var lblLoading = btnCalculatePrediction.querySelector(".c1-btn-label");
             if (lblLoading) lblLoading.textContent = "Analyzing Responses…";
         }
 
-        fetch(PREDICT_URL, {
+        var fetchOpts = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
-        })
+        };
+        if (controller) {
+            fetchOpts.signal = controller.signal;
+        }
+
+        fetch(PREDICT_URL, fetchOpts)
         .then(function (res) {
-            return res.json().then(function (data) {
-                return { ok: res.ok, status: res.status, data: data };
+            return res.text().then(function (rawText) {
+                var parsed = null;
+                try {
+                    parsed = rawText ? JSON.parse(rawText) : null;
+                } catch (e) {
+                    parsed = null;
+                }
+                return { ok: res.ok, status: res.status, data: parsed };
             });
         })
         .then(function (result) {
-            if (result.ok && result.data && result.data.status === "success") {
+            var data = result.data;
+            var catLower = data && data.predicted_category
+                ? String(data.predicted_category).toLowerCase()
+                : "";
+            var validCategory = catLower === "low" || catLower === "medium" || catLower === "high";
+            var validScore = data && typeof data.continuous_risk_score === "number" && isFinite(data.continuous_risk_score);
+
+            if (result.ok && data && data.status === "success" && validCategory && validScore) {
                 hideSectionValidationBanner();
-                renderPredictionResult(result.data);
+                renderPredictionResult(data);
+            } else if (!result.ok && result.status === 503) {
+                showRequestErrorBanner(
+                    (data && data.message)
+                        ? data.message
+                        : "The prediction model is temporarily unavailable. Please verify model artifacts on the server."
+                );
             } else {
-                var errorMsg = (result.data && result.data.message)
-                    ? result.data.message
-                    : "Unable to calculate result. Please review your selections.";
+                var errorMsg = (data && data.message)
+                    ? data.message
+                    : ("Unexpected assessment response (HTTP " + result.status + "). Please try again.");
                 showRequestErrorBanner(errorMsg);
             }
         })
-        .catch(function () {
-            showRequestErrorBanner("Unable to reach the assessment service. Please confirm the local server is running and try again.");
+        .catch(function (err) {
+            if (err && err.name === "AbortError") {
+                showRequestErrorBanner("The assessment request timed out. Please try submitting again.");
+            } else {
+                showRequestErrorBanner("Unable to reach the assessment service. Please confirm the local server is running and try again.");
+            }
         })
         .finally(function () {
+            if (timeoutId) clearTimeout(timeoutId);
             isSubmitting = false;
             if (btnCalculatePrediction) {
                 btnCalculatePrediction.disabled = false;
+                btnCalculatePrediction.setAttribute("aria-busy", "false");
                 var lblDone = btnCalculatePrediction.querySelector(".c1-btn-label");
                 if (lblDone) lblDone.textContent = "View Results";
             }

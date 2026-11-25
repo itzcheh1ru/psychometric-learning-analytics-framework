@@ -32,7 +32,7 @@ class CognitiveOffloadingModelService:
 
     COMPONENT_NAME = "Explainable Cognitive Offloading Risk Prediction"
     STAGE = "model_integrated"
-    DATA_COLLECTION_STATUS = "completed"
+    DATA_COLLECTION_STATUS = "ongoing_preliminary_v4"
 
     def __init__(self) -> None:
         self._predictor = None
@@ -44,10 +44,19 @@ class CognitiveOffloadingModelService:
                 get_predictor_v4,
             )
             self._predictor = get_predictor_v4()
-            logger.info("Component 1 Version 4 predictor successfully loaded.")
+            logger.info("Component 1 predictor successfully loaded.")
         except Exception as e:
             logger.warning("Component 1 model could not be loaded: %s", e)
             self._predictor = None
+
+    def reload_model(self) -> bool:
+        """Reload the singleton predictor from current configured artifact paths."""
+        from app.services.cognitive_offloading.integration_service import (
+            Component1IntegrationServiceV4,
+        )
+        Component1IntegrationServiceV4._instance = None
+        self._load_predictor()
+        return self.is_model_available()
 
     def is_model_available(self) -> bool:
         """Return True if the trained model artifact is loaded."""
@@ -60,13 +69,14 @@ class CognitiveOffloadingModelService:
         return {
             "component": self.COMPONENT_NAME,
             "stage": self.STAGE if available else "prototype_development",
-            "data_collection": self.DATA_COLLECTION_STATUS if available else "in_progress",
+            "data_collection": meta.get("data_collection_status", self.DATA_COLLECTION_STATUS) if available else "in_progress",
+            "preliminary_model": bool(meta.get("is_preliminary", True)) if available else True,
             "model_trained": available,
             "prediction_available": available,
             "explainability_available": available,
             "champion_model": meta.get("champion_model", "Calibrated Thresholded Ridge Regressor (Ordinal)"),
             "features_count": len(getattr(self._predictor, "feature_names", [])) if available else 0,
-            "version": "v4_performance_experiments",
+            "version": meta.get("pipeline_version", "v4_performance_experiments"),
         }
 
     def predict(self, features: dict, top_factors_count: int = 5) -> dict:
