@@ -1,199 +1,190 @@
 {% extends "base.html" %}
 
-{% block title %}Explainable Cognitive Offloading Risk Model — Component 1{% endblock %}
+{% block title %}AI Study Habits Assessment — Explainable Cognitive Offloading Risk Prediction{% endblock %}
 
 {% block extra_head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/component1.css') }}" />
 {% endblock %}
 
 {% block content %}
+<div class="c1-workspace">
 
-<!-- ================================================================
-     1. Page Header & Navigation Breadcrumb
-================================================================ -->
-<div class="c1-page-header">
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-        <a href="{{ url_for('main.dashboard') }}" class="breadcrumb__link">Overview</a>
-        <span class="breadcrumb__sep" aria-hidden="true">&rsaquo;</span>
-        <span class="breadcrumb__current" aria-current="page">Component 1</span>
-    </nav>
-    <div class="c1-page-header__meta">
-        <span class="c1-header-tag">Component 01</span>
-        <span class="c1-header-project">SLIIT Research Project J26-DS-310</span>
-    </div>
-    <h1 class="c1-page-title">Explainable Cognitive Offloading Risk Prediction</h1>
-    <p class="c1-page-subtitle">
-        An academic psychometric instrument assessing undergraduate cognitive autonomy and Generative AI reliance, evaluated through a calibrated 68-feature ordinal regression pipeline with exact LinearSHAP attribution.
-    </p>
-    <div class="c1-model-status-strip">
-        <span class="status-indicator-dot" aria-hidden="true"></span>
-        <span class="status-indicator-text">Calibrated Model Integrated (Version 4 Active) &bull; Thresholded Ridge Regressor (&alpha; = 30.0)</span>
-    </div>
-</div>
+    <!-- Shared Accessible Live Region for Dynamic Announcements -->
+    <div id="c1LiveAnnouncer" class="c1-visually-hidden" aria-live="polite" aria-atomic="true"></div>
 
-<!-- ================================================================
-     2. Academic Research Overview & Demonstration Controls
-================================================================ -->
-<section class="c1-research-overview" aria-labelledby="researchOverviewHeading">
-    <div class="c1-overview-card">
-        <div class="c1-overview-header">
-            <h2 id="researchOverviewHeading" class="c1-overview-title">Research Instrument &amp; Study Context</h2>
-            <span class="c1-overview-badge">Undergraduate Learning Analytics</span>
-        </div>
-        <p class="c1-overview-text">
-            Generative AI tools can support academic study when used for conceptual exploration and structured feedback.
-            However, substituting individual analytical struggle with automated outputs—termed <strong>cognitive offloading</strong>—can attenuate critical reasoning and problem-solving retention.
-            This instrument collects 20 behavioural indicators to quantify individual offloading risk on a 1.000–5.000 latent scale across four empirical tertiles: Low (&le; 2.667), Moderate (2.668–3.500), and High (&gt; 3.500).
-        </p>
-        
-        <div class="c1-overview-meta-grid">
-            <div class="c1-meta-item">
-                <span class="c1-meta-label">Evaluation Target</span>
-                <span class="c1-meta-value">Cognitive Offloading Index</span>
-            </div>
-            <div class="c1-meta-item">
-                <span class="c1-meta-label">Inference Model</span>
-                <span class="c1-meta-value">Ordinal Thresholded Ridge</span>
-            </div>
-            <div class="c1-meta-item">
-                <span class="c1-meta-label">Explainability</span>
-                <span class="c1-meta-value">Exact LinearSHAP (&phi;<sub>j</sub>)</span>
-            </div>
-            <div class="c1-meta-item">
-                <span class="c1-meta-label">Participant Scope</span>
-                <span class="c1-meta-value">Undergraduate Students</span>
-            </div>
+    <!-- ================================================================
+         STAGE 1: FOCUSED LANDING EXPERIENCE
+    ================================================================ -->
+    <section id="c1ViewIntro" class="c1-stage c1-intro" aria-labelledby="c1IntroTitle">
+        <div class="c1-topbar-crumb">
+            <a href="{{ url_for('main.dashboard') }}" class="c1-crumb-link">&larr; Back to Dashboard</a>
+            <span class="c1-crumb-meta">Component 01 &middot; J26-DS-310</span>
         </div>
 
-        <!-- Demonstration Preset Profile Toolbar (for Viva Evaluation) -->
-        <div class="c1-demo-toolbar">
-            <div class="c1-demo-toolbar__label">
-                <span class="c1-demo-title">Viva Demonstration Profiles:</span>
-                <span class="c1-demo-caption">Load calibrated student habit profiles to test model behaviour across risk tiers:</span>
-            </div>
-            <div class="c1-demo-toolbar__actions">
-                <button type="button" class="c1-btn c1-btn--outline-sm" id="btnPresetLow">
-                    Low Risk Profile
-                </button>
-                <button type="button" class="c1-btn c1-btn--outline-sm" id="btnPresetMed">
-                    Moderate Profile
-                </button>
-                <button type="button" class="c1-btn c1-btn--outline-sm" id="btnPresetHigh">
-                    High Risk Profile
-                </button>
-                <button type="button" class="c1-btn c1-btn--ghost-sm" id="btnClearProfile">
-                    Clear Form
+        <div class="c1-intro-card">
+            <h1 id="c1IntroTitle" class="c1-intro-title" tabindex="-1">AI Study Habits Assessment</h1>
+            <p class="c1-intro-lead">
+                Reflect on how you use Generative AI in coursework to see whether your current habits support independent learning or risk cognitive over-reliance.
+            </p>
+
+            <ul class="c1-facts-row" aria-label="Assessment overview">
+                <li><strong>20</strong> questions</li>
+                <li aria-hidden="true" class="c1-fact-sep">&middot;</li>
+                <li><strong>4</strong> short sections</li>
+                <li aria-hidden="true" class="c1-fact-sep">&middot;</li>
+                <li>About <strong>3 minutes</strong></li>
+                <li aria-hidden="true" class="c1-fact-sep">&middot;</li>
+                <li>Session-only evaluation</li>
+            </ul>
+
+            <div class="c1-intro-actions">
+                <button type="button" class="c1-btn c1-btn--primary c1-btn--hero" id="btnStartAssessment">
+                    Start Assessment
                 </button>
             </div>
+
+            <p class="c1-intro-privacy">
+                For exploratory educational self-reflection only. Responses are not stored and do not constitute a psychological assessment or grading judgement.
+            </p>
+
+            <!-- Collapsible Secondary Research & Demo Details -->
+            <div class="c1-intro-disclosures">
+                <details class="c1-disclosure" id="introResearchDetails">
+                    <summary class="c1-disclosure__summary">About &amp; Research Details</summary>
+                    <div class="c1-disclosure__body">
+                        <p>
+                            <strong>Explainable Cognitive Offloading Risk Prediction</strong> is Component 1 of SLIIT research project J26-DS-310. Your 20 responses map across 68 behavioral indicators and are evaluated using a calibrated ordinal Ridge regression pipeline with exact LinearSHAP feature attribution.
+                        </p>
+                        <dl class="c1-spec-list">
+                            <div>
+                                <dt>Model Status</dt>
+                                <dd>Calibrated Model Integrated (Version 4 Active)</dd>
+                            </div>
+                            <div>
+                                <dt>Risk Scale</dt>
+                                <dd>1.000 &ndash; 5.000 (Low &le; 2.667 &middot; Medium 2.668&ndash;3.500 &middot; High &gt; 3.500)</dd>
+                            </div>
+                            <div>
+                                <dt>Target Leakage Prevention</dt>
+                                <dd>Direct offloading construct items are strictly excluded from questionnaire inputs.</dd>
+                            </div>
+                        </dl>
+                    </div>
+                </details>
+
+                <details class="c1-disclosure" id="introDemoDetails">
+                    <summary class="c1-disclosure__summary">Viva Demonstration Profiles</summary>
+                    <div class="c1-disclosure__body">
+                        <p class="c1-disclosure__hint">
+                            Pre-fill all 20 questions with calibrated sample profiles to verify Low, Medium, and High predictions during evaluation:
+                        </p>
+                        <div class="c1-demo-actions">
+                            <button type="button" class="c1-btn c1-btn--outline-sm" id="btnPresetLow">Low-Risk Sample</button>
+                            <button type="button" class="c1-btn c1-btn--outline-sm" id="btnPresetMed">Medium-Risk Sample</button>
+                            <button type="button" class="c1-btn c1-btn--outline-sm" id="btnPresetHigh">High-Risk Sample</button>
+                            <button type="button" class="c1-btn c1-btn--ghost-sm" id="btnClearProfile">Reset</button>
+                        </div>
+                    </div>
+                </details>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- ================================================================
-     3. Questionnaire Wizard Section
-================================================================ -->
-<section class="c1-questionnaire-section" id="assessmentSection" aria-labelledby="questionnaireHeading">
-    <div class="c1-section-header">
-        <h2 class="c1-section-title" id="questionnaireHeading">Student Habit Assessment Questionnaire</h2>
-        <p class="c1-section-desc">
-            Please answer each item reflecting on your typical coursework routines during an active semester. All 20 items are required to compute the full assessment.
-        </p>
-    </div>
-
-    <!-- Multi-Step Progress Tracker -->
-    <div class="c1-stepper-container" role="navigation" aria-label="Questionnaire sections progress">
-        <div class="c1-stepper-track" aria-hidden="true">
-            <div class="c1-stepper-fill" id="c1ProgressBarFill" style="width: 25%;"></div>
-        </div>
-        <div class="c1-stepper-steps">
-            <button type="button" class="c1-step-btn step-active" data-step="1" id="stepPill1">
-                <span class="c1-step-number">1</span>
-                <span class="c1-step-info">
-                    <span class="c1-step-tag">Section 1</span>
-                    <span class="c1-step-name">Usage &amp; Demographics</span>
-                </span>
-            </button>
-            <button type="button" class="c1-step-btn step-pending" data-step="2" id="stepPill2">
-                <span class="c1-step-number">2</span>
-                <span class="c1-step-info">
-                    <span class="c1-step-tag">Section 2</span>
-                    <span class="c1-step-name">Task Delegation</span>
-                </span>
-            </button>
-            <button type="button" class="c1-step-btn step-pending" data-step="3" id="stepPill3">
-                <span class="c1-step-number">3</span>
-                <span class="c1-step-info">
-                    <span class="c1-step-tag">Section 3</span>
-                    <span class="c1-step-name">Verification Habits</span>
-                </span>
-            </button>
-            <button type="button" class="c1-step-btn step-pending" data-step="4" id="stepPill4">
-                <span class="c1-step-number">4</span>
-                <span class="c1-step-info">
-                    <span class="c1-step-tag">Section 4</span>
-                    <span class="c1-step-name">Autonomy &amp; Trust</span>
-                </span>
-            </button>
-        </div>
-    </div>
-
-    <!-- Validation Error Alert Banner -->
-    <div id="sectionValidationError" class="c1-validation-banner" hidden role="alert" aria-live="assertive">
-        <div class="c1-validation-banner__icon" aria-hidden="true">!</div>
-        <div class="c1-validation-banner__content">
-            <h4 class="c1-validation-banner__title">Please complete all required items before advancing:</h4>
-            <ul id="sectionValidationErrorList" class="c1-validation-banner__list"></ul>
-        </div>
-    </div>
-
-    <!-- Assessment Form -->
-    <form id="reflectionAssessmentForm" class="c1-form" autocomplete="off" novalidate aria-label="Cognitive offloading habit assessment form">
-
-        <!-- ============================================================
-             SECTION 1: AI USAGE HABITS & DEMOGRAPHIC CONTEXT
-        ============================================================ -->
-        <div class="c1-step-panel" id="formStep1" data-step="1">
-            <div class="c1-panel-header">
-                <span class="c1-panel-tag">Section 1 of 4</span>
-                <h3 class="c1-panel-title">AI Usage Habits &amp; Academic Background</h3>
-                <p class="c1-panel-desc">General details regarding your degree programme and frequency of Generative AI interaction.</p>
+    <!-- ================================================================
+         STAGE 2: INTERACTIVE QUESTIONNAIRE WIZARD (20 REQUIRED INPUTS)
+    ================================================================ -->
+    <section id="c1ViewWizard" class="c1-stage c1-wizard" hidden aria-labelledby="c1WizardHeading">
+        <div class="c1-wizard-topbar">
+            <div class="c1-wizard-topbar__row">
+                <button type="button" class="c1-text-btn" id="btnBackToIntro">&larr; Overview</button>
+                <span class="c1-answered-counter" id="c1AnsweredCounter" aria-live="polite">0 of 20 answered</span>
             </div>
 
-            <!-- Q1: Academic Field / Discipline -->
-            <div class="c1-question-card" id="card_degree_field">
-                <div class="c1-question-card__header">
-                    <label class="c1-question-title" for="pred_degree_field">
-                        1. Academic Field / Discipline
-                    </label>
-                    <span class="c1-required-tag">* Required</span>
-                </div>
-                <p class="c1-question-desc">Select the academic discipline or faculty that best matches your undergraduate degree.</p>
-                <div class="c1-control-wrap">
-                    <select id="pred_degree_field" name="degree_field" class="c1-select" required aria-required="true">
-                        <option value="" selected disabled>— Select academic field —</option>
+            <div class="c1-progress-wrap">
+                <progress id="c1ProgressBar" class="c1-progress" max="4" value="1" aria-label="Assessment section progress">Section 1 of 4</progress>
+            </div>
+
+            <nav class="c1-step-tabs" aria-label="Assessment sections">
+                <button type="button" class="c1-step-tab is-active" data-step="1" id="stepPill1" aria-current="step">
+                    <span class="c1-step-tab__num">1</span>
+                    <span class="c1-step-tab__label">Background</span>
+                </button>
+                <button type="button" class="c1-step-tab" data-step="2" id="stepPill2">
+                    <span class="c1-step-tab__num">2</span>
+                    <span class="c1-step-tab__label">Delegation</span>
+                </button>
+                <button type="button" class="c1-step-tab" data-step="3" id="stepPill3">
+                    <span class="c1-step-tab__num">3</span>
+                    <span class="c1-step-tab__label">Verification</span>
+                </button>
+                <button type="button" class="c1-step-tab" data-step="4" id="stepPill4">
+                    <span class="c1-step-tab__num">4</span>
+                    <span class="c1-step-tab__label">Autonomy</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Sample Profile Banner -->
+        <div id="c1DemoActiveNotice" class="c1-demo-notice" hidden role="status">
+            <span id="c1DemoActiveText">Sample profile loaded.</span>
+            <button type="button" class="c1-text-btn c1-text-btn--inline" id="btnJumpToReview">Jump to Step 4 &rarr;</button>
+        </div>
+
+        <!-- Validation Error Summary Banner -->
+        <div id="sectionValidationError" class="c1-error-summary" hidden role="alert" tabindex="-1" aria-labelledby="c1ValidationHeading">
+            <div class="c1-error-summary__badge" aria-hidden="true">!</div>
+            <div class="c1-error-summary__body">
+                <h2 id="c1ValidationHeading" class="c1-error-summary__title">Please complete all required questions in this section:</h2>
+                <ul id="sectionValidationErrorList" class="c1-error-summary__list"></ul>
+            </div>
+        </div>
+
+        <form id="reflectionAssessmentForm" class="c1-form" autocomplete="off" novalidate aria-labelledby="c1WizardHeading">
+            <h1 id="c1WizardHeading" class="c1-visually-hidden">AI Study Habits Assessment Questionnaire</h1>
+
+            <!-- ========================================================
+                 SECTION 1: AI USAGE HABITS & ACADEMIC BACKGROUND (Q1–Q6)
+            ======================================================== -->
+            <div class="c1-step-panel" id="formStep1" data-step="1">
+                <header class="c1-section-head">
+                    <span class="c1-section-kicker">Section 1 of 4</span>
+                    <h2 class="c1-section-title" id="stepHeading1" tabindex="-1">AI Usage Habits &amp; Academic Background</h2>
+                </header>
+
+                <!-- Q1: Academic Field / Discipline -->
+                <div class="c1-q-card" id="card_degree_field">
+                    <div class="c1-q-head">
+                        <label class="c1-q-label" for="pred_degree_field">
+                            <span class="c1-q-num">Q1</span>
+                            Academic Field / Discipline
+                        </label>
+                        <span class="c1-q-req" aria-hidden="true">Required</span>
+                    </div>
+                    <p class="c1-q-hint" id="hint_degree_field">Select the discipline that best matches your undergraduate degree.</p>
+                    <select id="pred_degree_field" name="degree_field" class="c1-select" required aria-invalid="false" data-error="err_degree_field" aria-describedby="hint_degree_field" enterkeyhint="next">
+                        <option value="" selected disabled>Select academic field&hellip;</option>
                         <option value="Computing_IT">Computer Science / IT / Software Engineering</option>
                         <option value="Engineering">Engineering &amp; Architecture</option>
                         <option value="Business_Economics">Business / Economics / Management</option>
                         <option value="Natural_Applied_Sciences">Natural &amp; Applied Sciences</option>
                         <option value="Humanities_Health_Other">Humanities / Social Sciences / Health / Law</option>
                     </select>
+                    <p class="c1-field-error" id="err_degree_field" hidden></p>
                 </div>
-                <p class="c1-error-msg" id="err_degree_field" hidden></p>
-            </div>
 
-            <!-- Q2 & Q3: Year and Age in two columns -->
-            <div class="c1-grid-2col">
-                <div class="c1-question-card" id="card_academic_year">
-                    <div class="c1-question-card__header">
-                        <label class="c1-question-title" for="pred_academic_year">
-                            2. Current Academic Year
-                        </label>
-                        <span class="c1-required-tag">* Required</span>
-                    </div>
-                    <p class="c1-question-desc">Current stage of university study.</p>
-                    <div class="c1-control-wrap">
-                        <select id="pred_academic_year" name="academic_year" class="c1-select" required aria-required="true">
-                            <option value="" selected disabled>— Select academic year —</option>
+                <!-- Q2 & Q3: Year & Age -->
+                <div class="c1-grid-2">
+                    <div class="c1-q-card" id="card_academic_year">
+                        <div class="c1-q-head">
+                            <label class="c1-q-label" for="pred_academic_year">
+                                <span class="c1-q-num">Q2</span>
+                                Current Academic Year
+                            </label>
+                            <span class="c1-q-req" aria-hidden="true">Required</span>
+                        </div>
+                        <p class="c1-q-hint" id="hint_academic_year">Current stage of study.</p>
+                        <select id="pred_academic_year" name="academic_year" class="c1-select" required aria-invalid="false" data-error="err_academic_year" aria-describedby="hint_academic_year" enterkeyhint="next">
+                            <option value="" selected disabled>Select year&hellip;</option>
                             <option value="1">1st Year (Freshman)</option>
                             <option value="2">2nd Year (Sophomore)</option>
                             <option value="3">3rd Year (Junior)</option>
@@ -201,695 +192,620 @@
                             <option value="5">5th Year</option>
                             <option value="6">Postgraduate</option>
                         </select>
+                        <p class="c1-field-error" id="err_academic_year" hidden></p>
                     </div>
-                    <p class="c1-error-msg" id="err_academic_year" hidden></p>
-                </div>
 
-                <div class="c1-question-card" id="card_age_group">
-                    <div class="c1-question-card__header">
-                        <label class="c1-question-title" for="pred_age_group">
-                            3. Age Group
-                        </label>
-                        <span class="c1-required-tag">* Required</span>
-                    </div>
-                    <p class="c1-question-desc">Select your age bracket.</p>
-                    <div class="c1-control-wrap">
-                        <select id="pred_age_group" name="age_group" class="c1-select" required aria-required="true">
-                            <option value="" selected disabled>— Select age bracket —</option>
-                            <option value="1">18–20 years</option>
-                            <option value="2">21–23 years</option>
-                            <option value="3">24–26 years</option>
+                    <div class="c1-q-card" id="card_age_group">
+                        <div class="c1-q-head">
+                            <label class="c1-q-label" for="pred_age_group">
+                                <span class="c1-q-num">Q3</span>
+                                Age Group
+                            </label>
+                            <span class="c1-q-req" aria-hidden="true">Required</span>
+                        </div>
+                        <p class="c1-q-hint" id="hint_age_group">Select your age bracket.</p>
+                        <select id="pred_age_group" name="age_group" class="c1-select" required aria-invalid="false" data-error="err_age_group" aria-describedby="hint_age_group" enterkeyhint="next">
+                            <option value="" selected disabled>Select age bracket&hellip;</option>
+                            <option value="1">18&ndash;20 years</option>
+                            <option value="2">21&ndash;23 years</option>
+                            <option value="3">24&ndash;26 years</option>
                             <option value="4">27 or above</option>
                         </select>
+                        <p class="c1-field-error" id="err_age_group" hidden></p>
                     </div>
-                    <p class="c1-error-msg" id="err_age_group" hidden></p>
                 </div>
-            </div>
 
-            <!-- Q4: AI Usage Frequency -->
-            <div class="c1-question-card" id="card_ai_usage_freq">
-                <div class="c1-question-card__header">
-                    <span class="c1-question-title">
-                        4. Frequency of Generative AI Usage for Coursework
-                    </span>
-                    <span class="c1-required-tag">* Required</span>
+                <!-- Q4: AI Usage Frequency -->
+                <div class="c1-q-card" id="card_ai_usage_freq">
+                    <fieldset class="c1-fieldset">
+                        <legend class="c1-q-legend">
+                            <span class="c1-q-legend__row">
+                                <span class="c1-q-label"><span class="c1-q-num">Q4</span> Frequency of Generative AI Usage for Coursework</span>
+                                <span class="c1-q-req">Required</span>
+                            </span>
+                        </legend>
+                        <p class="c1-q-hint">How often do you interact with Generative AI tools during an active teaching semester?</p>
+                        <div class="c1-choice-grid c1-choice-grid--2">
+                            <label class="c1-choice-tile">
+                                <input type="radio" name="ai_usage_freq" value="1" class="c1-visually-hidden" required aria-invalid="false" />
+                                <span class="c1-choice-indicator" aria-hidden="true"></span>
+                                <span class="c1-choice-text">
+                                    <strong>1 &mdash; Rarely</strong>
+                                    <span>Less than once a week</span>
+                                </span>
+                            </label>
+                            <label class="c1-choice-tile">
+                                <input type="radio" name="ai_usage_freq" value="2" class="c1-visually-hidden" />
+                                <span class="c1-choice-indicator" aria-hidden="true"></span>
+                                <span class="c1-choice-text">
+                                    <strong>2 &mdash; Sometimes</strong>
+                                    <span>1 to 3 times per week</span>
+                                </span>
+                            </label>
+                            <label class="c1-choice-tile">
+                                <input type="radio" name="ai_usage_freq" value="3" class="c1-visually-hidden" />
+                                <span class="c1-choice-indicator" aria-hidden="true"></span>
+                                <span class="c1-choice-text">
+                                    <strong>3 &mdash; Frequently</strong>
+                                    <span>4 to 6 times per week</span>
+                                </span>
+                            </label>
+                            <label class="c1-choice-tile">
+                                <input type="radio" name="ai_usage_freq" value="4" class="c1-visually-hidden" />
+                                <span class="c1-choice-indicator" aria-hidden="true"></span>
+                                <span class="c1-choice-text">
+                                    <strong>4 &mdash; Daily</strong>
+                                    <span>Every day for coursework</span>
+                                </span>
+                            </label>
+                        </div>
+                        <p class="c1-field-error" id="err_ai_usage_freq" hidden></p>
+                    </fieldset>
                 </div>
-                <p class="c1-question-desc">How often do you interact with Generative AI tools during an active teaching semester?</p>
-                <div class="c1-options-grid c1-options-grid--4" role="radiogroup" aria-label="AI usage frequency">
-                    <label class="c1-option-tile">
-                        <input type="radio" name="ai_usage_freq" value="1" />
-                        <span class="c1-option-tile__body">
-                            <strong class="c1-option-tile__title">1 &mdash; Rarely</strong>
-                            <span class="c1-option-tile__desc">Less than once a week</span>
-                        </span>
-                    </label>
-                    <label class="c1-option-tile">
-                        <input type="radio" name="ai_usage_freq" value="2" />
-                        <span class="c1-option-tile__body">
-                            <strong class="c1-option-tile__title">2 &mdash; Sometimes</strong>
-                            <span class="c1-option-tile__desc">1 to 3 times per week</span>
-                        </span>
-                    </label>
-                    <label class="c1-option-tile">
-                        <input type="radio" name="ai_usage_freq" value="3" />
-                        <span class="c1-option-tile__body">
-                            <strong class="c1-option-tile__title">3 &mdash; Frequently</strong>
-                            <span class="c1-option-tile__desc">4 to 6 times per week</span>
-                        </span>
-                    </label>
-                    <label class="c1-option-tile">
-                        <input type="radio" name="ai_usage_freq" value="4" />
-                        <span class="c1-option-tile__body">
-                            <strong class="c1-option-tile__title">4 &mdash; Daily</strong>
-                            <span class="c1-option-tile__desc">Every day for coursework</span>
-                        </span>
-                    </label>
-                </div>
-                <p class="c1-error-msg" id="err_ai_usage_freq" hidden></p>
-            </div>
 
-            <!-- Q5: Weekly Hours -->
-            <div class="c1-question-card" id="card_ai_time_per_week">
-                <div class="c1-question-card__header">
-                    <label class="c1-question-title" for="pred_ai_time_per_week">
-                        5. Estimated Cumulative AI Usage Time Per Week
-                    </label>
-                    <span class="c1-required-tag">* Required</span>
-                </div>
-                <p class="c1-question-desc">Approximate hours spent utilizing GenAI tools for academic activities each week.</p>
-                <div class="c1-control-wrap">
-                    <select id="pred_ai_time_per_week" name="ai_time_per_week" class="c1-select" required aria-required="true">
-                        <option value="" selected disabled>— Select weekly time range —</option>
+                <!-- Q5: Weekly Hours -->
+                <div class="c1-q-card" id="card_ai_time_per_week">
+                    <div class="c1-q-head">
+                        <label class="c1-q-label" for="pred_ai_time_per_week">
+                            <span class="c1-q-num">Q5</span>
+                            Estimated Cumulative AI Usage Time Per Week
+                        </label>
+                        <span class="c1-q-req" aria-hidden="true">Required</span>
+                    </div>
+                    <p class="c1-q-hint" id="hint_ai_time_per_week">Approximate hours spent utilizing GenAI tools for academic activities each week.</p>
+                    <select id="pred_ai_time_per_week" name="ai_time_per_week" class="c1-select" required aria-invalid="false" data-error="err_ai_time_per_week" aria-describedby="hint_ai_time_per_week" enterkeyhint="next">
+                        <option value="" selected disabled>Select weekly time range&hellip;</option>
                         <option value="1">Less than 1 hour per week</option>
                         <option value="2">1 to 3 hours per week</option>
                         <option value="3">4 to 6 hours per week</option>
                         <option value="4">7 to 10 hours per week</option>
                         <option value="5">More than 10 hours per week</option>
                     </select>
+                    <p class="c1-field-error" id="err_ai_time_per_week" hidden></p>
                 </div>
-                <p class="c1-error-msg" id="err_ai_time_per_week" hidden></p>
-            </div>
 
-            <!-- Q6: AI Tools Multi-Select -->
-            <div class="c1-question-card" id="card_tools_used">
-                <div class="c1-question-card__header">
-                    <span class="c1-question-title">
-                        6. Generative AI Tools Actively Utilized
-                    </span>
-                    <span class="c1-required-tag">* Required</span>
+                <!-- Q6: AI Tools Multi-Select -->
+                <div class="c1-q-card" id="card_tools_used">
+                    <fieldset class="c1-fieldset">
+                        <legend class="c1-q-legend">
+                            <span class="c1-q-legend__row">
+                                <span class="c1-q-label"><span class="c1-q-num">Q6</span> Generative AI Tools Actively Utilized</span>
+                                <span class="c1-q-req">Select at least one</span>
+                            </span>
+                        </legend>
+                        <p class="c1-q-hint">Select all tools you actively use for academic work.</p>
+                        <div class="c1-check-grid">
+                            <label class="c1-check-tile">
+                                <input type="checkbox" name="tools_used" value="ChatGPT" class="c1-visually-hidden" />
+                                <span class="c1-check-box" aria-hidden="true"></span>
+                                <span>ChatGPT (OpenAI)</span>
+                            </label>
+                            <label class="c1-check-tile">
+                                <input type="checkbox" name="tools_used" value="Google Gemini" class="c1-visually-hidden" />
+                                <span class="c1-check-box" aria-hidden="true"></span>
+                                <span>Google Gemini</span>
+                            </label>
+                            <label class="c1-check-tile">
+                                <input type="checkbox" name="tools_used" value="Microsoft Copilot" class="c1-visually-hidden" />
+                                <span class="c1-check-box" aria-hidden="true"></span>
+                                <span>Microsoft Copilot</span>
+                            </label>
+                            <label class="c1-check-tile">
+                                <input type="checkbox" name="tools_used" value="Claude" class="c1-visually-hidden" />
+                                <span class="c1-check-box" aria-hidden="true"></span>
+                                <span>Claude (Anthropic)</span>
+                            </label>
+                            <label class="c1-check-tile">
+                                <input type="checkbox" name="tools_used" value="Perplexity AI" class="c1-visually-hidden" />
+                                <span class="c1-check-box" aria-hidden="true"></span>
+                                <span>Perplexity AI</span>
+                            </label>
+                        </div>
+                        <p class="c1-field-error" id="err_tools_used" hidden></p>
+                    </fieldset>
                 </div>
-                <p class="c1-question-desc">Select all tools you actively use for academic work. At least one must be selected.</p>
-                <div class="c1-checkbox-grid" role="group" aria-label="Generative AI tools used">
-                    <label class="c1-checkbox-tile">
-                        <input type="checkbox" name="tools_used" value="ChatGPT" />
-                        <span class="c1-checkbox-tile__label">ChatGPT (OpenAI)</span>
-                    </label>
-                    <label class="c1-checkbox-tile">
-                        <input type="checkbox" name="tools_used" value="Google Gemini" />
-                        <span class="c1-checkbox-tile__label">Google Gemini</span>
-                    </label>
-                    <label class="c1-checkbox-tile">
-                        <input type="checkbox" name="tools_used" value="Microsoft Copilot" />
-                        <span class="c1-checkbox-tile__label">Microsoft Copilot</span>
-                    </label>
-                    <label class="c1-checkbox-tile">
-                        <input type="checkbox" name="tools_used" value="Claude" />
-                        <span class="c1-checkbox-tile__label">Claude (Anthropic)</span>
-                    </label>
-                    <label class="c1-checkbox-tile">
-                        <input type="checkbox" name="tools_used" value="Perplexity AI" />
-                        <span class="c1-checkbox-tile__label">Perplexity AI</span>
-                    </label>
-                </div>
-                <p class="c1-error-msg" id="err_tools_used" hidden></p>
-            </div>
 
-            <!-- Step 1 Navigation -->
-            <div class="c1-nav-bar c1-nav-bar--end">
-                <button type="button" class="c1-btn c1-btn--primary" id="btnNextStep1">
-                    Continue to Section 2: Task Delegation &rarr;
-                </button>
-            </div>
-        </div>
-
-        <!-- ============================================================
-             SECTION 2: ACADEMIC TASK DELEGATION & CONTENT USE
-        ============================================================ -->
-        <div class="c1-step-panel" id="formStep2" data-step="2" hidden>
-            <div class="c1-panel-header">
-                <span class="c1-panel-tag">Section 2 of 4</span>
-                <h3 class="c1-panel-title">Academic Task Delegation &amp; Content Use</h3>
-                <p class="c1-panel-desc">Assess the extent to which you transfer assignment completion and analytical tasks to AI.</p>
-            </div>
-
-            <!-- Q20: Task Delegation Frequency -->
-            <div class="c1-question-card" id="card_Q20">
-                <div class="c1-question-card__header">
-                    <span class="c1-question-title">
-                        1. Frequency of Delegating Complete Academic Tasks to AI
-                    </span>
-                    <span class="c1-required-tag">* Required</span>
-                </div>
-                <p class="c1-question-desc">How often do you prompt Generative AI to solve or complete entire coursework tasks for you?</p>
-                <div class="c1-likert-scale" role="radiogroup" aria-label="Task delegation frequency">
-                    <label class="c1-likert-option">
-                        <input type="radio" name="Q20_task_delegation_freq" value="1" />
-                        <span class="c1-likert-badge">1</span>
-                        <span class="c1-likert-label">Never</span>
-                    </label>
-                    <label class="c1-likert-option">
-                        <input type="radio" name="Q20_task_delegation_freq" value="2" />
-                        <span class="c1-likert-badge">2</span>
-                        <span class="c1-likert-label">Rarely</span>
-                    </label>
-                    <label class="c1-likert-option">
-                        <input type="radio" name="Q20_task_delegation_freq" value="3" />
-                        <span class="c1-likert-badge">3</span>
-                        <span class="c1-likert-label">Sometimes</span>
-                    </label>
-                    <label class="c1-likert-option">
-                        <input type="radio" name="Q20_task_delegation_freq" value="4" />
-                        <span class="c1-likert-badge">4</span>
-                        <span class="c1-likert-label">Often</span>
-                    </label>
-                    <label class="c1-likert-option">
-                        <input type="radio" name="Q20_task_delegation_freq" value="5" />
-                        <span class="c1-likert-badge">5</span>
-                        <span class="c1-likert-label">Very Often</span>
-                    </label>
-                </div>
-                <p class="c1-error-msg" id="err_Q20" hidden></p>
-            </div>
-
-            <!-- Delegated Task Types Multi-Select -->
-            <div class="c1-question-card" id="card_tasks_delegated">
-                <div class="c1-question-card__header">
-                    <span class="c1-question-title">
-                        2. Academic Tasks Typically Delegated to AI
-                    </span>
-                    <span class="c1-required-tag">* Required</span>
-                </div>
-                <p class="c1-question-desc">Select all types of tasks you delegate to AI systems. At least one selection is required.</p>
-                <div class="c1-checkbox-grid c1-checkbox-grid--2col" role="group" aria-label="Tasks delegated to AI">
-                    <label class="c1-checkbox-tile">
-                        <input type="checkbox" name="tasks_delegated" value="Writing assignments" />
-                        <span class="c1-checkbox-tile__label">Drafting / Writing Assignments</span>
-                    </label>
-                    <label class="c1-checkbox-tile">
-                        <input type="checkbox" name="tasks_delegated" value="Explaining concepts" />
-                        <span class="c1-checkbox-tile__label">Explaining Course Concepts</span>
-                    </label>
-                    <label class="c1-checkbox-tile">
-                        <input type="checkbox" name="tasks_delegated" value="Summarising materials" />
-                        <span class="c1-checkbox-tile__label">Summarising Reading Materials</span>
-                    </label>
-                    <label class="c1-checkbox-tile">
-                        <input type="checkbox" name="tasks_delegated" value="Creating presentations" />
-                        <span class="c1-checkbox-tile__label">Creating Presentations / Slides</span>
-                    </label>
-                    <label class="c1-checkbox-tile">
-                        <input type="checkbox" name="tasks_delegated" value="Programming problems" />
-                        <span class="c1-checkbox-tile__label">Solving Programming / Code Problems</span>
-                    </label>
-                    <label class="c1-checkbox-tile">
-                        <input type="checkbox" name="tasks_delegated" value="Mathematical problems" />
-                        <span class="c1-checkbox-tile__label">Solving Mathematical / Calculation Problems</span>
-                    </label>
-                </div>
-                <p class="c1-error-msg" id="err_tasks_delegated" hidden></p>
-            </div>
-
-            <!-- Q1: Direct Content Use -->
-            <div class="c1-question-card" id="card_Q1">
-                <div class="c1-question-card__header">
-                    <span class="c1-question-title">
-                        3. Direct Use of AI-Generated Content Without Modification
-                    </span>
-                    <span class="c1-required-tag">* Required</span>
-                </div>
-                <p class="c1-question-desc">I directly submit or use AI-generated outputs in coursework without substantive personal editing.</p>
-                <div class="c1-likert-scale" role="radiogroup" aria-label="Direct use frequency">
-                    <label class="c1-likert-option">
-                        <input type="radio" name="Q1_direct_use_freq" value="1" />
-                        <span class="c1-likert-badge">1</span>
-                        <span class="c1-likert-label">Never</span>
-                    </label>
-                    <label class="c1-likert-option">
-                        <input type="radio" name="Q1_direct_use_freq" value="2" />
-                        <span class="c1-likert-badge">2</span>
-                        <span class="c1-likert-label">Rarely</span>
-                    </label>
-                    <label class="c1-likert-option">
-                        <input type="radio" name="Q1_direct_use_freq" value="3" />
-                        <span class="c1-likert-badge">3</span>
-                        <span class="c1-likert-label">Sometimes</span>
-                    </label>
-                    <label class="c1-likert-option">
-                        <input type="radio" name="Q1_direct_use_freq" value="4" />
-                        <span class="c1-likert-badge">4</span>
-                        <span class="c1-likert-label">Often</span>
-                    </label>
-                    <label class="c1-likert-option">
-                        <input type="radio" name="Q1_direct_use_freq" value="5" />
-                        <span class="c1-likert-badge">5</span>
-                        <span class="c1-likert-label">Always</span>
-                    </label>
-                </div>
-                <p class="c1-error-msg" id="err_Q1" hidden></p>
-            </div>
-
-            <!-- Q22: Cognitive Effort on AI Outputs -->
-            <div class="c1-question-card" id="card_Q22">
-                <div class="c1-question-card__header">
-                    <span class="c1-question-title">
-                        4. Cognitive Effort Invested in Reviewing AI Outputs
-                    </span>
-                    <span class="c1-required-tag">* Required</span>
-                </div>
-                <p class="c1-question-desc">How much analytical effort do you expend evaluating and verifying AI-generated solutions?</p>
-                <div class="c1-likert-scale" role="radiogroup" aria-label="Effort spent on AI answers">
-                    <label class="c1-likert-option">
-                        <input type="radio" name="Q22_effort_on_ai_answers" value="1" />
-                        <span class="c1-likert-badge">1</span>
-                        <span class="c1-likert-label">No Effort</span>
-                    </label>
-                    <label class="c1-likert-option">
-                        <input type="radio" name="Q22_effort_on_ai_answers" value="2" />
-                        <span class="c1-likert-badge">2</span>
-                        <span class="c1-likert-label">Little Effort</span>
-                    </label>
-                    <label class="c1-likert-option">
-                        <input type="radio" name="Q22_effort_on_ai_answers" value="3" />
-                        <span class="c1-likert-badge">3</span>
-                        <span class="c1-likert-label">Moderate Effort</span>
-                    </label>
-                    <label class="c1-likert-option">
-                        <input type="radio" name="Q22_effort_on_ai_answers" value="4" />
-                        <span class="c1-likert-badge">4</span>
-                        <span class="c1-likert-label">High Effort</span>
-                    </label>
-                    <label class="c1-likert-option">
-                        <input type="radio" name="Q22_effort_on_ai_answers" value="5" />
-                        <span class="c1-likert-badge">5</span>
-                        <span class="c1-likert-label">Very High Effort</span>
-                    </label>
-                </div>
-                <p class="c1-error-msg" id="err_Q22" hidden></p>
-            </div>
-
-            <!-- Step 2 Navigation -->
-            <div class="c1-nav-bar c1-nav-bar--split">
-                <button type="button" class="c1-btn c1-btn--outline" id="btnPrevStep2">&larr; Back to Section 1</button>
-                <button type="button" class="c1-btn c1-btn--primary" id="btnNextStep2">
-                    Continue to Section 3: Verification Habits &rarr;
-                </button>
-            </div>
-        </div>
-
-        <!-- ============================================================
-             SECTION 3: VERIFICATION & CRITICAL THINKING HABITS
-        ============================================================ -->
-        <div class="c1-step-panel" id="formStep3" data-step="3" hidden>
-            <div class="c1-panel-header">
-                <span class="c1-panel-tag">Section 3 of 4</span>
-                <h3 class="c1-panel-title">Verification &amp; Critical Thinking Habits</h3>
-                <p class="c1-panel-desc">Evaluate your critical engagement, fact-checking, and source validation practices.</p>
-            </div>
-
-            <!-- Q2: Source Verification -->
-            <div class="c1-question-card" id="card_Q2">
-                <div class="c1-question-card__header">
-                    <span class="c1-question-title">
-                        1. Verification of AI-Generated Claims
-                    </span>
-                    <span class="c1-required-tag">* Required</span>
-                </div>
-                <p class="c1-question-desc">I verify the factual accuracy of AI-generated statements before using them in my work.</p>
-                <div class="c1-likert-scale" role="radiogroup" aria-label="Verification frequency">
-                    <label class="c1-likert-option"><input type="radio" name="Q2_verify_info" value="1" /><span class="c1-likert-badge">1</span><span class="c1-likert-label">Strongly Disagree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q2_verify_info" value="2" /><span class="c1-likert-badge">2</span><span class="c1-likert-label">Disagree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q2_verify_info" value="3" /><span class="c1-likert-badge">3</span><span class="c1-likert-label">Neutral</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q2_verify_info" value="4" /><span class="c1-likert-badge">4</span><span class="c1-likert-label">Agree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q2_verify_info" value="5" /><span class="c1-likert-badge">5</span><span class="c1-likert-label">Strongly Agree</span></label>
-                </div>
-                <p class="c1-error-msg" id="err_Q2" hidden></p>
-            </div>
-
-            <!-- Q3: Source Comparison -->
-            <div class="c1-question-card" id="card_Q3">
-                <div class="c1-question-card__header">
-                    <span class="c1-question-title">
-                        2. Cross-Referencing Independent Sources
-                    </span>
-                    <span class="c1-required-tag">* Required</span>
-                </div>
-                <p class="c1-question-desc">I compare AI-provided explanations with textbooks, lecture slides, or peer-reviewed literature.</p>
-                <div class="c1-likert-scale" role="radiogroup" aria-label="Cross-referencing sources">
-                    <label class="c1-likert-option"><input type="radio" name="Q3_compare_sources" value="1" /><span class="c1-likert-badge">1</span><span class="c1-likert-label">Strongly Disagree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q3_compare_sources" value="2" /><span class="c1-likert-badge">2</span><span class="c1-likert-label">Disagree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q3_compare_sources" value="3" /><span class="c1-likert-badge">3</span><span class="c1-likert-label">Neutral</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q3_compare_sources" value="4" /><span class="c1-likert-badge">4</span><span class="c1-likert-label">Agree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q3_compare_sources" value="5" /><span class="c1-likert-badge">5</span><span class="c1-likert-label">Strongly Agree</span></label>
-                </div>
-                <p class="c1-error-msg" id="err_Q3" hidden></p>
-            </div>
-
-            <!-- Q4: Checking Technical Accuracy -->
-            <div class="c1-question-card" id="card_Q4">
-                <div class="c1-question-card__header">
-                    <span class="c1-question-title">
-                        3. Checking Numerical &amp; Formula Accuracy
-                    </span>
-                    <span class="c1-required-tag">* Required</span>
-                </div>
-                <p class="c1-question-desc">I actively test whether AI formulas, derivations, calculations, or code outputs are factually sound.</p>
-                <div class="c1-likert-scale" role="radiogroup" aria-label="Accuracy checking">
-                    <label class="c1-likert-option"><input type="radio" name="Q4_check_accuracy" value="1" /><span class="c1-likert-badge">1</span><span class="c1-likert-label">Strongly Disagree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q4_check_accuracy" value="2" /><span class="c1-likert-badge">2</span><span class="c1-likert-label">Disagree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q4_check_accuracy" value="3" /><span class="c1-likert-badge">3</span><span class="c1-likert-label">Neutral</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q4_check_accuracy" value="4" /><span class="c1-likert-badge">4</span><span class="c1-likert-label">Agree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q4_check_accuracy" value="5" /><span class="c1-likert-badge">5</span><span class="c1-likert-label">Strongly Agree</span></label>
-                </div>
-                <p class="c1-error-msg" id="err_Q4" hidden></p>
-            </div>
-
-            <!-- Q5: Understanding the Underlying Reasoning -->
-            <div class="c1-question-card" id="card_Q5">
-                <div class="c1-question-card__header">
-                    <span class="c1-question-title">
-                        4. Conceptual Comprehension Before Adoption
-                    </span>
-                    <span class="c1-required-tag">* Required</span>
-                </div>
-                <p class="c1-question-desc">Before adopting an AI solution, I ensure I personally understand the underlying logic and derivation.</p>
-                <div class="c1-likert-scale" role="radiogroup" aria-label="Understanding the reasoning">
-                    <label class="c1-likert-option"><input type="radio" name="Q5_understand_reasoning" value="1" /><span class="c1-likert-badge">1</span><span class="c1-likert-label">Strongly Disagree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q5_understand_reasoning" value="2" /><span class="c1-likert-badge">2</span><span class="c1-likert-label">Disagree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q5_understand_reasoning" value="3" /><span class="c1-likert-badge">3</span><span class="c1-likert-label">Neutral</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q5_understand_reasoning" value="4" /><span class="c1-likert-badge">4</span><span class="c1-likert-label">Agree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q5_understand_reasoning" value="5" /><span class="c1-likert-badge">5</span><span class="c1-likert-label">Strongly Agree</span></label>
-                </div>
-                <p class="c1-error-msg" id="err_Q5" hidden></p>
-            </div>
-
-            <!-- Q6: Content Personalization -->
-            <div class="c1-question-card" id="card_Q6">
-                <div class="c1-question-card__header">
-                    <span class="c1-question-title">
-                        5. Personal Voice &amp; Critical Synthesis
-                    </span>
-                    <span class="c1-required-tag">* Required</span>
-                </div>
-                <p class="c1-question-desc">I rewrite and synthesize AI suggestions into my own academic phrasing and individual perspective.</p>
-                <div class="c1-likert-scale" role="radiogroup" aria-label="Content personalization">
-                    <label class="c1-likert-option"><input type="radio" name="Q6_modify_content" value="1" /><span class="c1-likert-badge">1</span><span class="c1-likert-label">Strongly Disagree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q6_modify_content" value="2" /><span class="c1-likert-badge">2</span><span class="c1-likert-label">Disagree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q6_modify_content" value="3" /><span class="c1-likert-badge">3</span><span class="c1-likert-label">Neutral</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q6_modify_content" value="4" /><span class="c1-likert-badge">4</span><span class="c1-likert-label">Agree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q6_modify_content" value="5" /><span class="c1-likert-badge">5</span><span class="c1-likert-label">Strongly Agree</span></label>
-                </div>
-                <p class="c1-error-msg" id="err_Q6" hidden></p>
-            </div>
-
-            <!-- Step 3 Navigation -->
-            <div class="c1-nav-bar c1-nav-bar--split">
-                <button type="button" class="c1-btn c1-btn--outline" id="btnPrevStep3">&larr; Back to Section 2</button>
-                <button type="button" class="c1-btn c1-btn--primary" id="btnNextStep3">
-                    Continue to Section 4: Autonomy &amp; Trust &rarr;
-                </button>
-            </div>
-        </div>
-
-        <!-- ============================================================
-             SECTION 4: COGNITIVE AUTONOMY & TOOL TRUST
-        ============================================================ -->
-        <div class="c1-step-panel" id="formStep4" data-step="4" hidden>
-            <div class="c1-panel-header">
-                <span class="c1-panel-tag">Section 4 of 4</span>
-                <h3 class="c1-panel-title">Cognitive Autonomy &amp; Tool Trust</h3>
-                <p class="c1-panel-desc">Assess your independent problem-solving confidence and degree of automation reliance.</p>
-            </div>
-
-            <!-- Q7: Attempt Independently -->
-            <div class="c1-question-card" id="card_Q7">
-                <div class="c1-question-card__header">
-                    <span class="c1-question-title">
-                        1. Independent Problem-Solving Attempt Before Prompting
-                    </span>
-                    <span class="c1-required-tag">* Required</span>
-                </div>
-                <p class="c1-question-desc">I make a serious personal attempt to solve difficult problems before turning to an AI tool.</p>
-                <div class="c1-likert-scale" role="radiogroup" aria-label="Independent attempt frequency">
-                    <label class="c1-likert-option"><input type="radio" name="Q7_attempt_independently" value="1" /><span class="c1-likert-badge">1</span><span class="c1-likert-label">Strongly Disagree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q7_attempt_independently" value="2" /><span class="c1-likert-badge">2</span><span class="c1-likert-label">Disagree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q7_attempt_independently" value="3" /><span class="c1-likert-badge">3</span><span class="c1-likert-label">Neutral</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q7_attempt_independently" value="4" /><span class="c1-likert-badge">4</span><span class="c1-likert-label">Agree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q7_attempt_independently" value="5" /><span class="c1-likert-badge">5</span><span class="c1-likert-label">Strongly Agree</span></label>
-                </div>
-                <p class="c1-error-msg" id="err_Q7" hidden></p>
-            </div>
-
-            <!-- Q8: Complete Without AI -->
-            <div class="c1-question-card" id="card_Q8">
-                <div class="c1-question-card__header">
-                    <span class="c1-question-title">
-                        2. Confidence in Completing Coursework Without AI
-                    </span>
-                    <span class="c1-required-tag">* Required</span>
-                </div>
-                <p class="c1-question-desc">I feel fully confident that I can successfully complete my coursework tasks without any AI assistance.</p>
-                <div class="c1-likert-scale" role="radiogroup" aria-label="Confidence without AI">
-                    <label class="c1-likert-option"><input type="radio" name="Q8_complete_without_ai" value="1" /><span class="c1-likert-badge">1</span><span class="c1-likert-label">Strongly Disagree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q8_complete_without_ai" value="2" /><span class="c1-likert-badge">2</span><span class="c1-likert-label">Disagree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q8_complete_without_ai" value="3" /><span class="c1-likert-badge">3</span><span class="c1-likert-label">Neutral</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q8_complete_without_ai" value="4" /><span class="c1-likert-badge">4</span><span class="c1-likert-label">Agree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q8_complete_without_ai" value="5" /><span class="c1-likert-badge">5</span><span class="c1-likert-label">Strongly Agree</span></label>
-                </div>
-                <p class="c1-error-msg" id="err_Q8" hidden></p>
-            </div>
-
-            <!-- Q9: Learning Assistant vs Substitution -->
-            <div class="c1-question-card" id="card_Q9">
-                <div class="c1-question-card__header">
-                    <span class="c1-question-title">
-                        3. Use of AI as an Explanatory Study Companion
-                    </span>
-                    <span class="c1-required-tag">* Required</span>
-                </div>
-                <p class="c1-question-desc">I view and use Generative AI as a learning assistant to clarify concepts rather than a substitute for my own thinking.</p>
-                <div class="c1-likert-scale" role="radiogroup" aria-label="Use as study assistant">
-                    <label class="c1-likert-option"><input type="radio" name="Q9_learning_assistant" value="1" /><span class="c1-likert-badge">1</span><span class="c1-likert-label">Strongly Disagree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q9_learning_assistant" value="2" /><span class="c1-likert-badge">2</span><span class="c1-likert-label">Disagree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q9_learning_assistant" value="3" /><span class="c1-likert-badge">3</span><span class="c1-likert-label">Neutral</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q9_learning_assistant" value="4" /><span class="c1-likert-badge">4</span><span class="c1-likert-label">Agree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q9_learning_assistant" value="5" /><span class="c1-likert-badge">5</span><span class="c1-likert-label">Strongly Agree</span></label>
-                </div>
-                <p class="c1-error-msg" id="err_Q9" hidden></p>
-            </div>
-
-            <!-- Q30: Belief in AI Accuracy -->
-            <div class="c1-question-card" id="card_Q30">
-                <div class="c1-question-card__header">
-                    <span class="c1-question-title">
-                        4. Uncritical Trust in AI Accuracy
-                    </span>
-                    <span class="c1-required-tag">* Required</span>
-                </div>
-                <p class="c1-question-desc">I generally assume that facts and solutions provided by Generative AI are correct and trustworthy without verification.</p>
-                <div class="c1-likert-scale" role="radiogroup" aria-label="Belief in AI accuracy">
-                    <label class="c1-likert-option"><input type="radio" name="Q30_trust_accuracy" value="1" /><span class="c1-likert-badge">1</span><span class="c1-likert-label">Strongly Disagree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q30_trust_accuracy" value="2" /><span class="c1-likert-badge">2</span><span class="c1-likert-label">Disagree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q30_trust_accuracy" value="3" /><span class="c1-likert-badge">3</span><span class="c1-likert-label">Neutral</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q30_trust_accuracy" value="4" /><span class="c1-likert-badge">4</span><span class="c1-likert-label">Agree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q30_trust_accuracy" value="5" /><span class="c1-likert-badge">5</span><span class="c1-likert-label">Strongly Agree</span></label>
-                </div>
-                <p class="c1-error-msg" id="err_Q30" hidden></p>
-            </div>
-
-            <!-- Q33: Trust in AI Guidance -->
-            <div class="c1-question-card" id="card_Q33">
-                <div class="c1-question-card__header">
-                    <span class="c1-question-title">
-                        5. Deference to AI Problem Guidance
-                    </span>
-                    <span class="c1-required-tag">* Required</span>
-                </div>
-                <p class="c1-question-desc">I trust that Generative AI provides the most appropriate guidance for my coursework problems over my own reasoning.</p>
-                <div class="c1-likert-scale" role="radiogroup" aria-label="Trust in AI guidance">
-                    <label class="c1-likert-option"><input type="radio" name="Q33_trust_appropriate_support" value="1" /><span class="c1-likert-badge">1</span><span class="c1-likert-label">Strongly Disagree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q33_trust_appropriate_support" value="2" /><span class="c1-likert-badge">2</span><span class="c1-likert-label">Disagree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q33_trust_appropriate_support" value="3" /><span class="c1-likert-badge">3</span><span class="c1-likert-label">Neutral</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q33_trust_appropriate_support" value="4" /><span class="c1-likert-badge">4</span><span class="c1-likert-label">Agree</span></label>
-                    <label class="c1-likert-option"><input type="radio" name="Q33_trust_appropriate_support" value="5" /><span class="c1-likert-badge">5</span><span class="c1-likert-label">Strongly Agree</span></label>
-                </div>
-                <p class="c1-error-msg" id="err_Q33" hidden></p>
-            </div>
-
-            <!-- Step 4 Navigation & Action Buttons -->
-            <div class="c1-nav-bar c1-nav-bar--split">
-                <button type="button" class="c1-btn c1-btn--outline" id="btnPrevStep4">&larr; Back to Section 3</button>
-                <div class="c1-btn-group">
-                    <button type="button" class="c1-btn c1-btn--ghost" id="btnResetAssessment">Reset Form</button>
-                    <button type="button" class="c1-btn c1-btn--primary c1-btn--lg" id="btnCalculatePrediction">
-                        Submit Assessment &amp; Calculate Prediction
+                <div class="c1-nav-bar c1-nav-bar--end">
+                    <button type="button" class="c1-btn c1-btn--primary" id="btnNextStep1" enterkeyhint="next">
+                        Next: Task Delegation &rarr;
                     </button>
                 </div>
             </div>
-        </div>
 
-    </form>
-</section>
+            <!-- ========================================================
+                 SECTION 2: ACADEMIC TASK DELEGATION & CONTENT USE (Q7–Q10)
+            ======================================================== -->
+            <div class="c1-step-panel" id="formStep2" data-step="2" hidden>
+                <header class="c1-section-head">
+                    <span class="c1-section-kicker">Section 2 of 4</span>
+                    <h2 class="c1-section-title" id="stepHeading2" tabindex="-1">Academic Task Delegation &amp; Content Use</h2>
+                </header>
 
-<!-- ================================================================
-     4. Assessment Results & Explainable LinearSHAP Panel
-================================================================ -->
-<section id="reflectionResultSection" class="c1-results-section" hidden aria-labelledby="resultsHeading">
-    <div id="predictionResultCard" class="c1-result-card">
-        
-        <!-- Result Header -->
-        <div class="c1-result-header">
-            <div class="c1-result-header__primary">
-                <span class="c1-result-tag">Assessment Assessment Result</span>
-                <h3 class="c1-result-title" id="resultsHeading">Cognitive Offloading Risk Profile</h3>
-                <div class="c1-risk-badge-wrapper">
-                    <div id="riskCategoryBadge" class="c1-risk-badge">Evaluating...</div>
+                <!-- Q7 (Q20): Task Delegation Frequency -->
+                <div class="c1-q-card" id="card_Q20">
+                    <fieldset class="c1-fieldset">
+                        <legend class="c1-q-legend">
+                            <span class="c1-q-legend__row">
+                                <span class="c1-q-label"><span class="c1-q-num">Q7</span> Frequency of Delegating Complete Academic Tasks to AI</span>
+                                <span class="c1-q-req">Required</span>
+                            </span>
+                        </legend>
+                        <p class="c1-q-hint">How often do you prompt Generative AI to solve or complete entire coursework tasks for you?</p>
+                        <div class="c1-likert-group">
+                            <label class="c1-likert-option"><input type="radio" name="Q20_task_delegation_freq" value="1" class="c1-visually-hidden" required /><span class="c1-likert-num">1</span><span class="c1-likert-text">Never</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q20_task_delegation_freq" value="2" class="c1-visually-hidden" /><span class="c1-likert-num">2</span><span class="c1-likert-text">Rarely</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q20_task_delegation_freq" value="3" class="c1-visually-hidden" /><span class="c1-likert-num">3</span><span class="c1-likert-text">Sometimes</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q20_task_delegation_freq" value="4" class="c1-visually-hidden" /><span class="c1-likert-num">4</span><span class="c1-likert-text">Often</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q20_task_delegation_freq" value="5" class="c1-visually-hidden" /><span class="c1-likert-num">5</span><span class="c1-likert-text">Very Often</span></label>
+                        </div>
+                        <p class="c1-field-error" id="err_Q20" hidden></p>
+                    </fieldset>
+                </div>
+
+                <!-- Q8 (tasks_delegated): Multi-Select -->
+                <div class="c1-q-card" id="card_tasks_delegated">
+                    <fieldset class="c1-fieldset">
+                        <legend class="c1-q-legend">
+                            <span class="c1-q-legend__row">
+                                <span class="c1-q-label"><span class="c1-q-num">Q8</span> Academic Tasks Typically Delegated to AI</span>
+                                <span class="c1-q-req">Select at least one</span>
+                            </span>
+                        </legend>
+                        <p class="c1-q-hint">Select all types of tasks you delegate to AI systems.</p>
+                        <div class="c1-check-grid c1-check-grid--2">
+                            <label class="c1-check-tile"><input type="checkbox" name="tasks_delegated" value="Writing assignments" class="c1-visually-hidden" /><span class="c1-check-box" aria-hidden="true"></span><span>Drafting / Writing Assignments</span></label>
+                            <label class="c1-check-tile"><input type="checkbox" name="tasks_delegated" value="Explaining concepts" class="c1-visually-hidden" /><span class="c1-check-box" aria-hidden="true"></span><span>Explaining Course Concepts</span></label>
+                            <label class="c1-check-tile"><input type="checkbox" name="tasks_delegated" value="Summarising materials" class="c1-visually-hidden" /><span class="c1-check-box" aria-hidden="true"></span><span>Summarising Reading Materials</span></label>
+                            <label class="c1-check-tile"><input type="checkbox" name="tasks_delegated" value="Creating presentations" class="c1-visually-hidden" /><span class="c1-check-box" aria-hidden="true"></span><span>Creating Presentations / Slides</span></label>
+                            <label class="c1-check-tile"><input type="checkbox" name="tasks_delegated" value="Programming problems" class="c1-visually-hidden" /><span class="c1-check-box" aria-hidden="true"></span><span>Solving Programming / Code Problems</span></label>
+                            <label class="c1-check-tile"><input type="checkbox" name="tasks_delegated" value="Mathematical problems" class="c1-visually-hidden" /><span class="c1-check-box" aria-hidden="true"></span><span>Solving Mathematical / Calculation Problems</span></label>
+                        </div>
+                        <p class="c1-field-error" id="err_tasks_delegated" hidden></p>
+                    </fieldset>
+                </div>
+
+                <!-- Q9 (Q1): Direct Use Without Modification -->
+                <div class="c1-q-card" id="card_Q1">
+                    <fieldset class="c1-fieldset">
+                        <legend class="c1-q-legend">
+                            <span class="c1-q-legend__row">
+                                <span class="c1-q-label"><span class="c1-q-num">Q9</span> Direct Use of AI-Generated Content Without Modification</span>
+                                <span class="c1-q-req">Required</span>
+                            </span>
+                        </legend>
+                        <p class="c1-q-hint">I directly submit or use AI-generated outputs in coursework without substantive personal editing.</p>
+                        <div class="c1-likert-group">
+                            <label class="c1-likert-option"><input type="radio" name="Q1_direct_use_freq" value="1" class="c1-visually-hidden" required /><span class="c1-likert-num">1</span><span class="c1-likert-text">Never</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q1_direct_use_freq" value="2" class="c1-visually-hidden" /><span class="c1-likert-num">2</span><span class="c1-likert-text">Rarely</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q1_direct_use_freq" value="3" class="c1-visually-hidden" /><span class="c1-likert-num">3</span><span class="c1-likert-text">Sometimes</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q1_direct_use_freq" value="4" class="c1-visually-hidden" /><span class="c1-likert-num">4</span><span class="c1-likert-text">Often</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q1_direct_use_freq" value="5" class="c1-visually-hidden" /><span class="c1-likert-num">5</span><span class="c1-likert-text">Always</span></label>
+                        </div>
+                        <p class="c1-field-error" id="err_Q1" hidden></p>
+                    </fieldset>
+                </div>
+
+                <!-- Q10 (Q22): Cognitive Effort on AI Outputs -->
+                <div class="c1-q-card" id="card_Q22">
+                    <fieldset class="c1-fieldset">
+                        <legend class="c1-q-legend">
+                            <span class="c1-q-legend__row">
+                                <span class="c1-q-label"><span class="c1-q-num">Q10</span> Cognitive Effort Invested in Reviewing AI Outputs</span>
+                                <span class="c1-q-req">Required</span>
+                            </span>
+                        </legend>
+                        <p class="c1-q-hint">How much analytical effort do you expend evaluating and verifying AI-generated solutions?</p>
+                        <div class="c1-likert-group">
+                            <label class="c1-likert-option"><input type="radio" name="Q22_effort_on_ai_answers" value="1" class="c1-visually-hidden" required /><span class="c1-likert-num">1</span><span class="c1-likert-text">No Effort</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q22_effort_on_ai_answers" value="2" class="c1-visually-hidden" /><span class="c1-likert-num">2</span><span class="c1-likert-text">Little Effort</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q22_effort_on_ai_answers" value="3" class="c1-visually-hidden" /><span class="c1-likert-num">3</span><span class="c1-likert-text">Moderate Effort</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q22_effort_on_ai_answers" value="4" class="c1-visually-hidden" /><span class="c1-likert-num">4</span><span class="c1-likert-text">High Effort</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q22_effort_on_ai_answers" value="5" class="c1-visually-hidden" /><span class="c1-likert-num">5</span><span class="c1-likert-text">Very High Effort</span></label>
+                        </div>
+                        <p class="c1-field-error" id="err_Q22" hidden></p>
+                    </fieldset>
+                </div>
+
+                <div class="c1-nav-bar c1-nav-bar--split">
+                    <button type="button" class="c1-btn c1-btn--outline" id="btnPrevStep2" enterkeyhint="previous">&larr; Previous</button>
+                    <button type="button" class="c1-btn c1-btn--primary" id="btnNextStep2" enterkeyhint="next">Next: Verification Habits &rarr;</button>
                 </div>
             </div>
-            <div class="c1-result-score-box">
-                <span class="c1-score-box__label">Latent Construct Score</span>
-                <div class="c1-score-box__value">
-                    <span id="continuousScoreVal" class="c1-score-number">—</span>
-                    <span class="c1-score-denom">/ 5.000</span>
-                </div>
-                <span class="c1-score-box__sub">Scale 1.000 (Low) to 5.000 (High)</span>
-            </div>
-        </div>
 
-        <!-- Latent Score Continuum Visualizer -->
-        <div class="c1-continuum-block" aria-hidden="true">
-            <div class="c1-continuum-header">
-                <span class="c1-continuum-label">Construct Score Placement Across Calibrated Cutoffs</span>
-            </div>
-            <div class="c1-continuum-track">
-                <div class="c1-continuum-zone c1-continuum-zone--low">
-                    <span>Low (&le; 2.667)</span>
-                </div>
-                <div class="c1-continuum-zone c1-continuum-zone--med">
-                    <span>Moderate (2.668–3.500)</span>
-                </div>
-                <div class="c1-continuum-zone c1-continuum-zone--high">
-                    <span>High (&gt; 3.500)</span>
-                </div>
-                <div class="c1-continuum-pointer" id="scoreSpectrumMarker" style="left: 0%;">
-                    <div class="c1-pointer-pin"></div>
-                </div>
-            </div>
-        </div>
+            <!-- ========================================================
+                 SECTION 3: VERIFICATION & CRITICAL THINKING (Q11–Q15)
+            ======================================================== -->
+            <div class="c1-step-panel" id="formStep3" data-step="3" hidden>
+                <header class="c1-section-head">
+                    <span class="c1-section-kicker">Section 3 of 4</span>
+                    <h2 class="c1-section-title" id="stepHeading3" tabindex="-1">Verification &amp; Critical Thinking Habits</h2>
+                </header>
 
-        <!-- Result Interpretation -->
-        <div class="c1-interpretation-box">
-            <h4 class="c1-interpretation-heading">Profile Summary</h4>
-            <p id="riskInterpretationSummary" class="c1-interpretation-text"></p>
-        </div>
+                <!-- Q11 (Q2) -->
+                <div class="c1-q-card" id="card_Q2">
+                    <fieldset class="c1-fieldset">
+                        <legend class="c1-q-legend"><span class="c1-q-legend__row"><span class="c1-q-label"><span class="c1-q-num">Q11</span> Verification of AI-Generated Claims</span><span class="c1-q-req">Required</span></span></legend>
+                        <p class="c1-q-hint">I verify the factual accuracy of AI-generated statements before using them in my work.</p>
+                        <div class="c1-likert-group">
+                            <label class="c1-likert-option"><input type="radio" name="Q2_verify_info" value="1" class="c1-visually-hidden" required /><span class="c1-likert-num">1</span><span class="c1-likert-text">Strongly Disagree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q2_verify_info" value="2" class="c1-visually-hidden" /><span class="c1-likert-num">2</span><span class="c1-likert-text">Disagree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q2_verify_info" value="3" class="c1-visually-hidden" /><span class="c1-likert-num">3</span><span class="c1-likert-text">Neutral</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q2_verify_info" value="4" class="c1-visually-hidden" /><span class="c1-likert-num">4</span><span class="c1-likert-text">Agree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q2_verify_info" value="5" class="c1-visually-hidden" /><span class="c1-likert-num">5</span><span class="c1-likert-text">Strongly Agree</span></label>
+                        </div>
+                        <p class="c1-field-error" id="err_Q2" hidden></p>
+                    </fieldset>
+                </div>
 
-        <!-- Calibrated Category Probabilities -->
-        <div class="c1-probs-block">
-            <div class="c1-sub-header">
-                <h4 class="c1-sub-title">Estimated Risk Category Likelihoods</h4>
-                <p class="c1-sub-desc">
-                    Probabilities derived through predictive density integration (&sigma; = 0.585) around the continuous latent estimate.
+                <!-- Q12 (Q3) -->
+                <div class="c1-q-card" id="card_Q3">
+                    <fieldset class="c1-fieldset">
+                        <legend class="c1-q-legend"><span class="c1-q-legend__row"><span class="c1-q-label"><span class="c1-q-num">Q12</span> Cross-Referencing Independent Sources</span><span class="c1-q-req">Required</span></span></legend>
+                        <p class="c1-q-hint">I compare AI-provided explanations with textbooks, lecture slides, or peer-reviewed literature.</p>
+                        <div class="c1-likert-group">
+                            <label class="c1-likert-option"><input type="radio" name="Q3_compare_sources" value="1" class="c1-visually-hidden" required /><span class="c1-likert-num">1</span><span class="c1-likert-text">Strongly Disagree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q3_compare_sources" value="2" class="c1-visually-hidden" /><span class="c1-likert-num">2</span><span class="c1-likert-text">Disagree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q3_compare_sources" value="3" class="c1-visually-hidden" /><span class="c1-likert-num">3</span><span class="c1-likert-text">Neutral</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q3_compare_sources" value="4" class="c1-visually-hidden" /><span class="c1-likert-num">4</span><span class="c1-likert-text">Agree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q3_compare_sources" value="5" class="c1-visually-hidden" /><span class="c1-likert-num">5</span><span class="c1-likert-text">Strongly Agree</span></label>
+                        </div>
+                        <p class="c1-field-error" id="err_Q3" hidden></p>
+                    </fieldset>
+                </div>
+
+                <!-- Q13 (Q4) -->
+                <div class="c1-q-card" id="card_Q4">
+                    <fieldset class="c1-fieldset">
+                        <legend class="c1-q-legend"><span class="c1-q-legend__row"><span class="c1-q-label"><span class="c1-q-num">Q13</span> Checking Numerical &amp; Formula Accuracy</span><span class="c1-q-req">Required</span></span></legend>
+                        <p class="c1-q-hint">I actively test whether AI formulas, derivations, calculations, or code outputs are factually sound.</p>
+                        <div class="c1-likert-group">
+                            <label class="c1-likert-option"><input type="radio" name="Q4_check_accuracy" value="1" class="c1-visually-hidden" required /><span class="c1-likert-num">1</span><span class="c1-likert-text">Strongly Disagree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q4_check_accuracy" value="2" class="c1-visually-hidden" /><span class="c1-likert-num">2</span><span class="c1-likert-text">Disagree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q4_check_accuracy" value="3" class="c1-visually-hidden" /><span class="c1-likert-num">3</span><span class="c1-likert-text">Neutral</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q4_check_accuracy" value="4" class="c1-visually-hidden" /><span class="c1-likert-num">4</span><span class="c1-likert-text">Agree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q4_check_accuracy" value="5" class="c1-visually-hidden" /><span class="c1-likert-num">5</span><span class="c1-likert-text">Strongly Agree</span></label>
+                        </div>
+                        <p class="c1-field-error" id="err_Q4" hidden></p>
+                    </fieldset>
+                </div>
+
+                <!-- Q14 (Q5) -->
+                <div class="c1-q-card" id="card_Q5">
+                    <fieldset class="c1-fieldset">
+                        <legend class="c1-q-legend"><span class="c1-q-legend__row"><span class="c1-q-label"><span class="c1-q-num">Q14</span> Conceptual Comprehension Before Adoption</span><span class="c1-q-req">Required</span></span></legend>
+                        <p class="c1-q-hint">Before adopting an AI solution, I ensure I personally understand the underlying logic and derivation.</p>
+                        <div class="c1-likert-group">
+                            <label class="c1-likert-option"><input type="radio" name="Q5_understand_reasoning" value="1" class="c1-visually-hidden" required /><span class="c1-likert-num">1</span><span class="c1-likert-text">Strongly Disagree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q5_understand_reasoning" value="2" class="c1-visually-hidden" /><span class="c1-likert-num">2</span><span class="c1-likert-text">Disagree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q5_understand_reasoning" value="3" class="c1-visually-hidden" /><span class="c1-likert-num">3</span><span class="c1-likert-text">Neutral</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q5_understand_reasoning" value="4" class="c1-visually-hidden" /><span class="c1-likert-num">4</span><span class="c1-likert-text">Agree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q5_understand_reasoning" value="5" class="c1-visually-hidden" /><span class="c1-likert-num">5</span><span class="c1-likert-text">Strongly Agree</span></label>
+                        </div>
+                        <p class="c1-field-error" id="err_Q5" hidden></p>
+                    </fieldset>
+                </div>
+
+                <!-- Q15 (Q6) -->
+                <div class="c1-q-card" id="card_Q6">
+                    <fieldset class="c1-fieldset">
+                        <legend class="c1-q-legend"><span class="c1-q-legend__row"><span class="c1-q-label"><span class="c1-q-num">Q15</span> Personal Voice &amp; Critical Synthesis</span><span class="c1-q-req">Required</span></span></legend>
+                        <p class="c1-q-hint">I rewrite and synthesize AI suggestions into my own academic phrasing and individual perspective.</p>
+                        <div class="c1-likert-group">
+                            <label class="c1-likert-option"><input type="radio" name="Q6_modify_content" value="1" class="c1-visually-hidden" required /><span class="c1-likert-num">1</span><span class="c1-likert-text">Strongly Disagree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q6_modify_content" value="2" class="c1-visually-hidden" /><span class="c1-likert-num">2</span><span class="c1-likert-text">Disagree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q6_modify_content" value="3" class="c1-visually-hidden" /><span class="c1-likert-num">3</span><span class="c1-likert-text">Neutral</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q6_modify_content" value="4" class="c1-visually-hidden" /><span class="c1-likert-num">4</span><span class="c1-likert-text">Agree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q6_modify_content" value="5" class="c1-visually-hidden" /><span class="c1-likert-num">5</span><span class="c1-likert-text">Strongly Agree</span></label>
+                        </div>
+                        <p class="c1-field-error" id="err_Q6" hidden></p>
+                    </fieldset>
+                </div>
+
+                <div class="c1-nav-bar c1-nav-bar--split">
+                    <button type="button" class="c1-btn c1-btn--outline" id="btnPrevStep3" enterkeyhint="previous">&larr; Previous</button>
+                    <button type="button" class="c1-btn c1-btn--primary" id="btnNextStep3" enterkeyhint="next">Next: Autonomy &amp; Trust &rarr;</button>
+                </div>
+            </div>
+
+            <!-- ========================================================
+                 SECTION 4: COGNITIVE AUTONOMY & TOOL TRUST (Q16–Q20)
+            ======================================================== -->
+            <div class="c1-step-panel" id="formStep4" data-step="4" hidden>
+                <header class="c1-section-head">
+                    <span class="c1-section-kicker">Section 4 of 4</span>
+                    <h2 class="c1-section-title" id="stepHeading4" tabindex="-1">Cognitive Autonomy &amp; Tool Trust</h2>
+                </header>
+
+                <!-- Q16 (Q7) -->
+                <div class="c1-q-card" id="card_Q7">
+                    <fieldset class="c1-fieldset">
+                        <legend class="c1-q-legend"><span class="c1-q-legend__row"><span class="c1-q-label"><span class="c1-q-num">Q16</span> Independent Problem-Solving Attempt Before Prompting</span><span class="c1-q-req">Required</span></span></legend>
+                        <p class="c1-q-hint">I make a serious personal attempt to solve difficult problems before turning to an AI tool.</p>
+                        <div class="c1-likert-group">
+                            <label class="c1-likert-option"><input type="radio" name="Q7_attempt_independently" value="1" class="c1-visually-hidden" required /><span class="c1-likert-num">1</span><span class="c1-likert-text">Strongly Disagree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q7_attempt_independently" value="2" class="c1-visually-hidden" /><span class="c1-likert-num">2</span><span class="c1-likert-text">Disagree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q7_attempt_independently" value="3" class="c1-visually-hidden" /><span class="c1-likert-num">3</span><span class="c1-likert-text">Neutral</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q7_attempt_independently" value="4" class="c1-visually-hidden" /><span class="c1-likert-num">4</span><span class="c1-likert-text">Agree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q7_attempt_independently" value="5" class="c1-visually-hidden" /><span class="c1-likert-num">5</span><span class="c1-likert-text">Strongly Agree</span></label>
+                        </div>
+                        <p class="c1-field-error" id="err_Q7" hidden></p>
+                    </fieldset>
+                </div>
+
+                <!-- Q17 (Q8) -->
+                <div class="c1-q-card" id="card_Q8">
+                    <fieldset class="c1-fieldset">
+                        <legend class="c1-q-legend"><span class="c1-q-legend__row"><span class="c1-q-label"><span class="c1-q-num">Q17</span> Confidence in Completing Coursework Without AI</span><span class="c1-q-req">Required</span></span></legend>
+                        <p class="c1-q-hint">I feel fully confident that I can successfully complete my coursework tasks without any AI assistance.</p>
+                        <div class="c1-likert-group">
+                            <label class="c1-likert-option"><input type="radio" name="Q8_complete_without_ai" value="1" class="c1-visually-hidden" required /><span class="c1-likert-num">1</span><span class="c1-likert-text">Strongly Disagree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q8_complete_without_ai" value="2" class="c1-visually-hidden" /><span class="c1-likert-num">2</span><span class="c1-likert-text">Disagree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q8_complete_without_ai" value="3" class="c1-visually-hidden" /><span class="c1-likert-num">3</span><span class="c1-likert-text">Neutral</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q8_complete_without_ai" value="4" class="c1-visually-hidden" /><span class="c1-likert-num">4</span><span class="c1-likert-text">Agree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q8_complete_without_ai" value="5" class="c1-visually-hidden" /><span class="c1-likert-num">5</span><span class="c1-likert-text">Strongly Agree</span></label>
+                        </div>
+                        <p class="c1-field-error" id="err_Q8" hidden></p>
+                    </fieldset>
+                </div>
+
+                <!-- Q18 (Q9) -->
+                <div class="c1-q-card" id="card_Q9">
+                    <fieldset class="c1-fieldset">
+                        <legend class="c1-q-legend"><span class="c1-q-legend__row"><span class="c1-q-label"><span class="c1-q-num">Q18</span> Use of AI as an Explanatory Study Companion</span><span class="c1-q-req">Required</span></span></legend>
+                        <p class="c1-q-hint">I view and use Generative AI as a learning assistant to clarify concepts rather than a substitute for my own thinking.</p>
+                        <div class="c1-likert-group">
+                            <label class="c1-likert-option"><input type="radio" name="Q9_learning_assistant" value="1" class="c1-visually-hidden" required /><span class="c1-likert-num">1</span><span class="c1-likert-text">Strongly Disagree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q9_learning_assistant" value="2" class="c1-visually-hidden" /><span class="c1-likert-num">2</span><span class="c1-likert-text">Disagree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q9_learning_assistant" value="3" class="c1-visually-hidden" /><span class="c1-likert-num">3</span><span class="c1-likert-text">Neutral</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q9_learning_assistant" value="4" class="c1-visually-hidden" /><span class="c1-likert-num">4</span><span class="c1-likert-text">Agree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q9_learning_assistant" value="5" class="c1-visually-hidden" /><span class="c1-likert-num">5</span><span class="c1-likert-text">Strongly Agree</span></label>
+                        </div>
+                        <p class="c1-field-error" id="err_Q9" hidden></p>
+                    </fieldset>
+                </div>
+
+                <!-- Q19 (Q30) -->
+                <div class="c1-q-card" id="card_Q30">
+                    <fieldset class="c1-fieldset">
+                        <legend class="c1-q-legend"><span class="c1-q-legend__row"><span class="c1-q-label"><span class="c1-q-num">Q19</span> Uncritical Trust in AI Accuracy</span><span class="c1-q-req">Required</span></span></legend>
+                        <p class="c1-q-hint">I generally assume that facts and solutions provided by Generative AI are correct and trustworthy without verification.</p>
+                        <div class="c1-likert-group">
+                            <label class="c1-likert-option"><input type="radio" name="Q30_trust_accuracy" value="1" class="c1-visually-hidden" required /><span class="c1-likert-num">1</span><span class="c1-likert-text">Strongly Disagree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q30_trust_accuracy" value="2" class="c1-visually-hidden" /><span class="c1-likert-num">2</span><span class="c1-likert-text">Disagree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q30_trust_accuracy" value="3" class="c1-visually-hidden" /><span class="c1-likert-num">3</span><span class="c1-likert-text">Neutral</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q30_trust_accuracy" value="4" class="c1-visually-hidden" /><span class="c1-likert-num">4</span><span class="c1-likert-text">Agree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q30_trust_accuracy" value="5" class="c1-visually-hidden" /><span class="c1-likert-num">5</span><span class="c1-likert-text">Strongly Agree</span></label>
+                        </div>
+                        <p class="c1-field-error" id="err_Q30" hidden></p>
+                    </fieldset>
+                </div>
+
+                <!-- Q20 (Q33) -->
+                <div class="c1-q-card" id="card_Q33">
+                    <fieldset class="c1-fieldset">
+                        <legend class="c1-q-legend"><span class="c1-q-legend__row"><span class="c1-q-label"><span class="c1-q-num">Q20</span> Deference to AI Problem Guidance</span><span class="c1-q-req">Required</span></span></legend>
+                        <p class="c1-q-hint">I trust that Generative AI provides the most appropriate guidance for my coursework problems over my own reasoning.</p>
+                        <div class="c1-likert-group">
+                            <label class="c1-likert-option"><input type="radio" name="Q33_trust_appropriate_support" value="1" class="c1-visually-hidden" required /><span class="c1-likert-num">1</span><span class="c1-likert-text">Strongly Disagree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q33_trust_appropriate_support" value="2" class="c1-visually-hidden" /><span class="c1-likert-num">2</span><span class="c1-likert-text">Disagree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q33_trust_appropriate_support" value="3" class="c1-visually-hidden" /><span class="c1-likert-num">3</span><span class="c1-likert-text">Neutral</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q33_trust_appropriate_support" value="4" class="c1-visually-hidden" /><span class="c1-likert-num">4</span><span class="c1-likert-text">Agree</span></label>
+                            <label class="c1-likert-option"><input type="radio" name="Q33_trust_appropriate_support" value="5" class="c1-visually-hidden" /><span class="c1-likert-num">5</span><span class="c1-likert-text">Strongly Agree</span></label>
+                        </div>
+                        <p class="c1-field-error" id="err_Q33" hidden></p>
+                    </fieldset>
+                </div>
+
+                <div class="c1-nav-bar c1-nav-bar--split">
+                    <button type="button" class="c1-btn c1-btn--outline" id="btnPrevStep4" enterkeyhint="previous">&larr; Previous</button>
+                    <div class="c1-nav-actions">
+                        <button type="button" class="c1-btn c1-btn--ghost" id="btnResetAssessment">Reset</button>
+                        <button type="submit" class="c1-btn c1-btn--primary c1-btn--lg" id="btnCalculatePrediction" enterkeyhint="done">
+                            <span class="c1-btn-label">View Results</span><span class="c1-visually-hidden"> &mdash; Submit Assessment</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </section>
+
+    <!-- ================================================================
+         STAGE 3: RESULTS EXPERIENCE
+    ================================================================ -->
+    <section id="reflectionResultSection" class="c1-stage c1-results" hidden aria-labelledby="resultsHeading">
+        <div id="predictionResultCard" class="c1-result-shell">
+
+            <!-- A. Main Result Header -->
+            <header class="c1-res-hero">
+                <div class="c1-res-hero__main">
+                    <span class="c1-res-kicker">Your Cognitive Offloading Risk</span>
+                    <div class="c1-res-title-row">
+                        <h1 id="resultsHeading" class="c1-res-category-title" tabindex="-1">Evaluating&hellip;</h1>
+                        <span id="riskCategoryBadge" class="c1-tier-pill">Pending</span>
+                    </div>
+                    <p id="riskInterpretationSummary" class="c1-res-summary"></p>
+                </div>
+
+                <div class="c1-res-score-tile">
+                    <span class="c1-res-score-tile__label">Score</span>
+                    <div class="c1-res-score-tile__num">
+                        <span id="continuousScoreVal">&mdash;</span>
+                        <span class="c1-res-score-tile__denom">/ 5.0</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- B. Meaningful Risk Scale Visualization -->
+            <section class="c1-res-section c1-scale-section" aria-labelledby="scaleHeading">
+                <h2 id="scaleHeading" class="c1-res-heading">Where Your Score Falls</h2>
+                <p id="c1ScaleAriaSummary" class="c1-res-sub"></p>
+
+                <figure class="c1-scale-figure">
+                    <div class="c1-scale-track-wrap">
+                        <div class="c1-scale-marker" id="scoreSpectrumMarker">
+                            <span class="c1-scale-marker__tag" id="scoreMarkerLabel">&mdash;</span>
+                            <span class="c1-scale-marker__stem" aria-hidden="true"></span>
+                        </div>
+                        <div class="c1-scale-bar" aria-hidden="true">
+                            <div class="c1-scale-seg c1-scale-seg--low"><span>Low</span></div>
+                            <div class="c1-scale-seg c1-scale-seg--med"><span>Med</span></div>
+                            <div class="c1-scale-seg c1-scale-seg--high"><span>High</span></div>
+                        </div>
+                        <div class="c1-scale-ticks" aria-hidden="true">
+                            <span class="c1-tick c1-tick--start">1.00</span>
+                            <span class="c1-tick c1-tick--cut1">2.67</span>
+                            <span class="c1-tick c1-tick--cut2">3.50</span>
+                            <span class="c1-tick c1-tick--end">5.00</span>
+                        </div>
+                    </div>
+                    <figcaption class="c1-scale-caption">
+                        Calibrated model scale from 1.000 (lowest reliance) to 5.000 (highest reliance) with boundaries at 2.667 and 3.500.
+                    </figcaption>
+                </figure>
+            </section>
+
+            <!-- C. Main Influencing Factors -->
+            <section class="c1-res-section" aria-labelledby="factorsHeading">
+                <h2 id="factorsHeading" class="c1-res-heading">Key Habits Shaping Your Result</h2>
+                <p class="c1-res-sub">
+                    Top study behaviors from your responses that increase or reduce predicted reliance.
                 </p>
-            </div>
-            <div class="c1-probs-grid">
-                <div class="c1-prob-card">
-                    <div class="c1-prob-card__header">
-                        <span class="c1-prob-name">Low Offloading</span>
-                        <span id="probValLow" class="c1-prob-value">0.0%</span>
-                    </div>
-                    <div class="c1-prob-bar">
-                        <div id="probBarLow" class="c1-prob-bar__fill c1-prob-bar__fill--low" style="width: 0%;"></div>
-                    </div>
-                    <span class="c1-prob-threshold">Threshold: &le; 2.667</span>
-                </div>
 
-                <div class="c1-prob-card">
-                    <div class="c1-prob-card__header">
-                        <span class="c1-prob-name">Moderate Offloading</span>
-                        <span id="probValMed" class="c1-prob-value">0.0%</span>
+                <div class="c1-factors-columns">
+                    <div class="c1-factor-col c1-factor-col--risk">
+                        <h3 class="c1-factor-col__head">
+                            <span class="c1-dir-dot c1-dir-dot--risk" aria-hidden="true">&uarr;</span>
+                            Increases Predicted Risk
+                        </h3>
+                        <div id="elevatingFactorsContainer" class="c1-factor-cards"></div>
                     </div>
-                    <div class="c1-prob-bar">
-                        <div id="probBarMed" class="c1-prob-bar__fill c1-prob-bar__fill--med" style="width: 0%;"></div>
-                    </div>
-                    <span class="c1-prob-threshold">Threshold: 2.668–3.500</span>
-                </div>
 
-                <div class="c1-prob-card">
-                    <div class="c1-prob-card__header">
-                        <span class="c1-prob-name">High Offloading</span>
-                        <span id="probValHigh" class="c1-prob-value">0.0%</span>
+                    <div class="c1-factor-col c1-factor-col--protect">
+                        <h3 class="c1-factor-col__head">
+                            <span class="c1-dir-dot c1-dir-dot--protect" aria-hidden="true">&darr;</span>
+                            Reduces Predicted Risk
+                        </h3>
+                        <div id="mitigatingFactorsContainer" class="c1-factor-cards"></div>
                     </div>
-                    <div class="c1-prob-bar">
-                        <div id="probBarHigh" class="c1-prob-bar__fill c1-prob-bar__fill--high" style="width: 0%;"></div>
-                    </div>
-                    <span class="c1-prob-threshold">Threshold: &gt; 3.500</span>
                 </div>
+            </section>
+
+            <!-- D. Practical Next Steps -->
+            <section class="c1-res-section" aria-labelledby="recsHeading">
+                <h2 id="recsHeading" class="c1-res-heading">Practical Study Suggestions</h2>
+                <div id="actionableIdeasGrid" class="c1-recs-list"></div>
+            </section>
+
+            <!-- F. Actions -->
+            <div class="c1-res-actions">
+                <button type="button" class="c1-btn c1-btn--primary" id="btnStartNewAssessment">
+                    Start New Assessment
+                </button>
+                <button type="button" class="c1-btn c1-btn--outline" id="btnReviewAnswers">
+                    Edit My Answers
+                </button>
+                <button type="button" class="c1-btn c1-btn--ghost" id="btnToggleDetails" aria-expanded="false" aria-controls="resultsTechnicalDetails">
+                    View Detailed Explanation
+                </button>
             </div>
+
+            <!-- E. Detailed Research & Technical Explanation (Expandable) -->
+            <details class="c1-disclosure c1-res-details" id="resultsTechnicalDetails">
+                <summary class="c1-disclosure__summary">Technical Explanation, Probabilities &amp; Research Details</summary>
+                <div class="c1-disclosure__body">
+                    <div class="c1-tech-grid">
+                        <div class="c1-tech-block">
+                            <h3 class="c1-tech-title">Category Probabilities</h3>
+                            <p class="c1-tech-desc">Calibrated likelihoods derived via predictive density integration around the continuous estimate.</p>
+                            <div class="c1-prob-rows">
+                                <div class="c1-prob-row">
+                                    <div class="c1-prob-meta"><span>Low Risk (&le; 2.667)</span><strong id="probValLow">0.0%</strong></div>
+                                    <div class="c1-prob-track"><div id="probBarLow" class="c1-prob-fill c1-prob-fill--low"></div></div>
+                                </div>
+                                <div class="c1-prob-row">
+                                    <div class="c1-prob-meta"><span>Medium Risk (2.668&ndash;3.500)</span><strong id="probValMed">0.0%</strong></div>
+                                    <div class="c1-prob-track"><div id="probBarMed" class="c1-prob-fill c1-prob-fill--med"></div></div>
+                                </div>
+                                <div class="c1-prob-row">
+                                    <div class="c1-prob-meta"><span>High Risk (&gt; 3.500)</span><strong id="probValHigh">0.0%</strong></div>
+                                    <div class="c1-prob-track"><div id="probBarHigh" class="c1-prob-fill c1-prob-fill--high"></div></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="c1-tech-block">
+                            <h3 class="c1-tech-title">Model &amp; Pipeline Information</h3>
+                            <dl class="c1-spec-list">
+                                <div>
+                                    <dt>Integration Status</dt>
+                                    <dd>Calibrated Model Integrated (Version 4 Active)</dd>
+                                </div>
+                                <div>
+                                    <dt>Estimator</dt>
+                                    <dd id="c1ModelArchVal">Thresholded Ridge Regressor (Ordinal)</dd>
+                                </div>
+                                <div>
+                                    <dt>Raw / Bounded Score</dt>
+                                    <dd id="c1RawScoreVal">&mdash;</dd>
+                                </div>
+                                <div>
+                                    <dt>Explainability Method</dt>
+                                    <dd>Exact LinearSHAP (&phi;<sub>j</sub> = &beta;<sub>j</sub>(x<sub>j</sub> &minus; x&#772;<sub>j</sub>)) over 68 predictors</dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <h3 class="c1-tech-title">Detailed LinearSHAP Contributions</h3>
+                    <div class="c1-table-scroll" role="region" aria-label="Detailed LinearSHAP feature contributions" tabindex="0">
+                        <table class="c1-tech-table">
+                            <caption>Top contributing features ranked by absolute impact magnitude</caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Habit / Indicator</th>
+                                    <th scope="col">Feature Key</th>
+                                    <th scope="col">Input Value</th>
+                                    <th scope="col">Direction</th>
+                                    <th scope="col">SHAP (&phi;<sub>j</sub>)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="c1ShapTableBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="c1-disclaimer-box" role="note">
+                        <strong>Research Limitations &amp; Disclaimer:</strong>
+                        <span id="c1BackendDisclaimer">
+                            This prediction is generated by an academic research model (Component 1, Explainable Cognitive Offloading Risk Prediction, Project J26-DS-310) for exploratory educational self-reflection only. It does not constitute a psychological assessment, cognitive diagnosis, or academic grading judgement.
+                        </span>
+                    </div>
+                </div>
+            </details>
+
         </div>
+    </section>
 
-        <!-- LinearSHAP Factor Breakdown -->
-        <div class="c1-shap-block">
-            <div class="c1-sub-header">
-                <h4 class="c1-sub-title">Behavioural Factor Attribution (LinearSHAP Explanation)</h4>
-                <p class="c1-sub-desc">
-                    Exact mathematical decomposition isolating how individual self-reported study habits increase or mitigate predicted cognitive offloading risk (&phi;<sub>j</sub> = &beta;<sub>j</sub> &times; (x<sub>j</sub> &minus; x&#772;<sub>j</sub>)).
-                </p>
-            </div>
-
-            <div class="c1-shap-grid">
-                <!-- Protective Factors -->
-                <div class="c1-shap-col c1-shap-col--mitigate">
-                    <div class="c1-shap-col__header">
-                        <span class="c1-shap-col__title">Protective Habits (Mitigating Offloading Risk)</span>
-                    </div>
-                    <div id="mitigatingFactorsContainer" class="c1-factors-list">
-                        <!-- Populated dynamically by component1.js -->
-                    </div>
-                </div>
-
-                <!-- Elevating Factors -->
-                <div class="c1-shap-col c1-shap-col--elevate">
-                    <div class="c1-shap-col__header">
-                        <span class="c1-shap-col__title">Risk-Elevating Habits (Increasing Offloading Risk)</span>
-                    </div>
-                    <div id="elevatingFactorsContainer" class="c1-factors-list">
-                        <!-- Populated dynamically by component1.js -->
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Actionable Learning Strategies -->
-        <div class="c1-recommendations-block">
-            <div class="c1-sub-header">
-                <h4 class="c1-sub-title">Cognitive Strategy Recommendations</h4>
-                <p class="c1-sub-desc">Targeted study habits to maintain independent problem-solving while utilizing GenAI assistance:</p>
-            </div>
-            <div id="actionableIdeasGrid" class="c1-recommendations-grid">
-                <!-- Populated dynamically by component1.js -->
-            </div>
-        </div>
-
-        <!-- Research Disclaimer Callout -->
-        <div class="c1-disclaimer-callout" role="note">
-            <div class="c1-disclaimer-callout__badge">RESEARCH DISCLAIMER</div>
-            <p class="c1-disclaimer-callout__text">
-                This prediction is generated by an academic research model (Component 1, Project J26-DS-310) for exploratory educational self-reflection only. It does not constitute a psychological assessment, cognitive diagnosis, formal evaluation, or disciplinary judgement.
-            </p>
-        </div>
-
-    </div>
-</section>
-
+</div>
 {% endblock %}
 
 {% block extra_scripts %}
