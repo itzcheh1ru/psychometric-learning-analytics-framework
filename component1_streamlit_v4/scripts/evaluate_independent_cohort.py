@@ -17,6 +17,7 @@ Usage:
 import argparse
 import json
 import math
+import re
 import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
@@ -75,7 +76,54 @@ SECTION_E_REFERENCE_KEYS: List[str] = [
     "Q15_reduces_thinking",
 ]
 
-FORBIDDEN_PII_COLUMNS = {
+ALLOWED_COLUMNS = {"study_id", *UI_PREDICTOR_KEYS, *SECTION_E_REFERENCE_KEYS}
+
+VALID_DEGREE_FIELDS = {
+    "Computing_IT",
+    "Engineering",
+    "Business_Economics",
+    "Natural_Applied_Sciences",
+    "Humanities_Health_Other",
+}
+
+VALID_TOOLS = {
+    "ChatGPT",
+    "Google Gemini",
+    "Microsoft Copilot",
+    "Claude",
+    "Perplexity AI",
+}
+
+VALID_TASKS = {
+    "Writing assignments",
+    "Explaining concepts",
+    "Summarising materials",
+    "Creating presentations",
+    "Programming problems",
+    "Mathematical problems",
+}
+
+NUMERIC_UI_BOUNDS: Dict[str, Tuple[int, int]] = {
+    "academic_year": (1, 6),
+    "age_group": (1, 4),
+    "ai_usage_freq": (1, 4),
+    "ai_time_per_week": (1, 5),
+    "Q20_task_delegation_freq": (1, 5),
+    "Q1_direct_use_freq": (1, 5),
+    "Q22_effort_on_ai_answers": (1, 5),
+    "Q2_verify_info": (1, 5),
+    "Q3_compare_sources": (1, 5),
+    "Q4_check_accuracy": (1, 5),
+    "Q5_understand_reasoning": (1, 5),
+    "Q6_modify_content": (1, 5),
+    "Q7_attempt_independently": (1, 5),
+    "Q8_complete_without_ai": (1, 5),
+    "Q9_learning_assistant": (1, 5),
+    "Q30_trust_accuracy": (1, 5),
+    "Q33_trust_appropriate_support": (1, 5),
+}
+
+FORBIDDEN_PII_TERMS = {
     "name",
     "full_name",
     "first_name",
@@ -88,9 +136,19 @@ FORBIDDEN_PII_COLUMNS = {
     "ip_address",
 }
 
+FORBIDDEN_LEAKAGE_COLUMNS = {
+    "co_score",
+    "co_risk",
+    "q34_depend_study",
+    "q35_hard_without_ai",
+    "q36_rely_grades",
+    "q37_important_part",
+    "q38_feel_anxious",
+}
+
 
 def parse_multi_value(value: Any) -> List[str]:
-    """Normalize semicolon/comma-separated strings or lists from CSV/JSON inputs."""
+    """Normalize semicolon/pipe/comma-separated strings or lists from CSV/JSON inputs."""
     if value is None or (isinstance(value, float) and math.isnan(value)):
         return []
     if isinstance(value, list):
@@ -149,18 +207,62 @@ def load_cohort_records(input_path: Path) -> pd.DataFrame:
     raise ValueError(f"Unsupported cohort file format: {suffix}. Use .csv or .json.")
 
 
+def _validate_integer_range(
+    df: pd.DataFrame, col: str, low: int, high: int, allow_missing: bool
+) -> int:
+    """Validate finite integer responses within [low, high]; return missing count."""
+    missing_cnt = 0
+    for idx, raw in df[col].items():
+        if raw is None or (isinstance(raw, float) and math.isnan(raw)) or (
+            isinstance(raw, str) and not raw.strip()
+        ):
+            if not allow_missing:
+                raise ValueError(f"Missing required reference value in '{col}' (row index {idx}).")
+            missing_cnt += 1
+            continue
+        if isinstance(raw, bool):
+            raise ValueError(f"Invalid boolean value in numeric column '{col}' (row index {idx}).")
+        try:
+            num = float(raw)
+        except (TypeError, ValueError) as exc:
+            raise ValueError(
+                f"Non-numeric value {raw!r} in Likert/ordinal column '{col}' (row index {idx})."
+            ) from exc
+        if not math.isfinite(num) or not num.is_integer() or num < low or num > high:
+            raise ValueError(
+                f"Invalid ordinal/Likert value {raw!r} in '{col}' (row index {idx}); expected integer in [{low}, {high}]."
+            )
+    return missing_cnt
+
+
 def validate_cohort_schema(df: pd.DataFrame, predictor_features: List[str]) -> Tuple[int, List[str]]:
     """
-    Validate cohort columns strictly:
-      - Reject direct PII fields (fail-closed privacy protection).
-      - Require anonymous study_id, all 20 UI keys, and all 6 Section E items.
+    Validate cohort records fail-closed:
+      - Reject direct PII fields, email-like IDs, and duplicate study_id values.
       - Verify zero leakage of Section E or ground-truth columns inside predictor schema.
+      - Reject unexpected columns and missing required predictor/reference columns.
+      - Reject invalid ordinal/Likert numbers and unrecognized categorical encodings.
     """
-    lower_cols = {c.lower().strip(): c for c in df.columns}
-    present_pii = [lower_cols[k] for k in FORBIDDEN_PII_COLUMNS if k in lower_cols]
+    if len(df) == 0:
+        raise ValueError("Cohort dataset contains zero rows.")
+
+    lower_cols = {str(c).lower().strip(): str(c) for c in df.columns}
+    present_pii = [
+        orig
+        for norm, orig in lower_cols.items()
+        if norm in FORBIDDEN_PII_TERMS or any(term in norm for term in ("email", "phone", "student_id"))
+    ]
     if present_pii:
         raise ValueError(
             f"Privacy check failed: remove direct PII columns before evaluation: {present_pii}"
+        )
+
+    present_leakage = [
+        orig for norm, orig in lower_cols.items() if norm in FORBIDDEN_LEAKAGE_COLUMNS
+    ]
+    if present_leakage:
+        raise ValueError(
+            f"Leakage protection triggered: forbidden outcome/dependence columns present: {present_leakage}"
         )
 
     for target_col in SECTION_E_REFERENCE_KEYS + ["co_score", "co_risk"]:
@@ -172,20 +274,68 @@ def validate_cohort_schema(df: pd.DataFrame, predictor_features: List[str]) -> T
     if missing:
         raise ValueError(f"Cohort file missing required columns: {missing}")
 
+    unexpected = [str(col) for col in df.columns if col not in ALLOWED_COLUMNS]
+    if unexpected:
+        raise ValueError(
+            f"Unexpected columns detected (remove extra fields or fix typos): {unexpected}"
+        )
+
     if df["study_id"].isna().any():
         raise ValueError("All rows must contain a non-empty anonymous study_id.")
 
-    # Track completeness across numeric UI inputs + reference items
+    normalized_ids: List[str] = []
+    for idx, sid in df["study_id"].items():
+        clean_id = str(sid).strip()
+        if not clean_id or clean_id.lower() in {"nan", "none"}:
+            raise ValueError(f"Empty study_id at row index {idx}.")
+        if "@" in clean_id or re.search(r"\bit\d{6,}\b", clean_id.lower()):
+            raise ValueError(
+                f"Privacy check failed: study_id {clean_id!r} appears to contain an email or university student ID."
+            )
+        normalized_ids.append(clean_id)
+
+    if len(set(normalized_ids)) != len(normalized_ids):
+        seen = set()
+        dups = sorted({s for s in normalized_ids if s in seen or seen.add(s)})
+        raise ValueError(f"Duplicate participant identifiers (study_id) detected: {dups}")
+
+    # Validate categorical encodings strictly
+    for idx, deg in df["degree_field"].items():
+        if pd.isna(deg) or str(deg).strip() not in VALID_DEGREE_FIELDS:
+            raise ValueError(
+                f"Invalid degree_field {deg!r} at row {idx}; expected one of {sorted(VALID_DEGREE_FIELDS)}."
+            )
+
+    for idx, raw_tools in df["tools_used"].items():
+        parsed = parse_multi_value(raw_tools)
+        invalid_tools = [item for item in parsed if item not in VALID_TOOLS]
+        if invalid_tools:
+            raise ValueError(
+                f"Invalid tools_used entries {invalid_tools} at row {idx}; expected subset of {sorted(VALID_TOOLS)}."
+            )
+
+    for idx, raw_tasks in df["tasks_delegated"].items():
+        parsed = parse_multi_value(raw_tasks)
+        invalid_tasks = [item for item in parsed if item not in VALID_TASKS]
+        if invalid_tasks:
+            raise ValueError(
+                f"Invalid tasks_delegated entries {invalid_tasks} at row {idx}; expected subset of {sorted(VALID_TASKS)}."
+            )
+
+    # Validate ordinal/Likert ranges for UI predictors (allow occasional missing -> median imputed with warning)
     warnings: List[str] = []
-    numeric_ui = [
-        k for k in UI_PREDICTOR_KEYS if k not in {"degree_field", "tools_used", "tasks_delegated"}
-    ]
-    missing_ui_cells = int(df[numeric_ui].isna().sum().sum())
+    missing_ui_cells = 0
+    for col, (lo, hi) in NUMERIC_UI_BOUNDS.items():
+        missing_ui_cells += _validate_integer_range(df, col, lo, hi, allow_missing=True)
     if missing_ui_cells > 0:
         warnings.append(
             f"Detected {missing_ui_cells} missing numeric UI responses across cohort (handled via reference medians)."
         )
-    missing_ref = int(df[SECTION_E_REFERENCE_KEYS].isna().sum().sum())
+
+    # Validate Section E reference values (allow incomplete rows to be explicitly excluded unless all invalid)
+    missing_ref = 0
+    for ref_col in SECTION_E_REFERENCE_KEYS:
+        missing_ref += _validate_integer_range(df, ref_col, 1, 5, allow_missing=True)
     return missing_ref, warnings
 
 
@@ -197,7 +347,7 @@ def evaluate_cohort_dataframe(df: pd.DataFrame) -> Dict[str, Any]:
     predictor = get_predictor_v4()
     missing_ref_cells, validation_warnings = validate_cohort_schema(df, predictor.feature_names)
 
-    # Filter to rows with valid reference Section E items (Q10-Q15)
+    # Filter to rows with complete reference Section E items (Q10-Q15)
     ref_df = df[SECTION_E_REFERENCE_KEYS].apply(pd.to_numeric, errors="coerce")
     valid_mask = ref_df.notna().all(axis=1)
     dropped_rows = int((~valid_mask).sum())
@@ -210,9 +360,6 @@ def evaluate_cohort_dataframe(df: pd.DataFrame) -> Dict[str, Any]:
     eval_ref = ref_df.loc[valid_mask].copy()
     if len(eval_df) == 0:
         raise ValueError("No rows have complete Section E reference items (Q10-Q15).")
-
-    if ((eval_ref < 1.0) | (eval_ref > 5.0)).any().any():
-        raise ValueError("Reference items Q10-Q15 must strictly lie within Likert [1, 5].")
 
     co_true = eval_ref.mean(axis=1).values.astype(float)
     y_true = np.array(
@@ -233,9 +380,13 @@ def evaluate_cohort_dataframe(df: pd.DataFrame) -> Dict[str, Any]:
             if key in {"tools_used", "tasks_delegated"}:
                 payload[key] = parse_multi_value(val)
             elif key == "degree_field":
-                payload[key] = "" if pd.isna(val) else str(val).strip()
+                payload[key] = str(val).strip()
             else:
-                payload[key] = np.nan if pd.isna(val) else val
+                payload[key] = (
+                    np.nan
+                    if pd.isna(val) or (isinstance(val, str) and not val.strip())
+                    else int(float(val))
+                )
 
         res = predictor.predict(payload, top_factors_count=5)
         if res.get("status") != "success":
