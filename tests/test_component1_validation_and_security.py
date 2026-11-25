@@ -39,11 +39,16 @@ TEMPLATE_CSV = (
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
+from app.services.cognitive_offloading.integration_service import (  # noqa: E402
+    Component1IntegrationServiceV4,
+)
+from app.services.cognitive_offloading.model_service import model_service  # noqa: E402
 from evaluate_independent_cohort import (  # noqa: E402
     SECTION_E_REFERENCE_KEYS,
     UI_PREDICTOR_KEYS,
     evaluate_cohort_dataframe,
 )
+from run_final_training_pipeline import run_final_training_workflow  # noqa: E402
 
 
 def _sample_ui_payload(**overrides):
@@ -357,3 +362,111 @@ def test_independent_cohort_evaluator_handles_partial_missing_responses_safely()
     assert report["n_evaluated"] == 2
     assert report["n_dropped_incomplete_reference"] == 1
     assert report["missing_reference_cells"] == 1
+
+
+# --------------------------------------------------------------------------- #
+# 4. Future Model Replacement, Missing/Corrupt Files & Rollback Safety        #
+# --------------------------------------------------------------------------- #
+
+def test_model_loader_rejects_missing_and_invalid_artifacts(tmp_path):
+    """Missing model, invalid JSON, or mismatched feature schema must fail cleanly."""
+    v4_model = REPO_ROOT / "models" / "thresholded_ridge_v4.joblib"
+    v4_meta = REPO_ROOT / "models" / "pipeline_metadata_v4.json"
+
+    with pytest.raises(FileNotFoundError):
+        Component1IntegrationServiceV4.from_paths(tmp_path / "missing.joblib", v4_meta)
+
+    with pytest.raises(FileNotFoundError):
+        Component1IntegrationServiceV4.from_paths(v4_model, tmp_path / "missing.json")
+
+    bad_json = tmp_path / "corrupt_meta.json"
+    bad_json.write_text("{not-valid-json", encoding="utf-8")
+    with pytest.raises(json.JSONDecodeError):
+        Component1IntegrationServiceV4.from_paths(v4_model, bad_json)
+
+    meta_obj = json.loads(v4_meta.read_text(encoding="utf-8"))
+    meta_obj["feature_names"] = meta_obj["feature_names"][:-1]  # 67 != 68 coefs
+    mismatch_meta = tmp_path / "mismatch_meta.json"
+    mismatch_meta.write_text(json.dumps(meta_obj), encoding="utf-8")
+    with pytest.raises(ValueError, match="Coefficient dimension"):
+        Component1IntegrationServiceV4.from_paths(v4_model, mismatch_meta)
+
+
+def test_api_returns_503_when_model_unavailable_and_blocks_oversized_keys(client):
+    """Unavailable model returns HTTP 503 JSON; >250 keys returns HTTP 400 PayloadTooLarge."""
+    with patch.object(model_service, "is_model_available", return_value=False):
+        resp = client.post("/api/component1/predict", json={"user_inputs": _sample_ui_payload()})
+        assert resp.status_code == 503
+        data = resp.get_json()
+        assert data["error_type"] == "ModelNotAvailable"
+
+    oversized = {f"extra_{i}": 1 for i in range(260)}
+    resp_big = client.post("/api/component1/predict", json={"user_inputs": oversized})
+    assert resp_big.status_code == 400
+    assert resp_big.get_json()["error_type"] == "PayloadTooLarge"
+
+
+def test_future_training_pipeline_and_env_model_swap_with_rollback(tmp_path, monkeypatch, client):
+    """
+    Verify run_final_training_workflow() handles arbitrary cohort sizes (N != 375),
+    removes duplicates cleanly, prevents split leakage, exports compatible artifacts,
+    supports zero-code env swap, and cleanly rolls back to Version 4.
+    """
+    v4_meta_path = REPO_ROOT / "models" / "pipeline_metadata_v4.json"
+    v4_meta = json.loads(v4_meta_path.read_text(encoding="utf-8"))
+    feature_cols = v4_meta["feature_names"]
+    medians = v4_meta["reference_medians"]
+
+    # Build N=45 synthetic test fixture dataset + 2 exact duplicate rows (software test fixture only)
+    rng = np.random.default_rng(7)
+    rows = []
+    for i in range(45):
+        tier = i % 3
+        row = {col: float(medians[col]) for col in feature_cols}
+        row["Q20_task_delegation_freq"] = float([1, 3, 5][tier])
+        row["Q1_direct_use_freq"] = float([1, 3, 5][tier])
+        row["Q8_complete_without_ai"] = float([5, 3, 1][tier])
+        row["ai_usage_freq"] = float([1, 2, 4][tier])
+        row["idx_delegation_intensity"] = row["ai_usage_freq"] * row["Q20_task_delegation_freq"]
+        row["idx_passive_adoption"] = row["Q1_direct_use_freq"] * (6.0 - row["Q22_effort_on_ai_answers"])
+        row["co_score"] = float(np.clip([2.0, 3.1, 4.2][tier] + rng.normal(0.0, 0.15), 1.0, 5.0))
+        if i == 0:
+            row["Q2_verify_info"] = np.nan  # test post-split imputation
+        rows.append(row)
+    rows.append(dict(rows[1]))  # duplicate row
+    fixture_csv = tmp_path / "synthetic_fixture_cohort.csv"
+    pd.DataFrame(rows).to_csv(fixture_csv, index=False)
+
+    out_dir = tmp_path / "candidate_v5"
+    summary = run_final_training_workflow(
+        input_path=fixture_csv,
+        output_dir=out_dir,
+        version_tag="test_v5",
+        test_size=0.20,
+        random_state=42,
+        thresholds_mode="preserve-v4",
+        min_samples=30,
+    )
+    assert summary["preprocessing_audit"]["n_raw_rows"] == 46
+    assert summary["preprocessing_audit"]["n_duplicates_removed"] == 1
+    assert summary["untouched_test_full_metrics"]["n_test"] == 9  # 20% of 45, not hardcoded 75
+    assert summary["comparison_vs_v4_baseline"]["new_candidate"]["n_total"] == 45
+
+    # Verify zero-code env swap updates /api/component1/status cleanly & predicts, then roll back to V4
+    try:
+        monkeypatch.setenv("COMPONENT1_MODEL_PATH", summary["generated_artifacts"]["thresholded_ridge"])
+        monkeypatch.setenv("COMPONENT1_CONTINUOUS_MODEL_PATH", summary["generated_artifacts"]["continuous_regressor"])
+        monkeypatch.setenv("COMPONENT1_METADATA_PATH", summary["generated_artifacts"]["metadata"])
+        assert model_service.reload_model() is True
+        st = client.get("/api/component1/status").get_json()
+        assert st["version"] == "test_v5"
+        assert st["data_collection"] == "completed"
+        pred_resp = client.post("/api/component1/predict", json={"user_inputs": _sample_ui_payload()})
+        assert pred_resp.status_code == 200
+    finally:
+        monkeypatch.delenv("COMPONENT1_MODEL_PATH", raising=False)
+        monkeypatch.delenv("COMPONENT1_CONTINUOUS_MODEL_PATH", raising=False)
+        monkeypatch.delenv("COMPONENT1_METADATA_PATH", raising=False)
+        assert model_service.reload_model() is True
+        assert client.get("/api/component1/status").get_json()["version"] == "v4_performance_experiments"
+
