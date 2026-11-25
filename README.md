@@ -7,7 +7,7 @@
 ![AI](https://img.shields.io/badge/Focus-Generative%20AI-orange)
 ![Status](https://img.shields.io/badge/Status-Integrated%20Research%20Platform-brightgreen)
 ![Dev Branch](https://img.shields.io/badge/Dev%20Branch-it23426580-blueviolet)
-![Tests](https://img.shields.io/badge/Tests-226%20Passing-success)
+![Tests](https://img.shields.io/badge/Tests-248%20Passing-success)
 
 ---
 
@@ -57,7 +57,7 @@ Component 1 has been developed as an engaging, student-friendly self-reflection 
 ### 2. Live Explainable Prediction Engine
 - **Categorical Risk Tier:** Calibrated 3-tier classification (**Low**, **Moderate**, **High**) derived from sample tertiles.
 - **Continuous Latent Score:** Latent score on the $1.000–5.000$ construct scale displayed with a visual 3-zone spectrum bar and precise placement marker.
-- **Calibrated Probabilities:** Class likelihoods calibrated via normal cumulative density ($\sigma = 0.585$) reflecting the expected distribution of peer students reporting similar habits.
+- **Calibrated Probabilities:** Class likelihoods calibrated via normal cumulative density using training residuals ($\sigma = 0.5588$ in the serialized estimator) reflecting the expected distribution of peer students reporting similar habits.
 - **Two-Column LinearSHAP Explanations:** Exact mathematical attribution ($\phi_j = \beta_j \times (x_j - \bar{x}_j)$) categorizes features into:
   - 🛡️ **Habits Protecting Cognitive Autonomy** (mitigating risk contributions).
   - ⚠️ **Habits Increasing Offloading Risk** (elevating risk contributions).
@@ -68,26 +68,29 @@ Component 1 has been developed as an engaging, student-friendly self-reflection 
 ## Component 1 — Version 4 Model Architecture & Performance
 
 ### Champion Architecture
-- **Model:** Calibrated Thresholded Ridge Regressor (Ordinal)
+- **Model:** Calibrated Thresholded Ridge Regressor (Ordinal, $\alpha = 30.0$)
 - **Deployment Artifacts:**
   - Primary Model: [`models/thresholded_ridge_v4.joblib`](models/thresholded_ridge_v4.joblib)
   - Continuous Regressor: [`models/continuous_regressor_v4.joblib`](models/continuous_regressor_v4.joblib)
   - Metadata & Medians: [`models/pipeline_metadata_v4.json`](models/pipeline_metadata_v4.json)
-- **Feature Space:** Exactly **68** deployed predictor features derived from survey antecedents, interaction terms, and composite indices.
-- **Zero Target Leakage:** Cognitive offloading construct items ($\text{CO}_1$ to $\text{CO}_5$), target variable `co_score`, survey identifiers, and personal information are strictly excluded from the predictor space.
+- **Feature Space:** Exactly **68** deployed predictor features (`17` directly collected numeric items + `22` purely UI-engineered features + `27` fixed training-median features + `2` partially imputed hybrid engineered features).
+- **Zero Target Leakage:** All 6 Section E cognitive offloading construct items (`Q10–Q15`), target variables `co_score` / `co_risk`, Section G AI dependence items (`Q34–Q38`), survey identifiers, and personal information are strictly excluded from the predictor space.
 
 ### Empirical Validation Performance
-- **Primary Selection Protocol:** 25-fold Repeated Stratified Cross-Validation (5 folds $\times$ 5 repeats) on the training set ($N=300$).
-  - **CV Macro-F1:** **$0.5643 \pm 0.0597$** (compact 51 features: **$0.5711 \pm 0.0470$**)
-  - **CV Accuracy:** **$56.00\% \pm 5.85\%$**
-  - **Medium-Risk Recall:** **$59.78\%$** (solves the boundary collapse of nominal tree ensembles, which achieved only 28%–34%)
-  - **CV ROC-AUC:** **$0.7508$** | **CV Log-Loss:** **$0.9271$**
-- **Continuous Latent Construct Signal:**
+- **Blind Training-Only Cross-Validation (Primary Selection Protocol — $N=300$, 5×5 Repeated Stratified CV):**
+  - **Deployed 68-Feature Model:** CV Accuracy **$53.93\% \pm 6.11\%$**, CV Macro-F1 **$0.5419 \pm 0.0610$**, Medium-Risk Recall **$58.58\%$**, CV ROC-AUC **$0.7315$**, CV Log-Loss **$0.9600$**
+  - **Compact 51-Feature Ablation Reference:** CV Accuracy **$54.67\% \pm 6.02\%$**, CV Macro-F1 **$0.5495 \pm 0.0619$**, Medium-Risk Recall **$59.78\%$**, CV ROC-AUC **$0.7355$**, CV Log-Loss **$0.9376$**
+- **Full-Sample Exploratory Cross-Validation ($N=375$, 5×5 Repeated Stratified CV in `train_model_v4.py`):**
+  - **68 Features:** CV Accuracy **$56.00\% \pm 5.85\%$**, CV Macro-F1 **$0.5643 \pm 0.0597$**, CV ROC-AUC **$0.7508$**, CV Log-Loss **$0.9271$** *(Compact 51 features: $56.64\%$ Acc, $0.5711$ Macro-F1)*
+- **Continuous Latent Construct Signal ($N=75$ Holdout):**
   - **Variance Explained ($R^2$):** **$0.4459$** ($44.59\%$ continuous construct variance explained)
   - **RMSE:** **$0.5779$** (on 1.0–5.0 Likert construct scale) | **MAE:** **$0.4578$**
   - **Effect Size:** Cohen's **$f^2 = 0.8048$** (large effect size in behavioral research)
-- **Historical Holdout Test Split ($N=75$):** Accuracy: $57.33\%$, Macro-F1: $0.5815$, ROC-AUC: $0.7576$ (documented in metadata as an exposed exploratory split; Repeated CV is reported as primary).
-- **Decision Cutoffs (Sample Tertiles):**
+- **Historical Exposed Holdout Benchmark ($N=75$, `random_state=42`):**
+  - **Full 68-Feature Vector:** Accuracy **$57.33\%$**, Macro-F1 **$0.5815$**, High-Risk Recall **$50.00\%$**, ROC-AUC **$0.7576$**, Log-Loss **$0.8803$**
+  - **20-Input Web UI (Pre-Fix Audit Baseline):** Accuracy $54.67\%$, Macro-F1 $0.5457$, High Recall $40.91\%$, 68-feature agreement $88.00\%$
+  - **20-Input Web UI (Post-Fix Verified):** Accuracy **$57.33\%$**, Macro-F1 **$0.5796$**, Medium Recall **$80.77\%$**, High Recall **$50.00\%$** (`100%` precision), 68-feature agreement **$90.67\%$**
+- **Decision Cutoffs (Empirical Sample Tertiles):**
   - **Low Risk:** Continuous Score $\le 2.667$
   - **Medium Risk:** Continuous Score $> 2.667$ and $\le 3.500$
   - **High Risk:** Continuous Score $> 3.500$
@@ -171,11 +174,12 @@ psychometric-learning-analytics-framework/
 ├── docs/
 │   └── architecture.md                   # Complete architectural specification
 │
-└── tests/                                # Automated Test Suites (226 Tests)
+└── tests/                                # Automated Test Suites (248 Tests)
     ├── conftest.py                       # Test client fixtures & env setup
     ├── test_app.py                       # Shared application & route tests (167 tests)
     ├── test_component1_v4_scenarios.py   # C1 eight regression scenarios (8 tests)
     ├── test_component1_v4_workflow.py    # C1 pipeline & LinearSHAP workflow (12 tests)
+    ├── test_component1_validation_and_security.py # C1 faculty mapping, security & cohort evaluator (22 tests)
     ├── test_component3_longitudinal_charts.py # C3 longitudinal chart analytics (17 tests)
     └── test_component4_retention.py      # C4 experimental retention tests (22 tests)
 ```
@@ -206,9 +210,11 @@ source .venv/bin/activate
 # On Windows (PowerShell):
 .venv\Scripts\Activate.ps1
 
-# Install exact pinned dependencies
-pip install -r requirements.txt
+# Install exact pinned runtime dependencies (+ pytest for test execution)
+pip install -r requirements.txt pytest
 ```
+
+> ℹ️ **Cross-OS Compatibility Note:** `gunicorn==26.2.0` targets POSIX systems (macOS/Linux). On **Windows** (native PowerShell/cmd without WSL2), install runtime packages excluding `gunicorn` (plus `waitress` for local production-style serving) and start the app with `flask --app app run --port 5001` or `waitress-serve --port=5001 --call app:create_app`. Note also that Component 2's R/`lavaan` modeling runs offline and is **not** required to boot Flask.
 
 ---
 
@@ -342,26 +348,24 @@ Open your browser at: **[http://localhost:8501](http://localhost:8501)**
 The test suite covers shared application routes, security headers, Component 1 inference scenarios, LinearSHAP explanations, Component 3 longitudinal chart logic, and Component 4 retention analysis.
 
 ```bash
-# Run complete test suite (226 tests)
-.venv/bin/pytest tests/ -v
+# Run complete test suite (248 tests)
+.venv/bin/python -m pytest tests/ -v
 
-# Run targeted Component 1 regression scenarios
-.venv/bin/pytest tests/test_component1_v4_scenarios.py -v
-
-# Run targeted Component 1 pipeline workflow & SHAP tests
-.venv/bin/pytest tests/test_component1_v4_workflow.py -v
+# Run targeted Component 1 regression, security & cohort validation suites
+.venv/bin/python -m pytest tests/test_component1_v4_scenarios.py tests/test_component1_v4_workflow.py tests/test_component1_validation_and_security.py -v
 
 # Run Component 3 longitudinal tests
-.venv/bin/pytest tests/test_component3_longitudinal_charts.py -v
+.venv/bin/python -m pytest tests/test_component3_longitudinal_charts.py -v
 
 # Run Component 4 retention tests
-.venv/bin/pytest tests/test_component4_retention.py -v
+.venv/bin/python -m pytest tests/test_component4_retention.py -v
 ```
 
-### Verified Test Results: **226 passed, 0 failed, 0 warnings (100% pass rate)**
+### Verified Test Results: **248 passed, 0 failed (100% pass rate)**
 - `tests/test_app.py`: **167 passed** (Framework integration, security headers, WSGI, presentation mode, error handlers, and component UI routes)
 - `tests/test_component1_v4_scenarios.py`: **8 passed** (Low, Medium, High risk, empty input guard, out-of-range clamping, dirty text handling)
 - `tests/test_component1_v4_workflow.py`: **12 passed** (Model loading, 68-feature schema, zero target leakage, calibrated probabilities, LinearSHAP)
+- `tests/test_component1_validation_and_security.py`: **22 passed** (Faculty slug mapping, exact 68-feature partition, API validation & 500 sanitization, cohort evaluator safeguards)
 - `tests/test_component3_longitudinal_charts.py`: **17 passed** (Weekly study shares, prompt counts, workload comparisons, coverage tables)
 - `tests/test_component4_retention.py`: **22 passed** (Condition A vs. B counterbalanced protocol, retention metrics, session verification)
 
@@ -371,7 +375,7 @@ The test suite covers shared application routes, security headers, Component 1 i
 
 1. **Zero Real Participant Data Committed:** The repository contains zero participant personal information (PII), student IDs, email addresses, or unaggregated survey records.
 2. **Academic Purpose Only:** Predictions are generated for exploratory self-reflection and academic research only. They do not constitute a psychological evaluation, cognitive diagnosis, or academic penalty.
-3. **No Circular Data Leakage:** Target construct items ($\text{CO}_1$ to $\text{CO}_5$) are strictly excluded from predictors.
+3. **No Circular Data Leakage:** Section E target construct items (`Q10–Q15`) and Section G AI dependence items (`Q34–Q38`) are strictly excluded from predictors.
 
 ---
 
