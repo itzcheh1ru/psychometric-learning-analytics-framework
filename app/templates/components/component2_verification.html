@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}Practical AI Verification Assessment — Component 2{% endblock %}
+{% block title %}AI Trust Compass — Verification Challenge{% endblock %}
 
 {% block extra_head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/component2.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ai_trust_compass.css') }}" />
 <style>
 /* Verification Task Assessment Custom Styles */
 .assessment-nav-tabs {
@@ -362,6 +363,41 @@
 {% block content %}
 
 <!-- ================================================================
+     A. Top Student Experience Navigation (AI Trust Compass)
+================================================================ -->
+<header class="compass-navbar" role="banner" style="margin: -1.5rem -1.5rem 1.5rem -1.5rem; border-radius: 0 0 12px 12px;">
+    <div class="compass-navbar__container">
+        <a href="{{ url_for('component2.index') }}" class="compass-navbar__brand" style="text-decoration:none;">
+            <div class="compass-navbar__logo-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+                </svg>
+            </div>
+            <div>
+                <span class="compass-navbar__title">AI Trust Compass</span>
+                <span class="compass-navbar__tagline" style="display:block; font-size:0.75rem; color:#64748B;">Verification Challenge</span>
+            </div>
+        </a>
+
+        <nav class="compass-navbar__menu" aria-label="Student Navigation">
+            <a href="{{ url_for('component2.index') }}" class="compass-navbar__link">
+                Overview
+            </a>
+            <a href="{{ url_for('component2.student_assessment') }}" class="compass-navbar__link">
+                Self-Assessment
+            </a>
+            <a href="{{ url_for('component2.verification_task') }}" class="compass-navbar__link compass-navbar__link--active">
+                Verification Challenge
+            </a>
+            <a href="{{ url_for('component2.index') }}?tab=researcher" class="compass-navbar__link">
+                Researcher &amp; SEM
+            </a>
+        </nav>
+    </div>
+</header>
+
+<!-- ================================================================
      1. Header & Navigation Tabs
 ================================================================ -->
 <div class="page-heading">
@@ -486,7 +522,7 @@
     <div class="scenario-stepper-header">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
             <div style="font-size: 0.85rem; font-weight: 700; color: #1e293b;" id="scenarioDomainBadge">
-                Scenario 1 of {{ total_scenarios }}: Mathematics &amp; Calculus
+                Scenario 1 of {{ total_scenarios }}: {{ scenarios[0].domain if scenarios else 'Academic Operations' }}
             </div>
             <div style="font-size: 0.8rem; font-weight: 600; color: #2563eb;" id="overallClaimProgressText">
                 0 of 24 Claims Evaluated

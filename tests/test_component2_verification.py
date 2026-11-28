@@ -39,6 +39,10 @@ from app.services.sem_analysis.validation_protocol import (
     VALIDATION_PROTOCOL_SPEC,
     compute_sample_correlation,
     save_pilot_evaluation_record,
+    compute_item_difficulty,
+    compute_item_discrimination,
+    compute_item_discrimination_from_scores,
+    compute_completion_time_metrics,
 )
 from app.services.sem_analysis.combined_report_service import (
     generate_combined_csv_report,
@@ -520,3 +524,65 @@ def test_api_validation_protocol_endpoint(client):
     assert "protocol" in data
     assert data["protocol"]["project_id"] == "J26-DS-310"
     assert len(data["protocol"]["protocol_phases"]) >= 4
+
+
+def test_compute_item_difficulty_metrics():
+    """Verify item difficulty calculation (p-values) and CTT classifications."""
+    mock_evals = [
+        {"claim_id": "SCEN_01_C1", "is_correct": True},
+        {"claim_id": "SCEN_01_C1", "is_correct": True},
+        {"claim_id": "SCEN_01_C1", "is_correct": True},
+        {"claim_id": "SCEN_01_C1", "is_correct": False},  # p = 3/4 = 0.75 (OPTIMAL_MEDIUM)
+        {"claim_id": "SCEN_01_C2", "is_correct": True},
+        {"claim_id": "SCEN_01_C2", "is_correct": True},
+        {"claim_id": "SCEN_01_C2", "is_correct": True},
+        {"claim_id": "SCEN_01_C2", "is_correct": True},
+        {"claim_id": "SCEN_01_C2", "is_correct": True},  # p = 5/5 = 1.0 (EASY)
+        {"claim_id": "SCEN_08_C3", "is_correct": False},
+        {"claim_id": "SCEN_08_C3", "is_correct": False},
+        {"claim_id": "SCEN_08_C3", "is_correct": True},   # p = 1/3 = 0.333 (CHALLENGING)
+    ]
+    res = compute_item_difficulty(mock_evals)
+    assert res["total_evaluations"] == 12
+    assert res["total_unique_items"] == 3
+    assert res["items"]["SCEN_01_C1"]["difficulty_p"] == 0.75
+    assert res["items"]["SCEN_01_C1"]["classification"] == "OPTIMAL_MEDIUM"
+    assert res["items"]["SCEN_01_C2"]["difficulty_p"] == 1.0
+    assert res["items"]["SCEN_01_C2"]["classification"] == "EASY"
+    assert res["items"]["SCEN_08_C3"]["difficulty_p"] == 0.333
+    assert res["items"]["SCEN_08_C3"]["classification"] == "CHALLENGING"
+
+
+def test_compute_item_discrimination_metrics():
+    """Verify Kelley's item discrimination index (D) and quality tiers."""
+    # Top 27%: 9/10 correct (p_upper = 0.90), Bottom 27%: 3/10 correct (p_lower = 0.30) -> D = 0.60 (EXCELLENT)
+    res_exc = compute_item_discrimination(upper_correct=9, upper_total=10, lower_correct=3, lower_total=10)
+    assert res_exc["discrimination_index"] == 0.60
+    assert res_exc["tier"] == "EXCELLENT"
+
+    # From binary score lists
+    upper_scores = [1, 1, 1, 1, 1, 1, 1, 0, 0, 0]  # 7/10
+    lower_scores = [1, 1, 1, 0, 0, 0, 0, 0, 0, 0]  # 3/10 -> D = 0.40 (EXCELLENT)
+    res_scores = compute_item_discrimination_from_scores(upper_scores, lower_scores)
+    assert res_scores["discrimination_index"] == 0.40
+    assert res_scores["tier"] == "EXCELLENT"
+
+    # Defective negative discrimination: lower group performs better
+    res_neg = compute_item_discrimination(upper_correct=2, upper_total=10, lower_correct=8, lower_total=10)
+    assert res_neg["discrimination_index"] == -0.60
+    assert res_neg["tier"] == "DEFECTIVE_NEGATIVE"
+
+
+def test_compute_completion_time_metrics():
+    """Verify pacing and completion time statistics calculation."""
+    # 6 duration values in seconds
+    times = [600.0, 720.0, 840.0, 960.0, 1080.0, 1200.0]  # 10 to 20 minutes
+    metrics = compute_completion_time_metrics(times)
+    assert metrics["n"] == 6
+    assert metrics["mean_seconds"] == 900.0
+    assert metrics["mean_minutes"] == 15.0
+    assert metrics["median_seconds"] == 900.0
+    assert metrics["min_seconds"] == 600.0
+    assert metrics["max_seconds"] == 1200.0
+    assert "educational pacing targets" in metrics["feasibility_assessment"]
+

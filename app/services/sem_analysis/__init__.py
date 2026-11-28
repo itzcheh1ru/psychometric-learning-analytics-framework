@@ -85,6 +85,10 @@ from app.services.sem_analysis.validation_protocol import (
     VALIDATION_PROTOCOL_SPEC,
     compute_sample_correlation,
     save_pilot_evaluation_record,
+    compute_item_difficulty,
+    compute_item_discrimination,
+    compute_item_discrimination_from_scores,
+    compute_completion_time_metrics,
 )
 from app.services.sem_analysis.combined_report_service import (
     generate_combined_csv_report,
@@ -139,5 +143,9 @@ __all__ = [
     "VALIDATION_PROTOCOL_SPEC",
     "compute_sample_correlation",
     "save_pilot_evaluation_record",
+    "compute_item_difficulty",
+    "compute_item_discrimination",
+    "compute_item_discrimination_from_scores",
+    "compute_completion_time_metrics",
     "generate_combined_csv_report",
 ]

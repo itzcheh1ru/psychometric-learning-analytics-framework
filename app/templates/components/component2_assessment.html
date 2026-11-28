@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}Personalized Student Assessment — Component 2{% endblock %}
+{% block title %}AI Trust Compass — Student Self-Assessment{% endblock %}
 
 {% block extra_head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/component2.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ai_trust_compass.css') }}" />
 <style>
 /* Assessment-specific custom styles */
 .assessment-nav-tabs {
@@ -557,6 +558,41 @@
 {% endblock %}
 
 {% block content %}
+
+<!-- ================================================================
+     A. Top Student Experience Navigation (AI Trust Compass)
+================================================================ -->
+<header class="compass-navbar" role="banner" style="margin: -1.5rem -1.5rem 1.5rem -1.5rem; border-radius: 0 0 12px 12px;">
+    <div class="compass-navbar__container">
+        <a href="{{ url_for('component2.index') }}" class="compass-navbar__brand" style="text-decoration:none;">
+            <div class="compass-navbar__logo-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+                </svg>
+            </div>
+            <div>
+                <span class="compass-navbar__title">AI Trust Compass</span>
+                <span class="compass-navbar__tagline" style="display:block; font-size:0.75rem; color:#64748B;">Student Learning Analytics</span>
+            </div>
+        </a>
+
+        <nav class="compass-navbar__menu" aria-label="Student Navigation">
+            <a href="{{ url_for('component2.index') }}" class="compass-navbar__link">
+                Overview
+            </a>
+            <a href="{{ url_for('component2.student_assessment') }}" class="compass-navbar__link compass-navbar__link--active">
+                Self-Assessment
+            </a>
+            <a href="{{ url_for('component2.verification_task') }}" class="compass-navbar__link">
+                Verification Challenge
+            </a>
+            <a href="{{ url_for('component2.index') }}?tab=researcher" class="compass-navbar__link">
+                Researcher &amp; SEM
+            </a>
+        </nav>
+    </div>
+</header>
 
 <!-- ================================================================
      1. Header & Navigation Tabs

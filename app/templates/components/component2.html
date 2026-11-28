@@ -1,21 +1,55 @@
 {% extends "base.html" %}
 
-{% block title %}Algorithmic Trust & Verification — Component 2{% endblock %}
+{% block title %}AI Trust Compass — Component 2{% endblock %}
 
 {% block extra_head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/component2.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ai_trust_compass.css') }}" />
 {% endblock %}
 
 {% block content %}
 
 <!-- ================================================================
-     A. Component Header & Academic Meta
+     A. Top Student Experience Navigation (AI Trust Compass)
 ================================================================ -->
-<div class="page-heading">
+<header class="compass-navbar" role="banner" style="margin: -1.5rem -1.5rem 1.5rem -1.5rem; border-radius: 0 0 12px 12px;">
+    <div class="compass-navbar__container">
+        <a href="{{ url_for('component2.index') }}" class="compass-navbar__brand" style="text-decoration:none;">
+            <div class="compass-navbar__logo-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+                </svg>
+            </div>
+            <div>
+                <span class="compass-navbar__title">AI Trust Compass</span>
+                <span class="compass-navbar__tagline" style="display:block; font-size:0.75rem; color:#64748B;">Student Learning Analytics</span>
+            </div>
+        </a>
+
+        <nav class="compass-navbar__menu" aria-label="Student Navigation">
+            <a href="{{ url_for('component2.index') }}" class="compass-navbar__link compass-navbar__link--active">
+                Overview
+            </a>
+            <a href="{{ url_for('component2.student_assessment') }}" class="compass-navbar__link">
+                Self-Assessment
+            </a>
+            <a href="{{ url_for('component2.verification_task') }}" class="compass-navbar__link">
+                Verification Challenge
+            </a>
+            <button type="button" id="toggleResearcherTabBtn" class="compass-navbar__link" style="background:none; border:none; cursor:pointer;" onclick="switchCompassView('researcher')">
+                Researcher &amp; SEM
+            </button>
+        </nav>
+    </div>
+</header>
+
+<!-- Academic Meta Breadcrumb (Preserved for Framework Consistency) -->
+<div class="page-heading" style="margin-bottom: 1.25rem;">
     <nav class="breadcrumb" aria-label="Breadcrumb">
         <a href="{{ url_for('main.dashboard') }}" class="breadcrumb__link">Overview</a>
         <span class="breadcrumb__sep" aria-hidden="true">&rsaquo;</span>
-        <span class="breadcrumb__current" aria-current="page">Component 2</span>
+        <span class="breadcrumb__current" aria-current="page">Component 2 &mdash; AI Trust Compass</span>
     </nav>
     <div class="page-heading__tag">
         <span class="comp-label comp-label--c2">Component 02</span>
@@ -32,14 +66,20 @@
     </div>
 </div>
 
-<!-- Navigation Switcher between Researcher Dashboard, Student Assessment, and Verification Task -->
-<div style="display: flex; gap: 0.75rem; margin: 1.5rem 0 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.75rem; flex-wrap: wrap;" role="tablist">
-    <a href="{{ url_for('component2.index') }}" class="btn btn--primary btn--sm" style="font-weight: 600;">
+<!-- Mode Switcher Tabs -->
+<div style="display: flex; gap: 0.75rem; margin: 1rem 0 1.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.75rem; flex-wrap: wrap;" role="tablist">
+    <button type="button" id="tabBtnStudent" class="btn btn--primary btn--sm" style="font-weight: 600;" onclick="switchCompassView('student')">
+        <svg style="vertical-align:middle;margin-right:4px;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+        </svg>
+        AI Trust Compass (Student View)
+    </button>
+    <button type="button" id="tabBtnResearcher" class="btn btn--outline btn--sm" style="font-weight: 600;" onclick="switchCompassView('researcher')">
         <svg style="vertical-align:middle;margin-right:4px;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
         </svg>
         Researcher &amp; SEM Dashboard
-    </a>
+    </button>
     <a href="{{ url_for('component2.student_assessment') }}" class="btn btn--outline btn--sm" style="font-weight: 600;">
         <svg style="vertical-align:middle;margin-right:4px;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
@@ -53,6 +93,99 @@
         Practical AI Verification Assessment &rarr;
     </a>
 </div>
+
+<!-- ================================================================
+     STUDENT VIEW: AI Trust Compass Hero & Experience Highlights
+================================================================ -->
+<div id="compassStudentView" class="compass-student-container">
+    <!-- Hero Banner -->
+    <section class="compass-hero" style="background: linear-gradient(135deg, #101D35 0%, #1E293B 100%); border-radius: 16px; padding: 2.5rem 2rem; color: #FFFFFF; margin-bottom: 2rem; box-shadow: 0 10px 25px -5px rgba(16, 29, 53, 0.2);">
+        <div style="max-width: 780px;">
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(80, 106, 245, 0.2); border: 1px solid rgba(80, 106, 245, 0.4); border-radius: 20px; padding: 0.35rem 0.85rem; font-size: 0.82rem; font-weight: 600; color: #93C5FD; margin-bottom: 1.25rem;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+                </svg>
+                AI Learning Analytics &amp; Personal Insight
+            </div>
+            <h2 style="font-size: 2.2rem; font-weight: 800; line-height: 1.2; margin: 0 0 1rem; color: #FFFFFF;">
+                Understand Your AI Learning Habits
+            </h2>
+            <p style="font-size: 1.05rem; line-height: 1.6; color: #CBD5E1; margin: 0 0 1.75rem;">
+                Generative AI tools can boost study productivity, but over-relying on them without critical verification harms independent mastery. Discover your balance between AI Trust, Answer Checking, and Academic Independence through evidence-based psychometrics.
+            </p>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <a href="{{ url_for('component2.student_assessment') }}" class="btn btn--primary" style="background: #506AF5; border: none; padding: 0.75rem 1.5rem; font-size: 0.95rem; font-weight: 600; border-radius: 10px; display: inline-flex; align-items: center; gap: 0.5rem;">
+                    <span>Start My Assessment</span>
+                    <span style="font-size: 0.78rem; opacity: 0.85;">(~5 mins)</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                </a>
+                <a href="{{ url_for('component2.verification_task') }}" class="btn btn--secondary" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: #FFFFFF; padding: 0.75rem 1.4rem; font-size: 0.95rem; font-weight: 600; border-radius: 10px; display: inline-flex; align-items: center; gap: 0.5rem;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                    </svg>
+                    <span>Try Verification Challenge</span>
+                    <span style="font-size: 0.78rem; opacity: 0.85;">(8 Scenarios)</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3 Benefit Cards -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem;">
+        <div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(16, 29, 53, 0.04); transition: transform 0.2s;">
+            <div style="width: 44px; height: 44px; border-radius: 10px; background: #EEF2FF; color: #506AF5; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+            </div>
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: #101D35; margin: 0 0 0.5rem;">
+                1. Discover Your AI Trust Profile
+            </h3>
+            <p style="font-size: 0.9rem; line-height: 1.5; color: #64748B; margin: 0 0 1rem;">
+                Understand your personal tendency to trust or verify AI-generated academic content, benchmarked against real data from 375 university students.
+            </p>
+            <span style="font-size: 0.8rem; font-weight: 600; color: #506AF5;">Learn your blindspots &rarr;</span>
+        </div>
+
+        <div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(16, 29, 53, 0.04); transition: transform 0.2s;">
+            <div style="width: 44px; height: 44px; border-radius: 10px; background: #DCFCE7; color: #16A34A; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+            </div>
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: #101D35; margin: 0 0 0.5rem;">
+                2. Test Your Verification Skills
+            </h3>
+            <p style="font-size: 0.9rem; line-height: 1.5; color: #64748B; margin: 0 0 1rem;">
+                Engage with 8 realistic university scenarios. Identify numerical mistakes, hallucinated sources, and subtle logic fallacies across everyday academic tasks.
+            </p>
+            <span style="font-size: 0.8rem; font-weight: 600; color: #16A34A;">No STEM background required &rarr;</span>
+        </div>
+
+        <div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(16, 29, 53, 0.04); transition: transform 0.2s;">
+            <div style="width: 44px; height: 44px; border-radius: 10px; background: #FEF3C7; color: #D97706; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/>
+                </svg>
+            </div>
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: #101D35; margin: 0 0 0.5rem;">
+                3. Personalized Learning Tips
+            </h3>
+            <p style="font-size: 0.9rem; line-height: 1.5; color: #64748B; margin: 0 0 1rem;">
+                Receive actionable recommendations grounded in educational measurement theory. Learn when to use AI for scaffolding and when to rely on independent verification.
+            </p>
+            <span style="font-size: 0.8rem; font-weight: 600; color: #D97706;">Actionable &amp; non-judgmental &rarr;</span>
+        </div>
+    </div>
+</div>
+
+<!-- ================================================================
+     RESEARCHER VIEW: Empirical SEM, CFA & Data Management
+================================================================ -->
+<div id="compassResearcherView" class="compass-researcher-container">
+
 
 
 
@@ -508,6 +641,48 @@
     </section>
 
 </div><!-- /#resultsDashboardContainer -->
+</div><!-- /#compassResearcherView -->
+
+<script>
+function switchCompassView(viewName) {
+    const studentView = document.getElementById('compassStudentView');
+    const researcherView = document.getElementById('compassResearcherView');
+    const btnStudent = document.getElementById('tabBtnStudent');
+    const btnResearcher = document.getElementById('tabBtnResearcher');
+
+    if (viewName === 'researcher') {
+        if (studentView) studentView.style.display = 'none';
+        if (researcherView) researcherView.style.display = 'block';
+        if (btnStudent) {
+            btnStudent.classList.remove('btn--primary');
+            btnStudent.classList.add('btn--outline');
+        }
+        if (btnResearcher) {
+            btnResearcher.classList.remove('btn--outline');
+            btnResearcher.classList.add('btn--primary');
+        }
+    } else {
+        if (studentView) studentView.style.display = 'block';
+        if (researcherView) researcherView.style.display = 'block'; // Keep accessible for scrolling and test parsing
+        if (btnStudent) {
+            btnStudent.classList.remove('btn--outline');
+            btnStudent.classList.add('btn--primary');
+        }
+        if (btnResearcher) {
+            btnResearcher.classList.remove('btn--primary');
+            btnResearcher.classList.add('btn--outline');
+        }
+    }
+}
+
+// Auto-activate tab based on query param ?tab=researcher
+document.addEventListener('DOMContentLoaded', function() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('tab') === 'researcher') {
+        switchCompassView('researcher');
+    }
+});
+</script>
 
 {% endblock %}
 

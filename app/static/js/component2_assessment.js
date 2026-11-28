@@ -35,10 +35,10 @@
     };
 
     var stepTitles = {
-        1: "Step 1 of 5: Algorithmic Trust (AT)",
-        2: "Step 2 of 5: Verification Behaviour (VB)",
-        3: "Step 3 of 5: Perceived Usefulness (PU)",
-        4: "Step 4 of 5: AI Dependence (AD)",
+        1: "Step 1 of 5: AI Trust (AT)",
+        2: "Step 2 of 5: Answer Checking / Verification (VB)",
+        3: "Step 3 of 5: AI Usefulness (PU)",
+        4: "Step 4 of 5: AI Reliance / Independence (AD)",
         5: "Step 5 of 5: Learning Confidence (LC)",
     };
 
